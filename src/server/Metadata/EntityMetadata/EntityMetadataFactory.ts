@@ -1,0 +1,33 @@
+import type { EntityType } from "@/server/types/global";
+import type { IEntityMetadata, RawMetadata } from "../types";
+import { CoachMetadata } from "./CoachMetadata";
+import { EventMetadata } from "./EventMetadata";
+import { PoolMetadata } from "./PoolMetadata";
+import { SchoolMetadata } from "./SchoolMetadata";
+import { SwimmerMetadata } from "./SwimmerMetadata";
+import { TeamMetadata } from "./TeamMetadata";
+
+type EntityMetadataClassType = {
+	new (rawMetadataArr?: RawMetadata[]): IEntityMetadata;
+};
+
+const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
+	coach: CoachMetadata,
+	event: EventMetadata,
+	pool: PoolMetadata,
+	school: SchoolMetadata,
+	swimmer: SwimmerMetadata,
+	team: TeamMetadata,
+};
+
+// biome-ignore lint/complexity/noStaticOnlyClass: Will fix later
+export class EntityMetadataFactory {
+	static getInstance(entityType: EntityType, rawMetadataArr?: RawMetadata[]) {
+		const EntityMetadataClass = entityMetadataClasses[entityType];
+		if (!EntityMetadataClass) {
+			throw Error("Invalid entity type");
+		}
+
+		return new EntityMetadataClass(rawMetadataArr);
+	}
+}

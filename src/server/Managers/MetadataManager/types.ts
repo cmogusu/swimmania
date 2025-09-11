@@ -1,0 +1,51 @@
+import type { MetadataFilter, MetadataValue } from "../../Metadata/types";
+import type { EntityType } from "../../types";
+
+// Outputs
+export type MetadataDatabaseRawOutputData = Required<MetadataRawInputs>;
+
+export type MetadataDatabaseOutputData = MetadataDatabaseRawOutputData;
+
+// Inputs
+export type MetadataGetAllRawInputs = {
+	entityType: EntityType;
+	entityId: number;
+};
+
+export type MetadataGetByIdRawInputs = {
+	entityType: EntityType;
+	id: number;
+	entityId: number;
+};
+
+export type MetadataUpdateRawInputs = MetadataPostRawInputs & {
+	id: number;
+};
+
+export type MetadataPostRawInputs = {
+	entityType: EntityType;
+	entityId: number;
+	name: string;
+	value?: MetadataValue;
+	itemIndex?: number;
+};
+
+export type MetadataDeleteRawInputs = {
+	id: number;
+	entityId: number;
+};
+
+export type MetadataFilterByRawInputs = {
+	entityType: EntityType;
+	filters: MetadataFilter[];
+};
+
+export type MetadataRawInputs = {
+	entityType?: EntityType;
+	id?: number;
+	entityId?: number;
+	name?: string;
+	value?: MetadataValue;
+	itemIndex?: number;
+	filters?: MetadataFilter[];
+};

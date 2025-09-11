@@ -1,0 +1,30 @@
+.loading {
+	color: green;
+}
+
+.map-container {
+	margin-bottom: 50px;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.map-container .zoom-level {
+	position: absolute;
+	max-width: 55px;
+	max-height: 18px;
+	right: 10px;
+	top: 20px;
+	z-index: 99999;
+	font-weight: bold;
+	background: #fff;
+	padding: 3px 6px;
+	border-radius: 3px;
+	box-shadow: 1px 3px 3px 0px #0000004f;
+	font-size: 8px;
+}
+
+.map-container > div.map {
+	width: 100%;
+	height: 100%;
+}

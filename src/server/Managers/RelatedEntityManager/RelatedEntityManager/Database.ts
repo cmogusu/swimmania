@@ -1,0 +1,62 @@
+import { BaseDatabase } from "../../services/BaseDatabase";
+import type { RelatedEntityInputData } from "../RelatedEntityInputData/RelatedEntityInputData";
+import { Query } from "./Query";
+
+export class Database extends BaseDatabase {
+	query: Query;
+
+	constructor() {
+		super();
+		this.query = new Query();
+	}
+
+	getRelated(relationData: RelatedEntityInputData): Promise<number[]> {
+		const metadata = relationData.toJSON();
+		const query = this.query.getRelated(
+			metadata.entityType,
+			metadata.entityId,
+			metadata.relatedEntityType,
+			metadata.limit,
+			metadata.offset,
+		);
+
+		return this.execSql<number[]>(query);
+	}
+
+	getNonRelated(relationData: RelatedEntityInputData): Promise<number[]> {
+		const metadata = relationData.toJSON();
+		const query = this.query.getNonRelated(
+			metadata.entityType,
+			metadata.entityId,
+			metadata.relatedEntityType,
+			metadata.limit,
+			metadata.offset,
+		);
+
+		return this.execSql<number[]>(query);
+	}
+
+	insert(relationData: RelatedEntityInputData) {
+		const metadata = relationData.toJSON();
+		const query = this.query.insert(
+			metadata.entityType,
+			metadata.entityId,
+			metadata.relatedEntityType,
+			metadata.relatedEntityId!,
+		);
+
+		return this.execSql(query);
+	}
+
+	deleteById(relationData: RelatedEntityInputData) {
+		const metadata = relationData.toJSON();
+		const query = this.query.deleteById(
+			metadata.entityType,
+			metadata.entityId,
+			metadata.relatedEntityType,
+			metadata.relatedEntityId!,
+		);
+
+		return this.execSql(query);
+	}
+}

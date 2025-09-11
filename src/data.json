@@ -1,0 +1,184 @@
+[
+	{
+		"id": 6,
+		"type": "pool",
+		"name": "name 2",
+		"description": "description chicken layer",
+		"defaultImage": {
+			"id": 2,
+			"alt": "image2 description",
+			"src": "/images/pool-3867287.jpg"
+		},
+		"images": [
+			{
+				"id": 1,
+				"alt": "image1 descrpt",
+				"src": "/images/pool-1249.jpg"
+			},
+			{
+				"id": 2,
+				"alt": "image2 description",
+				"src": "/images/pool-453.jpg"
+			},
+			{
+				"id": 3,
+				"alt": "descrpt",
+				"src": "/images/pool-2650.jpg"
+			},
+			{
+				"id": 4,
+				"alt": "image 4 description againsted",
+				"src": "/images/pool-5358.jpg"
+			},
+			{
+				"id": 5,
+				"alt": "desc",
+				"src": "/images/pool-3867287.jpg"
+			}
+		],
+		"metadata": [
+			{
+				"id": 13,
+				"name": "poolDimensions.length",
+				"value": 25,
+				"formattedValue": "25 meters",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 24,
+				"name": "operatingHours.closing",
+				"value": 24480000,
+				"formattedValue": "06:48 Hrs",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 25,
+				"name": "hasLaneRopes",
+				"value": true,
+				"formattedValue": "true",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 26,
+				"name": "isHeated",
+				"value": true,
+				"formattedValue": "true",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 28,
+				"name": "cleanliness",
+				"value": 4,
+				"formattedValue": "4",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 29,
+				"name": "hasOnDutyLifeguard",
+				"value": true,
+				"formattedValue": "true",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 14,
+				"name": "location.lat",
+				"value": -1.2611664809506706,
+				"formattedValue": "-1.2611664809506706°",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 15,
+				"name": "location.lng",
+				"value": 36.80447787409544,
+				"formattedValue": "36.80447787409544°",
+				"isHidden": 0,
+				"itemIndex": 0
+			}
+		]
+	},
+	{
+		"id": 7,
+		"type": "pool",
+		"name": "pool 0",
+		"description": "description pool 0",
+		"defaultImage": {
+			"id": 2,
+			"alt": "image2 description",
+			"src": "/images/pool-453.jpg"
+		},
+		"images": [],
+		"metadata": [
+			{
+				"id": 20,
+				"name": "openToChildren",
+				"value": true,
+				"formattedValue": "true",
+				"isHidden": 0,
+				"itemIndex": 0
+			},
+			{
+				"id": 6,
+				"name": "hasLaneRopes",
+				"value": true,
+				"formattedValue": "true",
+				"isHidden": 0,
+				"itemIndex": 0
+			}
+		]
+	},
+	{
+		"id": 8,
+		"type": "pool",
+		"name": "pool 1",
+		"description": "description pool 1",
+		"defaultImage": {
+			"id": 2,
+			"alt": "image2 description",
+			"src": "/images/pool-1249.jpg"
+		},
+		"images": [],
+		"metadata": [
+			{
+				"id": 12,
+				"name": "hasLaneRopes",
+				"value": true,
+				"formattedValue": "true",
+				"isHidden": 0,
+				"itemIndex": 0
+			}
+		]
+	},
+	{
+		"id": 9,
+		"type": "pool",
+		"name": "pool 0",
+		"description": "description pool 0",
+		"defaultImage": {
+			"id": 2,
+			"alt": "image2 description",
+			"src": "/images/pool-2650.jpg"
+		},
+		"images": [],
+		"metadata": []
+	},
+	{
+		"id": 21,
+		"type": "pool",
+		"name": "poolwe ",
+		"description": "dasdf",
+		"defaultImage": {
+			"id": 2,
+			"alt": "image2 description",
+			"src": "/images/pool-5358.jpg"
+		},
+		"images": [],
+		"metadata": []
+	}
+]

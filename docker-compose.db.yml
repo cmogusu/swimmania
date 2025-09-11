@@ -1,0 +1,22 @@
+name: "swimmania"
+services:
+  maria:
+    image: mariadb:11.8
+    container_name: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - mariadb:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  mariadb:
+    name: swimmania-mariadb-volume
