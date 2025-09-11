@@ -148,7 +148,7 @@ export const isSet = (v: unknown): boolean => !isUndefined(v) && !isNull(v);
 export const clamp = (v: number, min: number, max: number): number =>
 	Math.max(min, Math.min(v, max));
 
-export const isArray = (v: unknown): v is any[] => Array.isArray(v);
+export const isArray = (v: unknown): v is unknown[] => Array.isArray(v);
 
 export const addLeadingZero = (v: number) => (v < 10 ? `0${v}` : v.toString());
 

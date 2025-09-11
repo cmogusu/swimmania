@@ -1,16 +1,16 @@
-import { BooleanType } from "./BooleanType";
+import { BooleanType, EditBooleanType } from "./BooleanType";
 import { DateType } from "./DateType";
-import { LatitudeType } from "./LatitudeType";
-import { LongitudeType } from "./LongitudeType";
+import { EditLatitudeType, LatitudeType } from "./LatitudeType";
+import { EditLongitudeType, LongitudeType } from "./LongitudeType";
 import { NoneType } from "./NoneType";
-import { NumberType } from "./NumberType";
+import { EditNumberType, NumberType } from "./NumberType";
 import { OptionsType } from "./OptionsType";
 import { ParentType } from "./ParentType";
-import { RatingsType } from "./RatingsType";
+import { EditRatingsType, RatingsType } from "./RatingsType";
 import { TextType } from "./TextType";
 import { TimeType } from "./TimeType";
 
-export const metadataTypeComponents = {
+export const metadataComponents = {
 	none: NoneType,
 	parent: ParentType,
 	number: NumberType,
@@ -20,6 +20,20 @@ export const metadataTypeComponents = {
 	text: TextType,
 	latitude: LatitudeType,
 	longitude: LongitudeType,
+	time: TimeType,
+	date: DateType,
+};
+
+export const editMetadataComponents = {
+	none: NoneType,
+	parent: ParentType,
+	number: EditNumberType,
+	ratings: EditRatingsType,
+	boolean: EditBooleanType,
+	options: OptionsType,
+	text: TextType,
+	latitude: EditLatitudeType,
+	longitude: EditLongitudeType,
 	time: TimeType,
 	date: DateType,
 };

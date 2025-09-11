@@ -1,4 +1,4 @@
-import { isBoolean, isNotSet } from "../../utils";
+import { isNotSet } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataType } from "./BaseMetadataType";
 
@@ -23,7 +23,7 @@ export class BooleanType extends BaseMetadataType {
 	}
 
 	validateValue(v?: unknown) {
-		if (isNotSet(v) || !isBoolean(v)) {
+		if (isNotSet(v)) {
 			throw Error("Invalid value. Boolean expected");
 		}
 	}

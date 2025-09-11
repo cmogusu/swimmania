@@ -15,47 +15,67 @@ export async function deleteEntity(formData: FormData) {
 }
 
 export async function updateEntity(formData: FormData) {
-	const { entityType, entityId, name, description, location, currentPath } =
-		extractFormData(formData, [
-			"entityType",
-			"entityId",
-			"name",
-			"description",
-			"location",
-			"currentPath",
-		]);
+	const data = extractFormData(formData, [
+		"entityType",
+		"entityId",
+		"name",
+		"description",
+		"location",
+		"currentPath",
+	]);
 
 	await api.updateEntity(
-		entityType as EntityType,
-		Number(entityId),
-		name as string,
-		description as string,
-		location as string,
+		data.entityType as EntityType,
+		Number(data.entityId),
+		data.name as string,
+		data.description as string,
+		data.location as string,
 	);
 
-	if (currentPath) revalidatePath(currentPath as string);
+	if (data.currentPath) revalidatePath(data.currentPath as string);
 }
 
 export async function updateImage(formData: FormData) {
-	const { entityId, id, alt, filepath, isDefault, currentPath } =
-		extractFormData(formData, [
-			"entityId",
-			"id",
-			"alt",
-			"filepath",
-			"isDefault",
-			"currentPath",
-		]);
+	const data = extractFormData(formData, [
+		"entityId",
+		"id",
+		"alt",
+		"filepath",
+		"isDefault",
+		"currentPath",
+	]);
 
 	await api.updateImage(
-		Number(entityId),
-		Number(id),
-		alt as string,
-		filepath as string,
-		Boolean(isDefault),
+		Number(data.entityId),
+		Number(data.id),
+		data.alt as string,
+		data.filepath as string,
+		Boolean(data.isDefault),
 	);
 
-	if (currentPath) revalidatePath(currentPath as string);
+	if (data.currentPath) revalidatePath(data.currentPath as string);
+}
+
+export async function updateMetadata(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityType",
+		"id",
+		"entityId",
+		"name",
+		"value",
+		"currentPath",
+	]);
+
+	console.log(data);
+	await api.updateMetadata(
+		data.entityType as EntityType,
+		Number(data.id),
+		Number(data.entityId),
+		data.name as string,
+		data.value as string,
+	);
+
+	if (data.currentPath) revalidatePath(data.currentPath as string);
 }
 
 const extractFormData = (

@@ -64,6 +64,7 @@ export interface IMetadataType {
 	type: SchemaType;
 	itemIndex?: number;
 	isHidden?: boolean;
+	title: string;
 	name: string;
 	value: MetadataValue;
 	dbValue: MetadataData[];

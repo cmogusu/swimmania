@@ -4,15 +4,27 @@ import {
 	type IMetadataType,
 	type MetadataData,
 } from "@/server";
-import { metadataTypeComponents } from "../MetadataComponents";
+import { editMetadataComponents } from "../MetadataComponents";
 
 type Props = {
 	entityType: EntityType;
+	entityId: number;
 	metadata: MetadataData[] | undefined;
+	currentPath: string;
 };
 
-export const EditMetadata = ({ entityType, metadata }: Props) => {
-	const metadataComponents = getMetadataComponents(entityType, metadata);
+export const EditMetadata = ({
+	entityType,
+	entityId,
+	metadata,
+	currentPath,
+}: Props) => {
+	const metadataComponents = getMetadataComponents(
+		entityType,
+		entityId,
+		metadata,
+		currentPath,
+	);
 
 	return (
 		<section className="mb-4">
@@ -24,7 +36,9 @@ export const EditMetadata = ({ entityType, metadata }: Props) => {
 
 const getMetadataComponents = (
 	entityType: EntityType,
+	entityId: number,
 	metadata: MetadataData[] | undefined,
+	currentPath: string,
 ) => {
 	const entityMetadata = metadata?.length
 		? EntityMetadataFactory.getInstance(entityType, metadata)
@@ -38,7 +52,15 @@ const getMetadataComponents = (
 		.filter((m) => m.hasValue)
 		.map((metadataType: IMetadataType) => {
 			const { id, type } = metadataType;
-			const MetadataComponents = metadataTypeComponents[type];
-			return <MetadataComponents key={id} metadataType={metadataType} />;
+			const MetadataComponents = editMetadataComponents[type];
+			return (
+				<MetadataComponents
+					key={id}
+					entityId={entityId}
+					entityType={entityType}
+					metadataType={metadataType}
+					currentPath={currentPath}
+				/>
+			);
 		});
 };

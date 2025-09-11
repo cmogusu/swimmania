@@ -1,5 +1,10 @@
-import { EntityManagerFactory, imageManagerFactory } from "@/server/Managers";
+import {
+	EntityManagerFactory,
+	imageManagerFactory,
+	metadataManagerFactory,
+} from "@/server/Managers";
 import { POSTS_PER_PAGE } from "../constants";
+import type { MetadataValue } from "../Metadata";
 import { Log } from "../services";
 import type { EntityData, EntityType } from "../types";
 
@@ -100,6 +105,29 @@ export class Api {
 				alt,
 				filepath,
 				isDefault,
+			});
+			return updateData;
+		} catch (error: unknown) {
+			const errorMessage = "Unable to update entity";
+			this.log.error(errorMessage, error as Error);
+		}
+	}
+
+	async updateMetadata(
+		entityType: EntityType,
+		id: number,
+		entityId: number,
+		name: string,
+		value: MetadataValue,
+	) {
+		try {
+			const metadataManager = metadataManagerFactory.getInstance();
+			const updateData = await metadataManager.update({
+				entityType,
+				id,
+				entityId,
+				name,
+				value,
 			});
 			return updateData;
 		} catch (error: unknown) {

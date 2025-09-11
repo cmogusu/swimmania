@@ -4,7 +4,7 @@ import {
 	type IMetadataType,
 	type MetadataData,
 } from "@/server";
-import { metadataTypeComponents } from "../MetadataComponents";
+import { metadataComponents } from "../MetadataComponents";
 
 type Props = {
 	entityType: EntityType;
@@ -39,7 +39,7 @@ const getMetadataComponents = (
 		.filter((m) => m.hasValue)
 		.map((metadataType: IMetadataType) => {
 			const { id, type } = metadataType;
-			const MetadataComponents = metadataTypeComponents[type];
+			const MetadataComponents = metadataComponents[type];
 			return <MetadataComponents key={id} metadataType={metadataType} />;
 		});
 };
