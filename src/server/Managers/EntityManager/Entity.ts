@@ -81,6 +81,7 @@ export class Entity {
 			type: this.entityType,
 			name: this.name,
 			description: this.description,
+			location: this.location,
 			defaultImage: this.defaultImage?.toJSON(),
 			images: this.images?.map((img) => img.toJSON()),
 			metadata: this.metadata?.dbValue,

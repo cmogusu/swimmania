@@ -3,23 +3,20 @@ import type { ImageDatabaseRawOutputData } from "./types";
 export class Image {
 	id: number;
 	entityId: number;
-	name: string;
-	description: string;
+	alt: string;
 	filepath: string;
 	isDefault: boolean = false;
 
 	constructor({
 		id,
 		entityId,
-		name,
-		description,
+		alt,
 		filepath,
 		isDefault,
 	}: ImageDatabaseRawOutputData) {
 		this.id = id;
 		this.entityId = entityId;
-		this.name = name;
-		this.description = description;
+		this.alt = alt;
 		this.filepath = filepath;
 		this.isDefault = isDefault || false;
 	}
@@ -29,11 +26,12 @@ export class Image {
 	}
 
 	toJSON() {
-		const { id, description, src } = this;
+		const { id, alt, src, isDefault } = this;
 		return {
 			id,
-			alt: description,
+			alt,
 			src,
+			isDefault,
 		};
 	}
 }

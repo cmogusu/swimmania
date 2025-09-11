@@ -6,15 +6,18 @@ type Props = {
 };
 
 export const EntityImages = ({ images }: Props) => {
-	if (!images?.length) {
+	const nonDefaultImages = (images || []).filter((i) => !i.isDefault);
+
+	if (!nonDefaultImages?.length) {
 		return null;
 	}
 
 	return (
 		<section className="mb-4">
 			<h2>Images</h2>
+			<hr className="w-50 mb-4" />
 			<div>
-				{images.map((image) => (
+				{nonDefaultImages.map((image) => (
 					<div key={image.id} className="mb-2 ml-2">
 						<Image
 							alt={image.alt}

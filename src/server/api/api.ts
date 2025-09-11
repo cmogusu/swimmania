@@ -1,4 +1,4 @@
-import { EntityManagerFactory } from "@/server/Managers";
+import { EntityManagerFactory, imageManagerFactory } from "@/server/Managers";
 import { POSTS_PER_PAGE } from "../constants";
 import { Log } from "../services";
 import type { EntityData, EntityType } from "../types";
@@ -35,7 +35,7 @@ export class Api {
 	async getEntities(
 		entityType: EntityType,
 		page: number = 1,
-	): Promise<EntityData[]> {
+	): Promise<EntityData[] | undefined> {
 		try {
 			const entityManager = EntityManagerFactory.getInstance(entityType);
 			const entities = await entityManager.getAll({
@@ -49,7 +49,6 @@ export class Api {
 			return entities.map((e) => e.toJSON());
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
-			return undefined;
 		}
 	}
 
@@ -58,8 +57,53 @@ export class Api {
 			const entityManager = EntityManagerFactory.getInstance(entityType);
 			const insertData = await entityManager.deleteById({ entityId });
 			return insertData;
-		} catch (error) {
+		} catch (error: unknown) {
 			const errorMessage = "Unable to delete entity";
+			this.log.error(errorMessage, error as Error);
+		}
+	}
+
+	async updateEntity(
+		entityType: EntityType,
+		entityId: number,
+		name: string,
+		description: string,
+		location: string,
+	) {
+		try {
+			const entityManager = EntityManagerFactory.getInstance(entityType);
+			const updateData = await entityManager.update({
+				entityId,
+				name,
+				description,
+				location,
+			});
+			return updateData;
+		} catch (error: unknown) {
+			const errorMessage = "Unable to update entity";
+			this.log.error(errorMessage, error as Error);
+		}
+	}
+
+	async updateImage(
+		entityId: number,
+		id: number,
+		alt: string,
+		filepath: string,
+		isDefault: boolean,
+	) {
+		try {
+			const imageManager = imageManagerFactory.getInstance();
+			const updateData = await imageManager.update({
+				id,
+				entityId,
+				alt,
+				filepath,
+				isDefault,
+			});
+			return updateData;
+		} catch (error: unknown) {
+			const errorMessage = "Unable to update entity";
 			this.log.error(errorMessage, error as Error);
 		}
 	}

@@ -8,10 +8,11 @@ import { type Validate, ValidateInstance } from "./Validate";
 export class ImageInputData extends BaseInputData {
 	readonly id?: number;
 	readonly entityId: number;
-	readonly name?: string;
-	readonly description?: string;
+	readonly alt?: string;
 	readonly isDefault?: boolean = false;
-	readonly file?: ImageFileDataItem;
+
+	filepath?: string;
+	file?: ImageFileDataItem;
 
 	readonly validate: Validate;
 	readonly sanitize: Sanitize;
@@ -19,38 +20,40 @@ export class ImageInputData extends BaseInputData {
 	constructor({
 		id,
 		entityId,
-		name,
-		description,
+		alt,
+		filepath,
 		isDefault,
 		file,
 	}: ImageRawInputs) {
 		super();
 
 		if (!isUndefined(id)) this.id = id;
-		if (!isUndefined(name)) this.name = name;
-		if (!isUndefined(description)) this.description = description;
-		if (!isUndefined(file)) this.file = file;
+		if (!isUndefined(alt)) this.alt = alt;
+		if (!isUndefined(filepath)) this.filepath = filepath;
 		if (!isUndefined(isDefault)) this.isDefault = isDefault;
 
+		this.setFile(file);
 		this.entityId = entityId;
 		this.validate = ValidateInstance;
 		this.sanitize = SanitizeInstance;
 	}
 
-	get filepath() {
-		return this.file?.path
-			? this.file.path.replace(PUBLIC_FOLDER, IMAGE_FOLDER_URL) // TODO: verify this works
-			: undefined;
+	setFile(file: ImageFileDataItem | undefined) {
+		if (!file?.path) {
+			return;
+		}
+
+		this.file = file;
+		this.filepath = file.path.replace(PUBLIC_FOLDER, IMAGE_FOLDER_URL); // TODO: verify this works
 	}
 
 	toJSON() {
 		return {
 			id: this.id,
 			entityId: this.entityId,
-			name: this.sanitize.name(this.name),
-			description: this.sanitize.description(this.description),
-			isDefault: this.isDefault || false,
+			alt: this.sanitize.description(this.alt),
 			filepath: this.filepath,
+			isDefault: this.isDefault || false,
 		};
 	}
 
@@ -74,8 +77,8 @@ export class ImageInputData extends BaseInputData {
 
 	validatePostInputs() {
 		this.validate.id(this.entityId);
-		this.validate.name(this.name);
-		this.validate.description(this.description);
+		this.validate.description(this.alt);
+		this.validate.filepath(this.filepath);
 		this.validate.file(this.file);
 	}
 

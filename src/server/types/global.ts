@@ -17,6 +17,7 @@ export type ImageData = {
 	id: number;
 	alt: string;
 	src: string;
+	isDefault: boolean;
 };
 
 export type MetadataData = {
@@ -30,6 +31,7 @@ export type EntityData = {
 	type: string;
 	name: string;
 	description: string | undefined;
+	location: string | undefined;
 	defaultImage: ImageData | undefined;
 	images: ImageData[] | undefined;
 	metadata: MetadataData[] | undefined;

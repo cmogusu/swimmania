@@ -1,4 +1,4 @@
-import { Entities, Page } from "@/profile";
+import { Entities, Page } from "@/account";
 
 export default async function Home() {
 	const entityType = "pool";

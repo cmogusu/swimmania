@@ -12,7 +12,8 @@ type Props = {
 
 export const Entity = async ({ entityType, entityId }: Props) => {
 	const entity = await api.getEntity(entityType, entityId);
-	const { name, description, defaultImage, images, metadata } = entity || {};
+	const { name, description, location, defaultImage, images, metadata } =
+		entity || {};
 	const image = defaultImage || DefaultSiteImage;
 
 	if (!entity) {
@@ -21,8 +22,9 @@ export const Entity = async ({ entityType, entityId }: Props) => {
 
 	return (
 		<div>
-			<section>
+			<section className="mb-4">
 				<h1>{name}</h1>
+				<hr className="w-50 mb-4" />
 				<div className="mb-4">
 					<Image
 						alt={image.alt}
@@ -32,11 +34,12 @@ export const Entity = async ({ entityType, entityId }: Props) => {
 						src={image.src}
 					/>
 				</div>
+				{location && <div className="text-5xl">{location}</div>}
 
 				<p className="text-2xl">{description}</p>
 			</section>
 
-			<EntityImages images={images} />
+			<EntityImages defaultImage={defaultImage} images={images} />
 			<EntityMetadata entityType={entityType} metadata={metadata} />
 		</div>
 	);

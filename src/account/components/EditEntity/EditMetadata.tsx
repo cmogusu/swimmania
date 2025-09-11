@@ -11,7 +11,7 @@ type Props = {
 	metadata: MetadataData[] | undefined;
 };
 
-export const EntityMetadata = ({ entityType, metadata }: Props) => {
+export const EditMetadata = ({ entityType, metadata }: Props) => {
 	const metadataComponents = getMetadataComponents(entityType, metadata);
 
 	return (

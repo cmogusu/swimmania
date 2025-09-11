@@ -1,4 +1,4 @@
-import { Entities, Page } from "@/profile";
+import { Entities, Page } from "@/account";
 import type { EntityType } from "@/server";
 
 type Props = {

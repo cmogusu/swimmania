@@ -19,15 +19,13 @@ export class Query extends BaseQuery {
 	update(
 		imageId: number,
 		entityId: number,
-		name: string,
-		description: string,
+		alt: string,
 		filepath: string,
 		isDefault: boolean,
 	) {
 		const updateValues = {
 			entityId,
-			name,
-			description,
+			alt,
 			filepath,
 			isDefault,
 		};
@@ -41,17 +39,10 @@ export class Query extends BaseQuery {
 		return `UPDATE \`image\` SET ${updateValuesStr} WHERE id='${imageId}';`;
 	}
 
-	insert(
-		entityId: number,
-		name: string,
-		description: string,
-		filepath: string,
-		isDefault: boolean,
-	) {
+	insert(entityId: number, alt: string, filepath: string, isDefault: boolean) {
 		const insertValues = {
-			name,
-			description,
 			entityId,
+			alt,
 			filepath,
 			isDefault,
 		};

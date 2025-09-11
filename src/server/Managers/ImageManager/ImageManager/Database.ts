@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noNonNullAssertion: TODO: Find better solution to avoid non null assertions */
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type { ImageInputData } from "../ImageInputData/ImageInputData";
 import type { ImageDatabaseRawOutputData } from "../types";
@@ -36,8 +37,7 @@ export class Database extends BaseDatabase {
 		const query = this.query.update(
 			image.id!,
 			image.entityId,
-			image.name!,
-			image.description!,
+			image.alt!,
 			image.filepath!,
 			image.isDefault!,
 		);
@@ -49,8 +49,7 @@ export class Database extends BaseDatabase {
 		const image = imageData.toJSON();
 		const query = this.query.insert(
 			image.entityId,
-			image.name!,
-			image.description!,
+			image.alt!,
 			image.filepath!,
 			image.isDefault!,
 		);
@@ -60,7 +59,7 @@ export class Database extends BaseDatabase {
 
 	deleteById(imageData: ImageInputData) {
 		const image = imageData.toJSON();
-		const query = this.query.deleteById(image.id, image.entityId);
+		const query = this.query.deleteById(image.id!, image.entityId);
 
 		return this.execSql(query);
 	}
