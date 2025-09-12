@@ -34,13 +34,13 @@ export const Entity = ({ entityType, entity }: Props) => {
 			</div>
 
 			<a
-				href={`/profile/${entityType}/${id}`}
+				href={`/account/${entityType}/view/${id}`}
 				className="btn btn-square btn-ghost"
 			>
 				<IoMdOpen />
 			</a>
 			<a
-				href={`/profile/${entityType}/${id}/edit`}
+				href={`/account/${entityType}/edit/${id}`}
 				className="btn btn-square btn-ghost"
 			>
 				<CiEdit />

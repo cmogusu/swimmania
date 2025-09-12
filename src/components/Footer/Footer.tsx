@@ -5,7 +5,7 @@ export const Footer = () => (
 		<div className="md:container mx-auto footer sm:footer-horizontal text-base-content p-4">
 			<aside>
 				<Image
-					src="/img/mapguru-small-logo.png"
+					src="/images/mapguru-small-logo.png"
 					alt="MapGuru logo"
 					height={20}
 					width={70}

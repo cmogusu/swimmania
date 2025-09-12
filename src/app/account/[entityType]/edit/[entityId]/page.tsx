@@ -1,11 +1,12 @@
-import { Entity, Page } from "@/account";
+import { EditEntity, Page } from "@/account";
+import { EntityTypePlurals } from "@/constants";
 import type { EntityType } from "@/server";
 
 type Props = {
 	params: Promise<{ entityId: number; entityType: EntityType }>;
 };
 
-export default async function EntityPage({ params }: Props) {
+export default async function EditEntityPage({ params }: Props) {
 	const { entityId, entityType } = await params;
 	const breadcrumbs = [
 		{
@@ -17,13 +18,20 @@ export default async function EntityPage({ params }: Props) {
 			title: "My account",
 		},
 		{
-			title: entityType,
+			link: `/account/${entityType}/view`,
+			title: EntityTypePlurals[entityType],
+		},
+		{
+			title: "edit",
+		},
+		{
+			title: `${entityId}`,
 		},
 	];
 
 	return (
 		<Page breadcrumbs={breadcrumbs}>
-			<Entity entityId={entityId} entityType={entityType} />
+			<EditEntity entityId={entityId} entityType={entityType} />
 		</Page>
 	);
 }

@@ -1,3 +1,4 @@
+import type { EntityType } from "./server";
 import type { LatLng, LngLat } from "./types";
 
 export const TOAST_RENDER_DELAY_MS = 5000;
@@ -51,12 +52,13 @@ export const EntityTypes = {
 	coach: "coach",
 };
 
-export const EntityTypePlurals = {
-	swimmer: "swimmers",
-	school: "schools",
-	pool: "pools",
-	team: "teams",
-	coach: "coaches",
+export const EntityTypePlurals: Record<EntityType, string> = {
+	swimmer: "Swimmers",
+	school: "Schools",
+	pool: "Pools",
+	team: "Teams",
+	coach: "Coaches",
+	event: "Events",
 };
 
 export const EntityTypesValues = Object.values(EntityTypes);

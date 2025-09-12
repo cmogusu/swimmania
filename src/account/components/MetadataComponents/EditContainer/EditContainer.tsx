@@ -7,7 +7,6 @@ type Props = {
 	entityId: number;
 	id: number;
 	name: string;
-	currentPath: string;
 	children: ReactNode;
 };
 
@@ -16,7 +15,6 @@ export const EditContainer = ({
 	entityId,
 	id,
 	name,
-	currentPath,
 	children,
 }: Props) => {
 	return (
@@ -25,7 +23,6 @@ export const EditContainer = ({
 			<input type="hidden" name="id" defaultValue={id} />
 			<input type="hidden" name="entityId" defaultValue={entityId} />
 			<input type="hidden" name="name" defaultValue={name} />
-			<input type="hidden" name="currentPath" defaultValue={currentPath} />
 
 			{children}
 

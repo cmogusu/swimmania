@@ -10,8 +10,7 @@ export async function deleteEntity(formData: FormData) {
 	const entityType = formData.get("entityType");
 	await api.deleteEntity(entityType as EntityType, Number(entityId));
 
-	revalidatePath("/posts");
-	redirect("/posts");
+	revalidatePath(`/account/${entityType}`);
 }
 
 export async function updateEntity(formData: FormData) {
@@ -32,7 +31,30 @@ export async function updateEntity(formData: FormData) {
 		data.location as string,
 	);
 
-	if (data.currentPath) revalidatePath(data.currentPath as string);
+	revalidatePath(`/account/${data.entityType}/edit/${data.entityId}`);
+}
+
+export async function addEntity(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityType",
+		"name",
+		"description",
+		"location",
+		"nextPath",
+	]);
+
+	console.log("adding");
+	const response = await api.addEntity(
+		data.entityType as EntityType,
+		data.name as string,
+		data.description as string,
+		data.location as string,
+	);
+
+	console.log("response", response, response?.id);
+	if (response?.id) {
+		redirect(`/account/${data.entityType}/edit/${response.id}/`);
+	}
 }
 
 export async function updateImage(formData: FormData) {
@@ -42,7 +64,6 @@ export async function updateImage(formData: FormData) {
 		"alt",
 		"filepath",
 		"isDefault",
-		"currentPath",
 	]);
 
 	await api.updateImage(
@@ -53,7 +74,7 @@ export async function updateImage(formData: FormData) {
 		Boolean(data.isDefault),
 	);
 
-	if (data.currentPath) revalidatePath(data.currentPath as string);
+	revalidatePath(`/account/${data.entityType}/edit/${data.entityId}`);
 }
 
 export async function updateMetadata(formData: FormData) {
@@ -63,10 +84,8 @@ export async function updateMetadata(formData: FormData) {
 		"entityId",
 		"name",
 		"value",
-		"currentPath",
 	]);
 
-	console.log(data);
 	await api.updateMetadata(
 		data.entityType as EntityType,
 		Number(data.id),
@@ -75,7 +94,7 @@ export async function updateMetadata(formData: FormData) {
 		data.value as string,
 	);
 
-	if (data.currentPath) revalidatePath(data.currentPath as string);
+	revalidatePath(`/account/${data.entityType}/edit/${data.entityId}`);
 }
 
 const extractFormData = (

@@ -1,4 +1,3 @@
-import { isUndefined } from "@/server";
 import { EditContainer } from "../EditContainer";
 import type { EditProps } from "../types";
 
@@ -6,13 +5,8 @@ export const EditBooleanType = ({
 	entityType,
 	entityId,
 	metadataType,
-	currentPath,
 }: EditProps) => {
 	const { id, name, title, value } = metadataType;
-
-	if (isUndefined(value)) {
-		return null;
-	}
 
 	return (
 		<EditContainer
@@ -20,7 +14,6 @@ export const EditBooleanType = ({
 			entityId={entityId}
 			id={id}
 			name={name}
-			currentPath={currentPath}
 		>
 			<label className="floating-label mb-3">
 				<span>{title}</span>

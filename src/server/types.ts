@@ -1,4 +1,4 @@
-import type { MetadataValue } from "../Metadata";
+import type { MetadataValue } from "./Metadata";
 
 export type EntityType =
 	| "coach"

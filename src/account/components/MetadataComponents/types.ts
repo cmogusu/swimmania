@@ -4,5 +4,4 @@ export type EditProps = {
 	entityType: EntityType;
 	entityId: number;
 	metadataType: IMetadataType;
-	currentPath: string;
 };

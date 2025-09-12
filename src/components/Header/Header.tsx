@@ -7,7 +7,7 @@ export const Header = () => (
 				<div className="flex-1">
 					<a className="text-xl" href="/">
 						<Image
-							src="/img/mapguru-small-logo.png"
+							src="/images/mapguru-small-logo.png"
 							alt="MapGuru logo"
 							height={20}
 							width={70}

@@ -1,4 +1,5 @@
 import { api, type EntityType, updateEntity } from "@/server";
+import { EntityForm } from "../Forms";
 import { EditImages } from "./EditImages";
 import { EditMetadata } from "./EditMetadata";
 
@@ -11,68 +12,29 @@ const show = false;
 
 export const EditEntity = async ({ entityType, entityId }: Props) => {
 	const entity = await api.getEntity(entityType, entityId);
-	const { id, name, location, description, images, metadata } = entity || {};
+	const { images, metadata } = entity || {};
 
-	// TODO: fetch path from next
-	const currentPath = `/account/${entityType}/${entityId}/edit`;
-
-	if (!entity || !id) {
+	if (!entity) {
 		return "Oops, item not found";
 	}
 
 	return (
 		<div>
 			<section>
-				<form action={updateEntity}>
-					<input type="hidden" name="entityType" defaultValue={entityType} />
-					<input type="hidden" name="entityId" defaultValue={id} />
-					<input type="hidden" name="currentPath" defaultValue={currentPath} />
-
-					<h1 className="mb-4">Edit: {name}</h1>
-
-					<label className="floating-label mb-3">
-						<span>name</span>
-						<input
-							className="input input-sm"
-							type="text"
-							name="name"
-							placeholder="name"
-							defaultValue={name}
-						/>
-					</label>
-
-					<label className="floating-label mb-3">
-						<span>location</span>
-						<input
-							className="input input-sm"
-							type="text"
-							name="location"
-							defaultValue={location}
-						/>
-					</label>
-
-					<label className="floating-label mb-3">
-						<span>Description</span>
-						<textarea
-							className="textarea textarea-sm"
-							name="description"
-							defaultValue={description}
-						/>
-					</label>
-					<button className="btn btn-sm" type="submit">
-						Update
-					</button>
-				</form>
+				<h1 className="mb-4">Edit: {entity.name}</h1>
+				<EntityForm
+					entityType={entityType}
+					entityId={entityId}
+					entity={entity}
+					action={updateEntity}
+				/>
 			</section>
 
-			{show && (
-				<EditImages entityId={id} images={images} currentPath={currentPath} />
-			)}
+			{show && <EditImages entityId={entityId} images={images} />}
 			<EditMetadata
 				entityType={entityType}
-				entityId={id}
+				entityId={entityId}
 				metadata={metadata}
-				currentPath={currentPath}
 			/>
 		</div>
 	);

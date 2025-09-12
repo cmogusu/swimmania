@@ -90,6 +90,26 @@ export class Api {
 		}
 	}
 
+	async addEntity(
+		entityType: EntityType,
+		name: string,
+		description: string,
+		location: string,
+	) {
+		try {
+			const entityManager = EntityManagerFactory.getInstance(entityType);
+			const insertData = await entityManager.insert({
+				name,
+				description,
+				location,
+			});
+			return insertData;
+		} catch (error: unknown) {
+			const errorMessage = "Unable to add entity";
+			this.log.error(errorMessage, error as Error);
+		}
+	}
+
 	async updateImage(
 		entityId: number,
 		id: number,
