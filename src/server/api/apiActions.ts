@@ -31,7 +31,7 @@ export async function updateEntity(formData: FormData) {
 		data.location as string,
 	);
 
-	revalidatePath(`/account/${data.entityType}/edit/${data.entityId}`);
+	reloadEditPage(data.entityType, data.entityId);
 }
 
 export async function addEntity(formData: FormData) {
@@ -40,10 +40,8 @@ export async function addEntity(formData: FormData) {
 		"name",
 		"description",
 		"location",
-		"nextPath",
 	]);
 
-	console.log("adding");
 	const response = await api.addEntity(
 		data.entityType as EntityType,
 		data.name as string,
@@ -51,7 +49,6 @@ export async function addEntity(formData: FormData) {
 		data.location as string,
 	);
 
-	console.log("response", response, response?.id);
 	if (response?.id) {
 		redirect(`/account/${data.entityType}/edit/${response.id}/`);
 	}
@@ -74,7 +71,26 @@ export async function updateImage(formData: FormData) {
 		Boolean(data.isDefault),
 	);
 
-	revalidatePath(`/account/${data.entityType}/edit/${data.entityId}`);
+	reloadEditPage(data.entityType, data.entityId);
+}
+
+export async function insertImage(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityId",
+		"alt",
+		"filepath",
+		"isDefault",
+	]);
+
+	const response = await api.insertImage(
+		Number(data.entityId),
+		data.alt as string,
+		data.filepath as string,
+		Boolean(data.isDefault),
+	);
+	console.log(response);
+
+	reloadEditPage(data.entityType, data.entityId);
 }
 
 export async function updateMetadata(formData: FormData) {
@@ -94,7 +110,7 @@ export async function updateMetadata(formData: FormData) {
 		data.value as string,
 	);
 
-	revalidatePath(`/account/${data.entityType}/edit/${data.entityId}`);
+	reloadEditPage(data.entityType, data.entityId);
 }
 
 const extractFormData = (
@@ -105,3 +121,7 @@ const extractFormData = (
 		acc[key] = formData.get(key) as string;
 		return acc;
 	}, {});
+
+const reloadEditPage = (entityType: string, entityId: string) => {
+	revalidatePath(`/account/${entityType}/edit/${entityId}`);
+};

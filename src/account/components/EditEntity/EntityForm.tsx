@@ -45,7 +45,7 @@ export const EntityForm = ({ action, entityType, entityId, entity }: Props) => {
 				/>
 			</label>
 			<button className="btn btn-sm" type="submit">
-				Update
+				{entityId > -1 ? "Update" : "Create"}
 			</button>
 		</form>
 	);

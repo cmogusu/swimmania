@@ -1,7 +1,9 @@
-import { addEntity as addEntityAction, type EntityType } from "@/server";
-import { EditImages, EditMetadata } from "../EditEntity";
-import { EntityForm } from "../Forms";
-import { createEmptyEntity } from "./utils";
+import {
+	addEntity as addEntityAction,
+	type EntityData,
+	type EntityType,
+} from "@/server";
+import { EditImages, EditMetadata, EntityForm } from "../EditEntity";
 
 type Props = {
 	entityType: EntityType;
@@ -12,10 +14,6 @@ const show = false;
 export const AddEntity = async ({ entityType }: Props) => {
 	const entity = createEmptyEntity(entityType);
 	const { images, metadata } = entity || {};
-
-	if (!entity) {
-		return "Oops, item not found";
-	}
 
 	return (
 		<div>
@@ -39,4 +37,17 @@ export const AddEntity = async ({ entityType }: Props) => {
 			)}
 		</div>
 	);
+};
+
+const createEmptyEntity = (entityType: EntityType): EntityData => {
+	return {
+		id: -1,
+		type: entityType,
+		name: "",
+		description: "",
+		location: "",
+		defaultImage: undefined,
+		images: [],
+		metadata: [],
+	};
 };

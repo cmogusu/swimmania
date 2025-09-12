@@ -54,7 +54,7 @@ export class ImageManager {
 	async insert(rawImageData: ImagePostRawInputs) {
 		const imageData = new ImageInputData(rawImageData);
 		imageData.validatePostInputs();
-		const insertData = await this.db.update(imageData);
+		const insertData = await this.db.insert(imageData);
 
 		// @ts-ignore
 		if (!insertData?.insertId) {

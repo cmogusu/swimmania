@@ -9,7 +9,7 @@ export class ImageInputData extends BaseInputData {
 	readonly id?: number;
 	readonly entityId: number;
 	readonly alt?: string;
-	readonly isDefault?: boolean = false;
+	readonly isDefault?: number = 0;
 
 	filepath?: string;
 	file?: ImageFileDataItem;
@@ -30,7 +30,7 @@ export class ImageInputData extends BaseInputData {
 		if (!isUndefined(id)) this.id = id;
 		if (!isUndefined(alt)) this.alt = alt;
 		if (!isUndefined(filepath)) this.filepath = filepath;
-		if (!isUndefined(isDefault)) this.isDefault = isDefault;
+		if (!isUndefined(isDefault)) this.isDefault = isDefault ? 1 : 0;
 
 		this.setFile(file);
 		this.entityId = entityId;
@@ -53,7 +53,7 @@ export class ImageInputData extends BaseInputData {
 			entityId: this.entityId,
 			alt: this.sanitize.description(this.alt),
 			filepath: this.filepath,
-			isDefault: this.isDefault || false,
+			isDefault: this.isDefault,
 		};
 	}
 

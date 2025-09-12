@@ -1,32 +1,40 @@
 import Image from "next/image";
-import { DefaultImage } from "@/constants";
-import { type ImageData, updateImage } from "@/server";
+import type { ImageData } from "@/server";
 
 type EditImageProps = {
 	entityId: number;
 	image: ImageData;
+	action: (formData: FormData) => void;
 };
 
-export const ImageForm = ({ entityId, image }: EditImageProps) => {
-	const {
-		id,
-		alt = DefaultImage.alt,
-		src = DefaultImage.src,
-		isDefault,
-	} = image;
+export const ImageForm = ({ entityId, image, action }: EditImageProps) => {
+	const { id, alt, src, isDefault } = image;
 
 	return (
-		<form action={updateImage}>
+		<form action={action}>
 			<input type="hidden" name="entityId" value={entityId} />
 			<input type="hidden" name="id" value={id} />
 
-			<Image
-				alt={alt}
-				className="size-10 rounded-box mb-3"
-				width={1000}
-				height={667}
-				src={src}
-			/>
+			{src && (
+				<Image
+					alt={alt}
+					className="size-10 rounded-box mb-3"
+					width={1000}
+					height={667}
+					src={src}
+				/>
+			)}
+
+			<label className="floating-label mb-3">
+				<span>File path</span>
+				<input
+					className="input input-sm"
+					type="text"
+					placeholder="/path/to/file.jpg"
+					name="filepath"
+					defaultValue={src}
+				/>
+			</label>
 
 			<label className="floating-label mb-3">
 				<span>Alt description</span>
@@ -34,17 +42,6 @@ export const ImageForm = ({ entityId, image }: EditImageProps) => {
 					className="textarea textarea-sm mb-3"
 					name="alt"
 					defaultValue={alt}
-				/>
-			</label>
-
-			<label className="floating-label mb-3">
-				<span>filepath</span>
-				<input
-					className="input input-sm"
-					type="text"
-					placeholder="/path/to/file.jpg"
-					name="filepath"
-					defaultValue={src}
 				/>
 			</label>
 
@@ -61,7 +58,7 @@ export const ImageForm = ({ entityId, image }: EditImageProps) => {
 			</fieldset>
 
 			<button className="btn btn-sm" type="submit">
-				Update
+				{id > -1 ? "Update" : "Create"}
 			</button>
 		</form>
 	);

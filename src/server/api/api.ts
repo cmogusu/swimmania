@@ -128,7 +128,28 @@ export class Api {
 			});
 			return updateData;
 		} catch (error: unknown) {
-			const errorMessage = "Unable to update entity";
+			const errorMessage = "Unable to update image";
+			this.log.error(errorMessage, error as Error);
+		}
+	}
+
+	async insertImage(
+		entityId: number,
+		alt: string,
+		filepath: string,
+		isDefault: boolean,
+	) {
+		try {
+			const imageManager = imageManagerFactory.getInstance();
+			const updateData = await imageManager.insert({
+				entityId,
+				alt,
+				filepath,
+				isDefault,
+			});
+			return updateData;
+		} catch (error: unknown) {
+			const errorMessage = "Unable to create image";
 			this.log.error(errorMessage, error as Error);
 		}
 	}
