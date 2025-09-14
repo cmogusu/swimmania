@@ -1,24 +1,3 @@
-import { type IMetadataType, isUndefined } from "@/server";
+import { ParentType } from "../MetadataComponents/ParentType";
 
-type Props = {
-	metadataType: IMetadataType;
-};
-
-export const EditParentType = ({ metadataType }: Props) => {
-	const { children } = metadataType;
-	const childrenWithValues = children?.filter((child) => child.hasValue);
-
-	if (isUndefined(childrenWithValues)) {
-		return null;
-	}
-
-	return (
-		<div>
-			{childrenWithValues.map(({ id, name, formattedValue }: IMetadataType) => (
-				<div key={id}>
-					{name} = {formattedValue}
-				</div>
-			))}
-		</div>
-	);
-};
+export const EditParentType = ParentType;

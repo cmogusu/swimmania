@@ -20,7 +20,6 @@ export type RawMetadata = {
 };
 
 export type SchemaType =
-	| "none"
 	| "parent"
 	| "number"
 	| "ratings"
@@ -71,6 +70,7 @@ export interface IMetadataType {
 	formattedValue: string;
 	hasValue: boolean;
 	children?: IMetadataType[];
+	options?: Option[];
 }
 
 export interface IEntityMetadata {

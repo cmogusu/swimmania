@@ -1,21 +1,6 @@
-import { type IMetadataType, isUndefined } from "@/server";
+import { EditTextType } from "./EditTextType";
+import type { EditProps } from "./types";
 
-type Props = {
-	metadataType: IMetadataType;
-};
-
-export const EditDateType = ({ metadataType }: Props) => {
-	const { name, value, formattedValue } = metadataType;
-
-	if (isUndefined(value)) {
-		return null;
-	}
-
-	return (
-		<div>
-			<div>
-				{name} = {formattedValue}
-			</div>
-		</div>
-	);
+export const EditNumberType = (props: EditProps) => {
+	return <EditTextType {...props} inputType="date" />;
 };

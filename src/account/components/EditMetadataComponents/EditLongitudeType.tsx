@@ -7,7 +7,7 @@ export const EditLongitudeType = ({
 	entityId,
 	metadataType,
 }: EditProps) => {
-	const { id, name, title, value } = metadataType;
+	const { title, value } = metadataType;
 
 	if (isUndefined(value)) {
 		return null;
@@ -17,8 +17,7 @@ export const EditLongitudeType = ({
 		<EditContainer
 			entityType={entityType}
 			entityId={entityId}
-			id={id}
-			name={name}
+			metadataType={metadataType}
 		>
 			<label className="floating-label mb-3">
 				<span>{title}</span>

@@ -1,21 +1,34 @@
-import { type IMetadataType, isUndefined } from "@/server";
+import { EditContainer } from "./EditContainer";
+import type { EditProps } from "./types";
 
-type Props = {
-	metadataType: IMetadataType;
-};
+export const EditOptionsType = ({
+	entityType,
+	entityId,
+	metadataType,
+}: EditProps) => {
+	const { title, value, options } = metadataType;
 
-export const EditOptionsType = ({ metadataType }: Props) => {
-	const { name, value, formattedValue } = metadataType;
-
-	if (isUndefined(value)) {
-		return null;
+	if (!options?.length) {
+		return;
 	}
 
 	return (
-		<div>
-			<div>
-				{name} = {formattedValue}
-			</div>
-		</div>
+		<EditContainer
+			entityType={entityType}
+			entityId={entityId}
+			metadataType={metadataType}
+		>
+			<fieldset className="fieldset">
+				<legend className="fieldset-legend">{title}</legend>
+				<select defaultValue={value as string} className="select">
+					{options.map((o) => (
+						<option key={o.key} value={o.key}>
+							{o.value}
+						</option>
+					))}
+				</select>
+				<span className="label">Optional</span>
+			</fieldset>
+		</EditContainer>
 	);
 };

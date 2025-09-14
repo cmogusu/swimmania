@@ -101,6 +101,7 @@ export async function updateMetadata(formData: FormData) {
 		"name",
 		"value",
 	]);
+	console.log(data);
 
 	await api.updateMetadata(
 		data.entityType as EntityType,

@@ -1,22 +1,22 @@
 import type { ReactNode } from "react";
-import type { EntityType } from "@/server";
+import type { EntityType, IMetadataType } from "@/server";
 import { updateMetadata } from "@/server";
 
 type Props = {
 	entityType: EntityType;
 	entityId: number;
-	id: number;
-	name: string;
+	metadataType: IMetadataType;
 	children: ReactNode;
 };
 
 export const EditContainer = ({
 	entityType,
 	entityId,
-	id,
-	name,
+	metadataType,
 	children,
 }: Props) => {
+	const { id, name } = metadataType;
+
 	return (
 		<form action={updateMetadata} className="mb-4">
 			<input type="hidden" name="entityType" defaultValue={entityType} />

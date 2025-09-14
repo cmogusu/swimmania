@@ -6,26 +6,15 @@ export const EditBooleanType = ({
 	entityId,
 	metadataType,
 }: EditProps) => {
-	const { id, name, title, value } = metadataType;
+	const { title, value } = metadataType;
 
 	return (
 		<EditContainer
 			entityType={entityType}
 			entityId={entityId}
-			id={id}
-			name={name}
+			metadataType={metadataType}
 		>
-			<label className="floating-label mb-3">
-				<span>{title}</span>
-				<input
-					className="input input-sm"
-					type="text"
-					name="value"
-					placeholder="value"
-					defaultValue={value ? "true" : "false"}
-				/>
-			</label>
-			{/* <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4 mb-3">
+			<fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4 mb-3">
 				<legend className="fieldset-legend">{title}</legend>
 				<label className="label">
 					<input
@@ -35,7 +24,7 @@ export const EditBooleanType = ({
 						defaultChecked={value as boolean}
 					/>
 				</label>
-			</fieldset> */}
+			</fieldset>
 		</EditContainer>
 	);
 };

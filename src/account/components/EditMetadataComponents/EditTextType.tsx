@@ -1,21 +1,32 @@
-import { type IMetadataType, isUndefined } from "@/server";
+import { EditContainer } from "./EditContainer";
+import type { EditProps } from "./types";
 
-type Props = {
-	metadataType: IMetadataType;
-};
+type Props = EditProps & { inputType: "text" | "number" | "time" | "date" };
 
-export const EditTextType = ({ metadataType }: Props) => {
-	const { name, value, formattedValue } = metadataType;
-
-	if (isUndefined(value)) {
-		return null;
-	}
+export const EditTextType = ({
+	entityType,
+	entityId,
+	metadataType,
+	inputType,
+}: Props) => {
+	const { title, value } = metadataType;
 
 	return (
-		<div>
-			<div>
-				{name} = {formattedValue}
-			</div>
-		</div>
+		<EditContainer
+			entityType={entityType}
+			entityId={entityId}
+			metadataType={metadataType}
+		>
+			<label className="floating-label mb-3">
+				<span>{title}</span>
+				<input
+					className="input input-sm"
+					type={inputType || "text"}
+					name="value"
+					placeholder="value"
+					defaultValue={value as number}
+				/>
+			</label>
+		</EditContainer>
 	);
 };

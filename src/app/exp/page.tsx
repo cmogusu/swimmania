@@ -1,5 +1,5 @@
 import { Page } from "@/account";
-import { EntityMetadata } from "@/account/components/Entity/EntityMetadata";
+import { EditMetadata } from "@/account/components/EditEntity/EditMetadata";
 
 export default async function ExpPage() {
 	const metadata = [
@@ -15,7 +15,7 @@ export default async function ExpPage() {
 
 	return (
 		<Page>
-			<EntityMetadata entityType="pool" metadata={metadata} />
+			<EditMetadata entityId={6} entityType="pool" metadata={metadata} />
 		</Page>
 	);
 }

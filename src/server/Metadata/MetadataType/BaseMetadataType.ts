@@ -8,7 +8,7 @@ import type {
 } from "../types";
 
 export class BaseMetadataType implements IMetadataType {
-	type: SchemaType = "none";
+	type: SchemaType = "text";
 	id: number = -1;
 	name: string;
 	_value: MetadataValue;

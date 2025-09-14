@@ -4,4 +4,6 @@ export type EditProps = {
 	entityType: EntityType;
 	entityId: number;
 	metadataType: IMetadataType;
+	childrenMetadata?: IMetadataType[];
+	parentTitle?: string;
 };
