@@ -1,7 +1,7 @@
-import type { EntityType, IMetadataType } from "@/server";
+import type { IMetadataType } from "@/server";
 
-export type EditProps = {
-	entityType: EntityType;
-	entityId: number;
+export type MetadataTypeProps = {
+	parentTitle?: string;
+	childrenMetadata?: IMetadataType[];
 	metadataType: IMetadataType;
 };

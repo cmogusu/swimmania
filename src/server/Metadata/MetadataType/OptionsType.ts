@@ -1,4 +1,4 @@
-import { isNotSet, isString } from "../../utils";
+import { isNotSet, isString, isUndefined } from "../../utils";
 import type { Option, OptionsTypeInputs } from "../types";
 import { BaseMetadataType } from "./BaseMetadataType";
 
@@ -42,5 +42,15 @@ export class OptionsType extends BaseMetadataType {
 
 	sanitizeValue(v: string): string {
 		return v.toLowerCase();
+	}
+
+	get formattedValue(): string {
+		const { options, value } = this;
+		if (isUndefined(value)) {
+			return "";
+		}
+
+		const option = options.find((o) => o.key === value);
+		return option?.value ?? "";
 	}
 }

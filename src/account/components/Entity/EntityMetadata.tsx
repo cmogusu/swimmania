@@ -39,7 +39,7 @@ const getMetadataComponents = (
 		.filter((m) => m.hasValue)
 		.map((metadataType: IMetadataType) => {
 			const { id, type } = metadataType;
-			const MetadataComponents = metadataComponents[type];
-			return <MetadataComponents key={id} metadataType={metadataType} />;
+			const MetadataComponent = metadataComponents[type];
+			return <MetadataComponent key={id} metadataType={metadataType} />;
 		});
 };

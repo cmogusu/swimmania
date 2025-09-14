@@ -10,6 +10,8 @@ type Props = {
 	entityId: number;
 };
 
+const show = false;
+
 export const Entity = async ({ entityType, entityId }: Props) => {
 	const entity = await api.getEntity(entityType, entityId);
 	const { name, description, location, defaultImage, images, metadata } =
@@ -39,7 +41,7 @@ export const Entity = async ({ entityType, entityId }: Props) => {
 				<p className="text-2xl">{description}</p>
 			</section>
 
-			<EntityImages defaultImage={defaultImage} images={images} />
+			{show && <EntityImages images={images} />}
 			<EntityMetadata entityType={entityType} metadata={metadata} />
 		</div>
 	);

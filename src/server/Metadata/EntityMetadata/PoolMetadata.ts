@@ -103,12 +103,12 @@ export class PoolMetadata extends BaseEntityMetadata {
 
 	hasLaneRopes = new BooleanType({
 		name: "hasLaneRopes",
-		title: "Has lane ropes",
+		title: "Lane ropes",
 	});
 
 	isHeated = new BooleanType({
 		name: "isHeated",
-		title: "Is Heated",
+		title: "Heated",
 	});
 
 	entryFeeIn = new ParentType({
@@ -135,7 +135,7 @@ export class PoolMetadata extends BaseEntityMetadata {
 
 	cleanliness = new RatingsType({
 		name: "cleanliness",
-		title: "Cleanliness rating",
+		title: "Cleanliness",
 	});
 
 	changingRoomCleanliness = new RatingsType({
@@ -145,7 +145,7 @@ export class PoolMetadata extends BaseEntityMetadata {
 
 	hasOnDutyLifeguard = new BooleanType({
 		name: "hasOnDutyLifeguard",
-		title: "Has lifeguard",
+		title: "Lifeguards",
 	});
 
 	location = new ParentType({
