@@ -41,11 +41,11 @@ export type MetadataFilterByRawInputs = {
 };
 
 export type MetadataRawInputs = {
-	entityType?: EntityType;
 	id?: number;
-	entityId?: number;
 	name?: string;
 	value?: MetadataValue;
+	entityType?: EntityType;
+	entityId?: number;
 	itemIndex?: number;
 	filters?: MetadataFilter[];
 };

@@ -1,8 +1,8 @@
 import { isNotSet, isString, isUndefined } from "../../utils";
 import type { Option, OptionsTypeInputs } from "../types";
-import { BaseMetadataType } from "./BaseMetadataType";
+import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-export class OptionsType extends BaseMetadataType {
+export class OptionsPropertyType extends BaseMetadataPropertyType {
 	declare _value: string;
 	options: Option[] = [];
 
@@ -19,6 +19,10 @@ export class OptionsType extends BaseMetadataType {
 		}
 
 		this.options = options;
+	}
+
+	get value() {
+		return this._value;
 	}
 
 	set value(v: string) {

@@ -1,25 +1,46 @@
-import { DateType, TimeType } from "../MetadataType";
-import type { RawMetadata } from "../types";
+import { DatePropertyType, TimePropertyType } from "../MetadataPropertyType";
+import type { MetadataPropertyInitializer, RawMetadata } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
+import { getMetadataProperties, getPropertyInstance } from "./utils";
+
+const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	date: (rawMetadata?: RawMetadata) =>
+		new DatePropertyType({
+			name: "date",
+			title: "Event date",
+			...rawMetadata,
+		}),
+
+	time: (rawMetadata?: RawMetadata) =>
+		new TimePropertyType({
+			name: "time",
+			title: "Start time",
+			...rawMetadata,
+		}),
+};
 
 export class EventMetadata extends BaseEntityMetadata {
-	date = new DateType({
-		name: "date",
-		title: "Event date",
-	});
+	static propertyInitilizers = propertyInitializers;
 
-	time = new TimeType({
-		name: "time",
-		title: "Start time",
-	});
+	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+		return getPropertyInstance(EventMetadata.propertyInitilizers, rawMetadata);
+	};
 
-	metadata = [this.date, this.time];
-
-	constructor(rawMetadataArr?: RawMetadata[]) {
+	constructor(
+		rawMetadataArr?: RawMetadata[],
+		intializeAllProperties: boolean = false,
+	) {
 		super();
 
-		if (rawMetadataArr) {
-			this.setValues(rawMetadataArr);
+		const properties = getMetadataProperties(
+			EventMetadata.propertyInitilizers,
+			rawMetadataArr,
+			intializeAllProperties,
+		);
+
+		for (const propertyName in properties) {
+			this[propertyName] = properties[propertyName];
+			this.metadata.push(this[propertyName]);
 		}
 	}
 }

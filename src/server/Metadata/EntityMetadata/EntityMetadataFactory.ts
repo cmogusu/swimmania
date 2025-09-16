@@ -1,4 +1,4 @@
-import type { EntityType } from "@/server/types/global";
+import type { EntityType } from "@/server/types";
 import type { IEntityMetadata, RawMetadata } from "../types";
 import { CoachMetadata } from "./CoachMetadata";
 import { EventMetadata } from "./EventMetadata";
@@ -22,12 +22,25 @@ const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
 
 // biome-ignore lint/complexity/noStaticOnlyClass: Will fix later
 export class EntityMetadataFactory {
-	static getInstance(entityType: EntityType, rawMetadataArr?: RawMetadata[]) {
+	static getInstance(
+		entityType: EntityType,
+		rawMetadataArr?: RawMetadata[],
+		intializeAllProperties?: boolean,
+	) {
 		const EntityMetadataClass = entityMetadataClasses[entityType];
 		if (!EntityMetadataClass) {
 			throw Error("Invalid entity type");
 		}
 
-		return new EntityMetadataClass(rawMetadataArr);
+		return new EntityMetadataClass(rawMetadataArr, intializeAllProperties);
+	}
+
+	static getPropertyInstance(entityType: EntityType, rawMetadata: RawMetadata) {
+		const EntityMetadataClass = entityMetadataClasses[entityType];
+		if (!EntityMetadataClass) {
+			throw Error("Invalid entity type");
+		}
+
+		return EntityMetadataClass.getPropertyInstance(rawMetadata);
 	}
 }

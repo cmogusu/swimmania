@@ -2,7 +2,7 @@ import type { MetadataData } from "@/server/types";
 import { isSet, isUndefined } from "../../utils";
 import type {
 	IEntityMetadata,
-	IMetadataType,
+	IMetadataPropertyType,
 	MetadataFilter,
 	MetadataValue,
 	RawMetadata,
@@ -11,7 +11,7 @@ import type {
 export class BaseEntityMetadata implements IEntityMetadata {
 	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
 	[key: string]: any;
-	metadata: IMetadataType[] = [];
+	metadata: IMetadataPropertyType[] = [];
 
 	setValues(rawMetadataArr: RawMetadata[]) {
 		rawMetadataArr.forEach((rawMetadata: RawMetadata) => {
@@ -20,16 +20,15 @@ export class BaseEntityMetadata implements IEntityMetadata {
 	}
 
 	setValue(rawMetadata: RawMetadata) {
-		const { id, name, value, itemIndex, isHidden } = rawMetadata;
+		const { id, name, value, itemIndex } = rawMetadata;
 		const property = this.getProperty(name);
 
 		if (!isUndefined(id)) property.id = id;
 		if (!isUndefined(value)) property.value = value;
 		if (!isUndefined(itemIndex)) property.itemIndex = itemIndex;
-		if (!isUndefined(isHidden)) property.isHidden = isHidden;
 	}
 
-	getProperty(name: string): IMetadataType {
+	getProperty(name: string): IMetadataPropertyType {
 		const [propertyName, propertyChildName] = name.split(".");
 		if (!Object.hasOwn(this, propertyName)) {
 			throw Error("Property name does not exist");
@@ -64,7 +63,12 @@ export class BaseEntityMetadata implements IEntityMetadata {
 			throw Error("Metadata name required");
 		}
 
-		const property = this[name];
+		let property = this[name];
+		if (name.includes(".")) {
+			const [parentName, childName] = name.split(".");
+			property = this[parentName][childName];
+		}
+
 		if (!property) {
 			throw Error("Invalid metadata name");
 		}

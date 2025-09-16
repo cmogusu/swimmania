@@ -1,10 +1,10 @@
 import type { MetadataTypeInputs } from "../types";
-import { NumberType } from "./NumberType";
+import { NumberPropertyType } from "./NumberPropertyType";
 
 const MIN_VALUE = 1;
 const MAX_VALUE = 5;
 
-export class RatingsType extends NumberType {
+export class RatingsPropertyType extends NumberPropertyType {
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {

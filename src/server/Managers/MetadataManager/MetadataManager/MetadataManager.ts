@@ -55,7 +55,7 @@ export class MetadataManager {
 	async insert(rawInputs: MetadataPostRawInputs) {
 		const metadataInputs = new MetadataInputData(rawInputs);
 		metadataInputs.validatePostInputs();
-		const insertData = await this.db.update(metadataInputs);
+		const insertData = await this.db.insert(metadataInputs);
 
 		// @ts-ignore
 		if (!insertData?.insertId) {

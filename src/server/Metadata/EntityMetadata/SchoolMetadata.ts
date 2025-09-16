@@ -1,32 +1,57 @@
-import { NumberType, ParentType } from "../MetadataType";
-import type { RawMetadata } from "../types";
+import {
+	NumberPropertyType,
+	ParentPropertyType,
+} from "../MetadataPropertyType";
+import type { MetadataPropertyInitializer, RawMetadata } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
+import { getMetadataProperties, getPropertyInstance } from "./utils";
+
+const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	averageSchoolFees: () =>
+		new ParentPropertyType({
+			name: "averageSchoolFees",
+			title: "Average school fee",
+			childInitializers: {
+				ksh: (rawMetadata?: RawMetadata) =>
+					new NumberPropertyType({
+						name: "ksh",
+						prefix: "Ksh ",
+						title: "Shillings",
+						...rawMetadata,
+					}),
+				usd: (rawMetadata?: RawMetadata) =>
+					new NumberPropertyType({
+						name: "usd",
+						prefix: "Usd ",
+						title: "Usd",
+						...rawMetadata,
+					}),
+			},
+		}),
+};
 
 export class SchoolMetadata extends BaseEntityMetadata {
-	averageSchoolFees = new ParentType({
-		name: "averageSchoolFees",
-		title: "Average school fee",
-		children: [
-			new NumberType({
-				name: "ksh",
-				prefix: "Ksh ",
-				title: "Shillings",
-			}),
-			new NumberType({
-				name: "usd",
-				prefix: "Usd ",
-				title: "Usd",
-			}),
-		],
-	});
+	static propertyInitilizers = propertyInitializers;
 
-	metadata = [this.averageSchoolFees];
+	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+		return getPropertyInstance(SchoolMetadata.propertyInitilizers, rawMetadata);
+	};
 
-	constructor(rawMetadataArr?: RawMetadata[]) {
+	constructor(
+		rawMetadataArr?: RawMetadata[],
+		intializeAllProperties: boolean = false,
+	) {
 		super();
 
-		if (rawMetadataArr) {
-			this.setValues(rawMetadataArr);
+		const properties = getMetadataProperties(
+			SchoolMetadata.propertyInitilizers,
+			rawMetadataArr,
+			intializeAllProperties,
+		);
+
+		for (const propertyName in properties) {
+			this[propertyName] = properties[propertyName];
+			this.metadata.push(this[propertyName]);
 		}
 	}
 }

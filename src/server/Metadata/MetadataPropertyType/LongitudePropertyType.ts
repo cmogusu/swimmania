@@ -1,11 +1,11 @@
 import type { MetadataTypeInputs } from "../types";
-import { NumberType } from "./NumberType";
+import { NumberPropertyType } from "./NumberPropertyType";
 
 const MIN_VALUE = -180;
 const MAX_VALUE = 180;
 const SUFFIX = "°";
 
-export class LongitudeType extends NumberType {
+export class LongitudePropertyType extends NumberPropertyType {
 	constructor(inputs: MetadataTypeInputs) {
 		super({
 			...inputs,

@@ -12,11 +12,9 @@ export type RawMetadata = {
 	id?: number;
 	name: string;
 	value?: MetadataValue;
-	RawMetadata?: string;
 	entityType?: EntityType;
 	entityId?: number;
 	itemIndex?: number;
-	isHidden?: boolean;
 };
 
 export type SchemaType =
@@ -45,36 +43,40 @@ export type MetadataTypeInputs = {
 	min?: number;
 	max?: number;
 	itemIndex?: number;
-	isHidden?: boolean;
 	prefix?: string;
 	suffix?: string;
 };
 
+export type MetadataPropertyInitializer = (
+	rawMetadata?: RawMetadata,
+) => IMetadataPropertyType;
+
 export type ParentTypeInputs = MetadataTypeInputs & {
-	children?: IMetadataType[];
+	childInitializers: Record<string, MetadataPropertyInitializer>;
 };
 
 export type OptionsTypeInputs = MetadataTypeInputs & {
-	options?: Option[];
+	options: Option[];
 };
 
-export interface IMetadataType {
+export interface IMetadataPropertyType {
 	id: number;
 	type: SchemaType;
 	itemIndex?: number;
-	isHidden?: boolean;
 	title: string;
 	name: string;
 	value: MetadataValue;
 	dbValue: MetadataData[];
 	formattedValue: string;
 	hasValue: boolean;
-	children?: IMetadataType[];
+	children?: IMetadataPropertyType[];
 	options?: Option[];
+	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;
+	createAllChildInstances: () => void;
 }
 
 export interface IEntityMetadata {
-	metadata: IMetadataType[];
+	metadata: IMetadataPropertyType[];
 	dbValue: MetadataData[];
 	validateFilter: (filter: MetadataFilter) => void;
 	validateFilters: (filters?: MetadataFilter[]) => void;

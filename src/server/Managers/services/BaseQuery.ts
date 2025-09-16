@@ -35,8 +35,9 @@ export class BaseQuery {
 	throwIfNotSet(values: { [_: string]: unknown }) {
 		for (const name in values) {
 			const value = values[name];
+
 			if (value === undefined || value === null) {
-				throw Error(`${name} value not set`);
+				throw Error(`${name} not set`);
 			}
 		}
 	}

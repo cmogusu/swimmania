@@ -1,19 +1,15 @@
 import { addLeadingZero, isNumber, isString } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
-import { BaseMetadataType } from "./BaseMetadataType";
+import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-const SUFFIX = " Hrs";
-
-export class TimeType extends BaseMetadataType {
+// TODO: implement this
+export class DatePropertyType extends BaseMetadataPropertyType {
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {
-		super({
-			...inputs,
-			suffix: SUFFIX,
-		});
+		super(inputs);
 
-		this.type = "time";
+		this.type = "date";
 	}
 
 	get value(): number {
@@ -30,12 +26,15 @@ export class TimeType extends BaseMetadataType {
 
 	validateValue(v?: unknown): void {
 		if (!isNumber(v)) {
-			throw "Invalid value. Number expected for time value";
+			throw "Invalid value. Number expected for date value";
 		}
 	}
 
 	sanitizeValue(v: string): number {
-		return Number(v);
+		const [hours, minutes] = v.split(":").map(Number);
+		const date = new Date(0);
+		date.setUTCHours(hours, minutes);
+		return date.getTime();
 	}
 
 	get formattedValue(): string {
@@ -48,16 +47,9 @@ export class TimeType extends BaseMetadataType {
 		return `${this.prefix}${formatedTime}${this.suffix}`;
 	}
 
-	sanitizeStringTimeValue(v: string): number {
-		const [hours, minutes] = v.split(":").map(Number);
-		const date = new Date(0);
-		date.setUTCHours(hours, minutes);
-		return date.getTime();
-	}
-
-	validateStringTimeValue(v?: unknown): void {
+	stringTimeToValue(v?: unknown): void {
 		if (!isString(v)) {
-			throw "Invalid value. String expected for time";
+			throw "Invalid value. String expected for date value";
 		}
 
 		const [hours, minutes] = v.split(":");

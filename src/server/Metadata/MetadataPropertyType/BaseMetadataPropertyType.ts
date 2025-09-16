@@ -1,17 +1,18 @@
 import type { MetadataData } from "@/server/types";
 import { isSet, isUndefined } from "../../utils";
 import type {
-	IMetadataType,
+	IMetadataPropertyType,
 	MetadataTypeInputs,
 	MetadataValue,
+	RawMetadata,
 	SchemaType,
 } from "../types";
 
-export class BaseMetadataType implements IMetadataType {
+export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	type: SchemaType = "text";
 	id: number = -1;
 	name: string;
-	_value: MetadataValue;
+	_value: MetadataValue = false;
 
 	title: string = "";
 	editTitle: string = "";
@@ -23,11 +24,10 @@ export class BaseMetadataType implements IMetadataType {
 	suffix: string = "";
 
 	itemIndex: number = 0;
-	isHidden: boolean = false;
 
 	allowedComparators: string[] = ["=", "<>"];
 	hasValue: boolean = false;
-	parent: IMetadataType | undefined;
+	parent: IMetadataPropertyType | undefined;
 
 	constructor({
 		id,
@@ -38,7 +38,6 @@ export class BaseMetadataType implements IMetadataType {
 		min,
 		max,
 		itemIndex,
-		isHidden,
 		prefix,
 		suffix,
 	}: MetadataTypeInputs) {
@@ -48,7 +47,6 @@ export class BaseMetadataType implements IMetadataType {
 		if (!isUndefined(min)) this.min = min;
 		if (!isUndefined(max)) this.max = max;
 		if (!isUndefined(itemIndex)) this.itemIndex = itemIndex;
-		if (!isUndefined(isHidden)) this.isHidden = isHidden;
 		if (!isUndefined(prefix)) this.prefix = prefix;
 		if (!isUndefined(suffix)) this.suffix = suffix;
 		if (!isUndefined(value)) this.value = value;
@@ -86,9 +84,12 @@ export class BaseMetadataType implements IMetadataType {
 		return `${this.prefix}${this.value?.toString()}${this.suffix}`;
 	}
 
-	validateValue(v?: unknown) {}
+	validateValue(_?: MetadataValue) {}
 
 	sanitizeValue(v: MetadataValue) {
 		return v;
 	}
+
+	createChildInstance(_: string, __?: RawMetadata) {}
+	createAllChildInstances() {}
 }

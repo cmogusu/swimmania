@@ -1,8 +1,8 @@
 import { isNumber } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
-import { BaseMetadataType } from "./BaseMetadataType";
+import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-export class NumberType extends BaseMetadataType {
+export class NumberPropertyType extends BaseMetadataPropertyType {
 	declare _value: number;
 
 	allowedComparators: string[] = ["=", "<>", "<", "<=", ">", ">="];
@@ -36,5 +36,9 @@ export class NumberType extends BaseMetadataType {
 
 	sanitizeValue(v: number | string): number {
 		return Number(v);
+	}
+
+	get formattedValue() {
+		return `${this.value}`;
 	}
 }

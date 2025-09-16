@@ -1,8 +1,8 @@
 import { isNotSet } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
-import { BaseMetadataType } from "./BaseMetadataType";
+import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-export class BooleanType extends BaseMetadataType {
+export class BooleanPropertyType extends BaseMetadataPropertyType {
 	declare _value: boolean;
 
 	constructor(inputs: MetadataTypeInputs) {
@@ -23,6 +23,7 @@ export class BooleanType extends BaseMetadataType {
 	}
 
 	validateValue(v?: unknown) {
+		console.log(v);
 		if (isNotSet(v)) {
 			throw Error("Invalid value. Boolean expected");
 		}

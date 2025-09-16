@@ -43,8 +43,8 @@ export class Database extends BaseDatabase {
 	insert(metadataData: MetadataInputData) {
 		const { entityId, entityType, name, value } =
 			metadataData.getSanitizedInsertData();
-		const query = this.query.insert(entityId, entityType, name, value);
 
+		const query = this.query.insert(entityId, entityType, name, value);
 		return this.execSql(query);
 	}
 

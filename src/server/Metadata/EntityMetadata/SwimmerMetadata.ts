@@ -1,20 +1,42 @@
-import { TextType } from "../MetadataType";
-import type { RawMetadata } from "../types";
+import { TextPropertyType } from "../MetadataPropertyType";
+import type { MetadataPropertyInitializer, RawMetadata } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
+import { getMetadataProperties, getPropertyInstance } from "./utils";
+
+const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	dob: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "dob",
+			title: "Date of birth",
+			...rawMetadata,
+		}),
+};
 
 export class SwimmerMetadata extends BaseEntityMetadata {
-	dob = new TextType({
-		name: "dob",
-		title: "Date of birth",
-	});
+	static propertyInitilizers = propertyInitializers;
 
-	metadata = [this.dob];
+	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+		return getPropertyInstance(
+			SwimmerMetadata.propertyInitilizers,
+			rawMetadata,
+		);
+	};
 
-	constructor(rawMetadataArr?: RawMetadata[]) {
+	constructor(
+		rawMetadataArr?: RawMetadata[],
+		intializeAllProperties: boolean = false,
+	) {
 		super();
 
-		if (rawMetadataArr) {
-			this.setValues(rawMetadataArr);
+		const properties = getMetadataProperties(
+			SwimmerMetadata.propertyInitilizers,
+			rawMetadataArr,
+			intializeAllProperties,
+		);
+
+		for (const propertyName in properties) {
+			this[propertyName] = properties[propertyName];
+			this.metadata.push(this[propertyName]);
 		}
 	}
 }

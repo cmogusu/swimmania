@@ -1,8 +1,8 @@
 import { isNotSet, isString, sanitizeTextForDb } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
-import { BaseMetadataType } from "./BaseMetadataType";
+import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-export class TextType extends BaseMetadataType {
+export class TextPropertyType extends BaseMetadataPropertyType {
 	declare _value: string;
 
 	constructor(inputs: MetadataTypeInputs) {

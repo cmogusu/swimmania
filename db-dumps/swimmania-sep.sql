@@ -120,31 +120,31 @@ CREATE TABLE `metadata` (
 -- Dumping data for table `metadata`
 --
 
-INSERT INTO `metadata` (`id`, `entityId`, `entityType`, `name`, `value`, `itemIndex`, `isHidden`) VALUES
-(2, 2, 'pool', 'dog', 'dogz', 0, 0),
-(3, 2, 'pool', 'hasLaneRopes', 'true', 0, 0),
-(6, 7, 'pool', 'hasLaneRopes', 'true', 0, 0),
-(12, 8, 'pool', 'hasLaneRopes', 'true', 0, 0),
-(13, 6, 'pool', 'poolDimensions.length', '25', 0, 0),
-(14, 6, 'pool', 'location.lat', '-1.2611664809506706', 0, 0),
-(15, 6, 'pool', 'location.lng', '36.80447787409544', 0, 0),
-(17, 2, 'pool', 'openToChildren', 'true', 0, 0),
-(18, 2, 'pool', 'hello', 'kitty1', 0, 0),
-(19, 2, 'pool', 'hello', 'kittye', 0, 0),
-(20, 7, 'pool', 'openToChildren', 'true', 0, 0),
-(21, 22, 'pool', 'openToChildren', 'true', 0, 0),
-(22, 2, 'pool', 'cat', 'cats dog', 0, 0),
-(23, 2, 'pool', 'speaker', 'speakers dogs', 0, 0),
-(24, 6, 'pool', 'operatingHours.closing', '24480000', 0, 0),
-(25, 6, 'pool', 'hasLaneRopes', 'false', 0, 0),
-(26, 6, 'pool', 'isHeated', 'true', 0, 0),
-(28, 6, 'pool', 'cleanliness', '4', 0, 0),
-(29, 6, 'pool', 'hasOnDutyLifeguard', 'false', 0, 0),
-(30, 38, 'pool', 'poolDimensions.width', '343', 0, 0),
-(31, 38, 'pool', 'poolDimensions.length', '323', 0, 0),
-(32, 38, 'pool', 'poolDimensions.length', '326', 0, 0),
-(33, 38, 'pool', 'openToChildren', '334', 0, 0),
-(34, 38, 'pool', 'crowdinessRating', '', 0, 0);
+INSERT INTO `metadata` (`id`, `entityId`, `entityType`, `name`, `value`, `itemIndex`) VALUES
+(2, 2, 'pool', 'dog', 'dogz', 0),
+(3, 2, 'pool', 'hasLaneRopes', 'true', 0),
+(6, 7, 'pool', 'hasLaneRopes', 'true', 0),
+(12, 8, 'pool', 'hasLaneRopes', 'true', 0),
+(13, 6, 'pool', 'poolDimensions.length', '25', 0),
+(14, 6, 'pool', 'location.lat', '-1.2611664809506706', 0),
+(15, 6, 'pool', 'location.lng', '36.80447787409544', 0),
+(17, 2, 'pool', 'openToChildren', 'true', 0),
+(18, 2, 'pool', 'hello', 'kitty1', 0),
+(19, 2, 'pool', 'hello', 'kittye', 0),
+(20, 7, 'pool', 'openToChildren', 'true', 0),
+(21, 22, 'pool', 'openToChildren', 'true', 0),
+(22, 2, 'pool', 'cat', 'cats dog', 0),
+(23, 2, 'pool', 'speaker', 'speakers dogs', 0),
+(24, 6, 'pool', 'operatingHours.closing', '24480000', 0),
+(25, 6, 'pool', 'hasLaneRopes', 'false', 0),
+(26, 6, 'pool', 'isHeated', 'true', 0),
+(28, 6, 'pool', 'cleanliness', '4', 0),
+(29, 6, 'pool', 'hasOnDutyLifeguard', 'false', 0),
+(30, 38, 'pool', 'poolDimensions.width', '343', 0),
+(31, 38, 'pool', 'poolDimensions.length', '323', 0),
+(32, 38, 'pool', 'poolDimensions.length', '326', 0),
+(33, 38, 'pool', 'openToChildren', '334', 0),
+(34, 38, 'pool', 'crowdinessRating', '', 0);
 
 -- --------------------------------------------------------
 

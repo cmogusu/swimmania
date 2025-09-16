@@ -1,4 +1,3 @@
-import { isUndefined } from "@/server";
 import { childComponents } from "./childComponents";
 import type { EditProps } from "./types";
 
@@ -8,13 +7,12 @@ export const EditParentType = ({
 	metadataType,
 }: EditProps) => {
 	const { children, title } = metadataType;
-	const childrenWithValues = children?.filter((child) => child.hasValue);
 
-	if (isUndefined(childrenWithValues?.[0])) {
-		return null;
+	if (!children?.[0]) {
+		throw Error("Parent has no children");
 	}
 
-	const firstChild = childrenWithValues[0];
+	const firstChild = children[0];
 	const Component = childComponents[firstChild.type];
 
 	return (
@@ -22,7 +20,7 @@ export const EditParentType = ({
 			entityType={entityType}
 			entityId={entityId}
 			metadataType={firstChild}
-			childrenMetadata={childrenWithValues}
+			childrenMetadata={children}
 			parentTitle={title}
 		/>
 	);

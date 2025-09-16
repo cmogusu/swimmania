@@ -19,7 +19,7 @@ export const EditBooleanType = ({
 				<label className="label">
 					<input
 						type="checkbox"
-						name="isDefault"
+						name="value"
 						className="toggle toggle-sm"
 						defaultChecked={value as boolean}
 					/>

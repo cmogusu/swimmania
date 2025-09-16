@@ -172,7 +172,29 @@ export class Api {
 			});
 			return updateData;
 		} catch (error: unknown) {
-			const errorMessage = "Unable to update entity";
+			const errorMessage = "Unable to update metadata";
+			this.log.error(errorMessage, error as Error);
+		}
+	}
+
+	async insertMetadata(
+		entityType: EntityType,
+		entityId: number,
+		name: string,
+		value: MetadataValue,
+	) {
+		try {
+			const metadataManager = metadataManagerFactory.getInstance();
+			const updateData = await metadataManager.insert({
+				entityType,
+				entityId,
+				name,
+				value,
+			});
+			return updateData;
+		} catch (error: unknown) {
+			console.log(error);
+			const errorMessage = "Unable to insert metadata";
 			this.log.error(errorMessage, error as Error);
 		}
 	}

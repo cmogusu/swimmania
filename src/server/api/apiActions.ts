@@ -114,6 +114,25 @@ export async function updateMetadata(formData: FormData) {
 	reloadEditPage(data.entityType, data.entityId);
 }
 
+export async function insertMetadata(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityType",
+		"entityId",
+		"name",
+		"value",
+	]);
+	console.log(data);
+
+	await api.insertMetadata(
+		data.entityType as EntityType,
+		Number(data.entityId),
+		data.name as string,
+		data.value as string,
+	);
+
+	reloadEditPage(data.entityType, data.entityId);
+}
+
 const extractFormData = (
 	formData: FormData,
 	keys: string[],

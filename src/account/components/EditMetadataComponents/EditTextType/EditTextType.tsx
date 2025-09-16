@@ -1,6 +1,6 @@
 import type { EntityType, IMetadataType } from "@/server";
-import { EditContainer } from "./EditContainer";
-import type { EditProps } from "./types";
+import { EditContainer } from "../EditContainer";
+import type { EditProps } from "../types";
 
 type InputType = "text" | "number" | "time" | "date";
 type Props = EditProps & { inputType?: InputType };
@@ -19,7 +19,7 @@ export const EditTextType = ({
 				<h3 className="mb-3">{parentTitle}</h3>
 				{childrenMetadata?.map((m) => (
 					<RenderItem
-						key={m.id}
+						key={m.name}
 						entityType={entityType}
 						entityId={entityId}
 						metadataType={m}
@@ -53,7 +53,7 @@ export const RenderItem = ({
 	metadataType,
 	inputType,
 }: RenderItemProps) => {
-	const { title, value } = metadataType;
+	const { title, formattedValue } = metadataType;
 
 	return (
 		<EditContainer
@@ -67,8 +67,8 @@ export const RenderItem = ({
 					className="input input-sm"
 					type={inputType || "text"}
 					name="value"
-					placeholder="value"
-					defaultValue={value as number}
+					placeholder={title}
+					defaultValue={formattedValue}
 				/>
 			</label>
 		</EditContainer>

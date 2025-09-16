@@ -3,10 +3,11 @@ import { isUndefined } from "@/server/utils";
 import {
 	EntityMetadataFactory,
 	type IEntityMetadata,
+	type IMetadataPropertyType,
 	type MetadataFilter,
 	type MetadataValue,
 } from "../../../Metadata";
-import type { EntityType } from "../../../types/global";
+import type { EntityType } from "../../../types";
 import { BaseInputData } from "../../services/BaseInputData";
 import type { MetadataRawInputs } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
@@ -24,14 +25,14 @@ export class MetadataInputData extends BaseInputData {
 	readonly validate: Validate;
 	readonly sanitize: Sanitize;
 
-	metadata?: IEntityMetadata;
+	metadataProperty?: IMetadataPropertyType;
 
 	constructor({
 		id,
-		entityId,
-		entityType,
 		name,
 		value,
+		entityType,
+		entityId,
 		itemIndex,
 		filters,
 	}: MetadataRawInputs) {

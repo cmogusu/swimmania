@@ -20,7 +20,8 @@ export const EditOptionsType = ({
 		>
 			<fieldset className="fieldset">
 				<legend className="fieldset-legend">{title}</legend>
-				<select defaultValue={value as string} className="select">
+				<select name="value" defaultValue={value as string} className="select">
+					<option value="">Select</option>
 					{options.map((o) => (
 						<option key={o.key} value={o.key}>
 							{o.value}

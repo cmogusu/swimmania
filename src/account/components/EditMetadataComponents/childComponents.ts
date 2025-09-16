@@ -5,7 +5,7 @@ import { EditLongitudeType } from "./EditLongitudeType";
 import { EditNumberType } from "./EditNumberType";
 import { EditOptionsType } from "./EditOptionsType";
 import { EditRatingsType } from "./EditRatingsType";
-import { EditTextType } from "./EditTextType";
+import { EditTextType } from "./EditTextType/EditTextType";
 import { EditTimeType } from "./EditTimeType";
 
 export const childComponents = {

@@ -1,70 +1,102 @@
-import { NumberType, ParentType, RatingsType, TimeType } from "../MetadataType";
-import type { RawMetadata } from "../types";
+import {
+	NumberPropertyType,
+	ParentPropertyType,
+	RatingsPropertyType,
+	TimePropertyType,
+} from "../MetadataPropertyType";
+import type { MetadataPropertyInitializer, RawMetadata } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
+import { getMetadataProperties, getPropertyInstance } from "./utils";
+
+const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	performance: (rawMetadata?: RawMetadata) =>
+		new RatingsPropertyType({
+			name: "performance",
+			title: "How did the coach perform",
+			...rawMetadata,
+		}),
+
+	friendliness: (rawMetadata?: RawMetadata) =>
+		new RatingsPropertyType({
+			name: "friendliness",
+			title: "How friendly",
+			...rawMetadata,
+		}),
+
+	experience: (rawMetadata?: RawMetadata) =>
+		new NumberPropertyType({
+			name: "experience",
+			title: "Years of experience",
+			...rawMetadata,
+		}),
+
+	ratePerHour: () =>
+		new ParentPropertyType({
+			name: "ratePerHour",
+			title: "Hourly rate",
+			childInitializers: {
+				ksh: (rawMetadata?: RawMetadata) =>
+					new NumberPropertyType({
+						name: "ksh",
+						prefix: "Ksh ",
+						title: "Shillings",
+						...rawMetadata,
+					}),
+				usd: (rawMetadata?: RawMetadata) =>
+					new NumberPropertyType({
+						name: "usd",
+						prefix: "Usd ",
+						title: "Usd",
+						...rawMetadata,
+					}),
+			},
+		}),
+
+	workingHours: () =>
+		new ParentPropertyType({
+			name: "workingHours",
+			title: "Working hours",
+			childInitializers: {
+				opening: (rawMetadata?: RawMetadata) =>
+					new TimePropertyType({
+						name: "opening",
+						title: "Opening",
+						value: "8:00",
+						...rawMetadata,
+					}),
+				closing: (rawMetadata?: RawMetadata) =>
+					new TimePropertyType({
+						name: "closing",
+						title: "Closing",
+						value: "17:00",
+						...rawMetadata,
+					}),
+			},
+		}),
+};
 
 export class CoachMetadata extends BaseEntityMetadata {
-	performance = new RatingsType({
-		name: "performance",
-		title: "How did the coach perform",
-	});
+	static propertyInitilizers = propertyInitializers;
 
-	friendliness = new RatingsType({
-		name: "friendliness",
-		title: "How friendly",
-	});
+	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+		return getPropertyInstance(CoachMetadata.propertyInitilizers, rawMetadata);
+	};
 
-	experience = new NumberType({
-		name: "experience",
-		title: "Years of experience",
-	});
-
-	ratePerHour = new ParentType({
-		name: "ratePerHour",
-		title: "Hourly rate",
-		children: [
-			new NumberType({
-				name: "ksh",
-				prefix: "Ksh ",
-				title: "Shillings",
-			}),
-			new NumberType({
-				name: "usd",
-				prefix: "Usd ",
-				title: "Usd",
-			}),
-		],
-	});
-
-	workingHours = new ParentType({
-		name: "workingHours",
-		title: "Working hours",
-		children: [
-			new TimeType({
-				name: "opening",
-				title: "Opening",
-				value: "8:00",
-			}),
-			new TimeType({
-				name: "closing",
-				title: "Closing",
-				value: "17:00",
-			}),
-		],
-	});
-
-	metadata = [
-		this.performance,
-		this.friendliness,
-		this.experience,
-		this.ratePerHour,
-		this.workingHours,
-	];
-
-	constructor(rawMetadataArr?: RawMetadata[]) {
+	constructor(
+		rawMetadataArr?: RawMetadata[],
+		intializeAllProperties: boolean = false,
+	) {
 		super();
 
-		if (rawMetadataArr) {
-			this.setValues(rawMetadataArr);
+		const properties = getMetadataProperties(
+			CoachMetadata.propertyInitilizers,
+			rawMetadataArr,
+			intializeAllProperties,
+		);
+
+		for (const propertyName in properties) {
+			this[propertyName] = properties[propertyName];
+			this.metadata.push(this[propertyName]);
 		}
 	}
 }

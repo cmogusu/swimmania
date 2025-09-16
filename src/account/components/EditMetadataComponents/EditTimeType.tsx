@@ -1,7 +1,6 @@
-import { EditTextType } from "./EditTextType";
+import { EditTextType } from "./EditTextType/EditTextType";
 import type { EditProps } from "./types";
 
 export const EditTimeType = (props: EditProps) => {
-	console.log("time");
 	return <EditTextType {...props} inputType="time" />;
 };

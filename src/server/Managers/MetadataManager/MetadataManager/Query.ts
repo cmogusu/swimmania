@@ -63,7 +63,7 @@ export class Query extends BaseQuery {
 		return `INSERT INTO \`metadata\` (${keys}) VALUES (${values});`;
 	}
 
-	deleteById(metadataId, entityId) {
+	deleteById(metadataId: number, entityId: number) {
 		this.throwIfNotSet({
 			metadataId,
 			entityId,

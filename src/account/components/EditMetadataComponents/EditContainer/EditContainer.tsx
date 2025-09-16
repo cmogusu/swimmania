@@ -1,6 +1,8 @@
+import Form from "next/form";
 import type { ReactNode } from "react";
 import type { EntityType, IMetadataType } from "@/server";
-import { updateMetadata } from "@/server";
+import { insertMetadata, updateMetadata } from "@/server";
+import { SubmitButton } from "./SubmitButton";
 
 type Props = {
 	entityType: EntityType;
@@ -16,9 +18,11 @@ export const EditContainer = ({
 	children,
 }: Props) => {
 	const { id, name } = metadataType;
+	const action = id === -1 ? insertMetadata : updateMetadata;
+	const buttonText = id === -1 ? "Insert" : "Update";
 
 	return (
-		<form action={updateMetadata} className="mb-4">
+		<Form action={action} className="mb-4">
 			<input type="hidden" name="entityType" defaultValue={entityType} />
 			<input type="hidden" name="id" defaultValue={id} />
 			<input type="hidden" name="entityId" defaultValue={entityId} />
@@ -26,9 +30,11 @@ export const EditContainer = ({
 
 			{children}
 
-			<button className="btn btn-sm" type="submit">
-				Update
-			</button>
-		</form>
+			<SubmitButton buttonText={buttonText}>
+				<button className="btn btn-sm" type="submit">
+					{buttonText}
+				</button>
+			</SubmitButton>
+		</Form>
 	);
 };
