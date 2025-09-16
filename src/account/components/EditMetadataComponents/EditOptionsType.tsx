@@ -27,7 +27,6 @@ export const EditOptionsType = ({
 						</option>
 					))}
 				</select>
-				<span className="label">Optional</span>
 			</fieldset>
 		</EditContainer>
 	);

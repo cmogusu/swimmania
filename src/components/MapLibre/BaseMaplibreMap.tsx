@@ -32,7 +32,8 @@ export function BaseMaplibreMap({ styleUrl, center, zoom, ref }: Props) {
 		return {
 			setCenterOnClick: (onMapClick) => {
 				if (!mapRef.current) {
-					throw Error("map instance not set");
+					// throw Error("map instance not set");
+					return;
 				}
 
 				mapRef.current.on("click", (event) => {
