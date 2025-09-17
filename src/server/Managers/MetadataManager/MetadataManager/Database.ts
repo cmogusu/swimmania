@@ -31,18 +31,25 @@ export class Database extends BaseDatabase {
 	}
 
 	update(metadataData: MetadataInputData) {
-		const { id, entityId, entityType, name, value } =
+		const { id, entityId, entityType, name, value, type } =
 			metadataData.getSanitizedUpdateData();
 
-		const query = this.query.update(id, entityId!, entityType!, name, value);
+		const query = this.query.update(
+			id,
+			entityId!,
+			entityType!,
+			name,
+			value,
+			type,
+		);
 		return this.execSql(query);
 	}
 
 	insert(metadataData: MetadataInputData) {
-		const { entityId, entityType, name, value } =
+		const { entityId, entityType, name, value, type } =
 			metadataData.getSanitizedInsertData();
 
-		const query = this.query.insert(entityId!, entityType!, name, value);
+		const query = this.query.insert(entityId!, entityType!, name, value, type);
 		return this.execSql(query);
 	}
 

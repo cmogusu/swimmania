@@ -112,6 +112,7 @@ export class MetadataInputData extends BaseInputData {
 		return {
 			name: this.metadataProperty!.name,
 			value: this.metadataProperty!.value,
+			type: this.metadataProperty!.type,
 			entityId: this.entityId,
 			entityType: this.entityType,
 		};
@@ -119,7 +120,7 @@ export class MetadataInputData extends BaseInputData {
 
 	getSanitizedUpdateData() {
 		return {
-			id: this.id,
+			id: this.id!,
 			...this.getSanitizedInsertData(),
 		};
 	}

@@ -1,17 +1,36 @@
-import type { MetadataFilter, MetadataValue } from "../../../Metadata";
+import type {
+	MetadataFilter,
+	MetadataValue,
+	SchemaType,
+} from "../../../Metadata";
 import type { EntityType } from "../../../types";
 import { isString } from "../../../utils";
 import { BaseQuery } from "../../services";
 
+const METADATA_TYPE_TO_COLUMN: Record<SchemaType, string> = {
+	boolean: "value_bool",
+	ratings: "value_bool",
+	date: "value_time",
+	time: "value_time",
+	latitude: "value_lat",
+	longitude: "value_lng",
+	number: "value_num",
+	text: "value_text",
+	options: "value_text",
+	parent: "",
+};
+
+const COLUMNS = `id, entityId, entityType, name, itemIndex, COALESCE(value_bool, value_time, value_num, value_text, value_lat, value_lng) as value`;
+
 export class Query extends BaseQuery {
 	getAll(entityId: number): string {
 		this.throwIfNotSet({ entityId });
-		return `SELECT * FROM \`metadata\` Where entityId = ${entityId};`;
+		return `SELECT ${COLUMNS} FROM \`metadata\` Where entityId = ${entityId};`;
 	}
 
 	getById(entityId: number, metadataId: number): string {
 		this.throwIfNotSet({ entityId, metadataId });
-		return `SELECT * FROM \`metadata\` Where id =${metadataId} and entityId =${entityId};`;
+		return `SELECT ${COLUMNS} FROM \`metadata\` Where id =${metadataId} and entityId =${entityId};`;
 	}
 
 	filterBy(entityType: EntityType, filters: MetadataFilter[]): string {
@@ -33,18 +52,23 @@ export class Query extends BaseQuery {
 		entityType: EntityType,
 		name: string,
 		value: MetadataValue,
+		type: SchemaType,
 	) {
-		const inputValues = {
+		const inputValues: Record<string, MetadataValue> = {
 			entityId,
 			entityType,
 			name,
-			value,
 		};
 
 		this.throwIfNotSet({
+			type,
+			value,
 			metadataId,
 			...inputValues,
 		});
+
+		const columnName = METADATA_TYPE_TO_COLUMN[type];
+		inputValues[columnName] = value;
 
 		const updateValuesStr = this.formatUpdateValues(inputValues);
 		return `UPDATE \`metadata\` SET ${updateValuesStr} WHERE id='${metadataId}';`;
@@ -55,9 +79,21 @@ export class Query extends BaseQuery {
 		entityType: EntityType,
 		name: string,
 		value: MetadataValue,
+		type: SchemaType,
 	) {
-		const inputValues = { entityId, entityType, name, value };
-		this.throwIfNotSet(inputValues);
+		const inputValues: Record<string, MetadataValue> = {
+			entityId,
+			entityType,
+			name,
+		};
+		this.throwIfNotSet({
+			type,
+			value,
+			...inputValues,
+		});
+
+		const columnName = METADATA_TYPE_TO_COLUMN[type];
+		inputValues[columnName] = value;
 
 		const { keys, values } = this.formatInsertValues(inputValues);
 		return `INSERT INTO \`metadata\` (${keys}) VALUES (${values});`;
