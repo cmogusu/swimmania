@@ -8,6 +8,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TextPropertyType({
 			name: "dob",
 			title: "Date of birth",
+			sortIndex: 0,
 			...rawMetadata,
 		}),
 };
@@ -38,5 +39,7 @@ export class SwimmerMetadata extends BaseEntityMetadata {
 			this[propertyName] = properties[propertyName];
 			this.metadata.push(this[propertyName]);
 		}
+
+		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
 	}
 }

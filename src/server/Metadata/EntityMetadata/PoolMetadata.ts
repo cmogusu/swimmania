@@ -31,6 +31,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Gym",
 				},
 			],
+			sortIndex: 0,
 			...rawMetadata,
 		}),
 
@@ -56,6 +57,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Curvy",
 				},
 			],
+			sortIndex: 2,
 			...rawMetadata,
 		}),
 
@@ -79,6 +81,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 4,
 		}),
 
 	operatingHours: () =>
@@ -99,12 +102,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 6,
 		}),
 
 	crowdiness: (rawMetadata?: RawMetadata) =>
 		new RatingsPropertyType({
 			name: "crowdiness",
 			title: "How crowded",
+			sortIndex: 8,
 			...rawMetadata,
 		}),
 
@@ -112,6 +117,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "openToPublic",
 			title: "Open to public",
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 
@@ -119,6 +125,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "openToChildren",
 			title: "Open to children",
+			sortIndex: 12,
 			...rawMetadata,
 		}),
 
@@ -126,6 +133,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "hasLaneRopes",
 			title: "Lane ropes",
+			sortIndex: 14,
 			...rawMetadata,
 		}),
 
@@ -133,6 +141,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "isHeated",
 			title: "Heated",
+			sortIndex: 16,
 			...rawMetadata,
 		}),
 
@@ -156,12 +165,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 18,
 		}),
 
 	isIndoor: (rawMetadata?: RawMetadata) =>
 		new BooleanPropertyType({
 			name: "isIndoor",
 			title: "Indoor pool",
+			sortIndex: 20,
 			...rawMetadata,
 		}),
 
@@ -169,6 +180,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new RatingsPropertyType({
 			name: "cleanliness",
 			title: "Cleanliness",
+			sortIndex: 22,
 			...rawMetadata,
 		}),
 
@@ -176,6 +188,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new RatingsPropertyType({
 			name: "changingRoomCleanliness",
 			title: "Cleanliness of changing room",
+			sortIndex: 24,
 			...rawMetadata,
 		}),
 
@@ -183,6 +196,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "hasOnDutyLifeguard",
 			title: "Lifeguards",
+			sortIndex: 26,
 			...rawMetadata,
 		}),
 
@@ -204,6 +218,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 28,
 		}),
 };
 
@@ -230,5 +245,7 @@ export class PoolMetadata extends BaseEntityMetadata {
 			this[propertyName] = properties[propertyName];
 			this.metadata.push(this[propertyName]);
 		}
+
+		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
 	}
 }

@@ -27,6 +27,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 0,
 		}),
 };
 
@@ -53,5 +54,7 @@ export class SchoolMetadata extends BaseEntityMetadata {
 			this[propertyName] = properties[propertyName];
 			this.metadata.push(this[propertyName]);
 		}
+
+		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
 	}
 }

@@ -13,6 +13,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new NumberPropertyType({
 			name: "openToPublic",
 			title: "Open to public",
+			sortIndex: 0,
 			...rawMetadata,
 		}),
 
@@ -36,6 +37,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 2,
 		}),
 
 	location: () =>
@@ -56,6 +58,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 4,
 		}),
 };
 
@@ -82,5 +85,7 @@ export class TeamMetadata extends BaseEntityMetadata {
 			this[propertyName] = properties[propertyName];
 			this.metadata.push(this[propertyName]);
 		}
+
+		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
 	}
 }

@@ -45,6 +45,7 @@ export type MetadataTypeInputs = {
 	itemIndex?: number;
 	prefix?: string;
 	suffix?: string;
+	sortIndex?: number;
 };
 
 export type MetadataPropertyInitializer = (
@@ -70,6 +71,7 @@ export interface IMetadataPropertyType {
 	formattedValue: string;
 	children?: IMetadataPropertyType[];
 	options?: Option[];
+	sortIndex: number;
 	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;
 	createAllChildInstances: () => void;
 }

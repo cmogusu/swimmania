@@ -8,6 +8,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new DatePropertyType({
 			name: "date",
 			title: "Event date",
+			sortIndex: 0,
 			...rawMetadata,
 		}),
 
@@ -15,6 +16,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TimePropertyType({
 			name: "time",
 			title: "Start time",
+			sortIndex: 2,
 			...rawMetadata,
 		}),
 };
@@ -42,5 +44,7 @@ export class EventMetadata extends BaseEntityMetadata {
 			this[propertyName] = properties[propertyName];
 			this.metadata.push(this[propertyName]);
 		}
+
+		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
 	}
 }

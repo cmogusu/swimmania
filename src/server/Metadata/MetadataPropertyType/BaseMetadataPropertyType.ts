@@ -28,6 +28,8 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	allowedComparators: string[] = ["=", "<>"];
 	parent: IMetadataPropertyType | undefined;
 
+	sortIndex: number = 100;
+
 	constructor({
 		id,
 		name,
@@ -39,6 +41,7 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		itemIndex,
 		prefix,
 		suffix,
+		sortIndex,
 	}: MetadataTypeInputs) {
 		if (!isUndefined(id)) this.id = id;
 		if (!isUndefined(title)) this.title = title;
@@ -48,6 +51,7 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		if (!isUndefined(itemIndex)) this.itemIndex = itemIndex;
 		if (!isUndefined(prefix)) this.prefix = prefix;
 		if (!isUndefined(suffix)) this.suffix = suffix;
+		if (!isUndefined(sortIndex)) this.sortIndex = sortIndex;
 		if (!isUndefined(value)) this.value = value;
 		this.name = name;
 	}

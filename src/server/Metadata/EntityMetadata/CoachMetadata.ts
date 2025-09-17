@@ -13,6 +13,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new RatingsPropertyType({
 			name: "performance",
 			title: "How did the coach perform",
+			sortIndex: 0,
 			...rawMetadata,
 		}),
 
@@ -20,6 +21,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new RatingsPropertyType({
 			name: "friendliness",
 			title: "How friendly",
+			sortIndex: 2,
 			...rawMetadata,
 		}),
 
@@ -27,6 +29,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new NumberPropertyType({
 			name: "experience",
 			title: "Years of experience",
+			sortIndex: 4,
 			...rawMetadata,
 		}),
 
@@ -50,6 +53,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 6,
 		}),
 
 	workingHours: () =>
@@ -72,6 +76,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
+			sortIndex: 8,
 		}),
 };
 
@@ -98,5 +103,7 @@ export class CoachMetadata extends BaseEntityMetadata {
 			this[propertyName] = properties[propertyName];
 			this.metadata.push(this[propertyName]);
 		}
+
+		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
 	}
 }
