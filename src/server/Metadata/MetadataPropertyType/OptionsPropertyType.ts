@@ -7,18 +7,19 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 	options: Option[] = [];
 
 	constructor(inputs: OptionsTypeInputs) {
-		super(inputs);
+		super({
+			...inputs,
+			value: undefined, // Avoid setting value until options are set
+		});
 
-		this.type = "options";
-		this.setOptions(inputs.options);
-	}
-
-	setOptions(options?: Option[]) {
+		const { value, options } = inputs;
 		if (!options) {
 			throw Error("Options not set");
 		}
 
 		this.options = options;
+		this.type = "options";
+		if (!isUndefined(value)) this.value = value as string;
 	}
 
 	get value() {
@@ -28,8 +29,6 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 	set value(v: string) {
 		this.validateValue(v);
 		this._value = v;
-		this.hasValue = true;
-		if (this.parent) this.parent.hasValue = true;
 	}
 
 	validateValue(v?: unknown): void {

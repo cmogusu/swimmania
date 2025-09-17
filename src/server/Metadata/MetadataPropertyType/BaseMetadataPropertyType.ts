@@ -26,7 +26,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	itemIndex: number = 0;
 
 	allowedComparators: string[] = ["=", "<>"];
-	hasValue: boolean = false;
 	parent: IMetadataPropertyType | undefined;
 
 	constructor({
@@ -66,9 +65,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	set value(v: MetadataValue) {
 		this.validateValue(v);
 		this._value = v;
-
-		this.hasValue = true;
-		if (this.parent) this.parent.hasValue = true;
 	}
 
 	get dbValue(): MetadataData[] {

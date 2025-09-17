@@ -1,9 +1,9 @@
 import { addLeadingZero, isNumber, isString } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
-import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
+import { TimePropertyType } from "./TimePropertyType";
 
 // TODO: implement this
-export class DatePropertyType extends BaseMetadataPropertyType {
+export class DatePropertyType extends TimePropertyType {
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {
@@ -20,8 +20,6 @@ export class DatePropertyType extends BaseMetadataPropertyType {
 	set value(v: string) {
 		this.validateValue(v);
 		this._value = this.sanitizeValue(v);
-		this.hasValue = true;
-		if (this.parent) this.parent.hasValue = true;
 	}
 
 	validateValue(v?: unknown): void {

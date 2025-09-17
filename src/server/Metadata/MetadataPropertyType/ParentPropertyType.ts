@@ -1,6 +1,7 @@
 import type { MetadataData } from "@/server/types";
 import type {
 	IMetadataPropertyType,
+	MetadataPropertyInitializer,
 	MetadataValue,
 	ParentTypeInputs,
 	RawMetadata,
@@ -11,17 +12,27 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
 	[key: string]: any;
 	children: IMetadataPropertyType[] = [];
+	childInitializers: Record<string, MetadataPropertyInitializer>;
 
 	constructor(inputs: ParentTypeInputs) {
 		super(inputs);
 
 		this.type = "parent";
+		this.childInitializers = inputs.childInitializers;
 	}
 
-	createChildInstance(childName: string, rawMetadata?: RawMetadata) {
+	createChildInstance(name: string, rawMetadata?: RawMetadata) {
+		const childName = name.includes(".") ? name.split(".")[1] : name;
+		if (this[childName] && rawMetadata?.value) {
+			this[childName].id = rawMetadata.id;
+			this[childName].value = rawMetadata.value;
+			this[childName].itemIndex = rawMetadata.itemIndex;
+			return;
+		}
+
 		const initializer = this.childInitializers[childName];
 		if (!initializer) {
-			throw Error("");
+			throw Error("Invalid child name");
 		}
 
 		this[childName] = initializer(rawMetadata);
@@ -37,22 +48,32 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 		}
 	}
 
-	setChildren(children?: IMetadataPropertyType[]) {
-		if (!children) {
-			throw Error("Children not set");
+	getChild(name: string): IMetadataPropertyType {
+		const childName = name.includes(".") ? name.split(".")[1] : name;
+
+		if (!this[childName]) {
+			throw Error("Child not found");
 		}
 
-		this.children = children;
-		this.children.forEach((child) => {
-			const childName = child.name;
-			if (this[childName]) {
-				throw Error("Metadata child name already set");
-			}
-
-			this[childName] = child;
-			child.name = `${this.name}.${child.name}`;
-		});
+		return this[childName];
 	}
+
+	// setChildren(children?: IMetadataPropertyType[]) {
+	// 	if (!children) {
+	// 		throw Error("Children not set");
+	// 	}
+
+	// 	this.children = children;
+	// 	this.children.forEach((child) => {
+	// 		const childName = child.name;
+	// 		if (this[childName]) {
+	// 			throw Error("Metadata child name already set");
+	// 		}
+
+	// 		this[childName] = child;
+	// 		child.name = `${this.name}.${child.name}`;
+	// 	});
+	// }
 
 	get value(): MetadataValue {
 		throw Error("Getting parent value not permitted");

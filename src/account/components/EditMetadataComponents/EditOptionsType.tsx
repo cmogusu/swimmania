@@ -9,7 +9,7 @@ export const EditOptionsType = ({
 	const { title, value, options } = metadataType;
 
 	if (!options?.length) {
-		return;
+		throw Error("Options not set");
 	}
 
 	return (

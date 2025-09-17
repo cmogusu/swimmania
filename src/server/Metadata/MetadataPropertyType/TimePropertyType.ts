@@ -24,8 +24,6 @@ export class TimePropertyType extends BaseMetadataPropertyType {
 	set value(v: string) {
 		this.validateValue(v);
 		this._value = this.sanitizeValue(v);
-		this.hasValue = true;
-		if (this.parent) this.parent.hasValue = true;
 	}
 
 	validateValue(v: MetadataValue): void {

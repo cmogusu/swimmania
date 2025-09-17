@@ -1,11 +1,6 @@
 import type { MetadataFilter, MetadataValue } from "../../Metadata/types";
 import type { EntityType } from "../../types";
 
-// Outputs
-export type MetadataDatabaseRawOutputData = Required<MetadataRawInputs>;
-
-export type MetadataDatabaseOutputData = MetadataDatabaseRawOutputData;
-
 // Inputs
 export type MetadataGetAllRawInputs = {
 	entityType: EntityType;

@@ -66,14 +66,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				length: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "length",
+						name: "poolDimensions.length",
 						title: "Length",
 						suffix: " meters",
 						...rawMetadata,
 					}),
 				width: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "width",
+						name: "poolDimensions.width",
 						title: "Width",
 						suffix: " meters",
 						...rawMetadata,
@@ -88,13 +88,13 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				opening: (rawMetadata?: RawMetadata) =>
 					new TimePropertyType({
-						name: "opening",
+						name: "operatingHours.opening",
 						title: "Opening hours",
 						...rawMetadata,
 					}),
 				closing: (rawMetadata?: RawMetadata) =>
 					new TimePropertyType({
-						name: "closing",
+						name: "operatingHours.closing",
 						title: "Closing hours",
 						...rawMetadata,
 					}),
@@ -143,14 +143,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				ksh: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "ksh",
+						name: "entryFeeIn.ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
 						...rawMetadata,
 					}),
 				usd: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "usd",
+						name: "entryFeeIn.usd",
 						prefix: "Usd ",
 						title: "Usd",
 						...rawMetadata,
@@ -193,13 +193,13 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				lat: (rawMetadata?: RawMetadata) =>
 					new LatitudePropertyType({
-						name: "lat",
+						name: "location.lat",
 						title: "Latitude",
 						...rawMetadata,
 					}),
 				lng: (rawMetadata?: RawMetadata) =>
 					new LongitudePropertyType({
-						name: "lng",
+						name: "location.lng",
 						title: "Longitude",
 						...rawMetadata,
 					}),

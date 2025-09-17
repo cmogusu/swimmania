@@ -4,6 +4,7 @@ import type {
 	RawMetadata,
 } from "../types";
 
+// Always returns parent metadata property
 export function getPropertyInstance(
 	initializers: Record<string, MetadataPropertyInitializer>,
 	rawMetadata?: RawMetadata,
@@ -23,7 +24,11 @@ export function getPropertyInstance(
 	const propertyInstance = initializer(rawMetadata);
 	if (childName) {
 		propertyInstance.createChildInstance(childName, rawMetadata);
-		intializeAllProperties && propertyInstance.createAllChildInstances();
+	}
+
+	const { type } = propertyInstance;
+	if (type === "parent" && intializeAllProperties) {
+		propertyInstance.createAllChildInstances();
 	}
 
 	return propertyInstance;
@@ -34,32 +39,37 @@ export function getMetadataProperties(
 	rawMetadataArr?: RawMetadata[],
 	intializeAllProperties: boolean = false,
 ): Record<string, IMetadataPropertyType> {
-	const rawMetadataObject = createRawMetadataObjectFromArr(rawMetadataArr);
 	const properties: Record<string, IMetadataPropertyType> = {};
 
+	rawMetadataArr?.forEach((rawMetadata: RawMetadata) => {
+		const { name } = rawMetadata;
+		const [propertyName] = name.split(".");
+
+		if (properties[propertyName]?.type === "parent") {
+			properties[propertyName].createChildInstance(name, rawMetadata);
+			return;
+		}
+
+		properties[propertyName] = getPropertyInstance(
+			propertyInitilizers,
+			rawMetadata,
+			intializeAllProperties,
+		);
+	});
+
+	if (!intializeAllProperties) {
+		return properties;
+	}
+
 	for (const propertyName in propertyInitilizers) {
-		const rawMetadata = rawMetadataObject[propertyName];
-		if (rawMetadata || intializeAllProperties) {
+		if (!properties[propertyName]) {
 			properties[propertyName] = getPropertyInstance(
 				propertyInitilizers,
-				rawMetadata,
+				{ name: propertyName },
 				intializeAllProperties,
 			);
 		}
 	}
 
 	return properties;
-}
-
-function createRawMetadataObjectFromArr(
-	rawMetadataArr?: RawMetadata[],
-): Record<string, RawMetadata> {
-	return (rawMetadataArr || []).reduce(
-		(obj: Record<string, RawMetadata>, rawMetadata: RawMetadata) => {
-			const { name } = rawMetadata;
-			obj[name] = rawMetadata;
-			return obj;
-		},
-		{},
-	);
 }

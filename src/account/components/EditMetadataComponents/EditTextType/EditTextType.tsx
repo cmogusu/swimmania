@@ -1,4 +1,4 @@
-import type { EntityType, IMetadataType } from "@/server";
+import type { EntityType, IMetadataPropertyType } from "@/server";
 import { EditContainer } from "../EditContainer";
 import type { EditProps } from "../types";
 
@@ -17,15 +17,17 @@ export const EditTextType = ({
 		return (
 			<div className="border-t border-base-200 mb-4">
 				<h3 className="mb-3">{parentTitle}</h3>
-				{childrenMetadata?.map((m) => (
-					<RenderItem
-						key={m.name}
-						entityType={entityType}
-						entityId={entityId}
-						metadataType={m}
-						inputType={inputType}
-					/>
-				))}
+				<div className="pl-4">
+					{childrenMetadata?.map((m) => (
+						<RenderItem
+							key={m.name}
+							entityType={entityType}
+							entityId={entityId}
+							metadataType={m}
+							inputType={inputType}
+						/>
+					))}
+				</div>
 			</div>
 		);
 	}
@@ -43,7 +45,7 @@ export const EditTextType = ({
 type RenderItemProps = {
 	entityType: EntityType;
 	entityId: number;
-	metadataType: IMetadataType;
+	metadataType: IMetadataPropertyType;
 	inputType: InputType;
 };
 

@@ -14,14 +14,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				ksh: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "ksh",
+						name: "averageSchoolFees.ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
 						...rawMetadata,
 					}),
 				usd: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "usd",
+						name: "averageSchoolFees.usd",
 						prefix: "Usd ",
 						title: "Usd",
 						...rawMetadata,

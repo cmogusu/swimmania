@@ -1,5 +1,5 @@
 import { isUndefined } from "@/server/utils";
-import type { IEntityMetadata } from "../../Metadata/types";
+import type { RawMetadata } from "../../Metadata/types";
 import type { EntityType } from "../../types";
 import type { Image, ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
@@ -16,7 +16,7 @@ export class Entity {
 	location?: string;
 	defaultImage?: Image;
 	images?: Image[];
-	metadata?: IEntityMetadata;
+	metadata?: RawMetadata[];
 
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
@@ -84,7 +84,7 @@ export class Entity {
 			location: this.location,
 			defaultImage: this.defaultImage?.toJSON(),
 			images: this.images?.map((img) => img.toJSON()),
-			metadata: this.metadata?.dbValue,
+			metadata: this.metadata,
 		};
 	}
 }

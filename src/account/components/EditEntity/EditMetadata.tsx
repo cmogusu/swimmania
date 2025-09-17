@@ -1,7 +1,7 @@
 import {
-	EntityMetadataFactory,
 	type EntityType,
-	type IMetadataType,
+	entityMetadataFactory,
+	type IMetadataPropertyType,
 	type MetadataData,
 } from "@/server";
 import { editMetadataComponents } from "../EditMetadataComponents";
@@ -32,15 +32,17 @@ const getMetadataComponents = (
 	entityId: number,
 	metadata: MetadataData[] | undefined,
 ) => {
-	const entityMetadata = metadata?.length
-		? EntityMetadataFactory.getInstance(entityType, metadata)
-		: null;
+	const entityMetadata = entityMetadataFactory.getInstance(
+		entityType,
+		metadata,
+		true,
+	);
 
 	if (!entityMetadata) {
-		return undefined;
+		throw Error("entityMetadata not created");
 	}
 
-	return entityMetadata.metadata.map((metadataType: IMetadataType) => {
+	return entityMetadata.metadata.map((metadataType: IMetadataPropertyType) => {
 		const { name, type } = metadataType;
 		const MetadataComponent = editMetadataComponents[type];
 		return (

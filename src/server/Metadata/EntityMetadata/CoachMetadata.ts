@@ -37,14 +37,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				ksh: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "ksh",
+						name: "ratePerHour.ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
 						...rawMetadata,
 					}),
 				usd: (rawMetadata?: RawMetadata) =>
 					new NumberPropertyType({
-						name: "usd",
+						name: "ratePerHour.usd",
 						prefix: "Usd ",
 						title: "Usd",
 						...rawMetadata,
@@ -59,14 +59,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				opening: (rawMetadata?: RawMetadata) =>
 					new TimePropertyType({
-						name: "opening",
+						name: "workingHours.opening",
 						title: "Opening",
 						value: "8:00",
 						...rawMetadata,
 					}),
 				closing: (rawMetadata?: RawMetadata) =>
 					new TimePropertyType({
-						name: "closing",
+						name: "workingHours.closing",
 						title: "Closing",
 						value: "17:00",
 						...rawMetadata,

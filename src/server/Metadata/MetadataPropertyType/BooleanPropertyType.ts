@@ -18,12 +18,9 @@ export class BooleanPropertyType extends BaseMetadataPropertyType {
 	set value(v: boolean) {
 		this.validateValue(v);
 		this._value = this.sanitizeValue(v);
-		this.hasValue = true;
-		if (this.parent) this.parent.hasValue = true;
 	}
 
 	validateValue(v?: unknown) {
-		console.log(v);
 		if (isNotSet(v)) {
 			throw Error("Invalid value. Boolean expected");
 		}

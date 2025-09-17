@@ -18,8 +18,6 @@ export class TextPropertyType extends BaseMetadataPropertyType {
 	set value(v: string) {
 		this.validateValue(v);
 		this._value = v;
-		this.hasValue = true;
-		if (this.parent) this.parent.hasValue = true;
 	}
 
 	validateValue(v?: unknown): void {

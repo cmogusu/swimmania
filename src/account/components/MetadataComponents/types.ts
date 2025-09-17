@@ -1,7 +1,7 @@
-import type { IMetadataType } from "@/server";
+import type { IMetadataPropertyType } from "@/server";
 
 export type MetadataTypeProps = {
 	parentTitle?: string;
-	childrenMetadata?: IMetadataType[];
-	metadataType: IMetadataType;
+	childrenMetadata?: IMetadataPropertyType[];
+	metadataType: IMetadataPropertyType;
 };

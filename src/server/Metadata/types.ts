@@ -68,7 +68,6 @@ export interface IMetadataPropertyType {
 	value: MetadataValue;
 	dbValue: MetadataData[];
 	formattedValue: string;
-	hasValue: boolean;
 	children?: IMetadataPropertyType[];
 	options?: Option[];
 	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;

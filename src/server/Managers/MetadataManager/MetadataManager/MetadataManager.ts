@@ -1,8 +1,4 @@
-import {
-	EntityMetadataFactory,
-	type IEntityMetadata,
-	type RawMetadata,
-} from "../../../Metadata";
+import type { RawMetadata } from "../../../Metadata";
 import { MetadataInputData } from "../MetadataInputData/MetadataInputData";
 import type {
 	MetadataDeleteRawInputs,
@@ -21,22 +17,20 @@ export class MetadataManager {
 		this.db = new Database();
 	}
 
-	async getAll(rawInputs: MetadataGetAllRawInputs): Promise<IEntityMetadata> {
+	async getAll(rawInputs: MetadataGetAllRawInputs): Promise<RawMetadata[]> {
 		const metadataInputs = new MetadataInputData(rawInputs);
 		metadataInputs.validateGetAllInputs();
 
-		const rawMetadata: RawMetadata[] = await this.db.getAll(metadataInputs);
-		return EntityMetadataFactory.getInstance(rawInputs.entityType, rawMetadata);
+		const rawMetadataArr: RawMetadata[] = await this.db.getAll(metadataInputs);
+		return rawMetadataArr;
 	}
 
-	async getById(rawInputs: MetadataGetByIdRawInputs): Promise<IEntityMetadata> {
+	async getById(rawInputs: MetadataGetByIdRawInputs): Promise<RawMetadata> {
 		const metadataInputs = new MetadataInputData(rawInputs);
 		metadataInputs.validateGetByIdInputs();
 
 		const rawMetadata = await this.db.getByMetadataId(metadataInputs);
-		return EntityMetadataFactory.getInstance(rawInputs.entityType, [
-			rawMetadata,
-		]);
+		return rawMetadata[0];
 	}
 
 	async update(rawInputs: MetadataUpdateRawInputs) {

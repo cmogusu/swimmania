@@ -8,7 +8,10 @@ import { SwimmerMetadata } from "./SwimmerMetadata";
 import { TeamMetadata } from "./TeamMetadata";
 
 type EntityMetadataClassType = {
-	new (rawMetadataArr?: RawMetadata[]): IEntityMetadata;
+	new (
+		rawMetadataArr?: RawMetadata[],
+		intializeAllProperties?: boolean,
+	): IEntityMetadata;
 };
 
 const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
@@ -20,9 +23,8 @@ const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
 	team: TeamMetadata,
 };
 
-// biome-ignore lint/complexity/noStaticOnlyClass: Will fix later
-export class EntityMetadataFactory {
-	static getInstance(
+export const entityMetadataFactory = {
+	getInstance(
 		entityType: EntityType,
 		rawMetadataArr?: RawMetadata[],
 		intializeAllProperties?: boolean,
@@ -33,14 +35,14 @@ export class EntityMetadataFactory {
 		}
 
 		return new EntityMetadataClass(rawMetadataArr, intializeAllProperties);
-	}
+	},
 
-	static getPropertyInstance(entityType: EntityType, rawMetadata: RawMetadata) {
+	getPropertyInstance(entityType: EntityType, rawMetadata: RawMetadata) {
 		const EntityMetadataClass = entityMetadataClasses[entityType];
 		if (!EntityMetadataClass) {
 			throw Error("Invalid entity type");
 		}
 
 		return EntityMetadataClass.getPropertyInstance(rawMetadata);
-	}
-}
+	},
+};

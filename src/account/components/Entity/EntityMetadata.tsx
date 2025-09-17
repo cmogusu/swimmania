@@ -1,7 +1,7 @@
 import {
-	EntityMetadataFactory,
 	type EntityType,
-	type IMetadataType,
+	entityMetadataFactory,
+	type IMetadataPropertyType,
 	type MetadataData,
 } from "@/server";
 import { metadataComponents } from "../MetadataComponents";
@@ -28,18 +28,16 @@ const getMetadataComponents = (
 	metadata: MetadataData[] | undefined,
 ) => {
 	const entityMetadata = metadata?.length
-		? EntityMetadataFactory.getInstance(entityType, metadata)
+		? entityMetadataFactory.getInstance(entityType, metadata)
 		: null;
 
 	if (!entityMetadata) {
 		return undefined;
 	}
 
-	return entityMetadata.metadata
-		.filter((m) => m.hasValue)
-		.map((metadataType: IMetadataType) => {
-			const { id, type } = metadataType;
-			const MetadataComponent = metadataComponents[type];
-			return <MetadataComponent key={id} metadataType={metadataType} />;
-		});
+	return entityMetadata.metadata.map((metadataType: IMetadataPropertyType) => {
+		const { name, type } = metadataType;
+		const MetadataComponent = metadataComponents[type];
+		return <MetadataComponent key={name} metadataType={metadataType} />;
+	});
 };

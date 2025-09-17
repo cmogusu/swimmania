@@ -1,8 +1,7 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: TODO - Find better fix */
 import { isUndefined } from "@/server/utils";
 import {
-	EntityMetadataFactory,
-	type IEntityMetadata,
+	entityMetadataFactory,
 	type IMetadataPropertyType,
 	type MetadataFilter,
 	type MetadataValue,
@@ -73,8 +72,7 @@ export class MetadataInputData extends BaseInputData {
 		this.validate.value(this.value);
 		this.validate.itemIndex(this.itemIndex);
 
-		this.createMetadataInstance();
-		this.metadata!.validateMetadata(this.name, this.value);
+		this.createMetadataPropertyInstance();
 	}
 
 	validateDeleteInputs() {
@@ -83,8 +81,8 @@ export class MetadataInputData extends BaseInputData {
 
 	validateFilterByInputs() {
 		this.validate.entityType(this.entityType);
-		this.createMetadataInstance();
-		this.metadata!.validateFilters(this.filters);
+		this.createMetadataPropertyInstance();
+		// this.metadata!.validateFilters(this.filters);
 	}
 
 	getSanitizedGetAllData() {
@@ -101,44 +99,42 @@ export class MetadataInputData extends BaseInputData {
 	}
 
 	getSanitizedFilterByData() {
-		this.createMetadataInstance();
+		this.createMetadataPropertyInstance();
 
 		return {
 			entityType: this.entityType,
-			filters: this.metadata!.sanitizeFilters(this.filters),
+			// filters: this.metadata!.sanitizeFilters(this.filters),
+			filters: this.filters,
 		};
 	}
 
 	getSanitizedInsertData() {
-		this.createMetadataInstance();
-		const { name, metadata } = this;
-		const property = metadata!.metadata.find((m) => m.name === name);
-		if (!property) {
-			throw Error("missing metadata item");
-		}
+		this.createMetadataPropertyInstance();
 
 		return {
-			id: property.id,
-			name: property.name,
-			value: property.value,
+			name: this.metadataProperty!.name,
+			value: this.metadataProperty!.value,
 			entityId: this.entityId,
 			entityType: this.entityType,
 		};
 	}
 
 	getSanitizedUpdateData() {
-		return this.getSanitizedInsertData();
+		return {
+			id: this.id,
+			...this.getSanitizedInsertData(),
+		};
 	}
 
 	getSanitizedDeleteData() {
 		return {
-			id: this.metadata!,
+			id: this.id!,
 			entityId: this.entityId!,
 		};
 	}
 
-	createMetadataInstance() {
-		if (this.metadata) {
+	createMetadataPropertyInstance() {
+		if (this.metadataProperty) {
 			return;
 		}
 
@@ -155,8 +151,12 @@ export class MetadataInputData extends BaseInputData {
 			itemIndex: this.itemIndex,
 		};
 
-		this.metadata = EntityMetadataFactory.getInstance(this.entityType, [
+		const property = entityMetadataFactory.getPropertyInstance(
+			this.entityType,
 			rawMetadata,
-		]);
+		);
+
+		this.metadataProperty =
+			property.type === "parent" ? property.getChild(this.name) : property;
 	}
 }
