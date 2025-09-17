@@ -51,7 +51,7 @@ export class TimePropertyType extends BaseMetadataPropertyType {
 		const formatedHours = addLeadingZero(hours);
 		const formatedMinutes = addLeadingZero(minutes);
 		const formatedTime = `${formatedHours}:${formatedMinutes}`;
-		return `${this.prefix}${formatedTime}${this.suffix}`;
+		return formatedTime;
 	}
 
 	isStringTimeValue(v: MetadataValue) {

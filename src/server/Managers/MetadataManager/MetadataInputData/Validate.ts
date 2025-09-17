@@ -10,7 +10,7 @@ export class Validate extends BaseValidate {
 
 	itemIndex(v?: unknown) {
 		if (!isNumber(v)) {
-			throw Error("Value not number");
+			throw Error("Number value expected");
 		}
 	}
 }

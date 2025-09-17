@@ -8,7 +8,7 @@ export const EditRatingsType = ({
 	entityId,
 	metadataType,
 }: EditProps) => {
-	const { name, title, value } = metadataType;
+	const { title, value } = metadataType;
 
 	if (isUndefined(value)) {
 		return null;
@@ -34,7 +34,8 @@ export const EditRatingsType = ({
 										// biome-ignore lint/suspicious/noArrayIndexKey: No better solution found now
 										key={i}
 										type="radio"
-										name={name}
+										name="value"
+										value={i + 1}
 										className="mask mask-star"
 										aria-label={`${i + 1} star`}
 										{...current}

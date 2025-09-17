@@ -68,8 +68,6 @@ export class MetadataInputData extends BaseInputData {
 	validatePostInputs() {
 		this.validate.entityType(this.entityType);
 		this.validate.id(this.entityId);
-		this.validate.name(this.name);
-		this.validate.value(this.value);
 		this.validate.itemIndex(this.itemIndex);
 
 		this.createMetadataPropertyInstance();
