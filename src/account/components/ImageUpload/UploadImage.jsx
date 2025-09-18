@@ -1,13 +1,20 @@
-import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import { useCallback, useState } from "react";
+import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
-export const UploadImage = ({ onFileUpload }) => {
+export const UploadImage = ({ uploadUrl, onComplete }) => {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState("");
 	const [previewTitle, setPreviewTitle] = useState("");
+	const [fileList, setFileList] = useState([]);
 
 	const handleCancel = () => setPreviewOpen(false);
+	const handleChange = ({ file, fileList: newFileList }) => {
+		setFileList(newFileList);
+		if (file.status === "done") {
+			onComplete?.();
+		}
+	};
 	const handlePreview = async (file) => {
 		if (!file.url && !file.preview) {
 			file.preview = await getBase64(file.originFileObj);
@@ -19,24 +26,17 @@ export const UploadImage = ({ onFileUpload }) => {
 		);
 	};
 
-	const beforeUpload = useCallback(
-		(file) => {
-			onFileUpload(file);
-			return false;
-		},
-		[onFileUpload],
-	);
-
 	return (
 		<div>
 			<Upload
-				beforeUpload={beforeUpload}
+				action={uploadUrl}
 				listType="picture-card"
-				maxCount={1}
+				fileList={fileList}
 				onPreview={handlePreview}
+				onChange={handleChange}
 			>
 				<div>
-					<PlusOutlined />
+					<FaPlus />
 					<div style={{ marginTop: 8 }}>Upload</div>
 				</div>
 			</Upload>
@@ -46,6 +46,7 @@ export const UploadImage = ({ onFileUpload }) => {
 				footer={null}
 				onCancel={handleCancel}
 			>
+				{/** biome-ignore lint/performance/noImgElement: TODO - change later on */}
 				<img
 					alt="example"
 					style={{
