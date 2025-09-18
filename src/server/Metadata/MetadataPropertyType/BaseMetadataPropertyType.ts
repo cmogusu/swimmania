@@ -12,7 +12,7 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	type: SchemaType = "text";
 	id: number = -1;
 	name: string;
-	_value: MetadataValue = false;
+	_value!: MetadataValue;
 
 	title: string = "";
 	editTitle: string = "";
@@ -92,4 +92,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 
 	createChildInstance(_: string, __?: RawMetadata) {}
 	createAllChildInstances() {}
+
+	setSeedData() {}
 }

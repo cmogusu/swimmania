@@ -8,8 +8,8 @@ import { isString } from "../../../utils";
 import { BaseQuery } from "../../services";
 
 const METADATA_TYPE_TO_COLUMN: Record<SchemaType, string> = {
-	boolean: "value_bool",
-	ratings: "value_bool",
+	boolean: "value_tiny",
+	ratings: "value_tiny",
 	date: "value_time",
 	time: "value_time",
 	latitude: "value_lat",

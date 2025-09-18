@@ -88,4 +88,8 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 			(child: IMetadataPropertyType) => child.dbValue,
 		);
 	}
+
+	setSeedData() {
+		this.children.map((c) => c.setSeedData());
+	}
 }

@@ -1,4 +1,4 @@
-import { isBoolean, isNumber } from "@/server/utils";
+import { isNumber } from "@/server/utils";
 
 export class BaseQuery {
 	formatUpdateValues(
@@ -7,10 +7,9 @@ export class BaseQuery {
 		const setValueArr: string[] = [];
 		for (const name in updateValues) {
 			const value = updateValues[name];
-			const valueStr =
-				isNumber(value) || isBoolean(value)
-					? `${name}=${value}`
-					: `${name}='${value}'`;
+			const valueStr = isNumber(value)
+				? `${name}=${value}`
+				: `${name}='${value}'`;
 
 			setValueArr.push(valueStr);
 		}

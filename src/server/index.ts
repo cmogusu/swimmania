@@ -3,6 +3,7 @@ export * from "./constants";
 export * from "./Managers/EntityManager";
 export * from "./Managers/ImageManager";
 export * from "./Metadata";
+export * from "./seed";
 export * from "./serverFunctions";
 export * from "./types";
 export * from "./utils";

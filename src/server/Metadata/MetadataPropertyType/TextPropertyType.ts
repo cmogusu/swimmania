@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { isNotSet, isString, sanitizeTextForDb } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
@@ -28,5 +29,9 @@ export class TextPropertyType extends BaseMetadataPropertyType {
 
 	sanitizeValue(v: string): string {
 		return sanitizeTextForDb(v);
+	}
+
+	setSeedData() {
+		this.value = faker.word.words({ count: { min: 1, max: 2 } });
 	}
 }

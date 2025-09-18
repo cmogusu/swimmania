@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import type { MetadataTypeInputs } from "../types";
 import { NumberPropertyType } from "./NumberPropertyType";
 
@@ -15,5 +16,13 @@ export class LatitudePropertyType extends NumberPropertyType {
 		});
 
 		this.type = "latitude";
+	}
+
+	setSeedData() {
+		this.value = faker.location.latitude({
+			max: -1.1,
+			min: -1.3,
+			precision: 14,
+		});
 	}
 }

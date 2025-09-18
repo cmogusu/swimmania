@@ -74,6 +74,7 @@ export interface IMetadataPropertyType {
 	sortIndex: number;
 	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;
 	createAllChildInstances: () => void;
+	setSeedData: () => void;
 }
 
 export interface IEntityMetadata {
@@ -86,4 +87,5 @@ export interface IEntityMetadata {
 	sanitizeFilters: (filters?: MetadataFilter[]) => MetadataFilter[];
 
 	validateMetadata: (name?: string, value?: MetadataValue) => void;
+	setSeedData: () => void;
 }

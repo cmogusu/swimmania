@@ -122,4 +122,8 @@ export class BaseEntityMetadata implements IEntityMetadata {
 	toJSON() {
 		return this.dbValue;
 	}
+
+	setSeedData() {
+		this.metadata.forEach((m) => m.setSeedData());
+	}
 }

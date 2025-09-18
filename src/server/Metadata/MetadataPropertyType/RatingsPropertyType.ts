@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import type { MetadataTypeInputs } from "../types";
 import { NumberPropertyType } from "./NumberPropertyType";
 
@@ -15,5 +16,10 @@ export class RatingsPropertyType extends NumberPropertyType {
 		});
 
 		this.type = "ratings";
+	}
+
+	setSeedData() {
+		const { min, max } = this;
+		this.value = faker.number.int({ min, max });
 	}
 }

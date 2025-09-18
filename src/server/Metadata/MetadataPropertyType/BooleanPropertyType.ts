@@ -2,7 +2,7 @@ import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class BooleanPropertyType extends BaseMetadataPropertyType {
-	declare _value: boolean;
+	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {
 		super(inputs);
@@ -14,11 +14,15 @@ export class BooleanPropertyType extends BaseMetadataPropertyType {
 		return this._value;
 	}
 
-	set value(v: boolean) {
+	set value(v: number) {
 		this._value = this.sanitizeValue(v);
 	}
 
-	sanitizeValue(v: boolean | number | string): boolean {
-		return Boolean(v);
+	sanitizeValue(v: boolean | number | string): number {
+		return v ? 1 : 0;
+	}
+
+	setSeedData() {
+		this.value = Math.random() > 0.5 ? 1 : 0;
 	}
 }

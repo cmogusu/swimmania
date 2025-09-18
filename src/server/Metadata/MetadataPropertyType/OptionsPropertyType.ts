@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { isNotSet, isString, isUndefined } from "../../utils";
 import type { Option, OptionsTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
@@ -55,5 +56,11 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 
 		const option = options.find((o) => o.key === value);
 		return option?.value ?? "";
+	}
+
+	setSeedData() {
+		const max = this.options.length - 1;
+		const index = faker.number.int({ max });
+		this.value = this.options[index].value;
 	}
 }

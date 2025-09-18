@@ -133,9 +133,7 @@ export const isNumber = (v: unknown): v is number => {
 	return false;
 };
 
-export const isBoolean = (v: unknown): v is boolean =>
-	[true, false].includes(v as boolean) ||
-	["true", "false"].includes(v as string);
+export const isBoolean = (v: unknown): v is boolean => typeof v === "boolean";
 
 export const isNull = (v: unknown): v is null => v === null;
 

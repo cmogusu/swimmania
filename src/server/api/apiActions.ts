@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { seedEntityFactory } from "../seed";
 import type { EntityType } from "../types";
+import { isUndefined } from "../utils";
 import { api } from "./api";
 
 export async function deleteEntity(formData: FormData) {
@@ -129,6 +131,20 @@ export async function insertMetadata(formData: FormData) {
 	);
 
 	reloadEditPage(data.entityType, data.entityId);
+}
+
+export async function seedDb(formData: FormData) {
+	const { entityType, itemCount } = extractFormData(formData, [
+		"entityType",
+		"itemCount",
+	]);
+
+	if (isUndefined(entityType) || isUndefined(itemCount)) {
+		throw Error("Entitytype or itemCount not set");
+	}
+
+	const seeder = seedEntityFactory.getInstance(entityType as EntityType);
+	await seeder.insertItems(Number(itemCount));
 }
 
 const extractFormData = (

@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { addLeadingZero, isNumber, isString } from "../../utils";
 import type { MetadataTypeInputs } from "../types";
 import { TimePropertyType } from "./TimePropertyType";
@@ -64,5 +65,9 @@ export class DatePropertyType extends TimePropertyType {
 		if (minutesInt < 0 || minutesInt > 59) {
 			throw "Invalid minute set";
 		}
+	}
+
+	setSeedData() {
+		this.value = faker.date.anytime().toUTCString();
 	}
 }
