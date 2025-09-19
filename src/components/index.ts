@@ -1,2 +1,2 @@
-export * from "./Breadcrumbs";
+export * from "./Breadcrumbs/Breadcrumbs";
 export * from "./Footer";

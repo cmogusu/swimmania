@@ -1,0 +1,15 @@
+.bg-opacity-80 {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.line-height-30 {
+	line-height: 30px;
+}
+
+.text-slider-container {
+	height: 30px;
+}
+
+.transition-top {
+	transition: 1.5s top linear;
+}

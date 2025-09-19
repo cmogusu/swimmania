@@ -1,5 +1,10 @@
-import { Page } from "@/account";
+import { Page, Section1, Section2 } from "@/front";
 
 export default async function Home() {
-	return <Page>Welcome to your account page</Page>;
+	return (
+		<Page>
+			<Section1 />
+			<Section2 />
+		</Page>
+	);
 }

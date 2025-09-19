@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const Header = () => (
-	<header className="bg-primary">
+	<header className="bg-primary fixed">
 		<div className="md:container mx-auto px-4">
 			<div className="navbar shadow-sm">
 				<div className="flex-1">
