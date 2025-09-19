@@ -1,4 +1,4 @@
-import { Page } from "@/account";
+import { Page, SubmitButton } from "@/account";
 import { EntityTypes } from "@/constants";
 import { seedDb } from "@/server";
 
@@ -39,7 +39,7 @@ export default async function SeedPage() {
 					</label>
 				</fieldset>
 
-				<input className="btn btn-sm" type="submit" />
+				<SubmitButton buttonText="Seed" />
 			</form>
 		</Page>
 	);

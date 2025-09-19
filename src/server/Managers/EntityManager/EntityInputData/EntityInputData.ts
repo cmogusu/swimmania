@@ -108,6 +108,8 @@ export class EntityInputData extends BaseInputData {
 		return {
 			entityType: this.entityType,
 			entityIds: this.entityIds!,
+			offset: this.offset,
+			pageSize: this.pageSize,
 		};
 	}
 

@@ -1,19 +1,19 @@
 import type { MetadataFilter } from "../../Metadata";
 import type { EntityType, PaginationOptions } from "../../types";
 
-export type EntityLoadRelatedDataOptions = {
-	loadImages?: boolean;
-	loadDefaultImage?: boolean;
-	loadMetadata?: boolean;
-};
-
 // Outputs
-export type EntityDatabaseOutputData = {
+export type RawEntity = {
 	id: number;
 	name: string;
 	type: EntityType;
 	description?: string;
 	location?: string;
+};
+
+export type EntityLoadRelatedDataOptions = {
+	loadImages?: boolean;
+	loadDefaultImage?: boolean;
+	loadMetadata?: boolean;
 };
 
 // Inputs

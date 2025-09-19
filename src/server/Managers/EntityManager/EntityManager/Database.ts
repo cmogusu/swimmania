@@ -1,6 +1,6 @@
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type { EntityInputData } from "../EntityInputData/EntityInputData";
-import type { EntityDatabaseOutputData } from "../types";
+import type { RawEntity } from "../types";
 import { Query } from "./Query";
 
 export class Database extends BaseDatabase {
@@ -14,37 +14,31 @@ export class Database extends BaseDatabase {
 		this.query = new Query();
 	}
 
-	async getAll(
-		entityData: EntityInputData,
-	): Promise<EntityDatabaseOutputData[]> {
+	async getAll(entityData: EntityInputData): Promise<RawEntity[]> {
 		const { entityType, pageSize, offset } =
 			entityData.getSanitizedGetAllData();
 		const query = this.query.getByType(entityType, pageSize, offset);
 
 		const rawEntities = await this.execSql(query);
-		return rawEntities as EntityDatabaseOutputData[];
+		return rawEntities as RawEntity[];
 	}
 
-	async getByIds(
-		entityData: EntityInputData,
-	): Promise<EntityDatabaseOutputData[]> {
+	async getByIds(entityData: EntityInputData): Promise<RawEntity[]> {
 		const { entityType, entityIds } = entityData.getSanitizedGetByIdsInputs();
 		const query = this.query.getByIds(entityType, entityIds);
 		const rawEntities = await this.execSql(query);
-		return rawEntities as EntityDatabaseOutputData[];
+		return rawEntities as RawEntity[];
 	}
 
-	async getById(
-		entityData: EntityInputData,
-	): Promise<EntityDatabaseOutputData> {
+	async getById(entityData: EntityInputData): Promise<RawEntity> {
 		const { entityType, entityId } = entityData.getSanitizedGetByIdInputs();
 		const query = this.query.getById(entityType, entityId);
-		const rawEntities = await this.execSql<EntityDatabaseOutputData>(query);
+		const rawEntities = await this.execSql<RawEntity>(query);
 		if (!rawEntities?.[0]) {
 			throw Error("Entity not found");
 		}
 
-		return rawEntities[0] as EntityDatabaseOutputData;
+		return rawEntities?.[0] as RawEntity;
 	}
 
 	update(entityData: EntityInputData) {
