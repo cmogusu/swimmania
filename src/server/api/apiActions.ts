@@ -7,6 +7,10 @@ import type { EntityType } from "../types";
 import { isUndefined } from "../utils";
 import { api } from "./api";
 
+export async function getEntities(entityType: EntityType, pageNumber: number) {
+	return await api.getEntities(entityType, pageNumber);
+}
+
 export async function deleteEntity(formData: FormData) {
 	const entityId = formData.get("entityId");
 	const entityType = formData.get("entityType");

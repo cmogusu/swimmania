@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: TODO: Find a better solution besides this */
 import { BaseInputData } from "@/server/Managers/services/BaseInputData";
 import type { MetadataFilter } from "@/server/Metadata";
-import type { EntityType, PaginationOptions } from "@/server/types";
+import type { EntityType } from "@/server/types";
 import { isUndefined } from "@/server/utils";
 import type { EntityLoadRelatedDataOptions, EntryRawInputs } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
@@ -100,7 +100,7 @@ export class EntityInputData extends BaseInputData {
 		return {
 			entityType: this.entityType,
 			offset: this.offset,
-			pageSize: this.pageSize,
+			pageSize: this.getPageSize(),
 		};
 	}
 
@@ -109,7 +109,7 @@ export class EntityInputData extends BaseInputData {
 			entityType: this.entityType,
 			entityIds: this.entityIds!,
 			offset: this.offset,
-			pageSize: this.pageSize,
+			pageSize: this.getPageSize(),
 		};
 	}
 
@@ -148,13 +148,6 @@ export class EntityInputData extends BaseInputData {
 			loadImages: this.loadImages,
 			loadDefaultImage: this.loadDefaultImage,
 			loadMetadata: this.loadMetadata,
-		};
-	}
-
-	getPaginationOptions(): PaginationOptions {
-		return {
-			pageNumber: this.pageNumber,
-			pageSize: this.pageSize,
 		};
 	}
 }

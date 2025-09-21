@@ -31,4 +31,9 @@ export class BaseInputData {
 
 		return DEFAULT_PAGE_NUMBER;
 	}
+
+	getPageSize() {
+		// Add one to help determine if there is more data left to be fetched.
+		return this.pageSize + 1;
+	}
 }

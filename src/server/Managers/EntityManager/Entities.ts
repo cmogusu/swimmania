@@ -11,7 +11,7 @@ export class Entities {
 	metadataManager: MetadataManager;
 
 	constructor(
-		rawEntities: RawEntity[],
+		rawEntities: RawEntity[] | undefined,
 		entityInputData: EntityInputData,
 		imageManager: ImageManager,
 		metadataManager: MetadataManager,
@@ -19,7 +19,7 @@ export class Entities {
 		this.entityInputData = entityInputData;
 		this.imageManager = imageManager;
 		this.metadataManager = metadataManager;
-		this.entities = rawEntities.map((e) => new Entity(e));
+		this.entities = (rawEntities || []).map((e) => new Entity(e));
 	}
 
 	async loadRelatedData() {
@@ -41,12 +41,14 @@ export class Entities {
 	}
 
 	toJSON() {
-		const currentPage = this.entityInputData.pageNumber;
+		const { pageSize, pageNumber } = this.entityInputData;
+		const hasMore = this.entities.length > pageSize;
+		const entities = this.entities.slice(0, pageSize).map((e) => e.toJSON());
+
 		return {
-			currentPage,
-			nextPage: currentPage + 1,
-			entities: this.entities,
-			hasMore: true,
+			hasMore,
+			entities,
+			nextPage: pageNumber + 1,
 		};
 	}
 }

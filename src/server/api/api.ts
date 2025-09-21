@@ -6,7 +6,7 @@ import {
 import { POSTS_PER_PAGE } from "../constants";
 import type { MetadataValue } from "../Metadata";
 import { Log } from "../services";
-import type { EntityData, EntityType } from "../types";
+import type { EntitiesData, EntityData, EntityType } from "../types";
 
 export class Api {
 	pageSize: number;
@@ -40,18 +40,18 @@ export class Api {
 	async getEntities(
 		entityType: EntityType,
 		page: number = 1,
-	): Promise<EntityData[] | undefined> {
+	): Promise<EntitiesData> {
 		try {
 			const entityManager = EntityManagerFactory.getInstance(entityType);
 			const entities = await entityManager.getAll({
-				loadImages: true,
-				loadMetadata: true,
+				loadImages: false,
+				loadMetadata: false,
 				loadDefaultImage: true,
 				pageSize: this.pageSize,
 				pageNumber: page,
 			});
 
-			return entities.map((e) => e.toJSON());
+			return entities.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}

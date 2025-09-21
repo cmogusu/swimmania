@@ -20,7 +20,7 @@ const METADATA_TYPE_TO_COLUMN: Record<SchemaType, string> = {
 	parent: "",
 };
 
-const COLUMNS = `id, entityId, entityType, name, itemIndex, COALESCE(value_bool, value_time, value_num, value_text, value_lat, value_lng) as value`;
+const COLUMNS = `id, entityId, entityType, name, itemIndex, COALESCE(value_tiny, value_time, value_num, value_text, value_lat, value_lng) as value`;
 
 export class Query extends BaseQuery {
 	getAll(entityId: number): string {

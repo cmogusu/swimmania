@@ -7,7 +7,7 @@ type EntitiesProps = {
 };
 
 export const Entities = async ({ entityType }: EntitiesProps) => {
-	const entities = await api.getEntities("pool");
+	const { entities } = (await api.getEntities("pool")) || {};
 
 	if (!entities) {
 		return <h1>oops! Error happened</h1>;

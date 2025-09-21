@@ -36,3 +36,9 @@ export type EntityData = {
 	images: ImageData[] | undefined;
 	metadata: MetadataData[] | undefined;
 };
+
+export type EntitiesData = {
+	nextPage: number;
+	entities: EntityData[];
+	hasMore: boolean;
+};
