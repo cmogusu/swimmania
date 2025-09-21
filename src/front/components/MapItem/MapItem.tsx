@@ -1,10 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { useSelectedEntityContext } from "@/front/context";
+import { useCallback, useEffect } from "react";
+import {
+	useEntityScrollObserverContext,
+	useSelectedEntityContext,
+} from "@/front/context";
 
 export const MapItem = () => {
 	const { entity } = useSelectedEntityContext();
+	const { visibleEntityIdsRef } = useEntityScrollObserverContext();
+
+	const handlePageScroll = useCallback(() => {
+		requestIdleCallback(() => {
+			console.log(visibleEntityIdsRef.current);
+		});
+	}, [visibleEntityIdsRef.current]);
+
+	useEffect(() => {
+		window.addEventListener("scroll", handlePageScroll);
+		return () => {
+			window.removeEventListener("scroll", handlePageScroll);
+		};
+	}, [handlePageScroll]);
 
 	return (
 		<div>

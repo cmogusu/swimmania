@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { ReactNode } from "react";
 import { BooleanType } from "./BooleanType";
 import { DateType } from "./DateType";
 import { LatitudeType } from "./LatitudeType";
@@ -10,7 +10,7 @@ import { TextType } from "./TextType";
 import { TimeType } from "./TimeType";
 import type { MetadataTypeProps } from "./types";
 
-type ComponentType = (props: MetadataTypeProps) => JSX.Element | null;
+type ComponentType = (props: MetadataTypeProps) => ReactNode | null;
 
 export const childComponents: Record<string, ComponentType> = {
 	number: NumberType,

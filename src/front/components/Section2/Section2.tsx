@@ -1,6 +1,6 @@
-import Form from "next/form";
 import {
 	EntitiesContextProvider,
+	EntityScrollObserverContextProvider,
 	SelectedEntityContextProvider,
 } from "@/front/context";
 import type { EntitiesData, EntityType } from "@/server";
@@ -26,31 +26,33 @@ export const Section2 = async ({ entityType, entitiesData }: Props) => {
 				entityType={entityType}
 			>
 				<SelectedEntityContextProvider>
-					<div className="col-start-1 col-end-2 ">
-						<EntityCardList entityType={entityType}>
-							<div>
-								<h1>{entityType}</h1>
-								{entities.map((entity) => (
-									<EntityCard key={entity.id} entity={entity} />
-								))}
-							</div>
-						</EntityCardList>
-						{hasMore && (
-							<LoadMore entityType={entityType}>
-								<a
-									className="btn btn-sm"
-									href={`/${entityType}?page=${nextPage}`}
-								>
-									Load more
-								</a>
-							</LoadMore>
-						)}
-					</div>
-					<div className="col-start-2 col-end-3 relative">
-						<div className="sticky top-4">
-							<MapItem />
+					<EntityScrollObserverContextProvider>
+						<div className="col-start-1 col-end-2 ">
+							<EntityCardList entityType={entityType}>
+								<div>
+									<h1>{entityType}</h1>
+									{entities.map((entity) => (
+										<EntityCard key={entity.id} entity={entity} />
+									))}
+								</div>
+							</EntityCardList>
+							{hasMore && (
+								<LoadMore entityType={entityType}>
+									<a
+										className="btn btn-sm"
+										href={`/${entityType}?page=${nextPage}`}
+									>
+										Load more
+									</a>
+								</LoadMore>
+							)}
 						</div>
-					</div>
+						<div className="col-start-2 col-end-3 relative">
+							<div className="sticky top-4">
+								<MapItem />
+							</div>
+						</div>
+					</EntityScrollObserverContextProvider>
 				</SelectedEntityContextProvider>
 			</EntitiesContextProvider>
 		</section>

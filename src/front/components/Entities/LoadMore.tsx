@@ -1,8 +1,8 @@
 "use client";
 
 import {
-	type JSX,
 	type MouseEvent,
+	type ReactNode,
 	useCallback,
 	useEffect,
 	useRef,
@@ -12,7 +12,7 @@ import type { EntityType } from "@/server";
 
 type Props = {
 	entityType: EntityType;
-	children: JSX.Element;
+	children: ReactNode;
 };
 
 export const LoadMore = ({ entityType }: Props) => {

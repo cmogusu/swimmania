@@ -1,6 +1,6 @@
 "use client";
 
-import type { JSX } from "react";
+import type { ReactNode } from "react";
 import { useEntitiesContext } from "@/front/context";
 import type { EntityType } from "@/server";
 import { EntityCard } from "./EntityCard";
@@ -8,7 +8,7 @@ import { Loading } from "./Loading";
 
 type Props = {
 	entityType: EntityType;
-	children: JSX.Element;
+	children: ReactNode;
 };
 
 export const EntityCardList = ({ entityType }: Props) => {

@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { ReactNode } from "react";
 import { EditBooleanType } from "./EditBooleanType";
 import { EditDateType } from "./EditDateType";
 import { EditLatitudeType } from "./EditLatitudeType";
@@ -10,7 +10,7 @@ import { EditTextType } from "./EditTextType/EditTextType";
 import { EditTimeType } from "./EditTimeType";
 import type { EditProps } from "./types";
 
-type ComponentType = (props: EditProps) => JSX.Element | null;
+type ComponentType = (props: EditProps) => ReactNode | null;
 
 export const childComponents: Record<string, ComponentType> = {
 	number: EditNumberType,

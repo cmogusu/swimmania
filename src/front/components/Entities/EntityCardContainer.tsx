@@ -1,0 +1,23 @@
+"use client";
+
+import { type ReactNode, useEffect, useRef } from "react";
+import { useEntityScrollObserverContext } from "@/front/context";
+
+type Props = {
+	children: ReactNode;
+	entityId: number;
+};
+
+export const EntityCardContainer = ({ entityId, children }: Props) => {
+	const divRef = useRef<HTMLDivElement>(null);
+	const { setEntityContainerElement } = useEntityScrollObserverContext();
+
+	useEffect(() => {
+		if (divRef.current) {
+			const unsubscribe = setEntityContainerElement(divRef.current, entityId);
+			return unsubscribe;
+		}
+	}, [entityId, setEntityContainerElement]);
+
+	return <div ref={divRef}>{children}</div>;
+};
