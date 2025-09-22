@@ -1,6 +1,5 @@
 import { Page, SubmitButton } from "@/account";
-import { EntityTypes } from "@/constants";
-import { seedDb } from "@/server";
+import { EntityTypes, seedDb } from "@/server";
 
 const entityTypesArr = Object.values(EntityTypes);
 

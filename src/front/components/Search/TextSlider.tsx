@@ -1,6 +1,6 @@
 "use client";
 
-import { EntityTypesValues } from "@/constants";
+import { EntityTypesValues } from "@/server";
 import "./style.css";
 import { useEffect, useState } from "react";
 

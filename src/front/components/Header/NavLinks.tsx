@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EntityTypesValues } from "@/constants";
+import { EntityTypesValues } from "@/server";
 import { Nav } from "./Nav";
 
 export const NavLinks = () => (

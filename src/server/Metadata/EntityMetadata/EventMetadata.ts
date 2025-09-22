@@ -1,15 +1,32 @@
-import { DatePropertyType, TimePropertyType } from "../MetadataPropertyType";
+import {
+	DatePropertyType,
+	ParentPropertyType,
+	TimePropertyType,
+} from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer, RawMetadata } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getMetadataProperties, getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	date: (rawMetadata?: RawMetadata) =>
-		new DatePropertyType({
-			name: "date",
+	startEndDates: () =>
+		new ParentPropertyType({
+			name: "startEndDates",
 			title: "Event date",
+			childInitializers: {
+				startDate: (rawMetadata?: RawMetadata) =>
+					new DatePropertyType({
+						name: "startDate",
+						title: "Start date",
+						...rawMetadata,
+					}),
+				width: (rawMetadata?: RawMetadata) =>
+					new DatePropertyType({
+						name: "endDate",
+						title: "End date",
+						...rawMetadata,
+					}),
+			},
 			sortIndex: 0,
-			...rawMetadata,
 		}),
 
 	time: (rawMetadata?: RawMetadata) =>

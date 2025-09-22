@@ -6,7 +6,8 @@ export type EntityType =
 	| "pool"
 	| "school"
 	| "swimmer"
-	| "team";
+	| "team"
+	| "lifeguard";
 
 export type PaginationOptions = {
 	pageNumber?: number;

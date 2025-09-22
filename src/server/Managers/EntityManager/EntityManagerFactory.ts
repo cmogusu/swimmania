@@ -1,5 +1,5 @@
 import { EntityTypes } from "@/server/constants";
-import type { EntityType } from "@/server/types/global";
+import type { EntityType } from "@/server/types";
 import { EntityManager } from ".";
 
 const entityManagers: Record<string, EntityManager> = {};
