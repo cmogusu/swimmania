@@ -1,7 +1,10 @@
 "use client";
 
 import { useCallback } from "react";
-import { useSelectedEntityContext } from "@/front/context";
+import {
+	useEntityDrawerContext,
+	useSelectedEntityContext,
+} from "@/front/context";
 
 type Props = {
 	entityId: number;
@@ -9,10 +12,12 @@ type Props = {
 
 export const SelectEntityButton = ({ entityId }: Props) => {
 	const { selectEntity } = useSelectedEntityContext();
+	const { toggleDrawer } = useEntityDrawerContext();
 
 	const handleClick = useCallback(() => {
 		selectEntity(entityId);
-	}, [selectEntity, entityId]);
+		toggleDrawer();
+	}, [selectEntity, toggleDrawer, entityId]);
 
 	return (
 		<button className="btn btn-primary" type="button" onClick={handleClick}>

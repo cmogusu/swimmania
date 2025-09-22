@@ -3,19 +3,17 @@
 import Image from "next/image";
 import { useCallback, useEffect } from "react";
 import {
-	useEntityScrollObserverContext,
-	useSelectedEntityContext,
+	// useEntityScrollObserverContext,
 } from "@/front/context";
 
 export const MapItem = () => {
-	const { entity } = useSelectedEntityContext();
-	const { visibleEntityIdsRef } = useEntityScrollObserverContext();
+	// const { visibleEntityIdsRef } = useEntityScrollObserverContext();
 
 	const handlePageScroll = useCallback(() => {
-		requestIdleCallback(() => {
-			console.log(visibleEntityIdsRef.current);
-		});
-	}, [visibleEntityIdsRef.current]);
+		// requestIdleCallback(() => {
+		// 	console.log(visibleEntityIdsRef.current);
+		// });
+	}, []);
 
 	useEffect(() => {
 		window.addEventListener("scroll", handlePageScroll);
@@ -26,7 +24,6 @@ export const MapItem = () => {
 
 	return (
 		<div>
-			{entity && <h3>{entity.name}</h3>}
 			<Image
 				className="w-full"
 				src="/images/map-placeholder.jpeg"
