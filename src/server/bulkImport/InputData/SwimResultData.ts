@@ -7,6 +7,7 @@ import type { SwimEventData } from "./SwimEventData";
 export class SwimResultData {
 	entityType: EntityType = "swimResult";
 
+	entityId: number | undefined;
 	swimmerId: number | undefined;
 	teamId: number | undefined;
 
@@ -83,6 +84,7 @@ export class SwimResultData {
 			location: "",
 		});
 
+		this.entityId = entityId;
 		return entityId;
 	}
 
@@ -95,16 +97,40 @@ export class SwimResultData {
 	}
 
 	getMetadata() {
-		return {
-			position: this.position,
-			ageGroup: this.ageGroup,
-		};
+		return [
+			{
+				name: "position",
+				value: Number(this.position),
+			},
+			{
+				name: "ageGroup",
+				value: this.ageGroup,
+			},
+		];
 	}
 
-	getRelated() {
-		return {
-			position: this.position,
-			ageGroup: this.ageGroup,
+	getRelated(entityId: number) {
+		const currentEntity = {
+			entityId,
+			entityType: "swimResult",
 		};
+
+		return [
+			{
+				...currentEntity,
+				relatedEntityId: this.swimmerId,
+				relatedEntityType: "swimmer",
+			},
+			{
+				...currentEntity,
+				relatedEntityId: this.swimEventData.entityId,
+				relatedEntityType: "swmEvent",
+			},
+			{
+				...currentEntity,
+				relatedEntityId: this.team,
+				relatedEntityType: "team",
+			},
+		];
 	}
 }

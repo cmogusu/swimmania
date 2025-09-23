@@ -3,5 +3,7 @@ export * from "./EventMetadata";
 export * from "./entityMetadataFactory";
 export * from "./PoolMetadata";
 export * from "./SchoolMetadata";
+export * from "./SwimEventMetadata";
 export * from "./SwimmerMetadata";
+export * from "./SwimResultMetadata";
 export * from "./TeamMetadata";

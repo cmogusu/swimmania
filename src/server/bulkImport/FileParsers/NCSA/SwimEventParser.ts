@@ -14,13 +14,14 @@ export class SwimEventParser implements ILineTypeParser {
 		if (!matches) {
 			throw Error("Match not found");
 		}
-
-		const [_, eventNumber, sex, swimDistance, swimStroke] = matches;
+		const ageGroup = ""; // Implement agegroup
+		const [_, eventNumber, gender, swimDistance, swimStroke] = matches;
 		return {
 			eventNumber,
-			sex,
+			gender,
 			swimDistance,
 			swimStroke,
+			ageGroup,
 		};
 	}
 }

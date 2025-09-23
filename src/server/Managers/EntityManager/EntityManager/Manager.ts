@@ -1,9 +1,7 @@
+import type { RawMetadata } from "@/server/Metadata";
 import type { EntityType } from "../../../types";
 import { ImageManager } from "../../ImageManager";
-import {
-	MetadataManager,
-	type MetadataPostRawInputs,
-} from "../../MetadataManager";
+import { MetadataManager } from "../../MetadataManager";
 import {
 	RelatedEntityManager,
 	type RelatedEntityRawInputData,
@@ -138,20 +136,25 @@ export class EntityManager {
 
 	async insert(
 		rawInputs: EntityPostRawInputs,
-		metadataInputs: MetadataPostRawInputs,
-		rawRelatedEntityData: RelatedEntityRawInputData,
+		rawMetadataArr?: RawMetadata[],
+		rawRelatedEntitiesData?: RelatedEntityRawInputData[],
 	) {
 		const insertData = await this.insertEntity(rawInputs);
 		const insertPromises = [];
 
-		if (metadataInputs) {
-			const insertMetadataPromise = this.metadataManager.insert(metadataInputs);
+		if (rawMetadataArr) {
+			const insertMetadataPromise = this.metadataManager.insertBulk(
+				"swimResult",
+				insertData.id,
+				rawMetadataArr,
+			);
+
 			insertPromises.push(insertMetadataPromise);
 		}
 
-		if (rawRelatedEntityData) {
+		if (rawRelatedEntitiesData) {
 			const insertRelatedEntitiesPromises =
-				this.relatedEntityManager.insert(rawRelatedEntityData);
+				this.relatedEntityManager.insertBulk(rawRelatedEntitiesData);
 			insertPromises.push(insertRelatedEntitiesPromises);
 		}
 

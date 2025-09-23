@@ -11,9 +11,10 @@ export type SwimResultRawData = {
 
 export type SwimEventRawData = {
 	eventNumber: string;
-	sex: string;
-	swimDistance: string;
 	swimStroke: string;
+	swimDistance: string;
+	gender: string;
+	ageGroup: string;
 };
 
 export interface ILineTypeParser {

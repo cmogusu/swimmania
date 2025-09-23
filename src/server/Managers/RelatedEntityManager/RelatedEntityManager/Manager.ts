@@ -58,6 +58,14 @@ export class RelatedEntityManager {
 		return { id: insertData.insertId };
 	}
 
+	async insertBulk(rawRelatedEntityDataArr: RelatedEntityRawInputData[]) {
+		const insertPromise = rawRelatedEntityDataArr.map((data) =>
+			this.insert(data),
+		);
+
+		await Promise.all(insertPromise);
+	}
+
 	async deleteById(rawRelatedEntityData: RelatedEntityRawInputData) {
 		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
 		inputData.validateDeleteData();

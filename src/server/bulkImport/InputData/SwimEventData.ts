@@ -5,26 +5,30 @@ import type { SwimEventRawData } from "../types";
 export class SwimEventData {
 	entityType: EntityType = "swimEvent";
 
-	eventId: number | undefined;
+	entityId: number | undefined;
+
 	eventNumber: string;
-	sex: string;
+	gender: string;
 	swimDistance: string;
 	swimStroke: string;
+	ageGroup: string;
 
 	constructor({
 		eventNumber,
-		sex,
-		swimDistance,
 		swimStroke,
+		swimDistance,
+		gender,
+		ageGroup,
 	}: SwimEventRawData) {
 		this.eventNumber = eventNumber;
-		this.sex = sex;
-		this.swimDistance = swimDistance;
 		this.swimStroke = swimStroke;
+		this.swimDistance = swimDistance;
+		this.gender = gender;
+		this.ageGroup = ageGroup;
 	}
 
 	get name() {
-		return `${this.swimStroke}-${this.swimDistance}-${this.sex}`;
+		return `${this.swimStroke} ${this.swimDistance} ${this.gender} ${this.ageGroup}`;
 	}
 
 	async setEventId(swimEventManager: EntityManager) {
@@ -43,6 +47,7 @@ export class SwimEventData {
 			location: "",
 		});
 
+		this.entityId = entityId;
 		return entityId;
 	}
 }
