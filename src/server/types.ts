@@ -7,7 +7,9 @@ export type EntityType =
 	| "school"
 	| "swimmer"
 	| "team"
-	| "lifeguard";
+	| "lifeguard"
+	| "swimResult"
+	| "swimEvent";
 
 export type PaginationOptions = {
 	pageNumber?: number;

@@ -1,6 +1,13 @@
 import type { EntityType } from "../../../types";
 import { ImageManager } from "../../ImageManager";
-import { MetadataManager } from "../../MetadataManager";
+import {
+	MetadataManager,
+	type MetadataPostRawInputs,
+} from "../../MetadataManager";
+import {
+	RelatedEntityManager,
+	type RelatedEntityRawInputData,
+} from "../../RelatedEntityManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
 import { EntityInputData } from "../EntityInputData";
@@ -24,6 +31,7 @@ export class EntityManager {
 
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
+	relatedEntityManager: RelatedEntityManager;
 
 	singleItemLoadRelatedDataOptions: EntityLoadRelatedDataOptions = {
 		loadImages: true,
@@ -43,6 +51,7 @@ export class EntityManager {
 
 		this.imageManager = new ImageManager();
 		this.metadataManager = new MetadataManager();
+		this.relatedEntityManager = new RelatedEntityManager();
 	}
 
 	async getAll(rawInputs: EntityGetAllRawInputs): Promise<Entities> {
@@ -127,7 +136,32 @@ export class EntityManager {
 		return { id: rawInputs.entityId };
 	}
 
-	async insert(rawInputs: EntityPostRawInputs) {
+	async insert(
+		rawInputs: EntityPostRawInputs,
+		metadataInputs: MetadataPostRawInputs,
+		rawRelatedEntityData: RelatedEntityRawInputData,
+	) {
+		const insertData = await this.insertEntity(rawInputs);
+		const insertPromises = [];
+
+		if (metadataInputs) {
+			const insertMetadataPromise = this.metadataManager.insert(metadataInputs);
+			insertPromises.push(insertMetadataPromise);
+		}
+
+		if (rawRelatedEntityData) {
+			const insertRelatedEntitiesPromises =
+				this.relatedEntityManager.insert(rawRelatedEntityData);
+			insertPromises.push(insertRelatedEntitiesPromises);
+		}
+
+		if (insertPromises.length) {
+			await Promise.all(insertPromises);
+		}
+		return insertData;
+	}
+
+	async insertEntity(rawInputs: EntityPostRawInputs) {
 		const entityData = new EntityInputData(this.entityType, rawInputs);
 		entityData.validateInsertInputs();
 

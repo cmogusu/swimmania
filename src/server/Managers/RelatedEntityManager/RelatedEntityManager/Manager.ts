@@ -1,9 +1,9 @@
 import type { EntityType } from "../../../types";
 import {
-	type Entity,
 	type EntityGetByIdsRawInputs,
 	EntityManagerFactory,
 } from "../../EntityManager";
+import type { Entities } from "../../EntityManager/Entities";
 import { RelatedEntityInputData } from "../RelatedEntityInputData";
 import type { RelatedEntityRawInputData } from "../types";
 import { Database } from "./Database";
@@ -17,20 +17,20 @@ export class RelatedEntityManager {
 
 	getRelated(
 		rawRelatedEntityData: RelatedEntityRawInputData,
-	): Promise<Entity[]> {
+	): Promise<Entities> {
 		return this.getAll(rawRelatedEntityData, true);
 	}
 
 	getNonRelated(
 		rawRelatedEntityData: RelatedEntityRawInputData,
-	): Promise<Entity[]> {
+	): Promise<Entities> {
 		return this.getAll(rawRelatedEntityData, false);
 	}
 
 	async getAll(
 		rawRelatedEntityData: RelatedEntityRawInputData,
 		isRelated: boolean,
-	): Promise<Entity[]> {
+	): Promise<Entities> {
 		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
 		inputData.validateGetAllData();
 
@@ -72,7 +72,7 @@ export class RelatedEntityManager {
 		return { id: entityId };
 	}
 
-	getEntities(entityIds: number[], entityType: EntityType): Promise<Entity[]> {
+	getEntities(entityIds: number[], entityType: EntityType): Promise<Entities> {
 		const entityManager = EntityManagerFactory.getInstance(entityType);
 		return entityManager.getByIds({ entityIds } as EntityGetByIdsRawInputs);
 	}

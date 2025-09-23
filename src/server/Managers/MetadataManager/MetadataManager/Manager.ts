@@ -1,3 +1,4 @@
+import type { EntityType } from "@/server/types";
 import type { RawMetadata } from "../../../Metadata";
 import { MetadataInputData } from "../MetadataInputData";
 import type {
@@ -58,6 +59,22 @@ export class MetadataManager {
 
 		// @ts-ignore
 		return { id: insertData.insertId };
+	}
+
+	async insertBulk(
+		entityType: EntityType,
+		entityId: number,
+		rawMetadataArr: RawMetadata[],
+	) {
+		const insertPromises = rawMetadataArr.map((rawMetadata) =>
+			this.insert({
+				entityType,
+				entityId,
+				...rawMetadata,
+			}),
+		);
+
+		await Promise.all(insertPromises);
 	}
 
 	async deleteById(rawInputs: MetadataDeleteRawInputs) {

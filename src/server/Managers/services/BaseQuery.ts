@@ -1,6 +1,18 @@
 import { isNumber } from "@/server/utils";
 
 export class BaseQuery {
+	table_delete: string | undefined;
+
+	getAll_delete(limit: number, offset: number) {
+		this.throwIfNotSet({
+			limit,
+			offset,
+			table: this.table_delete,
+		});
+
+		return `SELECT * FROM \`${this.table_delete}\` LIMIT ${limit} OFFSET ${offset};`;
+	}
+
 	formatUpdateValues(
 		updateValues: Record<string, number | boolean | string>,
 	): string {

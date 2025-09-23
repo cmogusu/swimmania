@@ -1,9 +1,12 @@
+import type { EntityType } from "@/server/types";
 import type { EntityManager } from "../../Managers/EntityManager";
-import type { SingleEventRawData } from "../types";
+import type { SwimResultRawData } from "../types";
 import { swimmerToSwimmerIdCache, teamToTeamIdCache } from "./cache";
-import type { GalaEvent } from "./GalaEvent";
+import type { SwimEventData } from "./SwimEventData";
 
-export class SingleSwimmerEvent {
+export class SwimResultData {
+	entityType: EntityType = "swimResult";
+
 	swimmerId: number | undefined;
 	teamId: number | undefined;
 
@@ -14,27 +17,29 @@ export class SingleSwimmerEvent {
 	seedTime: number;
 	finalsTime: number;
 
-	birthYearMin: number;
-	birthYearMax: number;
+	ageGroup: string;
+	swimEventData: SwimEventData;
 
-	event: GalaEvent;
-
-	constructor(rawData: SingleEventRawData, event: GalaEvent) {
-		const { swimmerName, position, seedTime, finalsTime, team, ageGroup } =
-			rawData;
-
+	constructor(
+		{
+			swimmerName,
+			position,
+			seedTime,
+			finalsTime,
+			team,
+			ageGroup,
+		}: SwimResultRawData,
+		event: SwimEventData,
+	) {
 		this.swimmerName = swimmerName;
 		this.team = team;
 
 		this.position = Number(position);
 		this.seedTime = this.formatTime(seedTime);
 		this.finalsTime = this.formatTime(finalsTime);
+		this.ageGroup = ageGroup;
 
-		const [min, max] = this.getAgeRange(ageGroup);
-		this.birthYearMin = min;
-		this.birthYearMax = max;
-
-		this.event = event;
+		this.swimEventData = event;
 	}
 
 	formatTime(time: string) {
@@ -79,5 +84,27 @@ export class SingleSwimmerEvent {
 		});
 
 		return entityId;
+	}
+
+	getEntityData() {
+		return {
+			name: this.swimmerName,
+			description: this.swimmerName,
+			location: "",
+		};
+	}
+
+	getMetadata() {
+		return {
+			position: this.position,
+			ageGroup: this.ageGroup,
+		};
+	}
+
+	getRelated() {
+		return {
+			position: this.position,
+			ageGroup: this.ageGroup,
+		};
 	}
 }

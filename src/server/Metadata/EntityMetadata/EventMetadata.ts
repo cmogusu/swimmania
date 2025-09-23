@@ -1,5 +1,6 @@
 import {
 	DatePropertyType,
+	OptionsPropertyType,
 	ParentPropertyType,
 	TimePropertyType,
 } from "../MetadataPropertyType";
@@ -27,6 +28,24 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					}),
 			},
 			sortIndex: 0,
+		}),
+
+	course: (rawMetadata?: RawMetadata) =>
+		new OptionsPropertyType({
+			name: "course",
+			title: "Course",
+			options: [
+				{
+					key: "short",
+					value: "Short course",
+				},
+				{
+					key: "long",
+					value: "Long course",
+				},
+			],
+			sortIndex: 0,
+			...rawMetadata,
 		}),
 
 	time: (rawMetadata?: RawMetadata) =>
