@@ -1,5 +1,5 @@
 import { BaseDatabase } from "../../services/BaseDatabase";
-import type { RelatedEntityInputData } from "../RelatedEntityInputData/RelatedEntityInputData";
+import type { RelatedEntityInputData } from "../RelatedEntityInputData";
 import { Query } from "./Query";
 
 export class Database extends BaseDatabase {

@@ -1,5 +1,5 @@
 import type { RawMetadata } from "../../../Metadata";
-import { MetadataInputData } from "../MetadataInputData/MetadataInputData";
+import { MetadataInputData } from "../MetadataInputData";
 import type {
 	MetadataDeleteRawInputs,
 	MetadataFilterByRawInputs,

@@ -4,7 +4,7 @@ import {
 	type EntityGetByIdsRawInputs,
 	EntityManagerFactory,
 } from "../../EntityManager";
-import { RelatedEntityInputData } from "../RelatedEntityInputData/RelatedEntityInputData";
+import { RelatedEntityInputData } from "../RelatedEntityInputData";
 import type { RelatedEntityRawInputData } from "../types";
 import { Database } from "./Database";
 

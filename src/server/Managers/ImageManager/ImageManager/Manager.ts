@@ -1,5 +1,5 @@
 import { Image } from "../Image";
-import { ImageInputData } from "../ImageInputData/ImageInputData";
+import { ImageInputData } from "../ImageInputData";
 import type {
 	ImageDefaultRawInputs,
 	ImageDeleteRawInputs,

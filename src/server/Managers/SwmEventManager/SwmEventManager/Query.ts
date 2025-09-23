@@ -1,14 +1,7 @@
 import { BaseQuery } from "../../services";
 
 export class Query extends BaseQuery {
-	getAll(limit: number, offset: number) {
-		this.throwIfNotSet({
-			limit,
-			offset,
-		});
-
-		return `SELECT * FROM \`entity\` LIMIT ${limit} OFFSET ${offset};`;
-	}
+	table = "entity";
 
 	getByType(entityType: string, limit: number, offset: number) {
 		this.throwIfNotSet({

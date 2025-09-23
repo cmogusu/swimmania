@@ -1,5 +1,5 @@
 import { BaseDatabase } from "../../services/BaseDatabase";
-import type { EntityInputData } from "../EntityInputData";
+import type { EntityInputData } from "../SwmEventInputData/InputData";
 import type { RawEntity } from "../types";
 import { Query } from "./Query";
 

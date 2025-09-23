@@ -1,10 +1,10 @@
 import type { ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
-import { Entity } from "./Entity";
-import type { EntityInputData } from "./EntityInputData";
+import { Entity } from "./SwmEvent";
+import type { EntityInputData } from "./SwmEventInputData/InputData";
 import type { RawEntity } from "./types";
 
-export class Entities {
+export class SwmEvents {
 	entities: Entity[];
 	entityInputData: EntityInputData;
 	imageManager: ImageManager;

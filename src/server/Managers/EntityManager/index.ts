@@ -1,5 +1,5 @@
 export * from "./Entity";
-export * from "./EntityInputData/EntityInputData";
-export * from "./EntityManager/EntityManager";
+export * from "./EntityInputData";
+export * from "./EntityManager";
 export * from "./EntityManagerFactory";
 export * from "./types";

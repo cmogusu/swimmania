@@ -1,4 +1,4 @@
-import { ImageManager } from "./ImageManager/ImageManager";
+import { ImageManager } from "./ImageManager";
 
 export const imageManagerFactory = {
 	_imageManager: undefined as ImageManager | undefined,

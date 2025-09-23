@@ -7,7 +7,7 @@ import type { EntityLoadRelatedDataOptions, EntryRawInputs } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 
-export class EntityInputData extends BaseInputData {
+export class SwmEventInputData extends BaseInputData {
 	entityType: EntityType;
 	entityId?: number;
 	entityIds?: number[];
@@ -117,6 +117,13 @@ export class EntityInputData extends BaseInputData {
 		return {
 			entityType: this.entityType,
 			entityId: this.entityId!,
+		};
+	}
+
+	getSanitizedGetByNameInputs() {
+		return {
+			entityType: this.entityType,
+			name: this.name!,
 		};
 	}
 

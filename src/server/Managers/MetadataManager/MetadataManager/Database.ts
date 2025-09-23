@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: TODO - Find better solution */
 import type { RawMetadata } from "../../../Metadata";
 import { BaseDatabase } from "../../services/BaseDatabase";
-import type { MetadataInputData } from "../MetadataInputData/MetadataInputData";
+import type { MetadataInputData } from "../MetadataInputData";
 import { Query } from "./Query";
 
 export class Database extends BaseDatabase {

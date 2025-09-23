@@ -1,4 +1,4 @@
 export * from "./Image";
-export * from "./ImageManager/ImageManager";
+export * from "./ImageManager";
 export * from "./imageManagerFactory";
 export * from "./types";

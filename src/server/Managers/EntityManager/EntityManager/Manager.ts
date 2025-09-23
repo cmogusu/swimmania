@@ -3,13 +3,14 @@ import { ImageManager } from "../../ImageManager";
 import { MetadataManager } from "../../MetadataManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
-import { EntityInputData } from "../EntityInputData/EntityInputData";
+import { EntityInputData } from "../EntityInputData";
 import type {
 	EntityDeleteRawInputs,
 	EntityFilterByRawInputs,
 	EntityGetAllRawInputs,
 	EntityGetByIdRawInputs,
 	EntityGetByIdsRawInputs,
+	EntityGetByNameRawInputs,
 	EntityLoadRelatedDataOptions,
 	EntityPostRawInputs,
 	EntityUpdateRawInputs,
@@ -62,6 +63,19 @@ export class EntityManager {
 		return entities;
 	}
 
+	async getByIds(rawInputs: EntityGetByIdsRawInputs): Promise<Entities> {
+		const updatedInputs = this.merge(
+			this.multipleItemsLoadRelatedDataOptions,
+			rawInputs,
+		);
+		const entityInputData = new EntityInputData(this.entityType, updatedInputs);
+		entityInputData.validateGetByIdsInputs();
+
+		const rawEntities = await this.db.getByIds(entityInputData);
+		const entities = await this.getEntities(rawEntities, entityInputData);
+		return entities;
+	}
+
 	async getById(rawInputs: EntityGetByIdRawInputs): Promise<Entity> {
 		const updatedInputs = this.merge(
 			this.singleItemLoadRelatedDataOptions,
@@ -81,17 +95,23 @@ export class EntityManager {
 		return entity;
 	}
 
-	async getByIds(rawInputs: EntityGetByIdsRawInputs): Promise<Entities> {
+	async getByName(rawInputs: EntityGetByNameRawInputs): Promise<Entity> {
 		const updatedInputs = this.merge(
-			this.multipleItemsLoadRelatedDataOptions,
+			this.singleItemLoadRelatedDataOptions,
 			rawInputs,
 		);
 		const entityInputData = new EntityInputData(this.entityType, updatedInputs);
-		entityInputData.validateGetByIdsInputs();
+		entityInputData.validateGetByIdInputs();
 
-		const rawEntities = await this.db.getByIds(entityInputData);
-		const entities = await this.getEntities(rawEntities, entityInputData);
-		return entities;
+		const rawEntity = await this.db.getByName(entityInputData);
+		const entity = new Entity(rawEntity);
+		entity.loadRelatedData(
+			entityInputData,
+			this.imageManager,
+			this.metadataManager,
+		);
+
+		return entity;
 	}
 
 	async update(rawInputs: EntityUpdateRawInputs) {

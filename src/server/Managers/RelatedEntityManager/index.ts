@@ -1,2 +1,2 @@
-export * from "./RelatedEntityManager/RelatedEntityManager";
+export * from "./RelatedEntityManager";
 export * from "./types";

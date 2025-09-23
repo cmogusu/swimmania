@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: TODO: Find better solution to avoid non null assertions */
 import { BaseDatabase } from "../../services/BaseDatabase";
-import type { ImageInputData } from "../ImageInputData/ImageInputData";
+import type { ImageInputData } from "../ImageInputData";
 import type { ImageDatabaseRawOutputData } from "../types";
 import { Query } from "./Query";
 
