@@ -619,7 +619,7 @@ INSERT INTO `relations` (`id`, `entityId1`, `entityId2`, `relationship`) VALUES
 
 CREATE TABLE `unprocessed-swim-results` (
   `id` int(11) NOT NULL,
-  `position` int(11) NOT NULL,
+  `rank` int(11) NOT NULL,
   `firstName` varchar(120) NOT NULL,
   `surname` varchar(120) NOT NULL,
   `thirdName` varchar(120) NOT NULL,

@@ -1,7 +1,7 @@
 import type { SwimEventData, SwimResultData } from "./InputData";
 
 export type SwimResultRawData = {
-	position: string;
+	rank: string;
 	swimmerName: string;
 	seedTime: string;
 	finalsTime: string;
@@ -34,9 +34,9 @@ export type RawMeetResultsData = {
 };
 
 export type RawSwmMeetData = {
-	name: "Masters Swimming Tanzania";
-	subtitle: "Arusha International Masters SC Swim Champion";
-	date: "5/10/2025";
+	name: string;
+	subtitle: string;
+	date: string;
 };
 
 export type RawSwimEventData = {

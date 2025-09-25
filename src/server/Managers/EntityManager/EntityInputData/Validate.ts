@@ -9,7 +9,8 @@ export class Validate extends BaseValidate {
 		}
 	}
 
-	location(location?: string) {}
+	// TODO - Implement validation
+	location() {}
 
 	filters(filters?: MetadataFilter[]) {
 		if (!filters || !isArray(filters) || !filters.length) {
