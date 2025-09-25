@@ -8,7 +8,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import type { EntityData } from "@/server";
+import type { EntityData } from "@/server/types";
 import { useEntitiesContext } from "./entitiesContext";
 
 interface ContextType {

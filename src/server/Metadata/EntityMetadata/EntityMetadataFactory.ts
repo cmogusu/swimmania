@@ -1,10 +1,17 @@
 import type { EntityType } from "@/server/types";
-import type { IEntityMetadata, RawMetadata } from "../types";
+import type {
+	IEntityMetadata,
+	IMetadataPropertyType,
+	RawMetadata,
+} from "../types";
 import { CoachMetadata } from "./CoachMetadata";
-import { EventMetadata } from "./EventMetadata";
+import { LifeguardMetadata } from "./LifeguardMetadata";
 import { PoolMetadata } from "./PoolMetadata";
 import { SchoolMetadata } from "./SchoolMetadata";
+import { SwimEventMetadata } from "./SwimEventMetadata";
+import { SwimMeetMetadata } from "./SwimMeetMetadata";
 import { SwimmerMetadata } from "./SwimmerMetadata";
+import { SwimResultMetadata } from "./SwimResultMetadata";
 import { TeamMetadata } from "./TeamMetadata";
 
 type EntityMetadataClassType = {
@@ -12,15 +19,19 @@ type EntityMetadataClassType = {
 		rawMetadataArr?: RawMetadata[],
 		intializeAllProperties?: boolean,
 	): IEntityMetadata;
+	getPropertyInstance: (rawMetadata: RawMetadata) => IMetadataPropertyType;
 };
 
 const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
 	coach: CoachMetadata,
-	event: EventMetadata,
+	swimMeet: SwimMeetMetadata,
 	pool: PoolMetadata,
 	school: SchoolMetadata,
 	swimmer: SwimmerMetadata,
 	team: TeamMetadata,
+	swimEvent: SwimEventMetadata,
+	swimResult: SwimResultMetadata,
+	lifeguard: LifeguardMetadata,
 };
 
 export const entityMetadataFactory = {

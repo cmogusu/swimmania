@@ -31,15 +31,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 				{
 					key: "backstroke",
-					value: "Backstroke",
+					value: "Back stroke",
 				},
 				{
 					key: "breaststroke",
-					value: "Breaststroke",
+					value: "Breast stroke",
 				},
 				{
 					key: "im",
 					value: "Individual medlay",
+				},
+				{
+					key: "free-relay",
+					value: "Free relay",
+				},
+				{
+					key: "medley-relay",
+					value: "Medley relay",
 				},
 			],
 			sortIndex: 2,
@@ -62,6 +70,22 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				{
 					key: "100m",
 					value: "100 meters",
+				},
+				{
+					key: "200m",
+					value: "200 meters",
+				},
+				{
+					key: "400m",
+					value: "400 meters",
+				},
+				{
+					key: "800m",
+					value: "800 meters",
+				},
+				{
+					key: "1500m",
+					value: "1500 meters",
 				},
 			],
 			sortIndex: 4,

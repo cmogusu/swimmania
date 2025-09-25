@@ -20,6 +20,9 @@ importers:
       next:
         specifier: 15.3.4
         version: 15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      openai:
+        specifier: ^5.23.0
+        version: 5.23.0(zod@4.1.11)
       pdf-parse-new:
         specifier: ^1.4.1
         version: 1.4.1
@@ -41,6 +44,9 @@ importers:
       validator:
         specifier: ^13.15.15
         version: 13.15.15
+      zod:
+        specifier: ^4.1.11
+        version: 4.1.11
     devDependencies:
       '@biomejs/biome':
         specifier: 2.0.4
@@ -904,6 +910,18 @@ packages:
       encoding:
         optional: true
 
+  openai@5.23.0:
+    resolution: {integrity: sha512-Cfq155NHzI7VWR67LUNJMIgPZy2oSh7Fld/OKhxq648BiUjELAvcge7g30xJ6vAfwwXf6TVK0KKuN+3nmIJG/A==}
+    hasBin: true
+    peerDependencies:
+      ws: ^8.18.0
+      zod: ^3.23.8
+    peerDependenciesMeta:
+      ws:
+        optional: true
+      zod:
+        optional: true
+
   opencollective-postinstall@2.0.3:
     resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
     hasBin: true
@@ -1322,6 +1340,9 @@ packages:
 
   zlibjs@0.3.1:
     resolution: {integrity: sha512-+J9RrgTKOmlxFSDHo0pI1xM6BLVUv+o0ZT9ANtCxGkjIVCCUdx9alUF8Gm+dGLKbkkkidWIHFDZHDMpfITt4+w==}
+
+  zod@4.1.11:
+    resolution: {integrity: sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==}
 
 snapshots:
 
@@ -2108,6 +2129,10 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
+  openai@5.23.0(zod@4.1.11):
+    optionalDependencies:
+      zod: 4.1.11
+
   opencollective-postinstall@2.0.3: {}
 
   pbf@3.3.0:
@@ -2620,3 +2645,5 @@ snapshots:
   yallist@5.0.0: {}
 
   zlibjs@0.3.1: {}
+
+  zod@4.1.11: {}

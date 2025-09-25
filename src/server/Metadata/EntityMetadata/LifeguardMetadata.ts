@@ -1,21 +1,9 @@
-import {
-	NumberPropertyType,
-	TextPropertyType,
-	TimePropertyType,
-} from "../MetadataPropertyType";
+import { TextPropertyType } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer, RawMetadata } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getMetadataProperties, getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	position: (rawMetadata?: RawMetadata) =>
-		new NumberPropertyType({
-			name: "position",
-			title: "Position",
-			sortIndex: 0,
-			...rawMetadata,
-		}),
-
 	firstName: (rawMetadata?: RawMetadata) =>
 		new TextPropertyType({
 			name: "firstName",
@@ -40,29 +28,21 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			...rawMetadata,
 		}),
 
-	ageGroup: (rawMetadata?: RawMetadata) =>
+	dob: (rawMetadata?: RawMetadata) =>
 		new TextPropertyType({
-			name: "ageGroup",
-			title: "Age group",
-			sortIndex: 4,
-			...rawMetadata,
-		}),
-
-	time: (rawMetadata?: RawMetadata) =>
-		new TimePropertyType({
-			name: "time",
-			title: "Time",
-			sortIndex: 0,
+			name: "dob",
+			title: "Date of birth",
+			sortIndex: 6,
 			...rawMetadata,
 		}),
 };
 
-export class SwimResultMetadata extends BaseEntityMetadata {
+export class LifeguardMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
 		return getPropertyInstance(
-			SwimResultMetadata.propertyInitilizers,
+			LifeguardMetadata.propertyInitilizers,
 			rawMetadata,
 		);
 	};
@@ -74,7 +54,7 @@ export class SwimResultMetadata extends BaseEntityMetadata {
 		super();
 
 		const properties = getMetadataProperties(
-			SwimResultMetadata.propertyInitilizers,
+			LifeguardMetadata.propertyInitilizers,
 			rawMetadataArr,
 			intializeAllProperties,
 		);

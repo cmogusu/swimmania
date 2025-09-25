@@ -27,3 +27,30 @@ export interface ILineTypeParser {
 export interface ILineParser {
 	parse: (lineOfText: string) => SwimResultData | SwimEventData | undefined;
 }
+
+export type RawMeetResultsData = {
+	event: RawSwmMeetData;
+	results: RawSwimEventData[];
+};
+
+export type RawSwmMeetData = {
+	name: "Masters Swimming Tanzania";
+	subtitle: "Arusha International Masters SC Swim Champion";
+	date: "5/10/2025";
+};
+
+export type RawSwimEventData = {
+	event_number: number;
+	gender: string;
+	age_group: string;
+	distance: string;
+	results: RawSwimResultData[];
+};
+
+export type RawSwimResultData = {
+	rank: number;
+	name: string;
+	age: number;
+	team: string;
+	time: string;
+};

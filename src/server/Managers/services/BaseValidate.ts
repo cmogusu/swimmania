@@ -1,3 +1,4 @@
+import * as z from "zod";
 import { EntityTypes } from "@/server/constants";
 
 const MAX_TEXT_LENGTH = 3000;

@@ -1,5 +1,3 @@
-import { extractTextFromImage } from "@/server/api";
-
 export default async function ExpPage() {
 	return (
 		<div>
@@ -8,4 +6,15 @@ export default async function ExpPage() {
 			</form>
 		</div>
 	);
+}
+
+async function extractTextFromImage() {
+	"use server";
+	const y = await new Promise((resolve) => {
+		setTimeout(() => {
+			resolve({ id: 10 });
+		}, 1000);
+	});
+
+	console.log(y);
 }

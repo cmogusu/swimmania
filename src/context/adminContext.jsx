@@ -14,7 +14,7 @@ export const AdminContextProvider = (props) => {
 			isEditingEnabled,
 			setIsEditingEnabled,
 		}),
-		[isEditingEnabled, setIsEditingEnabled],
+		[isEditingEnabled],
 	);
 
 	return (

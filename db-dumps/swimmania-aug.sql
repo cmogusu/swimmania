@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `entity` (
   `id` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
-  `type` enum('swimmer','school','pool','team','event','coach') DEFAULT NULL,
+  `type` enum('swimmer','school','pool','team','swimMeet','coach') DEFAULT NULL,
   `description` text DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `insertTime` timestamp NULL DEFAULT current_timestamp()
@@ -44,7 +44,7 @@ INSERT INTO `entity` (`id`, `name`, `type`, `description`, `location`, `insertTi
 (1, 'entityName', 'swimmer', 'xxx description', 'xxx location', '2024-10-25 15:35:10'),
 (2, 'swimmer 1t', 'swimmer', 'description swimmer 1', 'location 1', '2024-10-25 15:35:10'),
 (3, 'name 1', 'team', 'description 1', '', '2024-10-25 15:35:10'),
-(4, 'name 2', 'event', 'description 2', '', '2024-10-25 15:35:10'),
+(4, 'name 2', 'swimMeet', 'description 2', '', '2024-10-25 15:35:10'),
 (6, 'name 2', 'pool', 'description chicken layer', 'kiambu tw', '2024-10-25 15:35:10'),
 (7, 'pool 0', 'pool', 'description pool 0', '', '2024-10-25 15:35:10'),
 (8, 'pool 1', 'pool', 'description pool 1', '', '2024-10-25 15:35:10'),
@@ -110,7 +110,7 @@ INSERT INTO `image` (`id`, `entityId`, `name`, `description`, `filepath`, `isDef
 CREATE TABLE `metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','event','coach') DEFAULT NULL,
+  `entityType` enum('swimmer','school','pool','team','swimMeet','coach') DEFAULT NULL,
   `name` varchar(254) NOT NULL,
   `value` varchar(254) DEFAULT NULL,
   `itemIndex` int(11) DEFAULT 0,

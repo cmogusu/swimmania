@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { EntityTypesValues } from "@/server";
+import { EntityTypesValues } from "@/server/constants";
 
 type Props = {
 	children: ReactNode;

@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { ExtractTextFromImage } from "../bulkImport/ExtractTextFromImage";
 import { seedEntityFactory } from "../seed";
 import type { EntityType } from "../types";
 import { isUndefined } from "../utils";
@@ -164,11 +163,3 @@ const extractFormData = (
 const reloadEditPage = (entityType: string, entityId: string) => {
 	revalidatePath(`/account/${entityType}/edit/${entityId}`);
 };
-
-export async function extractTextFromImage() {
-	const filePath = "http://localhost:3001/images/swim-results1.gitSkip.png";
-	const extractor = new ExtractTextFromImage();
-
-	const x = extractor.extract(filePath);
-	console.log("extracted", x);
-}

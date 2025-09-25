@@ -57,11 +57,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		}),
 };
 
-export class EventMetadata extends BaseEntityMetadata {
+export class SwimMeetMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(EventMetadata.propertyInitilizers, rawMetadata);
+		return getPropertyInstance(
+			SwimMeetMetadata.propertyInitilizers,
+			rawMetadata,
+		);
 	};
 
 	constructor(
@@ -71,7 +74,7 @@ export class EventMetadata extends BaseEntityMetadata {
 		super();
 
 		const properties = getMetadataProperties(
-			EventMetadata.propertyInitilizers,
+			SwimMeetMetadata.propertyInitilizers,
 			rawMetadataArr,
 			intializeAllProperties,
 		);

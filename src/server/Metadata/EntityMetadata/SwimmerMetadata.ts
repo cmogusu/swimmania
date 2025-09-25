@@ -4,11 +4,35 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getMetadataProperties, getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	firstName: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "firstName",
+			title: "First name",
+			sortIndex: 0,
+			...rawMetadata,
+		}),
+
+	surname: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "surname",
+			title: "Surname",
+			sortIndex: 2,
+			...rawMetadata,
+		}),
+
+	thirdName: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "thirdName",
+			title: "Third name or Initial",
+			sortIndex: 4,
+			...rawMetadata,
+		}),
+
 	dob: (rawMetadata?: RawMetadata) =>
 		new TextPropertyType({
 			name: "dob",
 			title: "Date of birth",
-			sortIndex: 0,
+			sortIndex: 6,
 			...rawMetadata,
 		}),
 };

@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `entity` (
   `id` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
-  `type` enum('swimmer','school','pool','team','event','coach') DEFAULT NULL,
+  `type` enum('swimmer','school','pool','team','swimMeet','coach') DEFAULT NULL,
   `description` text DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `insertTime` timestamp NULL DEFAULT current_timestamp()
@@ -41,7 +41,7 @@ CREATE TABLE `entity` (
 --
 
 INSERT INTO `entity` (`id`, `name`, `type`, `description`, `location`, `insertTime`) VALUES
-(6, 'favorite pool', 'pool', 'event more coherent description ', 'kiambu town', '2024-10-25 15:35:10'),
+(6, 'favorite pool', 'pool', 'swimMeet more coherent description ', 'kiambu town', '2024-10-25 15:35:10'),
 (41, 'Magdalen Garden', 'pool', 'out how now although worriedly miserably habit drat oh monumental until interestingly tentacle recklessly', 'function () { [native code] } function () { [native code] }', '2025-09-18 18:24:24'),
 (43, 'North Street', 'pool', 'flawless minor proliferate publicize usually whether wheel for lonely scorn effector when carelessly despite gown despite egg corporation', 'Essex Timor-Leste', '2025-09-18 18:48:58'),
 (44, 'N Railroad Street', 'pool', 'but for although inside trick ack uh-huh uniform interestingly at', 'County Armagh Indonesia', '2025-09-18 19:20:25');
@@ -83,7 +83,7 @@ INSERT INTO `image` (`id`, `entityId`, `alt`, `filepath`, `isDefault`) VALUES
 CREATE TABLE `metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','event','coach') DEFAULT NULL,
+  `entityType` enum('swimmer','school','pool','team','swimMeet','coach') DEFAULT NULL,
   `name` varchar(254) NOT NULL,
   `value` varchar(254) DEFAULT NULL,
   `itemIndex` int(11) DEFAULT 0,

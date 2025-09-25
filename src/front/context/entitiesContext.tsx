@@ -9,8 +9,8 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import type { EntitiesData, EntityData, EntityType } from "@/server";
 import { getEntities } from "@/server/api/apiActions";
+import type { EntitiesData, EntityData, EntityType } from "@/server/types";
 
 interface ContextType {
 	entities: EntityData[];

@@ -2,7 +2,7 @@ import type { MetadataValue } from "./Metadata";
 
 export type EntityType =
 	| "coach"
-	| "event"
+	| "swimMeet"
 	| "pool"
 	| "school"
 	| "swimmer"

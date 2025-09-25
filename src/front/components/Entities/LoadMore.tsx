@@ -8,7 +8,7 @@ import {
 	useRef,
 } from "react";
 import { useEntitiesContext } from "@/front/context";
-import type { EntityType } from "@/server";
+import type { EntityType } from "@/server/types";
 
 type Props = {
 	entityType: EntityType;

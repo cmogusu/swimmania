@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useModalRenderContext } from "@/context";
 import { useEffect } from "react";
+import { useModalRenderContext } from "@/context";
 import { addQueryString, removeQueryString } from "@/utilities";
 
 export const useUpdateSearchParams = () => {
