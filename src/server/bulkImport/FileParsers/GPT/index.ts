@@ -1,2 +1,2 @@
-export * from "./DeepSeek";
-export * from "./OpenAi";
+export * from "./DeepSeekParser";
+export * from "./OpenAIParser";

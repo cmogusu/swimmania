@@ -25,7 +25,7 @@ export class UnprocessedSwimResultsManager {
 		return { id };
 	}
 
-	async insertEntity(rawInputs: RawSwimResult) {
+	async insert(rawInputs: RawSwimResult) {
 		const inputData = new SwimResultInputData(rawInputs);
 		inputData.validateInsertInputs();
 

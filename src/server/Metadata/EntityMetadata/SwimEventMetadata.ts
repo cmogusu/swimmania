@@ -42,11 +42,11 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Individual medlay",
 				},
 				{
-					key: "free-relay",
-					value: "Free relay",
+					key: "freestyle_relay",
+					value: "Freestyle relay",
 				},
 				{
-					key: "medley-relay",
+					key: "medley_relay",
 					value: "Medley relay",
 				},
 			],
@@ -60,35 +60,65 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			title: "Swim distance",
 			options: [
 				{
-					key: "25m",
-					value: "25 meters",
+					key: "25",
+					value: "25",
 				},
 				{
-					key: "50m",
-					value: "50 meters",
+					key: "50",
+					value: "50",
 				},
 				{
-					key: "100m",
-					value: "100 meters",
+					key: "100",
+					value: "100",
 				},
 				{
-					key: "200m",
-					value: "200 meters",
+					key: "200",
+					value: "200",
 				},
 				{
-					key: "400m",
-					value: "400 meters",
+					key: "400",
+					value: "400",
 				},
 				{
-					key: "800m",
-					value: "800 meters",
+					key: "800",
+					value: "800",
 				},
 				{
-					key: "1500m",
-					value: "1500 meters",
+					key: "1500",
+					value: "1500",
+				},
+				{
+					key: "4x25",
+					value: "4 x 25",
+				},
+				{
+					key: "4x50",
+					value: "4 x 50",
+				},
+				{
+					key: "4x100",
+					value: "4 x 100",
 				},
 			],
 			sortIndex: 4,
+			...rawMetadata,
+		}),
+
+	swimDistanceUnit: (rawMetadata?: RawMetadata) =>
+		new OptionsPropertyType({
+			name: "swimDistanceUnit",
+			title: "Swim distance unit",
+			options: [
+				{
+					key: "meter",
+					value: "Meter",
+				},
+				{
+					key: "yard",
+					value: "Yard",
+				},
+			],
+			sortIndex: 6,
 			...rawMetadata,
 		}),
 
@@ -106,7 +136,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Women",
 				},
 			],
-			sortIndex: 6,
+			sortIndex: 8,
 			...rawMetadata,
 		}),
 
@@ -114,7 +144,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TextPropertyType({
 			name: "ageGroup",
 			title: "AgeGroup",
-			sortIndex: 8,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 };

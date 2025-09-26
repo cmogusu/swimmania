@@ -1,5 +1,5 @@
 import {
-	EntityManagerFactory,
+	entityManagerFactory,
 	imageManagerFactory,
 	metadataManagerFactory,
 } from "@/server/Managers";
@@ -22,7 +22,7 @@ export class Api {
 		entityId: number,
 	): Promise<EntityData | undefined> {
 		try {
-			const entityManager = EntityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance(entityType);
 			const entity = await entityManager.getById({
 				entityId,
 				loadImages: true,
@@ -42,7 +42,7 @@ export class Api {
 		page: number = 1,
 	): Promise<EntitiesData> {
 		try {
-			const entityManager = EntityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance(entityType);
 			const entities = await entityManager.getAll({
 				loadImages: false,
 				loadMetadata: false,
@@ -59,7 +59,7 @@ export class Api {
 
 	async deleteEntity(entityType: EntityType, entityId: number) {
 		try {
-			const entityManager = EntityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance(entityType);
 			const insertData = await entityManager.deleteById({ entityId });
 			return insertData;
 		} catch (error: unknown) {
@@ -76,7 +76,7 @@ export class Api {
 		location: string,
 	) {
 		try {
-			const entityManager = EntityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance(entityType);
 			const updateData = await entityManager.update({
 				entityId,
 				name,
@@ -97,7 +97,7 @@ export class Api {
 		location: string,
 	) {
 		try {
-			const entityManager = EntityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance(entityType);
 			const insertData = await entityManager.insert({
 				name,
 				description,

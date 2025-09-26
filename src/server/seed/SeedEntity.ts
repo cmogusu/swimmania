@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import {
 	type EntityManager,
-	EntityManagerFactory,
 	type EntityPostRawInputs,
+	entityManagerFactory,
 } from "../Managers/EntityManager";
 import { Log } from "../services";
 import type { EntityType } from "../types";
@@ -17,7 +17,7 @@ export class SeedEntity {
 
 	constructor(entityType: EntityType) {
 		this.log = new Log();
-		this.entityManager = EntityManagerFactory.getInstance(entityType);
+		this.entityManager = entityManagerFactory.getInstance(entityType);
 		this.seedImage = new SeedImage();
 		this.seedMetadata = new SeedMetadata(entityType);
 	}

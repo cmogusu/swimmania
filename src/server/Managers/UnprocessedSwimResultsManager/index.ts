@@ -1,5 +1,4 @@
-export * from "./Entity";
-export * from "./EntityManager";
-export * from "./EntityManagerFactory";
 export * from "./SwmResultInputData";
 export * from "./types";
+export * from "./UnprocessedSwimResultsManager";
+export * from "./unprocessedSwimResultsManagerFactory";

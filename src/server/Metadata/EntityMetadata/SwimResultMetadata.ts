@@ -8,18 +8,10 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getMetadataProperties, getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	position: (rawMetadata?: RawMetadata) =>
+	rank: (rawMetadata?: RawMetadata) =>
 		new NumberPropertyType({
-			name: "position",
+			name: "rank",
 			title: "Position",
-			sortIndex: 0,
-			...rawMetadata,
-		}),
-
-	firstName: (rawMetadata?: RawMetadata) =>
-		new TextPropertyType({
-			name: "firstName",
-			title: "First name",
 			sortIndex: 0,
 			...rawMetadata,
 		}),
@@ -32,6 +24,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			...rawMetadata,
 		}),
 
+	firstName: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "firstName",
+			title: "First name",
+			sortIndex: 0,
+			...rawMetadata,
+		}),
+
 	thirdName: (rawMetadata?: RawMetadata) =>
 		new TextPropertyType({
 			name: "thirdName",
@@ -40,7 +40,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			...rawMetadata,
 		}),
 
-	ageGroup: (rawMetadata?: RawMetadata) =>
+	age: (rawMetadata?: RawMetadata) =>
 		new TextPropertyType({
 			name: "ageGroup",
 			title: "Age group",

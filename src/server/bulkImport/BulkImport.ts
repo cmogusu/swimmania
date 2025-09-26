@@ -1,41 +1,58 @@
 import { type MetadataManager, metadataManagerFactory } from "../Managers";
 import {
 	type EntityManager,
-	EntityManagerFactory,
+	entityManagerFactory,
 } from "../Managers/EntityManager";
 import type { SwimResultData } from "./InputData";
-import type { ILineParser } from "./types";
+import type {
+	RawMeetResultsData,
+	RawSwimEventData,
+	RawSwmMeetData,
+} from "./types";
 
 export class BulkImport {
-	multiLineText: string;
-	lineParser: ILineParser;
+	rawSwmMeetData: RawSwmMeetData | undefined;
+	rawSwimEventDataArr: RawSwimEventData[] | undefined;
 
 	swimmerManager: EntityManager;
 	teamManager: EntityManager;
-	eventManager: EntityManager;
+	swimMeetManager: EntityManager;
 	swimResultManager: EntityManager;
 	swimEventManager: EntityManager;
 	metadataManager: MetadataManager;
 
-	constructor(multiLineText: string, lineParser: ILineParser) {
-		this.multiLineText = multiLineText;
-		this.lineParser = lineParser;
+	constructor(rawMeetResultsData: RawMeetResultsData) {
+		const { swimMeet, results } = rawMeetResultsData;
+		this.rawSwmMeetData = swimMeet;
+		this.rawSwimEventDataArr = results;
 
-		this.swimmerManager = EntityManagerFactory.getInstance("swimmer");
-		this.teamManager = EntityManagerFactory.getInstance("team");
-		this.eventManager = EntityManagerFactory.getInstance("event");
-		this.swimResultManager = EntityManagerFactory.getInstance("swimResult");
-		this.swimEventManager = EntityManagerFactory.getInstance("swimEvent");
+		this.swimmerManager = entityManagerFactory.getInstance("swimmer");
+		this.teamManager = entityManagerFactory.getInstance("team");
+		this.swimMeetManager = entityManagerFactory.getInstance("swimMeet");
+		this.swimResultManager = entityManagerFactory.getInstance("swimResult");
+		this.swimEventManager = entityManagerFactory.getInstance("swimEvent");
 		this.metadataManager = metadataManagerFactory.getInstance();
 	}
 
-	async import() {
-		for (const lineOfText of this.multiLineText) {
+	async importMeet() {
+		if (!this.rawSwmMeetData) {
+			return;
+		}
+
+		await this.importResults(this.re);
+	}
+
+	async importResults() {
+		if (!this.rawSwimEventDataArr?.length) {
+			return;
+		}
+
+		for (const rawSwimEventData of this.rawSwimEventDataArr) {
 			await this.importLine(lineOfText);
 		}
 	}
 
-	async importLine(lineOfText: string) {
+	async importEvent(lineOfText: string) {
 		const parsedData = this.lineParser.parse(lineOfText);
 		if (!parsedData) {
 			return;

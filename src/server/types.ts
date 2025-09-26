@@ -2,14 +2,15 @@ import type { MetadataValue } from "./Metadata";
 
 export type EntityType =
 	| "coach"
-	| "swimMeet"
+	| "lifeguard"
+	| "swimmer"
+	| "parent"
+	| "team"
 	| "pool"
 	| "school"
-	| "swimmer"
-	| "team"
-	| "lifeguard"
-	| "swimResult"
-	| "swimEvent";
+	| "swimMeet"
+	| "swimEvent"
+	| "swimResult";
 
 export type PaginationOptions = {
 	pageNumber?: number;
