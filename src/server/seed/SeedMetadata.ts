@@ -1,5 +1,8 @@
 import { type MetadataManager, metadataManagerFactory } from "../Managers";
-import { entityMetadataFactory, type RawMetadata } from "../Metadata";
+import {
+	entityMetadataFactory,
+	type RawMetadata,
+} from "../Managers/MetadataManager";
 import type { EntityType } from "../types";
 
 export class SeedMetadata {

@@ -51,7 +51,7 @@ export type ImageDeleteRawInputs = {
 	entityId: number;
 };
 
-export type ImageRawInputs = {
+export type RawImageInputs = {
 	id?: number;
 	entityId: number;
 	alt?: string;

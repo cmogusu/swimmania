@@ -1,4 +1,4 @@
-import type { RelatedEntityRawInputData } from "../types";
+import type { RawRelatedEntityInputData } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 
@@ -18,7 +18,7 @@ export class RelatedEntityInputData {
 		entityId,
 		relatedEntityType,
 		relatedEntityId,
-	}: RelatedEntityRawInputData) {
+	}: RawRelatedEntityInputData) {
 		this.entityType = entityType;
 		this.entityId = entityId;
 		this.relatedEntityType = relatedEntityType;

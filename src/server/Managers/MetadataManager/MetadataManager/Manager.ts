@@ -1,5 +1,5 @@
 import type { EntityType } from "@/server/types";
-import type { RawMetadata } from "../../../Metadata";
+import type { RawMetadata } from "../../../Managers/MetadataManager";
 import { MetadataInputData } from "../MetadataInputData";
 import type {
 	MetadataDeleteRawInputs,

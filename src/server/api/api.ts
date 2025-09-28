@@ -4,7 +4,7 @@ import {
 	metadataManagerFactory,
 } from "@/server/Managers";
 import { POSTS_PER_PAGE } from "../constants";
-import type { MetadataValue } from "../Metadata";
+import type { MetadataValue } from "../Managers/MetadataManager";
 import { Log } from "../services";
 import type { EntitiesData, EntityData, EntityType } from "../types";
 

@@ -5,7 +5,7 @@ import {
 	type IMetadataPropertyType,
 	type MetadataFilter,
 	type MetadataValue,
-} from "../../../Metadata";
+} from "../../../Managers/MetadataManager";
 import type { EntityType } from "../../../types";
 import { BaseInputData } from "../../services/BaseInputData";
 import type { MetadataRawInputs } from "../types";

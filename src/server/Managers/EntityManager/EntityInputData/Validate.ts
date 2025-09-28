@@ -1,5 +1,5 @@
+import type { MetadataFilter } from "@/server/Managers/MetadataManager";
 import { BaseValidate } from "@/server/Managers/services/BaseValidate";
-import type { MetadataFilter } from "@/server/Metadata";
 import { isArray } from "@/server/utils";
 
 export class Validate extends BaseValidate {

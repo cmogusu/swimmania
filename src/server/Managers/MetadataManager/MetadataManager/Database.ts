@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: TODO - Find better solution */
-import type { RawMetadata } from "../../../Metadata";
+import type { RawMetadata } from "../../../Managers/MetadataManager";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type { MetadataInputData } from "../MetadataInputData";
 import { Query } from "./Query";

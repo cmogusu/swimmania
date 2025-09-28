@@ -2,7 +2,7 @@ import type {
 	MetadataFilter,
 	MetadataValue,
 	SchemaType,
-} from "../../../Metadata";
+} from "../../../Managers/MetadataManager";
 import type { EntityType } from "../../../types";
 import { isString } from "../../../utils";
 import { BaseQuery } from "../../services";

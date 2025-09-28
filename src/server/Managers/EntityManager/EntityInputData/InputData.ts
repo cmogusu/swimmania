@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: TODO: Find a better solution besides this */
+
+import type { MetadataFilter } from "@/server/Managers/MetadataManager";
 import { BaseInputData } from "@/server/Managers/services/BaseInputData";
-import type { MetadataFilter } from "@/server/Metadata";
 import type { EntityType } from "@/server/types";
 import { isUndefined } from "@/server/utils";
 import type { EntityLoadRelatedDataOptions, EntryRawInputs } from "../types";

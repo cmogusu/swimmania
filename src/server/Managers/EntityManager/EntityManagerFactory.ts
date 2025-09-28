@@ -14,12 +14,7 @@ import {
 	TeamManager,
 } from "./EntityTypeManagers";
 
-const managerClasses: Record<
-	EntityType,
-	new (
-		entityType: EntityType,
-	) => EntityManager
-> = {
+const managerClasses: Record<EntityType, new () => EntityManager> = {
 	coach: CoachManager,
 	lifeguard: LifeguardManager,
 	parent: ParentManager,
@@ -46,7 +41,7 @@ export const entityManagerFactory = {
 
 		if (!entityManagers[entityType]) {
 			const ManagerClass = managerClasses[entityType];
-			entityManagers[entityType] = new ManagerClass(entityType);
+			entityManagers[entityType] = new ManagerClass();
 		}
 
 		return entityManagers[entityType];

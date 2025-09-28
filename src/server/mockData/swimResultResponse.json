@@ -1,0 +1,34 @@
+{
+  "eventNumber":101,
+  "gender":"female",
+  "ageGroup":"25-29",
+  "distance":"100",
+  "distanceUnit":"meter",
+  "stroke":"freestyle",
+  "results":[
+    {
+      "rank":1,
+      "surname":"Waburi",
+      "firstName":"Anne",
+      "age":29,
+      "team":"KE",
+      "time":"1:36.13"
+    },
+    {
+      "rank":2,
+      "surname":"Anjichi",
+      "firstName":"Beyu",
+      "age":26,
+      "team":"KE",
+      "time":"1:42.00"
+    },
+    {
+      "rank":3,
+      "surname":"Mutheu",
+      "firstName":"Victoria",
+      "age":27,
+      "team":"KE",
+      "time":"2:19.69"
+    }
+  ]
+}

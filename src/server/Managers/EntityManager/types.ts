@@ -1,5 +1,7 @@
-import type { MetadataFilter } from "../../Metadata";
 import type { EntityType, PaginationOptions } from "../../types";
+import type { RawImageInputs } from "../ImageManager";
+import type { MetadataFilter, RawMetadata } from "../MetadataManager";
+import type { RelationshipType } from "../RelatedEntityManager";
 
 // Outputs
 export type RawEntity = {
@@ -48,6 +50,9 @@ export type EntityPostRawInputs = {
 	name: string;
 	description?: string;
 	location?: string;
+	images?: RawImageInputs[];
+	metadata?: RawMetadata[];
+	related?: RawRelatedEntity[];
 };
 
 export type EntityDeleteRawInputs = {
@@ -67,4 +72,9 @@ export type EntryRawInputs = PaginationOptions & {
 	loadMetadata?: boolean;
 
 	filters?: MetadataFilter[];
+};
+
+export type RawRelatedEntity = EntityPostRawInputs & {
+	type: EntityType;
+	relationshipType: RelationshipType;
 };

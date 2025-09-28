@@ -1,4 +1,4 @@
-import type { MetadataValue } from "../../../Metadata";
+import type { MetadataValue } from "../../../Managers/MetadataManager";
 import { isString } from "../../../utils";
 import { BaseSanitize } from "../../services/BaseSanitize";
 

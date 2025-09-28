@@ -5,7 +5,11 @@ import {
 } from "../../EntityManager";
 import type { Entities } from "../../EntityManager/Entities";
 import { RelatedEntityInputData } from "../RelatedEntityInputData";
-import type { RelatedEntityRawInputData } from "../types";
+import type {
+	RawGetNonRelatedInputData,
+	RawGetRelatedInputData,
+	RawRelatedEntityInputData,
+} from "../types";
 import { Database } from "./Database";
 
 export class RelatedEntityManager {
@@ -15,20 +19,18 @@ export class RelatedEntityManager {
 		this.db = new Database();
 	}
 
-	getRelated(
-		rawRelatedEntityData: RelatedEntityRawInputData,
-	): Promise<Entities> {
+	getRelated(rawRelatedEntityData: RawGetRelatedInputData): Promise<Entities> {
 		return this.getAll(rawRelatedEntityData, true);
 	}
 
 	getNonRelated(
-		rawRelatedEntityData: RelatedEntityRawInputData,
+		rawRelatedEntityData: RawGetNonRelatedInputData,
 	): Promise<Entities> {
 		return this.getAll(rawRelatedEntityData, false);
 	}
 
 	async getAll(
-		rawRelatedEntityData: RelatedEntityRawInputData,
+		rawRelatedEntityData: RawGetRelatedInputData,
 		isRelated: boolean,
 	): Promise<Entities> {
 		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
@@ -44,7 +46,7 @@ export class RelatedEntityManager {
 		);
 	}
 
-	async insert(rawRelatedEntityData: RelatedEntityRawInputData) {
+	async insert(rawRelatedEntityData: RawRelatedEntityInputData) {
 		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
 		inputData.validateInsertData();
 
@@ -58,7 +60,7 @@ export class RelatedEntityManager {
 		return { id: insertData.insertId };
 	}
 
-	async insertBulk(rawRelatedEntityDataArr: RelatedEntityRawInputData[]) {
+	async insertBulk(rawRelatedEntityDataArr: RawRelatedEntityInputData[]) {
 		const insertPromise = rawRelatedEntityDataArr.map((data) =>
 			this.insert(data),
 		);
@@ -66,7 +68,7 @@ export class RelatedEntityManager {
 		await Promise.all(insertPromise);
 	}
 
-	async deleteById(rawRelatedEntityData: RelatedEntityRawInputData) {
+	async deleteById(rawRelatedEntityData: RawRelatedEntityInputData) {
 		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
 		inputData.validateDeleteData();
 

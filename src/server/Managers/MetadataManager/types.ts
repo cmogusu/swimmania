@@ -1,5 +1,5 @@
-import type { MetadataFilter, MetadataValue } from "../../Metadata/types";
 import type { EntityType } from "../../types";
+import type { MetadataFilter, MetadataValue } from "./Metadata/";
 
 // Inputs
 export type MetadataGetAllRawInputs = {

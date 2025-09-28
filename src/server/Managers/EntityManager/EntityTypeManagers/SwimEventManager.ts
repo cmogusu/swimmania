@@ -10,6 +10,10 @@ export class SwimEventManager extends EntityManager {
 
 	teamManager: TeamManager;
 
+	relationships: Record<string, EntityType[]> = {
+		contains: ["swimResult"],
+	};
+
 	constructor() {
 		super(entityType);
 		this.teamManager = new TeamManager();

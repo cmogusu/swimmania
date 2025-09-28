@@ -20,7 +20,7 @@ export class Database extends BaseDatabase {
 			metadata.offset,
 		);
 
-		return this.execSql<number[]>(query);
+		return this.execSql<number>(query);
 	}
 
 	getNonRelated(relationData: RelatedEntityInputData): Promise<number[]> {
@@ -33,7 +33,7 @@ export class Database extends BaseDatabase {
 			metadata.offset,
 		);
 
-		return this.execSql<number[]>(query);
+		return this.execSql<number>(query);
 	}
 
 	insert(relationData: RelatedEntityInputData) {

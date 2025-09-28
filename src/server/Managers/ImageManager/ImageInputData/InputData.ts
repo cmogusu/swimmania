@@ -1,7 +1,7 @@
 import { IMAGE_FOLDER_URL, PUBLIC_FOLDER } from "@/server/constants";
 import { isUndefined } from "@/server/utils";
 import { BaseInputData } from "../../services/BaseInputData";
-import type { ImageFileDataItem, ImageRawInputs } from "../types";
+import type { ImageFileDataItem, RawImageInputs } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 
@@ -24,7 +24,7 @@ export class ImageInputData extends BaseInputData {
 		filepath,
 		isDefault,
 		file,
-	}: ImageRawInputs) {
+	}: RawImageInputs) {
 		super();
 
 		if (!isUndefined(id)) this.id = id;

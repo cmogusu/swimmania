@@ -1,14 +1,14 @@
-import type { RawMetadata } from "@/server/Metadata";
 import type { EntityType } from "../../../types";
 import { ImageManager } from "../../ImageManager";
 import { MetadataManager } from "../../MetadataManager";
 import {
 	RelatedEntityManager,
-	type RelatedEntityRawInputData,
+	type RelationshipType,
 } from "../../RelatedEntityManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
 import { EntityInputData } from "../EntityInputData";
+import { entityManagerFactory } from "../entityManagerFactory";
 import type {
 	EntityDeleteRawInputs,
 	EntityFilterByRawInputs,
@@ -20,12 +20,19 @@ import type {
 	EntityPostRawInputs,
 	EntityUpdateRawInputs,
 	RawEntity,
+	RawRelatedEntity,
 } from "../types";
 import { Database } from "./Database";
+import { LruCache } from "./LruCache";
+
+type EntityId = {
+	id: number;
+};
 
 export class EntityManager {
 	entityType: EntityType;
 	db: Database;
+	cache: LruCache<EntityId>;
 
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
@@ -43,9 +50,12 @@ export class EntityManager {
 		loadMetadata: false,
 	};
 
+	relationships: Record<string, EntityType[]> = {};
+
 	constructor(entityType: EntityType) {
 		this.entityType = entityType;
 		this.db = new Database();
+		this.cache = new LruCache<EntityId>();
 
 		this.imageManager = new ImageManager();
 		this.metadataManager = new MetadataManager();
@@ -134,40 +144,30 @@ export class EntityManager {
 		return { id: rawInputs.entityId };
 	}
 
-	async insert(
-		rawInputs: EntityPostRawInputs,
-		rawMetadataArr?: RawMetadata[],
-		rawRelatedEntitiesData?: RelatedEntityRawInputData[],
-	) {
+	async insert(rawInputs: EntityPostRawInputs) {
+		const { metadata, related } = rawInputs;
 		const insertData = await this.insertEntity(rawInputs);
-		const insertPromises = [];
 
-		if (rawMetadataArr) {
-			const insertMetadataPromise = this.metadataManager.insertBulk(
-				"swimResult",
+		if (metadata) {
+			await this.metadataManager.insertBulk(
+				this.entityType,
 				insertData.id,
-				rawMetadataArr,
+				metadata,
 			);
-
-			insertPromises.push(insertMetadataPromise);
 		}
 
-		if (rawRelatedEntitiesData) {
-			const insertRelatedEntitiesPromises =
-				this.relatedEntityManager.insertBulk(rawRelatedEntitiesData);
-			insertPromises.push(insertRelatedEntitiesPromises);
+		if (related) {
+			await Promise.all(
+				related.map((r) => this.insertRelated(insertData.id, r)),
+			);
 		}
 
-		if (insertPromises.length) {
-			await Promise.all(insertPromises);
-		}
 		return insertData;
 	}
 
 	async insertEntity(rawInputs: EntityPostRawInputs) {
 		const entityData = new EntityInputData(this.entityType, rawInputs);
 		entityData.validateInsertInputs();
-
 		const insertData = await this.db.insert(entityData);
 
 		// @ts-ignore
@@ -177,6 +177,40 @@ export class EntityManager {
 
 		// @ts-ignore
 		return { id: insertData.insertId };
+	}
+
+	async insertRelated(entityId: number, related: RawRelatedEntity) {
+		const { type: relatedEntityType, name, relationshipType } = related;
+		const relationship = this.relationships[relationshipType];
+		if (!relationship?.includes(relatedEntityType)) {
+			throw Error("Invalid relationship");
+		}
+
+		const relatedEntityManager =
+			entityManagerFactory.getInstance(relatedEntityType);
+
+		let relatedEntity: { id: number } | undefined;
+		if (relatedEntityManager.cache.has(name)) {
+			relatedEntity = relatedEntityManager.cache.get(name);
+		}
+
+		if (!relatedEntity) {
+			relatedEntity = await relatedEntityManager.getByName({
+				name,
+			});
+		}
+
+		if (!relatedEntity) {
+			relatedEntity = await relatedEntityManager.insert(related);
+		}
+
+		relatedEntityManager.cache.set(name, relatedEntity);
+		await this.relatedEntityManager.insert({
+			entityId,
+			entityType: this.entityType,
+			relatedEntityId: relatedEntity.id,
+			relatedEntityType,
+		});
 	}
 
 	async deleteById(rawInputs: EntityDeleteRawInputs) {
@@ -225,5 +259,40 @@ export class EntityManager {
 
 	merge(a: Record<string, unknown>, b: Record<string, unknown>) {
 		return { ...a, ...b };
+	}
+
+	async getAllRelated(entityId: number) {
+		const related: Record<string, Record<string, Entities>> = {};
+
+		for (const relationshipType in this.relationships) {
+			related[relationshipType] = await this.getRelatedByRelationshipType(
+				entityId,
+				relationshipType as RelationshipType,
+			);
+		}
+
+		return related;
+	}
+
+	async getRelatedByRelationshipType(
+		entityId: number,
+		relationshipType: RelationshipType,
+	): Promise<Record<string, Entities>> {
+		const relatedEntityTypes = this.relationships[relationshipType];
+		if (!relatedEntityTypes) {
+			throw Error("Entity not related");
+		}
+
+		const relatedEntities: Record<string, Entities> = {};
+		for (const relatedEntityType of relatedEntityTypes) {
+			relatedEntities[relatedEntityType] =
+				await this.relatedEntityManager.getRelated({
+					entityId,
+					entityType: this.entityType,
+					relatedEntityType,
+				});
+		}
+
+		return relatedEntities;
 	}
 }

@@ -6,6 +6,10 @@ const entityType = "lifeguard";
 export class LifeguardManager extends EntityManager {
 	entityType: EntityType = entityType;
 
+	relationships: Record<string, EntityType[]> = {
+		worksAt: ["pool"],
+	};
+
 	constructor() {
 		super(entityType);
 	}
