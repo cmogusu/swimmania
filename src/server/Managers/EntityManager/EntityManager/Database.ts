@@ -17,44 +17,45 @@ export class Database extends BaseDatabase {
 	async getAll(entityData: EntityInputData): Promise<RawEntity[]> {
 		const { entityType, pageSize, offset } =
 			entityData.getSanitizedGetAllData();
-		const query = this.query.getByType(entityType, pageSize, offset);
-
-		const rawEntities = await this.execSql(query);
+		const [rawEntities] = await this.query.getByType(
+			entityType,
+			pageSize,
+			offset,
+		);
 		return rawEntities as RawEntity[];
 	}
 
 	async getByIds(entityData: EntityInputData): Promise<RawEntity[]> {
 		const { entityType, entityIds } = entityData.getSanitizedGetByIdsInputs();
-		const query = this.query.getByIds(entityType, entityIds);
-		const rawEntities = await this.execSql(query);
+		const [rawEntities] = await this.query.getByIds(entityType, entityIds);
 		return rawEntities as RawEntity[];
 	}
 
 	async getById(entityData: EntityInputData): Promise<RawEntity> {
 		const { entityType, entityId } = entityData.getSanitizedGetByIdInputs();
-		const query = this.query.getById(entityType, entityId);
-		const rawEntities = await this.execSql<RawEntity>(query);
-		if (!rawEntities?.[0]) {
+		const [rawEntities] = await this.query.getById(entityType, entityId);
+		const rawEntity = (rawEntities as RawEntity[])?.[0];
+		if (!rawEntity) {
 			throw Error("Entity not found");
 		}
 
-		return rawEntities?.[0] as RawEntity;
+		return rawEntity;
 	}
 
 	async getByName(entityData: EntityInputData): Promise<RawEntity> {
 		const { entityType, name } = entityData.getSanitizedGetByNameInputs();
-		const query = this.query.getByName(entityType, name);
-		const rawEntities = await this.execSql<RawEntity>(query);
-		if (!rawEntities?.[0]) {
+		const [rawEntities] = await this.query.getByName(entityType, name);
+		const rawEntity = (rawEntities as RawEntity[])?.[0];
+		if (!rawEntity) {
 			throw Error("Entity not found");
 		}
 
-		return rawEntities?.[0] as RawEntity;
+		return rawEntity;
 	}
 
-	update(entityData: EntityInputData) {
+	async update(entityData: EntityInputData) {
 		const cleanEntity = entityData.getSanitizedUploadInputs();
-		const query = this.query.update(
+		const [updateData] = await this.query.update(
 			cleanEntity.entityType,
 			cleanEntity.entityId,
 			cleanEntity.name,
@@ -62,23 +63,24 @@ export class Database extends BaseDatabase {
 			cleanEntity.location,
 		);
 
-		return this.execSql(query);
+		return updateData;
 	}
 
-	insert(entityData: EntityInputData) {
+	async insert(entityData: EntityInputData) {
 		const cleanEntity = entityData.getSanitizedUploadInputs();
-		const query = this.query.insert(
+		const [insertData] = await this.query.insert(
 			cleanEntity.entityType,
 			cleanEntity.name,
 			cleanEntity.description,
 			cleanEntity.location,
 		);
-		return this.execSql(query);
+
+		return insertData;
 	}
 
-	deleteById(entityData: EntityInputData) {
+	async deleteById(entityData: EntityInputData) {
 		const { entityType, entityId } = entityData.getSanitizedUploadInputs();
-		const query = this.query.deleteById(entityType, entityId);
-		return this.execSql(query);
+		const [deleteData] = await this.query.deleteById(entityType, entityId);
+		return deleteData;
 	}
 }

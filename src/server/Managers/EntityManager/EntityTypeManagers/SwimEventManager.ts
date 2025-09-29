@@ -1,6 +1,6 @@
 import type { EntityType } from "@/server/types";
 import { EntityManager } from "../EntityManager";
-import type { EntityPostRawInputs } from "../types";
+import type { EntityGetByNameRawInputs, EntityPostRawInputs } from "../types";
 import { TeamManager } from "./TeamManager";
 
 const entityType = "swimEvent";
@@ -22,5 +22,9 @@ export class SwimEventManager extends EntityManager {
 	async insertTeam(rawInputs: EntityPostRawInputs) {
 		const { id: teamId } = await this.teamManager.insert(rawInputs);
 		return teamId;
+	}
+
+	findExisting(rawInputs: EntityGetByNameRawInputs) {
+		return this.getByName(rawInputs);
 	}
 }

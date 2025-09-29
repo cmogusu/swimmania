@@ -23,7 +23,7 @@ export class Database extends BaseDatabase {
 			metadata.relationshipType,
 		);
 
-		return entityIds;
+		return entityIds as unknown as number[];
 	}
 
 	async getNonRelated(relationData: GetInputData): Promise<number[]> {
@@ -35,7 +35,7 @@ export class Database extends BaseDatabase {
 			metadata.relationshipType,
 		);
 
-		return entityIds;
+		return entityIds as unknown as number[];
 	}
 
 	async insert(relationData: InsertInputData) {

@@ -131,6 +131,10 @@ export class EntityManager {
 		return entity;
 	}
 
+	findExisting(rawInputs: EntityGetByNameRawInputs) {
+		return this.getByName(rawInputs);
+	}
+
 	async update(rawInputs: EntityUpdateRawInputs) {
 		const entityData = new EntityInputData(this.entityType, rawInputs);
 		entityData.validateUpdateInputs();
@@ -195,9 +199,7 @@ export class EntityManager {
 		}
 
 		if (!relatedEntity) {
-			relatedEntity = await relatedEntityManager.getByName({
-				name,
-			});
+			relatedEntity = await relatedEntityManager.findExisting(related);
 		}
 
 		if (!relatedEntity) {

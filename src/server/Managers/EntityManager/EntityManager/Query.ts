@@ -7,7 +7,10 @@ export class Query extends BaseQuery {
 			offset,
 		});
 
-		return `SELECT * FROM \`entity\` LIMIT ${limit} OFFSET ${offset};`;
+		return this.exec(`SELECT * FROM \`entity\` LIMIT ? OFFSET ?;`, [
+			limit,
+			offset,
+		]);
 	}
 
 	getByType(entityType: string, limit: number, offset: number) {
@@ -17,7 +20,10 @@ export class Query extends BaseQuery {
 			offset,
 		});
 
-		return `SELECT * FROM \`entity\` WHERE type = '${entityType}' LIMIT ${limit} OFFSET ${offset};`;
+		return this.exec(
+			`SELECT * FROM \`entity\` WHERE type = '?' LIMIT ? OFFSET ?;`,
+			[entityType, limit, offset],
+		);
 	}
 
 	getByName(entityType: string, name: string) {
@@ -26,7 +32,10 @@ export class Query extends BaseQuery {
 			name,
 		});
 
-		return `SELECT * FROM \`entity\` WHERE type = '${entityType}' and name like '${name}' LIMIT 1;`;
+		return this.exec(
+			`SELECT * FROM \`entity\` WHERE type = '?' and name like '?' LIMIT 1;`,
+			[entityType, name],
+		);
 	}
 
 	getById(entityType: string, entityId: number) {
@@ -35,7 +44,10 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return `SELECT * FROM \`entity\` WHERE id=${entityId} and type ='${entityType}' Limit 1;`;
+		return this.exec(
+			`SELECT * FROM \`entity\` WHERE id=? and type ='?' Limit 1;`,
+			[entityId, entityType],
+		);
 	}
 
 	getByIds(entityType: string, entityIds: number[]) {
@@ -45,7 +57,10 @@ export class Query extends BaseQuery {
 			firstEntityId: entityIds[0],
 		});
 
-		return `SELECT * FROM \`entity\` WHERE type ='${entityType}' and id in (${entityIds.join(",")}) Limit 1;`;
+		return this.exec(
+			`SELECT * FROM \`entity\` WHERE type ='?' and id in (?) Limit 1;`,
+			[entityType, entityIds.join(",")],
+		);
 	}
 
 	getByMetadata(
@@ -80,7 +95,10 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return `Delete FROM \`entity\` WHERE id = ${entityId} and type ='${entityType}'`;
+		return this.exec(`Delete FROM \`entity\` WHERE id = ? and type ='?'`, [
+			entityId,
+			entityType,
+		]);
 	}
 
 	update(
@@ -91,7 +109,7 @@ export class Query extends BaseQuery {
 		location: string,
 	) {
 		const values: Record<string, string> = {
-			type: entityType,
+			entityType,
 			name,
 			location,
 			description,
@@ -99,8 +117,10 @@ export class Query extends BaseQuery {
 
 		this.throwIfNotSet(values);
 
-		const updateValuesStr = this.formatUpdateValues(values);
-		return `UPDATE \`entity\` SET ${updateValuesStr} WHERE id='${entityId}';`;
+		return this.exec(
+			`UPDATE \`entity\` SET name='?', location='?', description='?' WHERE id=? and type='?';`,
+			[name, location, description, entityId, entityType],
+		);
 	}
 
 	insert(
@@ -114,19 +134,9 @@ export class Query extends BaseQuery {
 			name,
 		});
 
-		const insertValues: Record<string, string> = {
-			name,
-			type: entityType,
-		};
-
-		if (description) {
-			insertValues["description"] = description;
-		}
-		if (location) {
-			insertValues["location"] = location;
-		}
-
-		const { keys, values } = this.formatInsertValues(insertValues);
-		return `INSERT INTO \`entity\` (${keys}) VALUES (${values});`;
+		return this.exec(
+			`INSERT INTO \`entity\` (name, type, location, description) VALUES ('?', '?', '?', '?');`,
+			[name, entityType, location || "", description || ""],
+		);
 	}
 }
