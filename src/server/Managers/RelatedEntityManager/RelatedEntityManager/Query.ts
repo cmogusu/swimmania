@@ -1,3 +1,4 @@
+import type { RowDataPacket } from "mysql2";
 import { BaseQuery } from "../../services";
 import type { RelationshipType } from "../types";
 
@@ -7,8 +8,6 @@ export class Query extends BaseQuery {
 		entityId: number,
 		relatedEntityType: string,
 		relationshipType?: RelationshipType,
-		limit?: number,
-		offset?: number,
 	) {
 		this.throwIfNotSet({
 			entityId,
@@ -21,44 +20,52 @@ export class Query extends BaseQuery {
 			relatedEntityType,
 		);
 
-		const whereQuery =
-			`${activeColumn}=${entityId} and relationship='${relationship}'` +
-			relationshipType
-				? ` relationshipType = ${relationshipType}`
-				: "";
+		const relationshipTypeClause = relationshipType
+			? ` AND relationshipType = ${relationshipType}`
+			: "";
 
-		const limitQuery = this.getLimitQuery(limit, offset);
-		return `SELECT DISTINCT ${relatedColumn} AS id FROM \`relations\` where ${whereQuery} ${limitQuery};`;
+		return this.exec(
+			`SELECT DISTINCT ? AS id FROM \`relations\` WHERE ?=? AND relationship='?' ?;`,
+			[
+				relatedColumn,
+				activeColumn,
+				entityId,
+				relationship,
+				relationshipTypeClause,
+			],
+		);
 	}
 
-	getNonRelated(
+	async getNonRelated(
 		entityType: string,
 		entityId: number,
 		relatedEntityType: string,
 		relationshipType?: RelationshipType,
-		limit?: number,
-		offset?: number,
 	) {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
 		});
 
-		const limitQuery = this.getLimitQuery(limit, offset);
-		const relatedEntitySql = this.getRelated(
+		const [relatedEntityIds] = await this.getRelated(
 			entityType,
 			entityId,
 			relatedEntityType,
 			relationshipType,
 		);
 
-		const whereClause =
-			`type='${relatedEntityType}' and id not in (${relatedEntitySql})` +
-			relationshipType
-				? ` relationshipType = ${relationshipType}`
-				: "";
+		const relationshipTypeClause = relationshipType
+			? ` AND relationshipType = ${relationshipType}`
+			: "";
 
-		return `SELECT id FROM \`entity\` where ${whereClause} ${limitQuery}`;
+		return this.exec(
+			`SELECT id FROM \`entity\` WHERE type='?' AND id NOT IN (?) ?`,
+			[
+				relatedEntityType,
+				(relatedEntityIds as RowDataPacket[]).join(","),
+				relationshipTypeClause,
+			],
+		);
 	}
 
 	insert(
@@ -83,14 +90,10 @@ export class Query extends BaseQuery {
 			relatedEntityId,
 		);
 
-		const { keys, values } = this.formatInsertValues({
-			entityId1,
-			entityId2,
-			relationship,
-			relationshipType,
-		});
-
-		return `INSERT INTO \`relations\` (${keys}) VALUES (${values});`;
+		return this.exec(
+			`INSERT INTO \`relations\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, '?', '?');`,
+			[entityId1, entityId2, relationship, relationshipType],
+		);
 	}
 
 	deleteById(
@@ -113,18 +116,15 @@ export class Query extends BaseQuery {
 			relatedEntityType,
 			relatedEntityId,
 		);
-		const insertValues = {
-			entityId1,
-			entityId2,
-			relationship,
-			...(relationshipType ? { relationshipType } : {}),
-		};
 
-		const whereQuery = Object.entries(insertValues)
-			.map(([key, value]) => `${key} = '${value}'`)
-			.join(" AND ");
+		const relationshipTypeClause = relationshipType
+			? ` AND relationshipType = ${relationshipType}`
+			: "";
 
-		return `DELETE FROM \`relations\` WHERE ${whereQuery}`;
+		return this.exec(
+			`DELETE FROM \`relations\` WHERE entityId1=? AND entityId2=? AND relationship='?' ?;`,
+			[entityId1, entityId2, relationship, relationshipTypeClause],
+		);
 	}
 
 	getColumns(

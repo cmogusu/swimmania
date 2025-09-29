@@ -1,16 +1,38 @@
+import type mysql from "mysql2/promise";
+import type { FieldPacket, QueryResult } from "mysql2/promise";
 import { isNumber } from "@/server/utils";
+import { getConnectionPool } from "./DbConnectionPool";
+import { Log } from "./Log";
 
 export class BaseQuery {
-	table_delete: string | undefined;
+	table: string | undefined;
 
-	getAll_delete(limit: number, offset: number) {
+	log: Log;
+	connectionPool: mysql.Pool;
+	exec: <T extends QueryResult>(
+		sql: string,
+		values: unknown,
+	) => Promise<[T, FieldPacket[]]>;
+
+	isDisposed: boolean = false;
+
+	constructor() {
+		this.log = new Log();
+		this.connectionPool = getConnectionPool(this.log);
+		this.exec = this.connectionPool.execute;
+	}
+
+	getAll(limit: number, offset: number) {
 		this.throwIfNotSet({
 			limit,
 			offset,
-			table: this.table_delete,
+			table: this.table,
 		});
 
-		return `SELECT * FROM \`${this.table_delete}\` LIMIT ${limit} OFFSET ${offset};`;
+		return this.exec(`SELECT * FROM \`${this.table}\` LIMIT ? OFFSET ?;`, [
+			limit,
+			offset,
+		]);
 	}
 
 	formatUpdateValues(
@@ -50,6 +72,16 @@ export class BaseQuery {
 			if (value === undefined || value === null) {
 				throw Error(`${name} not set`);
 			}
+		}
+	}
+
+	[Symbol.dispose]() {
+		if (!this.isDisposed) {
+			this.connectionPool.end().then(() => {
+				this.log.appLogic("Ended connection");
+			});
+
+			this.isDisposed = true;
 		}
 	}
 }

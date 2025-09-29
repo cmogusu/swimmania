@@ -14,33 +14,33 @@ export class Database extends BaseDatabase {
 		this.query = new Query();
 	}
 
-	getRelated(relationData: GetInputData): Promise<number[]> {
+	async getRelated(relationData: GetInputData): Promise<number[]> {
 		const metadata = relationData.getSanitized();
-		const query = this.query.getRelated(
+		const [entityIds] = await this.query.getRelated(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relationshipType,
 		);
 
-		return this.execSql<number>(query);
+		return entityIds;
 	}
 
-	getNonRelated(relationData: GetInputData): Promise<number[]> {
+	async getNonRelated(relationData: GetInputData): Promise<number[]> {
 		const metadata = relationData.getSanitized();
-		const query = this.query.getNonRelated(
+		const [entityIds] = await this.query.getNonRelated(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relationshipType,
 		);
 
-		return this.execSql<number>(query);
+		return entityIds;
 	}
 
-	insert(relationData: InsertInputData) {
+	async insert(relationData: InsertInputData) {
 		const metadata = relationData.getSanitized();
-		const query = this.query.insert(
+		const [insertData] = await this.query.insert(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
@@ -48,12 +48,12 @@ export class Database extends BaseDatabase {
 			metadata.relationshipType,
 		);
 
-		return this.execSql(query);
+		return insertData;
 	}
 
-	deleteById(relationData: DeleteInputData) {
+	async deleteById(relationData: DeleteInputData) {
 		const metadata = relationData.getSanitized();
-		const query = this.query.deleteById(
+		const [deleteData] = await this.query.deleteById(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
@@ -61,6 +61,6 @@ export class Database extends BaseDatabase {
 			metadata.relationshipType,
 		);
 
-		return this.execSql(query);
+		return deleteData;
 	}
 }
