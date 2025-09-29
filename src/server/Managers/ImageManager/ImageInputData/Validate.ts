@@ -1,26 +1,23 @@
+import z from "zod";
 import { BaseValidate } from "../../services/BaseValidate";
 import type { ImageFileDataItem } from "../types";
 
-// TODO: implement this correctly
 export class Validate extends BaseValidate {
+	fileValidator = z.optional(
+		z.object({
+			originalname: z.string().min(1).max(100),
+			path: z.string().min(1).max(255),
+		}),
+	);
+
+	filepathValidator = z.optional(z.string().min(1).max(255));
+
 	file(file?: ImageFileDataItem) {
-		if (!file) {
-			return;
-		}
-
-		if (!file.originalname) {
-			throw Error("Invalid file name");
-		}
-
-		if (!file.path) {
-			throw Error("Invalid file path");
-		}
+		this.fileValidator.parse(file);
 	}
 
 	filepath(filepath?: unknown) {
-		if (filepath && typeof filepath === "string" && filepath.length > 40) {
-			throw Error("filepath too long");
-		}
+		this.filepathValidator.parse(filepath);
 	}
 }
 

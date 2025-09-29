@@ -16,6 +16,7 @@ export class Database extends BaseDatabase {
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
+			metadata.relationshipType,
 			metadata.limit,
 			metadata.offset,
 		);
@@ -29,6 +30,7 @@ export class Database extends BaseDatabase {
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
+			metadata.relationshipType,
 			metadata.limit,
 			metadata.offset,
 		);
@@ -43,6 +45,7 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relatedEntityId!,
+			metadata.relationshipType!,
 		);
 
 		return this.execSql(query);
@@ -55,6 +58,7 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relatedEntityId!,
+			metadata.relationshipType,
 		);
 
 		return this.execSql(query);

@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { isNotSet, isString, sanitizeTextForDb } from "../../utils";
+import { isNotSet, isString, sanitizeTextForDb } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 

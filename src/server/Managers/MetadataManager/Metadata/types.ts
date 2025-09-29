@@ -1,4 +1,4 @@
-import type { EntityType, MetadataData } from "../types";
+import type { EntityType, MetadataData } from "@/server/types";
 
 export type MetadataValue = boolean | number | string;
 
@@ -72,6 +72,7 @@ export interface IMetadataPropertyType {
 	children?: IMetadataPropertyType[];
 	options?: Option[];
 	sortIndex: number;
+	getChild: (childName: string) => IMetadataPropertyType;
 	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;
 	createAllChildInstances: () => void;
 	setSeedData: () => void;

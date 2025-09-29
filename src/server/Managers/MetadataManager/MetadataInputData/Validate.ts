@@ -1,17 +1,11 @@
-import { isNull, isNumber, isUndefined } from "../../../utils";
+import z from "zod";
 import { BaseValidate } from "../../services/BaseValidate";
 
 export class Validate extends BaseValidate {
-	value(v?: unknown) {
-		if (isNull(v) || isUndefined(v)) {
-			throw Error("value not set");
-		}
-	}
+	itemIndexValidator = z.nullable(z.number().positive().max(10));
 
 	itemIndex(v?: unknown) {
-		if (!isNumber(v)) {
-			throw Error("Number value expected");
-		}
+		this.itemIndexValidator.parse(v);
 	}
 }
 

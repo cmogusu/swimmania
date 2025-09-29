@@ -141,11 +141,15 @@ export class MetadataInputData extends BaseInputData {
 			throw Error("Entity type not set");
 		}
 
+		if (!this.name) {
+			throw Error("Entity name not set");
+		}
+
 		const rawMetadata = {
 			id: this.id,
 			entityId: this.entityId,
 			entityType: this.entityType,
-			name: this.name!,
+			name: this.name,
 			value: this.value,
 			itemIndex: this.itemIndex,
 		};

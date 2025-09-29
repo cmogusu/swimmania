@@ -210,6 +210,7 @@ export class EntityManager {
 			entityType: this.entityType,
 			relatedEntityId: relatedEntity.id,
 			relatedEntityType,
+			relationshipType,
 		});
 	}
 

@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { isNotSet, isString, isUndefined } from "../../utils";
+import { isNotSet, isString, isUndefined } from "@/server/utils";
 import type { Option, OptionsTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 

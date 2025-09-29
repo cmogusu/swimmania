@@ -1,5 +1,5 @@
 import type { MetadataData } from "@/server/types";
-import { isSet, isUndefined } from "../../utils";
+import { isSet, isUndefined } from "@/server/utils";
 import type {
 	IMetadataPropertyType,
 	MetadataTypeInputs,
@@ -13,6 +13,8 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	id: number = -1;
 	name: string;
 	_value!: MetadataValue;
+
+	validator: unknown;
 
 	title: string = "";
 	editTitle: string = "";

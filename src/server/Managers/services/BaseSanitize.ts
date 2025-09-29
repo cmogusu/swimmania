@@ -1,15 +1,15 @@
+import DOMPurify from "dompurify";
+
 export class BaseSanitize {
-	name(name?: string) {
-		return name ? removeHTML(name) : undefined;
+	name(name: string) {
+		return this.sanitizeString(name);
 	}
 
 	description(description?: string) {
-		return description ? removeHTML(description) : undefined;
+		return description ? this.sanitizeString(description) : undefined;
 	}
 
-	sanitizeString(v: string) {
-		return v;
-	}
+	sanitizeString = (v: string) => {
+		return DOMPurify.sanitize(v);
+	};
 }
-
-const removeHTML = (v: string): string => v;

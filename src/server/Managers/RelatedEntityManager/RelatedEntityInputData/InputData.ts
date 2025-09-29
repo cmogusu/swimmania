@@ -1,4 +1,4 @@
-import type { RawRelatedEntityInputData } from "../types";
+import type { RawRelatedEntityInputData, RelationshipType } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 
@@ -7,6 +7,7 @@ export class RelatedEntityInputData {
 	readonly entityId: number;
 	readonly relatedEntityType: string;
 	readonly relatedEntityId?: number;
+	readonly relationshipType?: RelationshipType;
 	limit: number = 10;
 	offset: number = 0;
 
@@ -18,10 +19,12 @@ export class RelatedEntityInputData {
 		entityId,
 		relatedEntityType,
 		relatedEntityId,
+		relationshipType,
 	}: RawRelatedEntityInputData) {
 		this.entityType = entityType;
 		this.entityId = entityId;
 		this.relatedEntityType = relatedEntityType;
+		this.relationshipType = relationshipType;
 
 		if (relatedEntityId) this.relatedEntityId = relatedEntityId;
 
@@ -35,6 +38,7 @@ export class RelatedEntityInputData {
 			entityId: this.entityId,
 			relatedEntityType: this.relatedEntityType,
 			relatedEntityId: this.relatedEntityId,
+			relationshipType: this.relationshipType,
 			limit: this.limit,
 			offset: this.offset,
 		};

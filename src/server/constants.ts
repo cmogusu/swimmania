@@ -1,6 +1,8 @@
 import path from "node:path";
 import type { EntityType } from "./types";
 
+export const MAX_TEXT_LENGTH = 3000;
+
 export const PublicFolder = path.join(__dirname, "../../public");
 export const ImageFolder = path.join(PublicFolder, "img");
 
@@ -24,6 +26,7 @@ export const EntityTypes = {
 };
 
 export const EntityTypePlurals: Record<EntityType, string> = {
+	parent: "Parents",
 	swimmer: "Swimmers",
 	school: "Schools",
 	pool: "Pools",

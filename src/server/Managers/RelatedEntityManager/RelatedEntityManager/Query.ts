@@ -1,10 +1,12 @@
 import { BaseQuery } from "../../services";
+import type { RelationshipType } from "../types";
 
 export class Query extends BaseQuery {
 	getRelated(
 		entityType: string,
 		entityId: number,
 		relatedEntityType: string,
+		relationshipType?: RelationshipType,
 		limit?: number,
 		offset?: number,
 	) {
@@ -18,22 +20,28 @@ export class Query extends BaseQuery {
 			entityId,
 			relatedEntityType,
 		);
+
+		const whereQuery =
+			`${activeColumn}=${entityId} and relationship='${relationship}'` +
+			relationshipType
+				? ` relationshipType = ${relationshipType}`
+				: "";
+
 		const limitQuery = this.getLimitQuery(limit, offset);
-		return `SELECT DISTINCT ${relatedColumn} AS id FROM \`relations\` where ${activeColumn}=${entityId} and relationship='${relationship}' ${limitQuery};`;
+		return `SELECT DISTINCT ${relatedColumn} AS id FROM \`relations\` where ${whereQuery} ${limitQuery};`;
 	}
 
 	getNonRelated(
 		entityType: string,
 		entityId: number,
 		relatedEntityType: string,
-		limit: number,
-		offset: number,
+		relationshipType?: RelationshipType,
+		limit?: number,
+		offset?: number,
 	) {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
-			limit,
-			offset,
 		});
 
 		const limitQuery = this.getLimitQuery(limit, offset);
@@ -41,8 +49,16 @@ export class Query extends BaseQuery {
 			entityType,
 			entityId,
 			relatedEntityType,
+			relationshipType,
 		);
-		return `SELECT id FROM \`entity\` where type='${relatedEntityType}' and id not in (${relatedEntitySql}) ${limitQuery}`;
+
+		const whereClause =
+			`type='${relatedEntityType}' and id not in (${relatedEntitySql})` +
+			relationshipType
+				? ` relationshipType = ${relationshipType}`
+				: "";
+
+		return `SELECT id FROM \`entity\` where ${whereClause} ${limitQuery}`;
 	}
 
 	insert(
@@ -50,12 +66,14 @@ export class Query extends BaseQuery {
 		entityId: number,
 		relatedEntityType: string,
 		relatedEntityId: number,
+		relationshipType: RelationshipType,
 	) {
 		this.throwIfNotSet({
 			entityType,
 			entityId,
 			relatedEntityType,
 			relatedEntityId,
+			relationshipType,
 		});
 
 		const { entityId1, entityId2, relationship } = this.getColumns(
@@ -64,10 +82,12 @@ export class Query extends BaseQuery {
 			relatedEntityType,
 			relatedEntityId,
 		);
+
 		const { keys, values } = this.formatInsertValues({
 			entityId1,
 			entityId2,
 			relationship,
+			relationshipType,
 		});
 
 		return `INSERT INTO \`relations\` (${keys}) VALUES (${values});`;
@@ -78,6 +98,7 @@ export class Query extends BaseQuery {
 		entityId: number,
 		relatedEntityType: string,
 		relatedEntityId: number,
+		relationshipType?: RelationshipType,
 	) {
 		this.throwIfNotSet({
 			entityType,
@@ -96,6 +117,7 @@ export class Query extends BaseQuery {
 			entityId1,
 			entityId2,
 			relationship,
+			...(relationshipType ? { relationshipType } : {}),
 		};
 
 		const whereQuery = Object.entries(insertValues)

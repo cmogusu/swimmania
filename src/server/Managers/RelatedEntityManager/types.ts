@@ -6,6 +6,7 @@ export type RawRelatedEntityInputData = {
 	entityId: number;
 	relatedEntityType: EntityType;
 	relatedEntityId?: number;
+	relationshipType?: RelationshipType;
 };
 
 export type RawGetRelatedInputData = {

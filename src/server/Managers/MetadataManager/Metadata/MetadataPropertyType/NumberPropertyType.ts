@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { isNumber } from "../../utils";
+import { isNumber } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
