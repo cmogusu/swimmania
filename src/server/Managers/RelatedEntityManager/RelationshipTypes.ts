@@ -35,43 +35,4 @@ export const RelationshipTypes: Record<
 	},
 };
 
-export const RelationshipDescriptionsDelete = {
-	isAlso: {
-		between: [
-			"coach-lifeguard",
-			"coach-swimmer",
-			"coach-parent",
-			"lifeguard-swimmer",
-			"swimmer-parent",
-		],
-		title: "Is same as",
-	},
-	worksIn: {
-		between: [
-			"coach-school",
-			"coach-pool",
-			"lifeguard-school",
-			"lifeguard-pool",
-		],
-	},
-	trainsAt: {
-		between: ["coach-pool", "swimmer-pool"],
-	},
-	canBeFound: {
-		between: [
-			"coach-school",
-			"coach-pool",
-			"lifeguard-school",
-			"lifeguard-pool",
-		],
-	},
-	manages: {
-		between: ["coach-team", "coach-swimmer"],
-	},
-	includes: {
-		between: ["swimEvent-swimMeet", "swimEvent-swimResult"],
-	},
-	participatedIn: {
-		between: [["swimEvent", "swimmer"], "swimMeet-swimmer"],
-	},
-};
+export const RelationshipTypeKeys = Object.keys(RelationshipTypes);

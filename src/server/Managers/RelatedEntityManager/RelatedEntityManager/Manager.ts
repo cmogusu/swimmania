@@ -4,11 +4,11 @@ import {
 	entityManagerFactory,
 } from "../../EntityManager";
 import type { Entities } from "../../EntityManager/Entities";
-import { RelatedEntityInputData } from "../RelatedEntityInputData";
+import { DeleteInputData, GetInputData, InsertInputData } from "../InputData";
 import type {
 	RawGetNonRelatedInputData,
 	RawGetRelatedInputData,
-	RawRelatedEntityInputData,
+	RawInsertRelatedInputData,
 } from "../types";
 import { Database } from "./Database";
 
@@ -33,8 +33,8 @@ export class RelatedEntityManager {
 		rawRelatedEntityData: RawGetRelatedInputData,
 		isRelated: boolean,
 	): Promise<Entities> {
-		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
-		inputData.validateGetAllData();
+		const inputData = new GetInputData(rawRelatedEntityData);
+		inputData.validateData();
 
 		const entityIds = isRelated
 			? await this.db.getRelated(inputData)
@@ -46,9 +46,9 @@ export class RelatedEntityManager {
 		);
 	}
 
-	async insert(rawRelatedEntityData: RawRelatedEntityInputData) {
-		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
-		inputData.validateInsertData();
+	async insert(rawRelatedEntityData: RawInsertRelatedInputData) {
+		const inputData = new InsertInputData(rawRelatedEntityData);
+		inputData.validateData();
 
 		const insertData = await this.db.insert(inputData);
 		// @ts-ignore
@@ -60,7 +60,7 @@ export class RelatedEntityManager {
 		return { id: insertData.insertId };
 	}
 
-	async insertBulk(rawRelatedEntityDataArr: RawRelatedEntityInputData[]) {
+	async insertBulk(rawRelatedEntityDataArr: RawInsertRelatedInputData[]) {
 		const insertPromise = rawRelatedEntityDataArr.map((data) =>
 			this.insert(data),
 		);
@@ -68,9 +68,9 @@ export class RelatedEntityManager {
 		await Promise.all(insertPromise);
 	}
 
-	async deleteById(rawRelatedEntityData: RawRelatedEntityInputData) {
-		const inputData = new RelatedEntityInputData(rawRelatedEntityData);
-		inputData.validateDeleteData();
+	async deleteById(rawRelatedEntityData: RawInsertRelatedInputData) {
+		const inputData = new DeleteInputData(rawRelatedEntityData);
+		inputData.validateData();
 
 		const deleteData = await this.db.deleteById(inputData);
 		// @ts-ignore

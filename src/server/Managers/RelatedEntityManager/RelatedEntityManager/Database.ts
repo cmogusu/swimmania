@@ -1,5 +1,9 @@
 import { BaseDatabase } from "../../services/BaseDatabase";
-import type { RelatedEntityInputData } from "../RelatedEntityInputData";
+import type {
+	DeleteInputData,
+	GetInputData,
+	InsertInputData,
+} from "../InputData";
 import { Query } from "./Query";
 
 export class Database extends BaseDatabase {
@@ -10,54 +14,50 @@ export class Database extends BaseDatabase {
 		this.query = new Query();
 	}
 
-	getRelated(relationData: RelatedEntityInputData): Promise<number[]> {
-		const metadata = relationData.toJSON();
+	getRelated(relationData: GetInputData): Promise<number[]> {
+		const metadata = relationData.getSanitized();
 		const query = this.query.getRelated(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relationshipType,
-			metadata.limit,
-			metadata.offset,
 		);
 
 		return this.execSql<number>(query);
 	}
 
-	getNonRelated(relationData: RelatedEntityInputData): Promise<number[]> {
-		const metadata = relationData.toJSON();
+	getNonRelated(relationData: GetInputData): Promise<number[]> {
+		const metadata = relationData.getSanitized();
 		const query = this.query.getNonRelated(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relationshipType,
-			metadata.limit,
-			metadata.offset,
 		);
 
 		return this.execSql<number>(query);
 	}
 
-	insert(relationData: RelatedEntityInputData) {
-		const metadata = relationData.toJSON();
+	insert(relationData: InsertInputData) {
+		const metadata = relationData.getSanitized();
 		const query = this.query.insert(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
-			metadata.relatedEntityId!,
-			metadata.relationshipType!,
+			metadata.relatedEntityId,
+			metadata.relationshipType,
 		);
 
 		return this.execSql(query);
 	}
 
-	deleteById(relationData: RelatedEntityInputData) {
-		const metadata = relationData.toJSON();
+	deleteById(relationData: DeleteInputData) {
+		const metadata = relationData.getSanitized();
 		const query = this.query.deleteById(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
-			metadata.relatedEntityId!,
+			metadata.relatedEntityId,
 			metadata.relationshipType,
 		);
 

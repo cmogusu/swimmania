@@ -13,6 +13,19 @@ export type RawGetRelatedInputData = {
 	entityType: EntityType;
 	entityId: number;
 	relatedEntityType: EntityType;
+	relationshipType?: RelationshipType;
+};
+
+export type RawInsertRelatedInputData = {
+	entityType: EntityType;
+	entityId: number;
+	relatedEntityType: EntityType;
+	relatedEntityId: number;
+	relationshipType: RelationshipType;
+};
+
+export type RawDeleteRelatedInputData = RawGetRelatedInputData & {
+	relatedEntityId: number;
 };
 
 export type RawGetNonRelatedInputData = RawGetRelatedInputData;
