@@ -4,15 +4,15 @@ import { BaseSanitize } from "../../services/BaseSanitize";
 
 export class Sanitize extends BaseSanitize {
 	value(v?: MetadataValue) {
-		if (isString(v)) {
-			return this.sanitizeString(v);
-		}
+		return isString(v) ? this.sanitizeString(v) : v;
+	}
 
-		return v;
+	type(v: string) {
+		return this.sanitizeString(v);
 	}
 
 	itemIndex(v?: number): number {
-		return v || 0;
+		return v ? Number(v) : 0;
 	}
 }
 

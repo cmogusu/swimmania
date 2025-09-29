@@ -7,6 +7,8 @@ export class Validate extends BaseValidate {
 		z.object({
 			originalname: z.string().min(1).max(100),
 			path: z.string().min(1).max(255),
+			filename: this.nameValidator,
+			size: z.optional(z.number()),
 		}),
 	);
 
@@ -16,7 +18,7 @@ export class Validate extends BaseValidate {
 		this.fileValidator.parse(file);
 	}
 
-	filepath(filepath?: unknown) {
+	filepath(filepath?: string) {
 		this.filepathValidator.parse(filepath);
 	}
 }

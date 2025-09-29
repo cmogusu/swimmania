@@ -15,8 +15,8 @@ export class Validate extends BaseValidate {
 			.min(1),
 	);
 
-	location(v?: string) {
-		this.locationValidator.parse(v);
+	location(location?: string) {
+		this.locationValidator.parse(location);
 	}
 
 	filters(filters?: MetadataFilter[]) {

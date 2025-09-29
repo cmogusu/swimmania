@@ -108,13 +108,14 @@ export class MetadataInputData extends BaseInputData {
 
 	getSanitizedInsertData() {
 		this.createMetadataPropertyInstance();
+		const { name, value, type } = this.metadataProperty;
 
 		return {
-			name: this.metadataProperty!.name,
-			value: this.metadataProperty!.value,
-			type: this.metadataProperty!.type,
-			entityId: this.entityId,
-			entityType: this.entityType,
+			name: this.sanitize.name(name),
+			value: this.sanitize.value(value),
+			type: this.sanitize.type(type),
+			entityId: this.sanitize.id(this.entityId),
+			entityType: this.sanitize.entityType(this.entityType),
 		};
 	}
 
