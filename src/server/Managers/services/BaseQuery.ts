@@ -5,8 +5,6 @@ import { getConnectionPool } from "./DbConnectionPool";
 import { Log } from "./Log";
 
 export class BaseQuery {
-	table: string | undefined;
-
 	log: Log;
 	connectionPool: mysql.Pool;
 	exec: <T extends QueryResult>(
@@ -20,19 +18,6 @@ export class BaseQuery {
 		this.log = new Log();
 		this.connectionPool = getConnectionPool(this.log);
 		this.exec = this.connectionPool.execute;
-	}
-
-	getAll(limit: number, offset: number) {
-		this.throwIfNotSet({
-			limit,
-			offset,
-			table: this.table,
-		});
-
-		return this.exec(`SELECT * FROM \`${this.table}\` LIMIT ? OFFSET ?;`, [
-			limit,
-			offset,
-		]);
 	}
 
 	formatUpdateValues(

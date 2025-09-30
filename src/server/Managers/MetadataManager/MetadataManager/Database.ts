@@ -12,29 +12,30 @@ export class Database extends BaseDatabase {
 		this.query = new Query();
 	}
 
-	getAll(metadataData: MetadataInputData): Promise<RawMetadata[]> {
+	async getAll(metadataData: MetadataInputData): Promise<RawMetadata[]> {
 		const { entityId } = metadataData.getSanitizedGetAllData();
-		const query = this.query.getAll(entityId);
-		return this.execSql<RawMetadata>(query);
+		const [rawMetadataArr] = await this.query.getAll(entityId);
+		return rawMetadataArr as RawMetadata[];
 	}
 
-	getByMetadataId(metadataData: MetadataInputData): Promise<RawMetadata[]> {
+	async getByMetadataId(metadataData: MetadataInputData): Promise<RawMetadata> {
 		const { id, entityId } = metadataData.getSanitizedGetByData();
-		const query = this.query.getById(entityId, id);
-		return this.execSql<RawMetadata>(query);
+		const [rawMetadataArr] = await this.query.getById(entityId, id);
+		const rawMetadata = (rawMetadataArr as RawMetadata[])?.[0];
+		return rawMetadata;
 	}
 
-	filterBy(metadataData: MetadataInputData): Promise<number[]> {
+	async filterBy(metadataData: MetadataInputData): Promise<number[]> {
 		const { entityType, filters } = metadataData.getSanitizedFilterByData();
-		const query = this.query.filterBy(entityType!, filters!);
-		return this.execSql<number>(query);
+		const [rawMetadataArr] = await this.query.filterBy(entityType!, filters!);
+		return rawMetadataArr as number[];
 	}
 
-	update(metadataData: MetadataInputData) {
+	async update(metadataData: MetadataInputData) {
 		const { id, entityId, entityType, name, value, type } =
 			metadataData.getSanitizedUpdateData();
 
-		const query = this.query.update(
+		const [updateData] = await this.query.update(
 			id,
 			entityId!,
 			entityType!,
@@ -42,21 +43,27 @@ export class Database extends BaseDatabase {
 			value,
 			type,
 		);
-		return this.execSql(query);
+		return updateData;
 	}
 
-	insert(metadataData: MetadataInputData) {
+	async insert(metadataData: MetadataInputData) {
 		const { entityId, entityType, name, value, type } =
 			metadataData.getSanitizedInsertData();
 
-		const query = this.query.insert(entityId!, entityType!, name, value, type);
-		return this.execSql(query);
+		const [insertData] = await this.query.insert(
+			entityId!,
+			entityType!,
+			name,
+			value,
+			type,
+		);
+		return insertData;
 	}
 
-	deleteById(metadataData: MetadataInputData) {
+	async deleteById(metadataData: MetadataInputData) {
 		const { id, entityId } = metadataData.getSanitizedDeleteData();
-		const query = this.query.deleteById(id, entityId);
+		const [deleteData] = await this.query.deleteById(id, entityId);
 
-		return this.execSql(query);
+		return deleteData;
 	}
 }

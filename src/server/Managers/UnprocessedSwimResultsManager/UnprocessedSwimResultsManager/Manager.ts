@@ -1,5 +1,5 @@
-import { SwimResultInputData } from "../SwmResultInputData";
-import type { RawSetProcessedSwmResultInputs, RawSwimResult } from "../types";
+import { InsertInputData, UpdateInputData } from "../InputData";
+import type { RawSwimResult, RawUpdateSwmResultInputs } from "../types";
 import { Database } from "./Database";
 
 export class UnprocessedSwimResultsManager {
@@ -14,21 +14,22 @@ export class UnprocessedSwimResultsManager {
 		return swmResult;
 	}
 
-	async setProcessed({ id }: RawSetProcessedSwmResultInputs) {
-		const updateData = await this.db.setProcessed(id);
+	async setProcessed(rawInputs: RawUpdateSwmResultInputs) {
+		const inputData = new UpdateInputData(rawInputs);
+		inputData.validateData();
+		const updateData = await this.db.setProcessed(inputData);
 
 		// @ts-ignore
 		if (!updateData?.affectedRows) {
 			throw Error("Unable to update image");
 		}
 
-		return { id };
+		return { id: inputData.id };
 	}
 
 	async insert(rawInputs: RawSwimResult) {
-		const inputData = new SwimResultInputData(rawInputs);
-		inputData.validateInsertInputs();
-
+		const inputData = new InsertInputData(rawInputs);
+		inputData.validateData();
 		const insertData = await this.db.insert(inputData);
 
 		// @ts-ignore

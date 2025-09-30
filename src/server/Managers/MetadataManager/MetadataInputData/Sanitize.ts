@@ -1,6 +1,6 @@
-import type { MetadataValue } from "../../../Managers/MetadataManager";
-import { isString } from "../../../utils";
-import { BaseSanitize } from "../../services/BaseSanitize";
+import type { MetadataValue } from "@/server/Managers/MetadataManager";
+import { BaseSanitize } from "@/server/Managers/services/BaseSanitize";
+import { isString } from "@/server/utils";
 
 export class Sanitize extends BaseSanitize {
 	value(v?: MetadataValue) {

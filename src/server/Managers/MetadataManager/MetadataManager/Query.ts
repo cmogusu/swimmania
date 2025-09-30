@@ -23,17 +23,23 @@ const METADATA_TYPE_TO_COLUMN: Record<SchemaType, string> = {
 const COLUMNS = `id, entityId, entityType, name, itemIndex, COALESCE(value_tiny, value_time, value_num, value_text, value_lat, value_lng) as value`;
 
 export class Query extends BaseQuery {
-	getAll(entityId: number): string {
+	getAll(entityId: number) {
 		this.throwIfNotSet({ entityId });
-		return `SELECT ${COLUMNS} FROM \`metadata\` Where entityId = ${entityId};`;
+		return this.exec(
+			`SELECT ${COLUMNS} FROM \`metadata\` Where entityId = ?;`,
+			[entityId],
+		);
 	}
 
-	getById(entityId: number, metadataId: number): string {
+	getById(entityId: number, metadataId: number) {
 		this.throwIfNotSet({ entityId, metadataId });
-		return `SELECT ${COLUMNS} FROM \`metadata\` Where id =${metadataId} and entityId =${entityId};`;
+		return this.exec(
+			`SELECT ${COLUMNS} FROM \`metadata\` Where id = ? and entityId = ?;`,
+			[metadataId, entityId],
+		);
 	}
 
-	filterBy(entityType: EntityType, filters: MetadataFilter[]): string {
+	filterBy(entityType: EntityType, filters: MetadataFilter[]) {
 		this.throwIfNotSet({ entityType, filters });
 
 		const whereClause = filters
@@ -42,8 +48,11 @@ export class Query extends BaseQuery {
 					? `${name} ${comparator} '${value}'`
 					: `${name} ${comparator} ${value}`,
 			)
-			.join(" and ");
-		return `SELECT entityId FROM \`metadata\` Where entityType = ${entityType} and ${whereClause}`;
+			.join("AND ");
+		return this.exec(
+			`SELECT entityId FROM \`metadata\` WHERE entityType = ? AND ?`,
+			[entityType, whereClause],
+		);
 	}
 
 	update(
@@ -54,24 +63,20 @@ export class Query extends BaseQuery {
 		value: MetadataValue,
 		type: SchemaType,
 	) {
-		const inputValues: Record<string, MetadataValue> = {
+		this.throwIfNotSet({
+			metadataId,
 			entityId,
 			entityType,
 			name,
-		};
-
-		this.throwIfNotSet({
 			type,
 			value,
-			metadataId,
-			...inputValues,
 		});
 
 		const columnName = METADATA_TYPE_TO_COLUMN[type];
-		inputValues[columnName] = value;
-
-		const updateValuesStr = this.formatUpdateValues(inputValues);
-		return `UPDATE \`metadata\` SET ${updateValuesStr} WHERE id='${metadataId}';`;
+		return this.exec(
+			`UPDATE \`metadata\` SET entityId=?, entityType='?', name='?', type='?', ${columnName}=? WHERE id=?;`,
+			[entityId, entityType, name, type, value, metadataId],
+		);
 	}
 
 	insert(
@@ -81,22 +86,19 @@ export class Query extends BaseQuery {
 		value: MetadataValue,
 		type: SchemaType,
 	) {
-		const inputValues: Record<string, MetadataValue> = {
+		this.throwIfNotSet({
 			entityId,
 			entityType,
 			name,
-		};
-		this.throwIfNotSet({
 			type,
 			value,
-			...inputValues,
 		});
 
 		const columnName = METADATA_TYPE_TO_COLUMN[type];
-		inputValues[columnName] = value;
-
-		const { keys, values } = this.formatInsertValues(inputValues);
-		return `INSERT INTO \`metadata\` (${keys}) VALUES (${values});`;
+		return this.exec(
+			`INSERT INTO \`metadata\` (entityId, entityType, name, type, ${columnName}) VALUES (?, ?, ?, ?, ?);`,
+			[entityId, entityType, name, type, value],
+		);
 	}
 
 	deleteById(metadataId: number, entityId: number) {
@@ -105,6 +107,9 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return `Delete FROM \`metadata\` Where id = ${metadataId} and entityId = ${entityId} `;
+		return this.exec(
+			`Delete FROM \`metadata\` Where id = ? and entityId = ? `,
+			[metadataId, entityId],
+		);
 	}
 }

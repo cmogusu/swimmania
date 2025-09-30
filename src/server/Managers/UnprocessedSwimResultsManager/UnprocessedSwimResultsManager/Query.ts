@@ -1,44 +1,57 @@
 import { BaseQuery } from "../../services";
 
 export class Query extends BaseQuery {
-	table = "unprocessed-swim-results";
-
 	getUnprocessed() {
-		return `SELECT * FROM \`${this.table}\` where isProcessed = 0;`;
+		return `SELECT * FROM \`unprocessed_swim_results\` where isProcessed = 0 limit 1;`;
 	}
 
 	setProcessed(id: number) {
-		this.throwIfNotSet({
-			id,
-		});
-
-		const updateValuesStr = this.formatUpdateValues({ isProcessed: 1 });
-		return `UPDATE \`${this.table}\` SET ${updateValuesStr} WHERE id='${id}';`;
+		this.throwIfNotSet({ id });
+		return this.exec(
+			`UPDATE \`unprocessed_swim_results\` SET isProcessed=1 WHERE id=?;`,
+			[id],
+		);
 	}
 
 	insert(
+		eventNumber: number,
+		gender: string,
+		team: string,
+		distance: string,
+		distanceUnit: string,
+		stroke: string,
 		rank: number,
 		firstName: string,
 		surname: string,
 		thirdName: string | undefined,
 		age: number | undefined,
 		ageGroup: string,
-		time: number,
+		time: string,
 	) {
-		const insertValues: Record<string, unknown> = {
+		this.throwIfNotSet({
 			rank,
 			firstName,
 			surname,
 			ageGroup,
 			time,
-		};
+		});
 
-		this.throwIfNotSet(insertValues);
-
-		if (thirdName) insertValues.thirdName = thirdName;
-		if (age) insertValues.age = age;
-
-		const { keys, values } = this.formatInsertValues(insertValues);
-		return `INSERT INTO \`${this.table}\` (${keys}) VALUES (${values});`;
+		return this.exec(
+			`INSERT INTO \`unprocessed_swim_results\` (eventNumber, gender, team, distance, distanceUnit, stroke, rank, firstName, surname, time, age, thirdName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);`,
+			[
+				eventNumber,
+				gender,
+				team,
+				distance,
+				distanceUnit,
+				stroke,
+				rank,
+				firstName,
+				surname,
+				time,
+				age || null,
+				thirdName || null,
+			],
+		);
 	}
 }

@@ -1,19 +1,25 @@
 import { BaseQuery } from "../../services";
 
 export class Query extends BaseQuery {
-	getAll(entityId: number): string {
+	getAll(entityId: number) {
 		this.throwIfNotSet({ entityId });
-		return `SELECT * FROM \`image\` Where entityId = ${entityId};`;
+		return this.exec(`SELECT * FROM \`image\` Where entityId = ?;`, [entityId]);
 	}
 
-	getDefault(entityId: number): string {
+	getDefault(entityId: number) {
 		this.throwIfNotSet({ entityId });
-		return `SELECT * FROM \`image\` Where entityId =${entityId} and isDefault = true`;
+		return this.exec(
+			`SELECT * FROM \`image\` Where entityId = ? and isDefault = true;`,
+			[entityId],
+		);
 	}
 
-	getById(entityId: number, imageId: number): string {
+	getById(entityId: number, imageId: number) {
 		this.throwIfNotSet({ entityId, imageId });
-		return `SELECT * FROM \`image\` Where id = '${imageId}' and entityId = ${entityId};`;
+		return this.exec(`SELECT * FROM \`image\` Where id = ? and entityId = ?;`, [
+			imageId,
+			entityId,
+		]);
 	}
 
 	update(
@@ -23,34 +29,27 @@ export class Query extends BaseQuery {
 		filepath: string,
 		isDefault: boolean,
 	) {
-		const updateValues = {
+		this.throwIfNotSet({
 			entityId,
 			alt,
 			filepath,
 			isDefault,
-		};
-
-		this.throwIfNotSet({
 			imageId,
-			...updateValues,
 		});
 
-		const updateValuesStr = this.formatUpdateValues(updateValues);
-		return `UPDATE \`image\` SET ${updateValuesStr} WHERE id='${imageId}';`;
+		return this.exec(
+			`UPDATE \`image\` SET entityId=?, alt='?', filepath='?', isDefault=? WHERE id=?;`,
+			[entityId, alt, filepath, isDefault, imageId],
+		);
 	}
 
 	insert(entityId: number, alt: string, filepath: string, isDefault: boolean) {
-		const insertValues = {
-			entityId,
-			alt,
-			filepath,
-			isDefault,
-		};
+		this.throwIfNotSet({ entityId, alt, filepath, isDefault });
 
-		this.throwIfNotSet(insertValues);
-
-		const { keys, values } = this.formatInsertValues(insertValues);
-		return `INSERT INTO \`image\` (${keys}) VALUES (${values});`;
+		return this.exec(
+			`INSERT INTO \`image\` (entityId, alt, filepath, isDefault) VALUES (?, '?', '?', ?);`,
+			[entityId, alt, filepath, isDefault],
+		);
 	}
 
 	deleteById(imageId: number, entityId: number) {
@@ -59,6 +58,9 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return `Delete FROM \`image\` Where id = ${imageId} and entityId = ${entityId} `;
+		return this.exec(`Delete FROM \`image\` Where id = ? and entityId = ? `, [
+			imageId,
+			entityId,
+		]);
 	}
 }

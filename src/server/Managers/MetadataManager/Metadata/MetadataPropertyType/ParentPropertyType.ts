@@ -58,23 +58,6 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 		return this[childName];
 	}
 
-	// setChildren(children?: IMetadataPropertyType[]) {
-	// 	if (!children) {
-	// 		throw Error("Children not set");
-	// 	}
-
-	// 	this.children = children;
-	// 	this.children.forEach((child) => {
-	// 		const childName = child.name;
-	// 		if (this[childName]) {
-	// 			throw Error("Metadata child name already set");
-	// 		}
-
-	// 		this[childName] = child;
-	// 		child.name = `${this.name}.${child.name}`;
-	// 	});
-	// }
-
 	get value(): MetadataValue {
 		throw Error("Getting parent value not permitted");
 	}

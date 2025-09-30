@@ -7,6 +7,8 @@ import type {
 	RawMetadata,
 	SchemaType,
 } from "../types";
+import { type Sanitize, SanitizeInstance } from "./Sanitize";
+import { type Validate, ValidateInstance } from "./Validate";
 
 export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	type: SchemaType = "text";
@@ -14,7 +16,8 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	name: string;
 	_value!: MetadataValue;
 
-	validator: unknown;
+	validate: Validate;
+	sanitize: Sanitize;
 
 	title: string = "";
 	editTitle: string = "";
@@ -56,6 +59,9 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		if (!isUndefined(sortIndex)) this.sortIndex = sortIndex;
 		if (!isUndefined(value)) this.value = value;
 		this.name = name;
+
+		this.validate = ValidateInstance;
+		this.sanitize = SanitizeInstance;
 	}
 
 	set(target: unknown, source?: unknown) {
@@ -96,4 +102,12 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	createAllChildInstances() {}
 
 	setSeedData() {}
+
+	getChild(_name: string) {
+		if (this.type !== "parent") {
+			throw Error("Not parent class");
+		}
+
+		return this as IMetadataPropertyType;
+	}
 }

@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker";
-import z from "zod";
 import { addLeadingZero, isNumber, isString } from "@/server/utils";
 import type { MetadataTypeInputs, MetadataValue } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
@@ -8,9 +7,6 @@ const SUFFIX = " Hrs";
 
 export class TimePropertyType extends BaseMetadataPropertyType {
 	declare _value: number;
-
-	// format: "03:15:00"
-	validator: z.ZodISOTime = z.iso.time();
 
 	constructor(inputs: MetadataTypeInputs) {
 		super({
@@ -32,7 +28,7 @@ export class TimePropertyType extends BaseMetadataPropertyType {
 	}
 
 	validateValue(v: MetadataValue): void {
-		this.validator.parse(v);
+		this.validate.time(v as string);
 
 		if (this.isStringTimeValue(v)) {
 			this.validateStringTimeValue(v);

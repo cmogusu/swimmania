@@ -61,7 +61,7 @@ export const getSwimResultsWithSchema = {
 					"butterfly",
 					"breaststroke",
 					"breaststroke",
-					"individual_medlay",
+					"individual_medley",
 					"freestyle_relay",
 					"medley_relay",
 				],

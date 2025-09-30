@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker";
-import z from "zod";
 import { addLeadingZero, isNumber, isString } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { TimePropertyType } from "./TimePropertyType";
@@ -7,10 +6,6 @@ import { TimePropertyType } from "./TimePropertyType";
 // TODO: implement this
 export class DatePropertyType extends TimePropertyType {
 	declare _value: number;
-
-	// Format: "2020-01-01"
-	// @ts-ignore
-	validator: z.ZodISODate = z.iso.date();
 
 	constructor(inputs: MetadataTypeInputs) {
 		super(inputs);
@@ -29,7 +24,7 @@ export class DatePropertyType extends TimePropertyType {
 	}
 
 	validateValue(v?: unknown): void {
-		this.validator.parse(v);
+		this.validate.date(v as string);
 	}
 
 	sanitizeValue(v: string): number {

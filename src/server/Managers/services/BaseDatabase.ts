@@ -12,12 +12,6 @@ export class BaseDatabase {
 		this.connectionPool = getConnectionPool(this.log);
 	}
 
-	// TODO: Convert to connectionPool.execute
-	async execSql<T>(query: string): Promise<T[]> {
-		const [rows] = await this.connectionPool.query(query);
-		return rows as T[];
-	}
-
 	escape(value: unknown) {
 		this.connectionPool.escape(value);
 	}

@@ -12,29 +12,33 @@ export class Database extends BaseDatabase {
 		this.query = new Query();
 	}
 
-	getAll(imageData: ImageInputData): Promise<ImageDatabaseRawOutputData[]> {
-		const image = imageData.toJSON();
-		const query = this.query.getAll(image.entityId);
-		return this.execSql<ImageDatabaseRawOutputData>(query);
-	}
-
-	getDefault(imageData: ImageInputData): Promise<ImageDatabaseRawOutputData[]> {
-		const image = imageData.toJSON();
-		const query = this.query.getDefault(image.entityId);
-		return this.execSql<ImageDatabaseRawOutputData>(query);
-	}
-
-	getByImageId(
+	async getAll(
 		imageData: ImageInputData,
 	): Promise<ImageDatabaseRawOutputData[]> {
 		const image = imageData.toJSON();
-		const query = this.query.getById(image.entityId, image.id!);
-		return this.execSql<ImageDatabaseRawOutputData>(query);
+		const [rawImages] = await this.query.getAll(image.entityId);
+		return rawImages as ImageDatabaseRawOutputData[];
 	}
 
-	update(imageData: ImageInputData) {
+	async getDefault(
+		imageData: ImageInputData,
+	): Promise<ImageDatabaseRawOutputData[]> {
 		const image = imageData.toJSON();
-		const query = this.query.update(
+		const [rawImages] = await this.query.getDefault(image.entityId);
+		return (rawImages as ImageDatabaseRawOutputData[])?.[0];
+	}
+
+	async getByImageId(
+		imageData: ImageInputData,
+	): Promise<ImageDatabaseRawOutputData[]> {
+		const image = imageData.toJSON();
+		const [rawImages] = await this.query.getById(image.entityId, image.id!);
+		return (rawImages as ImageDatabaseRawOutputData[])?.[0];
+	}
+
+	async update(imageData: ImageInputData) {
+		const image = imageData.toJSON();
+		const [updateData] = await this.query.update(
 			image.id!,
 			image.entityId,
 			image.alt!,
@@ -42,25 +46,25 @@ export class Database extends BaseDatabase {
 			image.isDefault!,
 		);
 
-		return this.execSql(query);
+		return updateData;
 	}
 
-	insert(imageData: ImageInputData) {
+	async insert(imageData: ImageInputData) {
 		const image = imageData.toJSON();
-		const query = this.query.insert(
+		const [insertData] = await this.query.insert(
 			image.entityId,
 			image.alt!,
 			image.filepath!,
 			image.isDefault!,
 		);
 
-		return this.execSql(query);
+		return insertData;
 	}
 
-	deleteById(imageData: ImageInputData) {
+	async deleteById(imageData: ImageInputData) {
 		const image = imageData.toJSON();
-		const query = this.query.deleteById(image.id!, image.entityId);
+		const [deleteData] = await this.query.deleteById(image.id!, image.entityId);
 
-		return this.execSql(query);
+		return deleteData;
 	}
 }

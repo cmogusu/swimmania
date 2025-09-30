@@ -31,7 +31,7 @@ export class MetadataManager {
 		metadataInputs.validateGetByIdInputs();
 
 		const rawMetadata = await this.db.getByMetadataId(metadataInputs);
-		return rawMetadata[0];
+		return rawMetadata;
 	}
 
 	async update(rawInputs: MetadataUpdateRawInputs) {

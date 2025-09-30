@@ -38,8 +38,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Breast stroke",
 				},
 				{
-					key: "im",
-					value: "Individual medlay",
+					key: "individual_medley",
+					value: "Individual medley",
 				},
 				{
 					key: "freestyle_relay",

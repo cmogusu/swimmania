@@ -1,14 +1,12 @@
+import z from "zod";
 import { BaseValidate } from "@/server/Managers/services/BaseValidate";
 
-// TODO - Implement validation
 export class Validate extends BaseValidate {
-	rank(rank: number) {}
+	textValidator = z.string();
 
-	age(age?: number) {}
-
-	time(time: number) {}
-
-	ageGroup(ageGroup: string) {}
+	text(v: string) {
+		this.textValidator.parse(v);
+	}
 }
 
 export const ValidateInstance = new Validate();

@@ -9,6 +9,14 @@ export class BaseSanitize {
 		return this.sanitizeString(name);
 	}
 
+	text(text: string) {
+		return this.sanitizeString(text);
+	}
+
+	number(n: number) {
+		return Number(n);
+	}
+
 	description(description?: string) {
 		return description ? this.sanitizeString(description) : undefined;
 	}

@@ -1,4 +1,10 @@
 export type RawSwimResult = {
+	eventNumber: number;
+	gender: string;
+	team: string;
+	distance: string;
+	distanceUnit: string;
+	stroke: string;
 	id: number | undefined;
 	rank: number;
 	firstName: string;
@@ -6,10 +12,10 @@ export type RawSwimResult = {
 	thirdName: string | undefined;
 	age: number | undefined;
 	ageGroup: string;
-	time: number;
+	time: string;
 };
 
 // Inputs
-export type RawSetProcessedSwmResultInputs = {
+export type RawUpdateSwmResultInputs = {
 	id: number;
 };
