@@ -1,5 +1,5 @@
 import type { MetadataData } from "@/server/types";
-import { isSet, isUndefined } from "../../utils";
+import { isSet, isUndefined } from "@/server/utils";
 import type {
 	IEntityMetadata,
 	IMetadataPropertyType,

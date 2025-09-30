@@ -1,13 +1,20 @@
 import type { EntityType } from "@/server/types";
 import type { RawMetadata } from "../../../Managers/MetadataManager";
-import { MetadataInputData } from "../MetadataInputData";
+import {
+	DeleteInputData,
+	FilterInputData,
+	GetAllInputData,
+	GetByIdInputData,
+	InsertInputData,
+	UpdateInputData,
+} from "../InputData";
 import type {
-	MetadataDeleteRawInputs,
-	MetadataFilterByRawInputs,
-	MetadataGetAllRawInputs,
-	MetadataGetByIdRawInputs,
-	MetadataPostRawInputs,
-	MetadataUpdateRawInputs,
+	RawDeleteMetadataInputs,
+	RawFilterByMetadataInputs,
+	RawGetAllMetadataInputs,
+	RawGetByIdMetadataInputs,
+	RawInsertMetadataInputs,
+	RawUpdateMetadataInputs,
 } from "../types";
 import { Database } from "./Database";
 
@@ -18,25 +25,25 @@ export class MetadataManager {
 		this.db = new Database();
 	}
 
-	async getAll(rawInputs: MetadataGetAllRawInputs): Promise<RawMetadata[]> {
-		const metadataInputs = new MetadataInputData(rawInputs);
-		metadataInputs.validateGetAllInputs();
+	async getAll(rawInputs: RawGetAllMetadataInputs): Promise<RawMetadata[]> {
+		const metadataInputs = new GetAllInputData(rawInputs);
+		metadataInputs.validateData();
 
 		const rawMetadataArr: RawMetadata[] = await this.db.getAll(metadataInputs);
 		return rawMetadataArr;
 	}
 
-	async getById(rawInputs: MetadataGetByIdRawInputs): Promise<RawMetadata> {
-		const metadataInputs = new MetadataInputData(rawInputs);
-		metadataInputs.validateGetByIdInputs();
+	async getById(rawInputs: RawGetByIdMetadataInputs): Promise<RawMetadata> {
+		const metadataInputs = new GetByIdInputData(rawInputs);
+		metadataInputs.validateData();
 
 		const rawMetadata = await this.db.getByMetadataId(metadataInputs);
 		return rawMetadata;
 	}
 
-	async update(rawInputs: MetadataUpdateRawInputs) {
-		const metadataInputs = new MetadataInputData(rawInputs);
-		metadataInputs.validateUpdateInputs();
+	async update(rawInputs: RawUpdateMetadataInputs) {
+		const metadataInputs = new UpdateInputData(rawInputs);
+		metadataInputs.validateData();
 		const updateData = await this.db.update(metadataInputs);
 
 		// @ts-ignore
@@ -47,9 +54,9 @@ export class MetadataManager {
 		return { id: metadataInputs.id };
 	}
 
-	async insert(rawInputs: MetadataPostRawInputs) {
-		const metadataInputs = new MetadataInputData(rawInputs);
-		metadataInputs.validatePostInputs();
+	async insert(rawInputs: RawInsertMetadataInputs) {
+		const metadataInputs = new InsertInputData(rawInputs);
+		metadataInputs.validateData();
 		const insertData = await this.db.insert(metadataInputs);
 
 		// @ts-ignore
@@ -77,9 +84,9 @@ export class MetadataManager {
 		await Promise.all(insertPromises);
 	}
 
-	async deleteById(rawInputs: MetadataDeleteRawInputs) {
-		const metadataInputs = new MetadataInputData(rawInputs);
-		metadataInputs.validateDeleteInputs();
+	async deleteById(rawInputs: RawDeleteMetadataInputs) {
+		const metadataInputs = new DeleteInputData(rawInputs);
+		metadataInputs.validateData();
 		const deleteData = await this.db.deleteById(metadataInputs);
 
 		// @ts-ignore
@@ -91,9 +98,9 @@ export class MetadataManager {
 		return { id: entityId };
 	}
 
-	filterBy(rawInputs: MetadataFilterByRawInputs): Promise<number[]> {
-		const metadataInputs = new MetadataInputData(rawInputs);
-		metadataInputs.validateFilterByInputs();
+	filterBy(rawInputs: RawFilterByMetadataInputs): Promise<number[]> {
+		const metadataInputs = new FilterInputData(rawInputs);
+		metadataInputs.validateData();
 		return this.db.filterBy(metadataInputs);
 	}
 }

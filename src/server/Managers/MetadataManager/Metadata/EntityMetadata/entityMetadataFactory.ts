@@ -6,6 +6,7 @@ import type {
 } from "../types";
 import { CoachMetadata } from "./CoachMetadata";
 import { LifeguardMetadata } from "./LifeguardMetadata";
+import { ParentMetadata } from "./ParentMetadata";
 import { PoolMetadata } from "./PoolMetadata";
 import { SchoolMetadata } from "./SchoolMetadata";
 import { SwimEventMetadata } from "./SwimEventMetadata";
@@ -32,6 +33,7 @@ const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
 	swimEvent: SwimEventMetadata,
 	swimResult: SwimResultMetadata,
 	lifeguard: LifeguardMetadata,
+	parent: ParentMetadata,
 };
 
 export const entityMetadataFactory = {

@@ -2,22 +2,24 @@ import type { EntityType } from "../../types";
 import type { MetadataFilter, MetadataValue } from "./Metadata/";
 
 // Inputs
-export type MetadataGetAllRawInputs = {
+export type RawGetAllMetadataInputs = {
 	entityType: EntityType;
 	entityId: number;
+	pageSize: number;
+	pageNumber: number;
 };
 
-export type MetadataGetByIdRawInputs = {
+export type RawGetByIdMetadataInputs = {
 	entityType: EntityType;
 	id: number;
 	entityId: number;
 };
 
-export type MetadataUpdateRawInputs = MetadataPostRawInputs & {
+export type RawUpdateMetadataInputs = RawInsertMetadataInputs & {
 	id: number;
 };
 
-export type MetadataPostRawInputs = {
+export type RawInsertMetadataInputs = {
 	entityType: EntityType;
 	entityId: number;
 	name: string;
@@ -25,12 +27,12 @@ export type MetadataPostRawInputs = {
 	itemIndex?: number;
 };
 
-export type MetadataDeleteRawInputs = {
+export type RawDeleteMetadataInputs = {
 	id: number;
 	entityId: number;
 };
 
-export type MetadataFilterByRawInputs = {
+export type RawFilterByMetadataInputs = {
 	entityType: EntityType;
 	filters: MetadataFilter[];
 };
