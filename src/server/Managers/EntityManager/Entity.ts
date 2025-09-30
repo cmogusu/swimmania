@@ -3,7 +3,7 @@ import type { RawMetadata } from "../../Managers/MetadataManager";
 import type { EntityType } from "../../types";
 import type { Image, ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
-import type { EntityLoadRelatedDataOptions, RawEntity } from "./types";
+import type { ILoadableEntity, RawEntity } from "./types";
 
 export class Entity {
 	id: number;
@@ -43,23 +43,20 @@ export class Entity {
 	}
 
 	async loadRelatedData(
-		loadRelatedDataOptions: EntityLoadRelatedDataOptions,
+		inputData: ILoadableEntity,
 		imageManager: ImageManager,
 		metadataManager: MetadataManager,
 	) {
-		const { loadImages, loadDefaultImage, loadMetadata } =
-			loadRelatedDataOptions;
-
 		const loadTasks: Promise<unknown>[] = [];
-		if (loadImages) {
+		if (inputData.loadImages) {
 			loadTasks.push(this.loadImages(imageManager));
 		}
 
-		if (loadDefaultImage) {
+		if (inputData.loadDefaultImage) {
 			loadTasks.push(this.loadDefaultImage(imageManager));
 		}
 
-		if (loadMetadata) {
+		if (inputData.loadMetadata) {
 			loadTasks.push(this.loadMetadata(metadataManager));
 		}
 

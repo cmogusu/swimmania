@@ -19,34 +19,31 @@ export type EntityLoadRelatedDataOptions = {
 };
 
 // Inputs
-export type EntityGetAllRawInputs = EntityLoadRelatedDataOptions &
+export type RawGetAllEntityInputs = EntityLoadRelatedDataOptions &
 	PaginationOptions & {
 		filters?: MetadataFilter[];
 	};
 
-export type EntityFilterByRawInputs = EntityLoadRelatedDataOptions &
-	PaginationOptions & {
-		filters: MetadataFilter[];
-	};
+export type RawFilterByEntityInputs = RawGetAllEntityInputs;
 
-export type EntityGetByIdsRawInputs = EntityLoadRelatedDataOptions &
+export type RawGetByIdsEntityInputs = EntityLoadRelatedDataOptions &
 	PaginationOptions & {
 		entityIds: number[];
 	};
 
-export type EntityGetByIdRawInputs = EntityLoadRelatedDataOptions & {
+export type RawGetByIdEntityInputs = EntityLoadRelatedDataOptions & {
 	entityId: number;
 };
 
-export type EntityGetByNameRawInputs = EntityLoadRelatedDataOptions & {
+export type RawGetByNameEntityInputs = EntityLoadRelatedDataOptions & {
 	name: string;
 };
 
-export type EntityUpdateRawInputs = EntityPostRawInputs & {
+export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 	entityId: number;
 };
 
-export type EntityPostRawInputs = {
+export type RawInsertEntityInputs = {
 	name: string;
 	description?: string;
 	location?: string;
@@ -55,7 +52,7 @@ export type EntityPostRawInputs = {
 	related?: RawRelatedEntity[];
 };
 
-export type EntityDeleteRawInputs = {
+export type RawDeleteEntityInputs = {
 	entityId: number;
 };
 
@@ -74,7 +71,13 @@ export type EntryRawInputs = PaginationOptions & {
 	filters?: MetadataFilter[];
 };
 
-export type RawRelatedEntity = EntityPostRawInputs & {
+export type RawRelatedEntity = RawInsertEntityInputs & {
 	type: EntityType;
 	relationshipType: RelationshipType;
 };
+
+export interface ILoadableEntity {
+	loadImages: boolean;
+	loadDefaultImage: boolean;
+	loadMetadata: boolean;
+}

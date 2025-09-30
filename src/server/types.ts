@@ -17,6 +17,11 @@ export type PaginationOptions = {
 	pageSize?: number;
 };
 
+export interface IPaginated {
+	pageNumber: number;
+	pageSize: number;
+}
+
 export type ImageData = {
 	id: number;
 	alt: string;

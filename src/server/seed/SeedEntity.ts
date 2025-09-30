@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import {
 	type EntityManager,
-	type EntityPostRawInputs,
 	entityManagerFactory,
+	type RawInsertEntityInputs,
 } from "../Managers/EntityManager";
 import { Log } from "../services";
 import type { EntityType } from "../types";
@@ -42,7 +42,7 @@ export class SeedEntity {
 		]);
 	}
 
-	getSeedData(): EntityPostRawInputs {
+	getSeedData(): RawInsertEntityInputs {
 		return {
 			name: faker.location.street(),
 			description: faker.word.words({ count: { min: 10, max: 20 } }),

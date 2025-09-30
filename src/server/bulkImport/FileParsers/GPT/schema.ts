@@ -35,7 +35,8 @@ export const swimResult = {
 		},
 		time: {
 			type: "string",
-			description: "Time taken to complete the race",
+			description:
+				"Time taken to complete the race. The time can be omitted if the swimmer did not finish the race, or was disqualified. Write DNF if swimmer did not finish and DQ if disqualified.",
 			format: "time",
 		},
 	},

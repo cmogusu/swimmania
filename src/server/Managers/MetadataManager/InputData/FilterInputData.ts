@@ -1,4 +1,5 @@
 import type { EntityType } from "../../../types";
+import { BaseInputData } from "../../services";
 import {
 	entityMetadataFactory,
 	type IEntityMetadata,
@@ -7,14 +8,21 @@ import {
 import type { RawFilterByMetadataInputs } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
-export class FilterInputData {
+export class FilterInputData extends BaseInputData {
 	entityType: EntityType;
 	filters: MetadataFilter[];
 	entityMetadata: IEntityMetadata;
 
 	readonly validate: Validate;
 
-	constructor({ entityType, filters }: RawFilterByMetadataInputs) {
+	constructor({
+		entityType,
+		filters,
+		pageSize,
+		pageNumber,
+	}: RawFilterByMetadataInputs) {
+		super();
+
 		this.entityType = entityType;
 		this.filters = filters;
 		this.entityMetadata = entityMetadataFactory.getInstance(
@@ -22,6 +30,9 @@ export class FilterInputData {
 			undefined,
 			true,
 		);
+
+		this.pageSize = pageSize;
+		this.pageNumber = pageNumber;
 
 		this.validate = ValidateInstance;
 	}
@@ -35,6 +46,8 @@ export class FilterInputData {
 		return {
 			entityType: this.entityType,
 			filters: this.filters,
+			offset: this.offset,
+			pageSize: this.pageSize,
 		};
 	}
 }

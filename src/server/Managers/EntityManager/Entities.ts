@@ -1,18 +1,18 @@
+import type { IPaginated } from "@/server/types";
 import type { ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
 import { Entity } from "./Entity";
-import type { EntityInputData } from "./EntityInputData";
-import type { RawEntity } from "./types";
+import type { ILoadableEntity, RawEntity } from "./types";
 
 export class Entities {
 	entities: Entity[];
-	entityInputData: EntityInputData;
+	entityInputData: ILoadableEntity & IPaginated;
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
 
 	constructor(
 		rawEntities: RawEntity[] | undefined,
-		entityInputData: EntityInputData,
+		entityInputData: ILoadableEntity & IPaginated,
 		imageManager: ImageManager,
 		metadataManager: MetadataManager,
 	) {
@@ -23,15 +23,9 @@ export class Entities {
 	}
 
 	async loadRelatedData() {
-		const loadRelatedDataOptions =
-			this.entityInputData.getLoadRelatedDataOptions();
-		if (!loadRelatedDataOptions) {
-			return;
-		}
-
 		const promises = this.entities.map((entity: Entity) =>
 			entity.loadRelatedData(
-				loadRelatedDataOptions,
+				this.entityInputData,
 				this.imageManager,
 				this.metadataManager,
 			),

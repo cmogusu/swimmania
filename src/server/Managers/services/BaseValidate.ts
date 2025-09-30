@@ -3,6 +3,7 @@ import { EntityTypesKeys, MAX_TEXT_LENGTH } from "@/server/constants";
 
 export class BaseValidate {
 	idValidator = z.number().positive();
+	idsValidator = z.array(this.idValidator);
 	nameValidator = z.string().min(2).max(255);
 	descriptionValidator = z.string().min(2).max(MAX_TEXT_LENGTH);
 	entityTypeValidator = z.enum(EntityTypesKeys);
@@ -13,6 +14,10 @@ export class BaseValidate {
 
 	id(id?: number | string) {
 		this.idValidator.parse(id);
+	}
+
+	ids(ids?: number[]) {
+		this.idsValidator.parse(ids);
 	}
 
 	name(name?: string) {

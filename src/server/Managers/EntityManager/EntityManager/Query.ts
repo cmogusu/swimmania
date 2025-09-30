@@ -1,3 +1,4 @@
+import type { EntityType } from "@/server/types";
 import { BaseQuery } from "../../services";
 
 export class Query extends BaseQuery {
@@ -102,32 +103,25 @@ export class Query extends BaseQuery {
 	}
 
 	update(
-		entityType: string,
+		entityType: EntityType,
 		entityId: number,
 		name: string,
-		description: string,
-		location: string,
+		description?: string,
+		location?: string,
 	) {
-		const values: Record<string, string> = {
-			entityType,
-			name,
-			location,
-			description,
-		};
-
-		this.throwIfNotSet(values);
+		this.throwIfNotSet({ entityId, entityType, name });
 
 		return this.exec(
 			`UPDATE \`entity\` SET name='?', location='?', description='?' WHERE id=? and type='?';`,
-			[name, location, description, entityId, entityType],
+			[name, location || null, description || null, entityId, entityType],
 		);
 	}
 
 	insert(
 		entityType: string,
 		name: string,
-		description: string,
-		location: string,
+		description?: string,
+		location?: string,
 	) {
 		this.throwIfNotSet({
 			entityType,
@@ -136,7 +130,7 @@ export class Query extends BaseQuery {
 
 		return this.exec(
 			`INSERT INTO \`entity\` (name, type, location, description) VALUES ('?', '?', '?', '?');`,
-			[name, entityType, location || "", description || ""],
+			[name, entityType, location || null, description || null],
 		);
 	}
 }

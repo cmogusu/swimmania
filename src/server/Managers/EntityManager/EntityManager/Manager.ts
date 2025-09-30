@@ -1,4 +1,4 @@
-import type { EntityType } from "../../../types";
+import type { EntityType, IPaginated } from "../../../types";
 import { ImageManager } from "../../ImageManager";
 import { MetadataManager } from "../../MetadataManager";
 import {
@@ -7,20 +7,28 @@ import {
 } from "../../RelatedEntityManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
-import { EntityInputData } from "../EntityInputData";
 import { entityManagerFactory } from "../entityManagerFactory";
+import {
+	DeleteInputData,
+	GetAllInputData,
+	GetByIdInputData,
+	GetByIdsInputData,
+	GetByNameInputData,
+	InsertInputData,
+	UpdateInputData,
+} from "../InputData";
 import type {
-	EntityDeleteRawInputs,
-	EntityFilterByRawInputs,
-	EntityGetAllRawInputs,
-	EntityGetByIdRawInputs,
-	EntityGetByIdsRawInputs,
-	EntityGetByNameRawInputs,
-	EntityLoadRelatedDataOptions,
-	EntityPostRawInputs,
-	EntityUpdateRawInputs,
+	ILoadableEntity,
+	RawDeleteEntityInputs,
 	RawEntity,
+	RawFilterByEntityInputs,
+	RawGetAllEntityInputs,
+	RawGetByIdEntityInputs,
+	RawGetByIdsEntityInputs,
+	RawGetByNameEntityInputs,
+	RawInsertEntityInputs,
 	RawRelatedEntity,
+	RawUpdateEntityInputs,
 } from "../types";
 import { Database } from "./Database";
 import { LruCache } from "./LruCache";
@@ -34,23 +42,11 @@ export class EntityManager {
 	db: Database;
 	cache: LruCache<EntityId>;
 
+	relationships: Record<string, EntityType[]> = {};
+
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
 	relatedEntityManager: RelatedEntityManager;
-
-	singleItemLoadRelatedDataOptions: EntityLoadRelatedDataOptions = {
-		loadImages: true,
-		loadDefaultImage: true,
-		loadMetadata: true,
-	};
-
-	multipleItemsLoadRelatedDataOptions: EntityLoadRelatedDataOptions = {
-		loadImages: false,
-		loadDefaultImage: true,
-		loadMetadata: false,
-	};
-
-	relationships: Record<string, EntityType[]> = {};
 
 	constructor(entityType: EntityType) {
 		this.entityType = entityType;
@@ -62,83 +58,54 @@ export class EntityManager {
 		this.relatedEntityManager = new RelatedEntityManager();
 	}
 
-	async getAll(rawInputs: EntityGetAllRawInputs): Promise<Entities> {
+	async getAll(rawInputs: RawGetAllEntityInputs): Promise<Entities> {
 		if (rawInputs.filters) {
-			return this.filterBy(rawInputs as EntityFilterByRawInputs);
+			return this.filterBy(rawInputs as RawFilterByEntityInputs);
 		}
 
-		const updatedInputs = this.merge(
-			this.multipleItemsLoadRelatedDataOptions,
-			rawInputs,
-		);
+		const inputData = new GetAllInputData(rawInputs);
+		inputData.validateData();
 
-		const entityInputData = new EntityInputData(this.entityType, updatedInputs);
-		entityInputData.validateGetAllInputs();
-
-		const rawEntities = await this.db.getAll(entityInputData);
-		const entities = await this.getEntities(rawEntities, entityInputData);
+		const rawEntities = await this.db.getAll(this.entityType, inputData);
+		const entities = await this.getEntities(rawEntities, inputData);
 		return entities;
 	}
 
-	async getByIds(rawInputs: EntityGetByIdsRawInputs): Promise<Entities> {
-		const updatedInputs = this.merge(
-			this.multipleItemsLoadRelatedDataOptions,
-			rawInputs,
-		);
-		const entityInputData = new EntityInputData(this.entityType, updatedInputs);
-		entityInputData.validateGetByIdsInputs();
+	async getByIds(rawInputs: RawGetByIdsEntityInputs): Promise<Entities> {
+		const inputData = new GetByIdsInputData(rawInputs);
+		inputData.validateData();
 
-		const rawEntities = await this.db.getByIds(entityInputData);
-		const entities = await this.getEntities(rawEntities, entityInputData);
+		const rawEntities = await this.db.getByIds(this.entityType, inputData);
+		const entities = await this.getEntities(rawEntities, inputData);
 		return entities;
 	}
 
-	async getById(rawInputs: EntityGetByIdRawInputs): Promise<Entity> {
-		const updatedInputs = this.merge(
-			this.singleItemLoadRelatedDataOptions,
-			rawInputs,
-		);
-		const entityInputData = new EntityInputData(this.entityType, updatedInputs);
-		entityInputData.validateGetByIdInputs();
+	async getById(rawInputs: RawGetByIdEntityInputs): Promise<Entity> {
+		const inputData = new GetByIdInputData(rawInputs);
+		inputData.validateData();
 
-		const rawEntity = await this.db.getById(entityInputData);
+		const rawEntity = await this.db.getById(this.entityType, inputData);
 		const entity = new Entity(rawEntity);
-		entity.loadRelatedData(
-			entityInputData,
-			this.imageManager,
-			this.metadataManager,
-		);
+		entity.loadRelatedData(inputData, this.imageManager, this.metadataManager);
 
 		return entity;
 	}
 
-	async getByName(rawInputs: EntityGetByNameRawInputs): Promise<Entity> {
-		const updatedInputs = this.merge(
-			this.singleItemLoadRelatedDataOptions,
-			rawInputs,
-		);
-		const entityInputData = new EntityInputData(this.entityType, updatedInputs);
-		entityInputData.validateGetByIdInputs();
+	async getByName(rawInputs: RawGetByNameEntityInputs): Promise<Entity> {
+		const inputData = new GetByNameInputData(rawInputs);
+		inputData.validateData();
 
-		const rawEntity = await this.db.getByName(entityInputData);
+		const rawEntity = await this.db.getByName(this.entityType, inputData);
 		const entity = new Entity(rawEntity);
-		entity.loadRelatedData(
-			entityInputData,
-			this.imageManager,
-			this.metadataManager,
-		);
+		entity.loadRelatedData(inputData, this.imageManager, this.metadataManager);
 
 		return entity;
 	}
 
-	findExisting(rawInputs: EntityGetByNameRawInputs) {
-		return this.getByName(rawInputs);
-	}
-
-	async update(rawInputs: EntityUpdateRawInputs) {
-		const entityData = new EntityInputData(this.entityType, rawInputs);
-		entityData.validateUpdateInputs();
-		const updateData = await this.db.update(entityData);
+	async update(rawInputs: RawUpdateEntityInputs) {
+		const inputData = new UpdateInputData(rawInputs);
+		inputData.validateData();
+		const updateData = await this.db.update(this.entityType, inputData);
 
 		// @ts-ignore
 		if (!updateData?.affectedRows) {
@@ -148,7 +115,7 @@ export class EntityManager {
 		return { id: rawInputs.entityId };
 	}
 
-	async insert(rawInputs: EntityPostRawInputs) {
+	async insert(rawInputs: RawInsertEntityInputs) {
 		const { metadata, related } = rawInputs;
 		const insertData = await this.insertEntity(rawInputs);
 
@@ -169,10 +136,10 @@ export class EntityManager {
 		return insertData;
 	}
 
-	async insertEntity(rawInputs: EntityPostRawInputs) {
-		const entityData = new EntityInputData(this.entityType, rawInputs);
-		entityData.validateInsertInputs();
-		const insertData = await this.db.insert(entityData);
+	async insertEntity(rawInputs: RawInsertEntityInputs) {
+		const inputData = new InsertInputData(rawInputs);
+		inputData.validateData();
+		const insertData = await this.db.insert(this.entityType, inputData);
 
 		// @ts-ignore
 		if (!insertData?.affectedRows) {
@@ -216,10 +183,10 @@ export class EntityManager {
 		});
 	}
 
-	async deleteById(rawInputs: EntityDeleteRawInputs) {
-		const entityData = new EntityInputData(this.entityType, rawInputs);
-		entityData.validateInsertInputs();
-		const deleteData = await this.db.deleteById(entityData);
+	async deleteById(rawInputs: RawDeleteEntityInputs) {
+		const inputData = new DeleteInputData(rawInputs);
+		inputData.validateData();
+		const deleteData = await this.db.deleteById(this.entityType, inputData);
 
 		// @ts-ignore
 		if (!deleteData?.affectedRows) {
@@ -230,28 +197,30 @@ export class EntityManager {
 		return { id: entityId };
 	}
 
-	async filterBy(rawInputs: EntityFilterByRawInputs) {
-		const entityData = new EntityInputData(this.entityType, rawInputs);
-		entityData.validateFilterByInputs();
+	findExisting(rawInputs: RawGetByNameEntityInputs) {
+		return this.getByName(rawInputs);
+	}
+
+	async filterBy(rawInputs: RawFilterByEntityInputs) {
 		const entityIds = await this.metadataManager.filterBy({
 			entityType: this.entityType,
-			filters: rawInputs.filters,
+			filters: rawInputs.filters || [],
 		});
 
 		return this.getByIds({
 			entityIds,
 			entityType: this.entityType,
 			...rawInputs,
-		} as unknown as EntityGetByIdsRawInputs);
+		} as unknown as RawGetByIdsEntityInputs);
 	}
 
 	async getEntities(
 		rawEntities: RawEntity[],
-		entityInputData: EntityInputData,
+		inputData: ILoadableEntity & IPaginated,
 	) {
 		const entities = new Entities(
 			rawEntities,
-			entityInputData,
+			inputData,
 			this.imageManager,
 			this.metadataManager,
 		);

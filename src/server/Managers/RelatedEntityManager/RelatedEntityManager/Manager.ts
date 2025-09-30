@@ -1,7 +1,7 @@
 import type { EntityType } from "../../../types";
 import {
-	type EntityGetByIdsRawInputs,
 	entityManagerFactory,
+	type RawGetByIdsEntityInputs,
 } from "../../EntityManager";
 import type { Entities } from "../../EntityManager/Entities";
 import { DeleteInputData, GetInputData, InsertInputData } from "../InputData";
@@ -84,6 +84,6 @@ export class RelatedEntityManager {
 
 	getEntities(entityIds: number[], entityType: EntityType): Promise<Entities> {
 		const entityManager = entityManagerFactory.getInstance(entityType);
-		return entityManager.getByIds({ entityIds } as EntityGetByIdsRawInputs);
+		return entityManager.getByIds({ entityIds } as RawGetByIdsEntityInputs);
 	}
 }

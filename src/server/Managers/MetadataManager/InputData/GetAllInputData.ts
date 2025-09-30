@@ -1,4 +1,3 @@
-import { isUndefined } from "@/server/utils";
 import type { EntityType } from "../../../types";
 import { BaseInputData } from "../../services/BaseInputData";
 import type { RawGetAllMetadataInputs } from "../types";
@@ -23,8 +22,8 @@ export class GetAllInputData extends BaseInputData {
 		this.entityId = entityId;
 		this.entityType = entityType;
 
-		if (!isUndefined(pageSize)) this.pageSize = pageSize;
-		if (!isUndefined(pageNumber)) this.pageNumber = pageNumber;
+		this.pageSize = pageSize;
+		this.pageNumber = pageNumber;
 
 		this.validate = ValidateInstance;
 		this.sanitize = SanitizeInstance;
@@ -39,7 +38,7 @@ export class GetAllInputData extends BaseInputData {
 		return {
 			entityId: this.sanitize.id(this.entityId),
 			offset: this.offset,
-			pageSize: this.getPageSize(),
+			pageSize: this.pageSize,
 		};
 	}
 }
