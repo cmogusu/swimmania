@@ -1,5 +1,8 @@
+// TODO: Delete this class and use query class directly
+
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
+	DeleteAllInputData,
 	DeleteInputData,
 	GetInputData,
 	InsertInputData,
@@ -60,6 +63,13 @@ export class Database extends BaseDatabase {
 			metadata.relatedEntityId,
 			metadata.relationshipType,
 		);
+
+		return deleteData;
+	}
+
+	async deleteAll(relationData: DeleteAllInputData) {
+		const metadata = relationData.getSanitized();
+		const [deleteData] = await this.query.deleteAll(metadata.entityId);
 
 		return deleteData;
 	}

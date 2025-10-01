@@ -127,6 +127,17 @@ export class Query extends BaseQuery {
 		);
 	}
 
+	deleteAll(entityId: number) {
+		this.throwIfNotSet({
+			entityId,
+		});
+
+		return this.exec(
+			`DELETE FROM \`relations\` WHERE entityId1=? OR entityId2=?;`,
+			[entityId, entityId],
+		);
+	}
+
 	getColumns(
 		entityType: string,
 		entityId: number,

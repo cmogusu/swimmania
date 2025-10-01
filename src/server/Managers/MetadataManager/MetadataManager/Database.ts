@@ -1,3 +1,5 @@
+// TODO: Delete this class and use query class directly
+
 import type { RawMetadata } from "../../../Managers/MetadataManager";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {

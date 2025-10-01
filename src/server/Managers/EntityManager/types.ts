@@ -3,6 +3,20 @@ import type { RawImageInputs } from "../ImageManager";
 import type { MetadataFilter, RawMetadata } from "../MetadataManager";
 import type { RelationshipType } from "../RelatedEntityManager";
 
+export type EntityLike = {
+	id: number;
+};
+
+export type EntitiesLike = {
+	entities: EntityLike[];
+};
+
+export type RelatedEntities = {
+	type: EntityType;
+	relationshipType: RelationshipType;
+	entities: EntitiesLike | undefined;
+};
+
 // Outputs
 export type RawEntity = {
 	id: number;
@@ -49,31 +63,19 @@ export type RawInsertEntityInputs = {
 	location?: string;
 	images?: RawImageInputs[];
 	metadata?: RawMetadata[];
-	related?: RawRelatedEntity[];
 };
 
 export type RawDeleteEntityInputs = {
 	entityId: number;
 };
 
-export type EntryRawInputs = PaginationOptions & {
-	entityId?: number;
-	entityIds?: number[];
-
-	name?: string;
+export type RawEntityInputs = {
+	id?: number;
+	name: string;
 	description?: string;
 	location?: string;
-
-	loadImages?: boolean;
-	loadDefaultImage?: boolean;
-	loadMetadata?: boolean;
-
-	filters?: MetadataFilter[];
-};
-
-export type RawRelatedEntity = RawInsertEntityInputs & {
-	type: EntityType;
-	relationshipType: RelationshipType;
+	images?: RawImageInputs[];
+	metadata?: RawMetadata[];
 };
 
 export interface ILoadableEntity {

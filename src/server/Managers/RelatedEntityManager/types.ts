@@ -28,6 +28,10 @@ export type RawDeleteRelatedInputData = RawGetRelatedInputData & {
 	relatedEntityId: number;
 };
 
+export type RawDeleteAllRelatedInputData = {
+	entityId: number;
+};
+
 export type RawGetNonRelatedInputData = RawGetRelatedInputData;
 
 // Output

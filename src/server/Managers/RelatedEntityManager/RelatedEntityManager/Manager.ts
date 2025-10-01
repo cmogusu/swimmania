@@ -1,11 +1,7 @@
-import type { EntityType } from "../../../types";
-import {
-	entityManagerFactory,
-	type RawGetByIdsEntityInputs,
-} from "../../EntityManager";
-import type { Entities } from "../../EntityManager/Entities";
 import { DeleteInputData, GetInputData, InsertInputData } from "../InputData";
+import { DeleteAllInputData } from "../InputData/DeleteAllInputData";
 import type {
+	RawDeleteAllRelatedInputData,
 	RawGetNonRelatedInputData,
 	RawGetRelatedInputData,
 	RawInsertRelatedInputData,
@@ -19,31 +15,26 @@ export class RelatedEntityManager {
 		this.db = new Database();
 	}
 
-	getRelated(rawRelatedEntityData: RawGetRelatedInputData): Promise<Entities> {
+	getRelated(rawRelatedEntityData: RawGetRelatedInputData): Promise<number[]> {
 		return this.getAll(rawRelatedEntityData, true);
 	}
 
 	getNonRelated(
 		rawRelatedEntityData: RawGetNonRelatedInputData,
-	): Promise<Entities> {
+	): Promise<number[]> {
 		return this.getAll(rawRelatedEntityData, false);
 	}
 
 	async getAll(
 		rawRelatedEntityData: RawGetRelatedInputData,
 		isRelated: boolean,
-	): Promise<Entities> {
+	): Promise<number[]> {
 		const inputData = new GetInputData(rawRelatedEntityData);
 		inputData.validateData();
 
-		const entityIds = isRelated
+		return isRelated
 			? await this.db.getRelated(inputData)
 			: await this.db.getNonRelated(inputData);
-
-		return await this.getEntities(
-			entityIds,
-			rawRelatedEntityData.relatedEntityType,
-		);
 	}
 
 	async insert(rawRelatedEntityData: RawInsertRelatedInputData) {
@@ -82,8 +73,17 @@ export class RelatedEntityManager {
 		return { id: entityId };
 	}
 
-	getEntities(entityIds: number[], entityType: EntityType): Promise<Entities> {
-		const entityManager = entityManagerFactory.getInstance(entityType);
-		return entityManager.getByIds({ entityIds } as RawGetByIdsEntityInputs);
+	async deleteAll(rawRelatedEntityData: RawDeleteAllRelatedInputData) {
+		const inputData = new DeleteAllInputData(rawRelatedEntityData);
+		inputData.validateData();
+
+		const deleteData = await this.db.deleteAll(inputData);
+		// @ts-ignore
+		if (!deleteData?.affectedRows) {
+			throw Error("Unable to delete metadata");
+		}
+
+		// @ts-ignore
+		return { id: entityId };
 	}
 }
