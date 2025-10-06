@@ -41,9 +41,14 @@ export const EntitiesContextProvider = ({
 	entitiesData,
 	children,
 }: Props) => {
-	const [entities, setEntities] = useState<EntityData[]>(entitiesData.entities);
-	const [nextPage, setNextPage] = useState<number>(entitiesData.nextPage);
-	const [hasMore, setHasMore] = useState<boolean>(entitiesData.hasMore);
+	const {
+		entities: initialEntities = [],
+		nextPage: initialNextPage = 2,
+		hasMore: initialHasMore = false,
+	} = entitiesData || {};
+	const [entities, setEntities] = useState<EntityData[]>(initialEntities);
+	const [nextPage, setNextPage] = useState<number>(initialNextPage);
+	const [hasMore, setHasMore] = useState<boolean>(initialHasMore);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const updatePage = useGetUpdatePageFn();
 

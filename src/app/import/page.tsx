@@ -1,20 +1,25 @@
+import jwt from "jsonwebtoken";
+
+const userKey = "myBestKey";
+
 export default async function ExpPage() {
+	const userToken = jwt.sign({ id: 30, user: "clive" }, userKey);
+
 	return (
 		<div>
-			<form action={extractTextFromImage}>
+			<form action={handleSubmit}>
+				<input type="hidden" name="token" defaultValue={userToken} />
 				<input type="submit" className="btn btn-sm" />
 			</form>
 		</div>
 	);
 }
 
-async function extractTextFromImage() {
+async function handleSubmit(formData: FormData) {
 	"use server";
-	const y = await new Promise((resolve) => {
-		setTimeout(() => {
-			resolve({ id: 10 });
-		}, 1000);
-	});
 
-	console.log(y);
+	const token = formData.get("token");
+	const decoded = jwt.verify(token as string, userKey);
+
+	console.log(decoded);
 }
