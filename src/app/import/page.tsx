@@ -1,10 +1,13 @@
 import jwt from "jsonwebtoken";
+import { auth } from "../../../auth";
 
 const userKey = "myBestKey";
 
 export default async function ExpPage() {
+	const session = await auth();
 	const userToken = jwt.sign({ id: 30, user: "clive" }, userKey);
 
+	console.log(session);
 	return (
 		<div>
 			<form action={handleSubmit}>
