@@ -20,7 +20,7 @@ export const EntityCard = ({ entity }: Props) => {
 				</figure>
 				<div className="card-body">
 					<h2 className="card-title">
-						{name}- {id}
+						{name} - {id}
 					</h2>
 					<p className="text-xs">{location}</p>
 					<p>{description}</p>
