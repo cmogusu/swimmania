@@ -1,4 +1,4 @@
-import { api, type EntityType, updateEntity } from "@/server";
+import { api, type EntityType } from "@/server";
 import { EditImages } from "./EditImages";
 import { EditMetadata } from "./EditMetadata";
 import { EntityForm } from "./EntityForm";
@@ -26,7 +26,6 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 					entityType={entityType}
 					entityId={entityId}
 					entity={entity}
-					action={updateEntity}
 				/>
 			</section>
 

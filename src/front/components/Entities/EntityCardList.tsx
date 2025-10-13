@@ -1,10 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Loading } from "@/components/Loading";
 import { useEntitiesContext } from "@/front/context";
 import type { EntityType } from "@/server/types";
 import { EntityCard } from "./EntityCard";
-import { Loading } from "./Loading";
 
 type Props = {
 	entityType: EntityType;

@@ -30,6 +30,6 @@
 		"components/ThreeJsLayer.jsx",
 		"components/Heatmaps/App.jsx",
 		"src/app/page.tsx"
-	],
+, "src/front/components/Play/Play.tss"	],
 	"exclude": ["node_modules"]
 }
