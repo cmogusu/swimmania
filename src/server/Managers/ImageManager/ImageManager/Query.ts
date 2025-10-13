@@ -38,7 +38,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`UPDATE \`image\` SET entityId=?, alt='?', filepath='?', isDefault=? WHERE id=?;`,
+			`UPDATE \`image\` SET entityId=?, alt=?, filepath=?, isDefault=? WHERE id=?;`,
 			[entityId, alt, filepath, isDefault, imageId],
 		);
 	}
@@ -47,7 +47,7 @@ export class Query extends BaseQuery {
 		this.throwIfNotSet({ entityId, alt, filepath, isDefault });
 
 		return this.exec(
-			`INSERT INTO \`image\` (entityId, alt, filepath, isDefault) VALUES (?, '?', '?', ?);`,
+			`INSERT INTO \`image\` (entityId, alt, filepath, isDefault) VALUES (?, ?, ?, ?);`,
 			[entityId, alt, filepath, isDefault],
 		);
 	}

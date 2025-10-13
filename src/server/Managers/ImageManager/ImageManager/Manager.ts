@@ -27,8 +27,8 @@ export class ImageManager {
 	async getDefault(rawImageData: ImageDefaultRawInputs): Promise<Image> {
 		const imageData = new ImageInputData(rawImageData);
 		imageData.validateDefaultInputs();
-		const rawImages = await this.db.getDefault(imageData);
-		return rawImages.map((img) => new Image(img))[0];
+		const rawImage = await this.db.getDefault(imageData);
+		return new Image(rawImage);
 	}
 
 	async getByImageId(rawImageData: ImageGetByIdRawInputs): Promise<Image> {

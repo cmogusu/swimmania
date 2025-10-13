@@ -1,12 +1,7 @@
-import path from "node:path";
 import type { EntityType } from "./types";
 
 export const MAX_TEXT_LENGTH = 3000;
 export const POSTS_PER_PAGE = 5;
-
-export const PUBLIC_FOLDER = path.join(__dirname, "../../../public");
-export const IMAGE_FOLDER = path.join(PUBLIC_FOLDER, "images");
-export const IMAGE_FOLDER_URL = `/images`;
 
 // Entity types
 export const EntityTypes = {

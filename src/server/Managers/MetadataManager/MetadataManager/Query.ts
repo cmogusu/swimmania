@@ -74,7 +74,7 @@ export class Query extends BaseQuery {
 
 		const columnName = METADATA_TYPE_TO_COLUMN[type];
 		return this.exec(
-			`UPDATE \`metadata\` SET entityId=?, entityType='?', name='?', type='?', ${columnName}=? WHERE id=?;`,
+			`UPDATE \`metadata\` SET entityId=?, entityType=?, name=?, type=?, ${columnName}=? WHERE id=?;`,
 			[entityId, entityType, name, type, value, metadataId],
 		);
 	}

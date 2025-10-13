@@ -1,4 +1,4 @@
-import { IMAGE_FOLDER_URL, PUBLIC_FOLDER } from "@/server/constants";
+import { IMAGE_FOLDER_URL, PUBLIC_FOLDER } from "@/server/folderConstants";
 import { isUndefined } from "@/server/utils";
 import { BaseInputData } from "../../services/BaseInputData";
 import type { ImageFileDataItem, RawImageInputs } from "../types";

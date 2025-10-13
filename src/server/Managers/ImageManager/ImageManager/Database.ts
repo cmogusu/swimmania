@@ -22,7 +22,7 @@ export class Database extends BaseDatabase {
 
 	async getDefault(
 		imageData: ImageInputData,
-	): Promise<ImageDatabaseRawOutputData[]> {
+	): Promise<ImageDatabaseRawOutputData> {
 		const image = imageData.toJSON();
 		const [rawImages] = await this.query.getDefault(image.entityId);
 		return (rawImages as ImageDatabaseRawOutputData[])?.[0];

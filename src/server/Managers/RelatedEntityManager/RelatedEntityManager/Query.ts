@@ -25,7 +25,7 @@ export class Query extends BaseQuery {
 			: "";
 
 		return this.exec(
-			`SELECT DISTINCT ? AS id FROM \`relations\` WHERE ?=? AND relationship='?' ?;`,
+			`SELECT DISTINCT ? AS id FROM \`relations\` WHERE ?=? AND relationship=? ?;`,
 			[
 				relatedColumn,
 				activeColumn,
@@ -59,7 +59,7 @@ export class Query extends BaseQuery {
 			: "";
 
 		return this.exec(
-			`SELECT id FROM \`entity\` WHERE type='?' AND id NOT IN (?) ?`,
+			`SELECT id FROM \`entity\` WHERE type=? AND id NOT IN (?) ?`,
 			[
 				relatedEntityType,
 				(relatedEntityIds as RowDataPacket[]).join(","),
@@ -91,7 +91,7 @@ export class Query extends BaseQuery {
 		);
 
 		return this.exec(
-			`INSERT INTO \`relations\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, '?', '?');`,
+			`INSERT INTO \`relations\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, ?, ?);`,
 			[entityId1, entityId2, relationship, relationshipType],
 		);
 	}
@@ -122,7 +122,7 @@ export class Query extends BaseQuery {
 			: "";
 
 		return this.exec(
-			`DELETE FROM \`relations\` WHERE entityId1=? AND entityId2=? AND relationship='?' ?;`,
+			`DELETE FROM \`relations\` WHERE entityId1=? AND entityId2=? AND relationship=? ?;`,
 			[entityId1, entityId2, relationship, relationshipTypeClause],
 		);
 	}

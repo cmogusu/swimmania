@@ -1,4 +1,4 @@
-import type { EntitiesData, EntityType } from "@/server";
+import type { EntitiesData, EntityType } from "@/server/types";
 import { EntityCard, EntityCardList, LoadMore } from "../Entities/";
 import { MapItem } from "../MapItem";
 

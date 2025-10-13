@@ -1,5 +1,5 @@
-import { Profiler } from "react";
 import { Page, Section1, Section2 } from "@/front";
+import { AppProfiler } from "@/front/components/AppProfiler";
 import { EntityDrawerContainer } from "@/front/components/EntityDrawer/";
 import {
 	EntitiesContextProvider,
@@ -13,25 +13,6 @@ type Props = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-const appId = "swimmania-frontend";
-const logProfileInfo = (
-	id: string,
-	phase: "mount" | "update" | "nested-update",
-	actualDuration: number,
-	baseDuration: number,
-	startTimestamp: number,
-	commitTimestamp: number,
-) => {
-	console.log(
-		id,
-		phase,
-		actualDuration,
-		baseDuration,
-		startTimestamp,
-		commitTimestamp,
-	);
-};
-
 export default async function Home({ searchParams }: Props) {
 	const { page = 1 } = await searchParams;
 
@@ -39,7 +20,7 @@ export default async function Home({ searchParams }: Props) {
 	const entitiesData = await api.getEntities(entityType, Number(page));
 
 	return (
-		<Profiler id={appId} onRender={logProfileInfo}>
+		<AppProfiler>
 			<EntitiesContextProvider
 				entitiesData={entitiesData}
 				entityType={entityType}
@@ -60,6 +41,6 @@ export default async function Home({ searchParams }: Props) {
 					</EntityScrollObserverContextProvider>
 				</SelectedEntityContextProvider>
 			</EntitiesContextProvider>
-		</Profiler>
+		</AppProfiler>
 	);
 }

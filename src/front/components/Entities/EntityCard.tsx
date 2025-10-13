@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { DefaultSiteImage } from "@/constants";
-import type { EntityData } from "@/server";
+import type { EntityData } from "@/server/types";
 import { EntityCardContainer } from "./EntityCardContainer";
 import { SelectEntityButton } from "./SelectEntityButton";
 

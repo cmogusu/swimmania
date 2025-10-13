@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
 import "@testing-library/dom";
 import { DefaultSiteImage } from "@/constants";
-import type { EntityData } from "@/server";
+import type { EntityData } from "@/server/types";
 import { EntityCard } from "../EntityCard";
 
 const mockDefaultImage = {

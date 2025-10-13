@@ -22,7 +22,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`SELECT * FROM \`entity\` WHERE type = '?' LIMIT ? OFFSET ?;`,
+			`SELECT * FROM \`entity\` WHERE type = ? LIMIT ? OFFSET ?;`,
 			[entityType, limit, offset],
 		);
 	}
@@ -34,7 +34,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`SELECT * FROM \`entity\` WHERE type = '?' and name like '?' LIMIT 1;`,
+			`SELECT * FROM \`entity\` WHERE type = ? and name like ? LIMIT 1;`,
 			[entityType, name],
 		);
 	}
@@ -46,7 +46,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`SELECT * FROM \`entity\` WHERE id=? and type ='?' Limit 1;`,
+			`SELECT * FROM \`entity\` WHERE id=? and type =? Limit 1;`,
 			[entityId, entityType],
 		);
 	}
@@ -59,7 +59,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`SELECT * FROM \`entity\` WHERE type ='?' and id in (?) Limit 1;`,
+			`SELECT * FROM \`entity\` WHERE type =? and id in (?) Limit 1;`,
 			[entityType, entityIds.join(",")],
 		);
 	}
@@ -96,7 +96,7 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return this.exec(`Delete FROM \`entity\` WHERE id = ? and type ='?'`, [
+		return this.exec(`Delete FROM \`entity\` WHERE id = ? and type =?`, [
 			entityId,
 			entityType,
 		]);
@@ -112,7 +112,7 @@ export class Query extends BaseQuery {
 		this.throwIfNotSet({ entityId, entityType, name });
 
 		return this.exec(
-			`UPDATE \`entity\` SET name='?', location='?', description='?' WHERE id=? and type='?';`,
+			`UPDATE \`entity\` SET name=?, location=?, description=? WHERE id=? and type=?;`,
 			[name, location || null, description || null, entityId, entityType],
 		);
 	}
@@ -129,7 +129,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`INSERT INTO \`entity\` (name, type, location, description) VALUES ('?', '?', '?', '?');`,
+			`INSERT INTO \`entity\` (name, type, location, description) VALUES (?, ?, ?, ?);`,
 			[name, entityType, location || null, description || null],
 		);
 	}
