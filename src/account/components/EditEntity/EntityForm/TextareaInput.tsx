@@ -1,18 +1,22 @@
+import type { ChangeEvent } from "react";
+
 type Props = {
 	name: string;
 	title: string;
+	value?: number | string;
 	defaultValue?: string;
 	placeholder?: string;
 	type?: string;
 	error?: string;
+	onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
 export const TextareaInput = ({
 	name,
-	defaultValue,
 	error,
 	placeholder,
 	title,
+	...props
 }: Props) => (
 	<label className="floating-label mb-3">
 		<span>{title}</span>
@@ -20,7 +24,7 @@ export const TextareaInput = ({
 			className={`input input-sm ${error ? "input-error" : ""}`}
 			name={name}
 			placeholder={placeholder || title}
-			{...(defaultValue ? { defaultValue } : {})}
+			{...props}
 		/>
 		{error && <span className="error">{error}</span>}
 	</label>
