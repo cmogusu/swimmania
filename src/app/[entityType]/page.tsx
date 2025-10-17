@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Page, Section1, Section2 } from "@/front";
 import { EntityDrawerContainer } from "@/front/components/EntityDrawer/";
 import {
 	EntitiesContextProvider,
@@ -7,6 +6,7 @@ import {
 	EntityScrollObserverContextProvider,
 	SelectedEntityContextProvider,
 } from "@/front/context";
+import { EntitiesPage, PageLayout } from "@/front/pages";
 import { api, type EntityType, EntityTypePlurals } from "@/server";
 
 type Props = {
@@ -36,10 +36,12 @@ export default async function Home({ params, searchParams }: Props) {
 				<EntityScrollObserverContextProvider>
 					<EntityDrawerContextProvider>
 						<EntityDrawerContainer>
-							<Page>
-								<Section1 />
-								<Section2 entityType={entityType} entitiesData={entitiesData} />
-							</Page>
+							<PageLayout>
+								<EntitiesPage
+									entitiesData={entitiesData}
+									entityType={entityType}
+								/>
+							</PageLayout>
 						</EntityDrawerContainer>
 					</EntityDrawerContextProvider>
 				</EntityScrollObserverContextProvider>

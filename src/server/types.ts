@@ -51,3 +51,10 @@ export type EntitiesData = {
 	entities: EntityData[];
 	hasMore: boolean;
 };
+
+export type EntityRequest = {
+	defaultImage: "";
+	images: [];
+	metadata: [];
+	related: ["pool", "school"];
+};

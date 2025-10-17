@@ -5,7 +5,7 @@ type Props = {
 	images: ImageData[] | undefined;
 };
 
-export const EntityImages = ({ images }: Props) => {
+export const Images = ({ images }: Props) => {
 	const nonDefaultImages = (images || []).filter((i) => !i.isDefault);
 
 	if (!nonDefaultImages?.length) {

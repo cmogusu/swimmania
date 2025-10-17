@@ -16,11 +16,11 @@ export class Validate extends BaseValidate {
 	);
 
 	location(location?: string) {
-		this.locationValidator.parse(location);
+		return this.locationValidator.parse(location);
 	}
 
 	filters(filters?: MetadataFilter[]) {
-		this.filterValidator.parse(filters);
+		return this.filterValidator.parse(filters);
 	}
 }
 

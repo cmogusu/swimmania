@@ -1,3 +1,2 @@
-export * from "./EntityCard";
-export * from "./EntityCardList";
+export * from "./Entities";
 export * from "./LoadMore";

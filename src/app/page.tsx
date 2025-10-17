@@ -1,5 +1,4 @@
-import { Page, Section1, Section2 } from "@/front";
-import { AppProfiler } from "@/front/components/AppProfiler";
+import { AppProfiler } from "@/front/components/AppProfiler/AppProfiler";
 import { EntityDrawerContainer } from "@/front/components/EntityDrawer/";
 import {
 	EntitiesContextProvider,
@@ -7,6 +6,7 @@ import {
 	EntityScrollObserverContextProvider,
 	SelectedEntityContextProvider,
 } from "@/front/context";
+import { HomePage, PageLayout } from "@/front/pages";
 import { api } from "@/server";
 
 type Props = {
@@ -29,13 +29,12 @@ export default async function Home({ searchParams }: Props) {
 					<EntityScrollObserverContextProvider>
 						<EntityDrawerContextProvider>
 							<EntityDrawerContainer>
-								<Page>
-									<Section1 />
-									<Section2
-										entityType={entityType}
+								<PageLayout>
+									<HomePage
 										entitiesData={entitiesData}
+										entityType={entityType}
 									/>
-								</Page>
+								</PageLayout>
 							</EntityDrawerContainer>
 						</EntityDrawerContextProvider>
 					</EntityScrollObserverContextProvider>

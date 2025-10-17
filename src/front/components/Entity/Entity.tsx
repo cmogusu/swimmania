@@ -1,19 +1,15 @@
 import Image from "next/image";
 import { DefaultSiteImage } from "@/constants";
-import { api, type EntityType } from "@/server";
-
+import type { EntityData, EntityType } from "@/server/types";
+import { Metadata } from "../Metadata";
 import { Images } from "./Images";
-import { Metadata } from "./Metadata";
 
 type Props = {
 	entityType: EntityType;
-	entityId: number;
+	entity: EntityData;
 };
 
-const show = false;
-
-export const Entity = async ({ entityType, entityId }: Props) => {
-	const entity = await api.getEntity(entityType, entityId);
+export const Entity = async ({ entityType, entity }: Props) => {
 	const { name, description, location, defaultImage, images, metadata } =
 		entity || {};
 	const image = defaultImage || DefaultSiteImage;
@@ -41,7 +37,7 @@ export const Entity = async ({ entityType, entityId }: Props) => {
 				<p className="text-2xl">{description}</p>
 			</section>
 
-			{show && Images images={images} />}
+			<Images images={images} />
 			<Metadata entityType={entityType} metadata={metadata} />
 		</div>
 	);

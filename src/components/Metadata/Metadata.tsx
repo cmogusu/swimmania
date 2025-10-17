@@ -4,14 +4,14 @@ import {
 	type IMetadataPropertyType,
 	type MetadataData,
 } from "@/server";
-import { metadataComponents } from "../MetadataComponents";
+import { metadataComponents } from "./metadataComponents";
 
 type Props = {
 	entityType: EntityType;
 	metadata: MetadataData[] | undefined;
 };
 
-export const EntityMetadata = ({ entityType, metadata }: Props) => {
+export const Metadata = ({ entityType, metadata }: Props) => {
 	const metadataComponents = getMetadataComponents(entityType, metadata);
 
 	return (
