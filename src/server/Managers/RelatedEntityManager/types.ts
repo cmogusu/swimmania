@@ -1,58 +1,24 @@
-import type { EntityType } from "../../types";
+import type { EntityType } from "@/server/types";
+import type {
+	RawDeleteEntityInputs,
+	RawGetAllEntityInputs,
+	RawInsertEntityInputs,
+} from "../EntityManager";
+import type { RelationshipType } from "../RelatedEntityIdManager";
 
-// Input
-export type RawRelatedEntityInputData = {
-	entityType: EntityType;
-	entityId: number;
-	relatedEntityType: EntityType;
-	relatedEntityId?: number;
-	relationshipType?: RelationshipType;
-};
-
-export type RawGetRelatedInputData = {
-	entityType: EntityType;
-	entityId: number;
-	relatedEntityType: EntityType;
-	relationshipType?: RelationshipType;
-};
-
-export type RawInsertRelatedInputData = {
-	entityType: EntityType;
-	entityId: number;
-	relatedEntityType: EntityType;
-	relatedEntityId: number;
+// Inputs
+export type RawGetRelatedEntityInputs = RawGetAllEntityInputs & {
+	type: EntityType;
 	relationshipType: RelationshipType;
 };
 
-export type RawDeleteRelatedInputData = RawGetRelatedInputData & {
-	relatedEntityId: number;
+export type RawInsertRelatedEntityInputs = RawInsertEntityInputs & {
+	entityId?: number;
+	type: EntityType;
+	relationshipType: RelationshipType;
 };
 
-export type RawDeleteAllRelatedInputData = {
-	entityId: number;
-};
-
-export type RawGetNonRelatedInputData = RawGetRelatedInputData;
-
-// Output
-export type RelatedEntityDatabaseRawOutputData =
-	Required<RawRelatedEntityInputData>;
-
-export type RelatedEntityDatabaseOutputData =
-	RelatedEntityDatabaseRawOutputData;
-
-export type RelatedEntityValueType = boolean | number | string;
-
-export type RelationshipType =
-	| "isAlso"
-	| "worksAt"
-	| "trainsAt"
-	| "canBeFoundAt"
-	| "manages"
-	| "contains"
-	| "participatedIn";
-
-export type RelationshipDescription = {
-	title: string;
-	description: string;
+export type RawDeleteRelatedEntityInputs = RawDeleteEntityInputs & {
+	type: EntityType;
+	relationshipType: RelationshipType;
 };

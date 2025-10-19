@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { DefaultSiteImage } from "@/constants";
+import { EntityContextProvider } from "@/context";
 import type { EntityData, EntityType } from "@/server/types";
 import { Metadata } from "../Metadata";
 import { Images } from "./Images";
@@ -10,8 +11,15 @@ type Props = {
 };
 
 export const Entity = async ({ entityType, entity }: Props) => {
-	const { name, description, location, defaultImage, images, metadata } =
-		entity || {};
+	const {
+		id: entityId,
+		name,
+		description,
+		location,
+		defaultImage,
+		images,
+		metadata,
+	} = entity || {};
 	const image = defaultImage || DefaultSiteImage;
 
 	if (!entity) {
@@ -19,7 +27,7 @@ export const Entity = async ({ entityType, entity }: Props) => {
 	}
 
 	return (
-		<div>
+		<EntityContextProvider entityId={entityId} entityType={entityType}>
 			<section className="mb-4">
 				<h1>{name}</h1>
 				<hr className="w-50 mb-4" />
@@ -39,6 +47,6 @@ export const Entity = async ({ entityType, entity }: Props) => {
 
 			<Images images={images} />
 			<Metadata entityType={entityType} metadata={metadata} />
-		</div>
+		</EntityContextProvider>
 	);
 };

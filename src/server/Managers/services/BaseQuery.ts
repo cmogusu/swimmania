@@ -12,6 +12,7 @@ export class BaseQuery {
 	// ) => Promise<[T, FieldPacket[]]>;
 
 	isDisposed: boolean = false;
+	MaxQueryLimit: number = 1000;
 
 	constructor() {
 		this.log = new Log();

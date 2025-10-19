@@ -24,6 +24,8 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relationshipType,
+			metadata.pageSize,
+			metadata.offset,
 		);
 
 		return entityIds as unknown as number[];
@@ -36,6 +38,8 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relationshipType,
+			metadata.pageSize,
+			metadata.offset,
 		);
 
 		return entityIds as unknown as number[];
@@ -61,7 +65,6 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relatedEntityId,
-			metadata.relationshipType,
 		);
 
 		return deleteData;

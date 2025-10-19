@@ -6,10 +6,8 @@ import type { RelationshipType } from "../types";
 export class Validate extends BaseValidate {
 	relationshipTypeValidator = z.enum(RelationshipTypeKeys);
 
-	relationshipType(type?: RelationshipType, isRequired?: true) {
-		if (type || isRequired) {
-			this.relationshipTypeValidator.parse(type);
-		}
+	relationshipType(type?: RelationshipType) {
+		this.relationshipTypeValidator.parse(type);
 	}
 }
 

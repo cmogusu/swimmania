@@ -3,7 +3,7 @@ import type { RawMetadata } from "../../Managers/MetadataManager";
 import type { EntityType } from "../../types";
 import type { Image, ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
-import type { ILoadableEntity, RawEntity, RelatedEntities } from "./types";
+import type { ILoadableEntity, RawEntity } from "./types";
 
 export class Entity {
 	id: number;
@@ -14,7 +14,6 @@ export class Entity {
 	defaultImage?: Image;
 	images?: Image[];
 	metadata?: RawMetadata[];
-	related: RelatedEntities[] | undefined;
 
 	constructor({ id, name, type, description, location }: RawEntity) {
 		this.id = id;
@@ -74,7 +73,6 @@ export class Entity {
 			defaultImage: this.defaultImage?.toJSON(),
 			images: this.images?.map((img) => img.toJSON()),
 			metadata: this.metadata,
-			related: this.related,
 		};
 	}
 }

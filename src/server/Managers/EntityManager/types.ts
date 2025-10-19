@@ -1,21 +1,6 @@
 import type { EntityType, PaginationOptions } from "../../types";
 import type { RawImageInputs } from "../ImageManager";
 import type { MetadataFilter, RawMetadata } from "../MetadataManager";
-import type { RelationshipType } from "../RelatedEntityManager";
-
-export type EntityLike = {
-	id: number;
-};
-
-export type EntitiesLike = {
-	entities: EntityLike[];
-};
-
-export type RelatedEntities = {
-	type: EntityType;
-	relationshipType: RelationshipType;
-	entities: EntitiesLike | undefined;
-};
 
 // Outputs
 export type RawEntity = {

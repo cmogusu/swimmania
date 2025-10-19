@@ -44,6 +44,7 @@ export type EntityData = {
 	defaultImage: ImageData | undefined;
 	images: ImageData[] | undefined;
 	metadata: MetadataData[] | undefined;
+	relationshipType?: string;
 };
 
 export type EntitiesData = {

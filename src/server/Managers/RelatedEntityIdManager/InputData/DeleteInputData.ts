@@ -1,11 +1,12 @@
-import { BaseInputData } from "../../services";
-import type { RawGetRelatedInputData, RelationshipType } from "../types";
+import type { EntityType } from "@/server/types";
+import type { RawDeleteByIdRelatedInputData, RelationshipType } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
-export class GetInputData extends BaseInputData {
-	readonly entityType: string;
+export class DeleteInputData {
+	readonly entityType: EntityType;
 	readonly entityId: number;
-	readonly relatedEntityType: string;
+	readonly relatedEntityType: EntityType;
+	readonly relatedEntityId: number;
 	readonly relationshipType?: RelationshipType;
 
 	validate: Validate;
@@ -14,13 +15,13 @@ export class GetInputData extends BaseInputData {
 		entityType,
 		entityId,
 		relatedEntityType,
+		relatedEntityId,
 		relationshipType,
-	}: RawGetRelatedInputData) {
-		super();
-
+	}: RawDeleteByIdRelatedInputData) {
 		this.entityType = entityType;
 		this.entityId = entityId;
 		this.relatedEntityType = relatedEntityType;
+		this.relatedEntityId = relatedEntityId;
 		this.relationshipType = relationshipType;
 
 		this.validate = ValidateInstance;
@@ -30,16 +31,16 @@ export class GetInputData extends BaseInputData {
 		this.validate.entityType(this.entityType);
 		this.validate.id(this.entityId);
 		this.validate.entityType(this.relatedEntityType);
+		this.validate.id(this.relatedEntityId);
 		this.validate.relationshipType(this.relationshipType);
 	}
 
 	getSanitized() {
-		// No need to sanitize data since it is not stored in db
-
 		return {
 			entityType: this.entityType,
 			entityId: this.entityId,
 			relatedEntityType: this.relatedEntityType,
+			relatedEntityId: this.relatedEntityId,
 			relationshipType: this.relationshipType,
 		};
 	}

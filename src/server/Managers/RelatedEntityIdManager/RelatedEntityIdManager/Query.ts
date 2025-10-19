@@ -7,11 +7,17 @@ export class Query extends BaseQuery {
 		entityType: string,
 		entityId: number,
 		relatedEntityType: string,
-		relationshipType?: RelationshipType,
+		relationshipType: RelationshipType,
+		limit: number,
+		offset: number,
 	) {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
+			relatedEntityType,
+			relationshipType,
+			limit,
+			offset,
 		});
 
 		const { activeColumn, relatedColumn, relationship } = this.getColumns(
@@ -20,18 +26,16 @@ export class Query extends BaseQuery {
 			relatedEntityType,
 		);
 
-		const relationshipTypeClause = relationshipType
-			? ` AND relationshipType = ${relationshipType}`
-			: "";
-
 		return this.exec(
-			`SELECT DISTINCT ? AS id FROM \`relations\` WHERE ?=? AND relationship=? ?;`,
+			`SELECT DISTINCT ? AS id FROM \`relations\` WHERE ?=? AND relationship=? AND relationshipType=? LIMIT ? OFFSET ?;`,
 			[
 				relatedColumn,
 				activeColumn,
 				entityId,
 				relationship,
-				relationshipTypeClause,
+				relationshipType,
+				limit,
+				offset,
 			],
 		);
 	}
@@ -40,11 +44,17 @@ export class Query extends BaseQuery {
 		entityType: string,
 		entityId: number,
 		relatedEntityType: string,
-		relationshipType?: RelationshipType,
+		relationshipType: RelationshipType,
+		limit: number,
+		offset: number,
 	) {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
+			relatedEntityType,
+			relationshipType,
+			limit,
+			offset,
 		});
 
 		const [relatedEntityIds] = await this.getRelated(
@@ -52,18 +62,18 @@ export class Query extends BaseQuery {
 			entityId,
 			relatedEntityType,
 			relationshipType,
+			this.MaxQueryLimit,
+			0,
 		);
 
-		const relationshipTypeClause = relationshipType
-			? ` AND relationshipType = ${relationshipType}`
-			: "";
-
 		return this.exec(
-			`SELECT id FROM \`entity\` WHERE type=? AND id NOT IN (?) ?`,
+			`SELECT id FROM \`entity\` WHERE type=? AND id NOT IN (?) AND relationshipType=? LIMIT ? OFFSET ?`,
 			[
 				relatedEntityType,
 				(relatedEntityIds as RowDataPacket[]).join(","),
-				relationshipTypeClause,
+				relationshipType,
+				limit,
+				offset,
 			],
 		);
 	}

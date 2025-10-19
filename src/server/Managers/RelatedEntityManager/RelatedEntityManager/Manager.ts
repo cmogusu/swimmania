@@ -1,89 +1,135 @@
-import { DeleteInputData, GetInputData, InsertInputData } from "../InputData";
-import { DeleteAllInputData } from "../InputData/DeleteAllInputData";
+import type { EntityType } from "@/server/types";
+import { type Entities, entityManagerFactory } from "../../EntityManager";
+import { RelatedEntityIdManager } from "../../RelatedEntityIdManager";
 import type {
-	RawDeleteAllRelatedInputData,
-	RawGetNonRelatedInputData,
-	RawGetRelatedInputData,
-	RawInsertRelatedInputData,
+	RawDeleteRelatedEntityInputs,
+	RawGetRelatedEntityInputs,
+	RawInsertRelatedEntityInputs,
 } from "../types";
-import { Database } from "./Database";
+import { EntityIdCache } from "./EntityIdCache";
 
 export class RelatedEntityManager {
-	db: Database;
+	entityIdCache: EntityIdCache;
+
+	relatedEntityIdManager: RelatedEntityIdManager;
 
 	constructor() {
-		this.db = new Database();
+		this.entityIdCache = new EntityIdCache();
+		this.relatedEntityIdManager = new RelatedEntityIdManager();
 	}
 
-	getRelated(rawRelatedEntityData: RawGetRelatedInputData): Promise<number[]> {
-		return this.getAll(rawRelatedEntityData, true);
-	}
+	async insertRelated(
+		entityType: EntityType,
+		entityId: number,
+		rawRelatedEntity: RawInsertRelatedEntityInputs,
+	) {
+		const {
+			type: relatedEntityType,
+			relationshipType,
+			name,
+		} = rawRelatedEntity;
 
-	getNonRelated(
-		rawRelatedEntityData: RawGetNonRelatedInputData,
-	): Promise<number[]> {
-		return this.getAll(rawRelatedEntityData, false);
-	}
+		const entityManager = entityManagerFactory.getInstance(entityType);
+		entityManager.validateRelationship(relatedEntityType, relationshipType);
 
-	async getAll(
-		rawRelatedEntityData: RawGetRelatedInputData,
-		isRelated: boolean,
-	): Promise<number[]> {
-		const inputData = new GetInputData(rawRelatedEntityData);
-		inputData.validateData();
-
-		return isRelated
-			? await this.db.getRelated(inputData)
-			: await this.db.getNonRelated(inputData);
-	}
-
-	async insert(rawRelatedEntityData: RawInsertRelatedInputData) {
-		const inputData = new InsertInputData(rawRelatedEntityData);
-		inputData.validateData();
-
-		const insertData = await this.db.insert(inputData);
-		// @ts-ignore
-		if (!insertData?.insertId) {
-			throw Error("Unable to create metadata");
+		let relatedEntityId: number | undefined = rawRelatedEntity.entityId;
+		if (!relatedEntityId) {
+			relatedEntityId = await this.getEntityId(rawRelatedEntity);
 		}
 
-		// @ts-ignore
-		return { id: insertData.insertId };
+		this.entityIdCache.set(relatedEntityType, name, relatedEntityId);
+		await this.relatedEntityIdManager.insert({
+			entityId,
+			entityType: entityManager.entityType,
+			relatedEntityId,
+			relatedEntityType,
+			relationshipType,
+		});
 	}
 
-	async insertBulk(rawRelatedEntityDataArr: RawInsertRelatedInputData[]) {
-		const insertPromise = rawRelatedEntityDataArr.map((data) =>
-			this.insert(data),
-		);
+	async deleteRelated(
+		entityType: EntityType,
+		entityId: number,
+		rawRelatedEntity: RawDeleteRelatedEntityInputs,
+	) {
+		const {
+			type: relatedEntityType,
+			entityId: relatedEntityId,
+			relationshipType,
+		} = rawRelatedEntity;
 
-		await Promise.all(insertPromise);
-	}
-
-	async deleteById(rawRelatedEntityData: RawInsertRelatedInputData) {
-		const inputData = new DeleteInputData(rawRelatedEntityData);
-		inputData.validateData();
-
-		const deleteData = await this.db.deleteById(inputData);
-		// @ts-ignore
-		if (!deleteData?.affectedRows) {
-			throw Error("Unable to delete metadata");
+		if (relatedEntityType && relatedEntityId) {
+			return this.relatedEntityIdManager.deleteById({
+				entityType,
+				entityId,
+				relatedEntityType,
+				relatedEntityId,
+				relationshipType,
+			});
 		}
 
-		// @ts-ignore
-		return { id: entityId };
+		return this.relatedEntityIdManager.deleteAll({ entityId });
 	}
 
-	async deleteAll(rawRelatedEntityData: RawDeleteAllRelatedInputData) {
-		const inputData = new DeleteAllInputData(rawRelatedEntityData);
-		inputData.validateData();
+	async getRelated(
+		entityType: EntityType,
+		entityId: number,
+		relatedEntity: RawGetRelatedEntityInputs,
+		pageNumber?: number,
+		pageSize?: number,
+	): Promise<Entities> {
+		const { type: relatedEntityType, relationshipType } = relatedEntity;
 
-		const deleteData = await this.db.deleteAll(inputData);
-		// @ts-ignore
-		if (!deleteData?.affectedRows) {
-			throw Error("Unable to delete metadata");
+		const entityManager = entityManagerFactory.getInstance(entityType);
+		entityManager.validateRelationship(relatedEntityType, relationshipType);
+
+		const entityIds = await this.relatedEntityIdManager.getRelated({
+			entityId,
+			entityType,
+			relatedEntityType,
+			relationshipType,
+			pageNumber,
+			pageSize,
+		});
+
+		const otherEntityManager =
+			entityManagerFactory.getInstance(relatedEntityType);
+
+		const entities = await otherEntityManager.getByIds({ entityIds });
+		entities.setRelationshipType(relationshipType);
+		return entities;
+	}
+
+	async getEntityId(rawRelatedEntity: RawInsertRelatedEntityInputs) {
+		const { type: relatedEntityType, name: relatedEntityName } =
+			rawRelatedEntity;
+
+		let relatedEntityId: number | undefined;
+		if (this.entityIdCache.has(relatedEntityType, relatedEntityName)) {
+			relatedEntityId = this.entityIdCache.get(
+				relatedEntityType,
+				relatedEntityName,
+			);
 		}
 
-		// @ts-ignore
-		return { id: entityId };
+		const relatedEntityManager =
+			entityManagerFactory.getInstance(relatedEntityType);
+
+		if (!relatedEntityId) {
+			const relatedEntity =
+				await relatedEntityManager.findExisting(rawRelatedEntity);
+			relatedEntityId = relatedEntity?.id;
+		}
+
+		if (!relatedEntityId) {
+			const { id } = await relatedEntityManager.insert(rawRelatedEntity);
+			relatedEntityId = id;
+		}
+
+		if (!relatedEntityId) {
+			throw Error("Unable to get related entity");
+		}
+
+		return relatedEntityId;
 	}
 }

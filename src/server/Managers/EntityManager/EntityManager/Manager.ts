@@ -1,7 +1,7 @@
 import type { EntityType, IPaginated } from "../../../types";
 import { ImageManager } from "../../ImageManager";
 import { MetadataManager } from "../../MetadataManager";
-import type { RelationshipType } from "../../RelatedEntityManager";
+import type { RelationshipType } from "../../RelatedEntityIdManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
 import {

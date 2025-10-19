@@ -1,11 +1,16 @@
+import type { EntityType } from "@/server/types";
 import type { RawInsertRelatedInputData, RelationshipType } from "../types";
-import { GetInputData } from "./GetInputData";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
+import { type Validate, ValidateInstance } from "./Validate";
 
-export class InsertInputData extends GetInputData {
+export class InsertInputData {
+	readonly entityType: EntityType;
+	readonly entityId: number;
+	readonly relatedEntityType: EntityType;
 	readonly relatedEntityId: number;
 	readonly relationshipType: RelationshipType;
 
+	validate: Validate;
 	sanitize: Sanitize;
 
 	constructor({
@@ -15,23 +20,22 @@ export class InsertInputData extends GetInputData {
 		relatedEntityId,
 		relationshipType,
 	}: RawInsertRelatedInputData) {
-		super({
-			entityType,
-			entityId,
-			relatedEntityType,
-			relationshipType,
-		});
-
-		this.relationshipType = relationshipType;
+		this.entityType = entityType;
+		this.entityId = entityId;
+		this.relatedEntityType = relatedEntityType;
 		this.relatedEntityId = relatedEntityId;
+		this.relationshipType = relationshipType;
 
+		this.validate = ValidateInstance;
 		this.sanitize = SanitizeInstance;
 	}
 
 	validateData() {
-		super.validateData();
+		this.validate.entityType(this.entityType);
+		this.validate.id(this.entityId);
+		this.validate.entityType(this.relatedEntityType);
 		this.validate.id(this.relatedEntityId);
-		this.validate.relationshipType(this.relationshipType, true);
+		this.validate.relationshipType(this.relationshipType);
 	}
 
 	getSanitized() {

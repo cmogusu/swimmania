@@ -1,22 +1,27 @@
 import type { IPaginated } from "@/server/types";
 import type { ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
+import type { RelationshipType } from "../RelatedEntityIdManager";
 import { Entity } from "./Entity";
 import type { ILoadableEntity, RawEntity } from "./types";
 
 export class Entities {
 	entities: Entity[];
-	entityInputData: ILoadableEntity & IPaginated;
+	loadRelatedDataAndPaginationOptions: ILoadableEntity & IPaginated;
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
 
+	isRelatedEntities: boolean = false;
+	relationshipType?: RelationshipType;
+
 	constructor(
 		rawEntities: RawEntity[] | undefined,
-		entityInputData: ILoadableEntity & IPaginated,
+		loadRelatedDataAndPaginationOptions: ILoadableEntity & IPaginated,
 		imageManager: ImageManager,
 		metadataManager: MetadataManager,
 	) {
-		this.entityInputData = entityInputData;
+		this.loadRelatedDataAndPaginationOptions =
+			loadRelatedDataAndPaginationOptions;
 		this.imageManager = imageManager;
 		this.metadataManager = metadataManager;
 		this.entities = (rawEntities || []).map((e) => new Entity(e));
@@ -25,7 +30,7 @@ export class Entities {
 	async loadRelatedData() {
 		const promises = this.entities.map((entity: Entity) =>
 			entity.loadRelatedData(
-				this.entityInputData,
+				this.loadRelatedDataAndPaginationOptions,
 				this.imageManager,
 				this.metadataManager,
 			),
@@ -34,8 +39,13 @@ export class Entities {
 		await Promise.all(promises);
 	}
 
+	setRelationshipType(relationshipType: RelationshipType) {
+		this.isRelatedEntities = true;
+		this.relationshipType = relationshipType;
+	}
+
 	toJSON() {
-		const { pageSize, pageNumber } = this.entityInputData;
+		const { pageSize, pageNumber } = this.loadRelatedDataAndPaginationOptions;
 		const hasMore = this.entities.length > pageSize;
 		const entities = this.entities.slice(0, pageSize).map((e) => e.toJSON());
 
@@ -43,6 +53,9 @@ export class Entities {
 			hasMore,
 			entities,
 			nextPage: pageNumber + 1,
+			...(this.isRelatedEntities
+				? { relationshipType: this.relationshipType }
+				: {}),
 		};
 	}
 }
