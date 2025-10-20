@@ -12,6 +12,15 @@ export type EntityType =
 	| "swimEvent"
 	| "swimResult";
 
+export type RelationshipType =
+	| "isAlso"
+	| "worksAt"
+	| "trainsAt"
+	| "canBeFoundAt"
+	| "manages"
+	| "contains"
+	| "participatedIn";
+
 export type PaginationOptions = {
 	pageNumber?: number;
 	pageSize?: number;

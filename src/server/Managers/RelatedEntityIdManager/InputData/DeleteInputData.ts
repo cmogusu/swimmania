@@ -1,5 +1,5 @@
-import type { EntityType } from "@/server/types";
-import type { RawDeleteByIdRelatedInputData, RelationshipType } from "../types";
+import type { EntityType, RelationshipType } from "@/server/types";
+import type { RawDeleteByIdRelatedInputData } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class DeleteInputData {

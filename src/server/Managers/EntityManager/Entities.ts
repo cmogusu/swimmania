@@ -1,7 +1,6 @@
-import type { IPaginated } from "@/server/types";
+import type { IPaginated, RelationshipType } from "@/server/types";
 import type { ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
-import type { RelationshipType } from "../RelatedEntityIdManager";
 import { Entity } from "./Entity";
 import type { ILoadableEntity, RawEntity } from "./types";
 

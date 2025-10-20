@@ -1,7 +1,10 @@
 import { Suspense } from "react";
 import { api } from "@/server/api";
-import type { RelationshipType } from "@/server/Managers/RelatedEntityIdManager/types";
-import type { EntitiesData, EntityType } from "@/server/types";
+import type {
+	EntitiesData,
+	EntityType,
+	RelationshipType,
+} from "@/server/types";
 import { Loading } from "../Loading";
 import { RelatedEntities } from "./RelatedEntities";
 

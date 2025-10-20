@@ -1,4 +1,8 @@
-import type { EntityType, PaginationOptions } from "../../types";
+import type {
+	EntityType,
+	PaginationOptions,
+	RelationshipType,
+} from "../../types";
 
 // Input
 export type BaseRelatedData = {
@@ -45,15 +49,6 @@ export type RelatedEntityDatabaseOutputData =
 	RelatedEntityDatabaseRawOutputData;
 
 export type RelatedEntityValueType = boolean | number | string;
-
-export type RelationshipType =
-	| "isAlso"
-	| "worksAt"
-	| "trainsAt"
-	| "canBeFoundAt"
-	| "manages"
-	| "contains"
-	| "participatedIn";
 
 export type RelationshipDescription = {
 	title: string;

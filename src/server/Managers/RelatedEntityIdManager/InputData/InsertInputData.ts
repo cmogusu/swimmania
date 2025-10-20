@@ -1,5 +1,5 @@
-import type { EntityType } from "@/server/types";
-import type { RawInsertRelatedInputData, RelationshipType } from "../types";
+import type { EntityType, RelationshipType } from "@/server/types";
+import type { RawInsertRelatedInputData } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 

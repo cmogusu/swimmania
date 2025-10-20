@@ -1,5 +1,5 @@
+import type { RelationshipType } from "@/server/types";
 import { BaseSanitize } from "../../services/BaseSanitize";
-import type { RelationshipType } from "../types";
 
 export class Sanitize extends BaseSanitize {
 	relationshipType(type: RelationshipType) {

@@ -1,5 +1,5 @@
+import type { RelationshipType } from "@/server/types";
 import { BaseQuery } from "../../services";
-import type { RelationshipType } from "../types";
 import { extractIds } from "./utils";
 
 export class Query extends BaseQuery {

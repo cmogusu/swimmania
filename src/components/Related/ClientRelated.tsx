@@ -3,8 +3,7 @@
 import { Suspense, use } from "react";
 import { useEntityContext } from "@/front/context";
 import { api } from "@/server/api";
-import type { RelationshipType } from "@/server/Managers/RelatedEntityIdManager/types";
-import type { EntityType } from "@/server/types";
+import type { EntityType, RelationshipType } from "@/server/types";
 import { Loading } from "../Loading";
 import { EntityCard } from "./EntityCard";
 

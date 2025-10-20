@@ -1,6 +1,6 @@
-import type { EntityType } from "@/server/types";
+import type { EntityType, RelationshipType } from "@/server/types";
 import { BaseInputData } from "../../services";
-import type { RawGetRelatedInputData, RelationshipType } from "../types";
+import type { RawGetRelatedInputData } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class GetInputData extends BaseInputData {

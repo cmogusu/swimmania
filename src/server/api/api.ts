@@ -6,9 +6,13 @@ import {
 } from "@/server/Managers";
 import { POSTS_PER_PAGE } from "../constants";
 import type { MetadataValue } from "../Managers/MetadataManager";
-import type { RelationshipType } from "../Managers/RelatedEntityIdManager";
 import { Log } from "../services";
-import type { EntitiesData, EntityData, EntityType } from "../types";
+import type {
+	EntitiesData,
+	EntityData,
+	EntityType,
+	RelationshipType,
+} from "../types";
 
 export class Api {
 	pageSize: number;
