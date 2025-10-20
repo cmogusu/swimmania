@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Related } from "@/components/Related";
+import { RelatedEntities } from "@/components";
 import { DefaultSiteImage } from "@/constants";
 import { EntityContextProvider } from "@/front/context";
 import type { EntityData, EntityType } from "@/server/types";
@@ -46,12 +46,7 @@ export const Entity = async ({ entityType, entity }: Props) => {
 				<p className="text-2xl">{description}</p>
 			</section>
 
-			<Related
-				entityType="pool"
-				entityId={6}
-				relatedEntityType="coach"
-				relationshipType="worksAt"
-			/>
+			<RelatedEntities entityType={entityType} entityId={entityId} />
 			<Images images={images} />
 			<Metadata entityType={entityType} metadata={metadata} />
 		</EntityContextProvider>

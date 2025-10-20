@@ -41,7 +41,7 @@ export const Entity = async ({ entityType, entityId }: Props) => {
 				<p className="text-2xl">{description}</p>
 			</section>
 
-			{show && Images images={images} />}
+			{show && <Images images={images} />}
 			<Metadata entityType={entityType} metadata={metadata} />
 		</div>
 	);

@@ -19,7 +19,8 @@ export type RelationshipType =
 	| "canBeFoundAt"
 	| "manages"
 	| "contains"
-	| "participatedIn";
+	| "participatedIn"
+	| "parentOf";
 
 export type PaginationOptions = {
 	pageNumber?: number;
@@ -62,9 +63,9 @@ export type EntitiesData = {
 	hasMore: boolean;
 };
 
-export type EntityRequest = {
-	defaultImage: "";
-	images: [];
-	metadata: [];
-	related: ["pool", "school"];
+export type RelationshipTypeDescription = {
+	title: string;
+	description: string;
 };
+
+export type RelatedEntityRelationship = [RelationshipType, EntityType];

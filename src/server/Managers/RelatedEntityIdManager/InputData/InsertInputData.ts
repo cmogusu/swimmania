@@ -35,7 +35,11 @@ export class InsertInputData {
 		this.validate.id(this.entityId);
 		this.validate.entityType(this.relatedEntityType);
 		this.validate.id(this.relatedEntityId);
-		this.validate.relationshipType(this.relationshipType);
+		this.validate.relationshipType(
+			this.entityType,
+			this.relatedEntityType,
+			this.relationshipType,
+		);
 	}
 
 	getSanitized() {

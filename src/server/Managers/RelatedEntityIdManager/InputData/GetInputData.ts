@@ -35,7 +35,11 @@ export class GetInputData extends BaseInputData {
 		this.validate.entityType(this.entityType);
 		this.validate.id(this.entityId);
 		this.validate.entityType(this.relatedEntityType);
-		this.validate.relationshipType(this.relationshipType);
+		this.validate.relationshipType(
+			this.entityType,
+			this.relatedEntityType,
+			this.relationshipType,
+		);
 	}
 
 	getSanitized() {

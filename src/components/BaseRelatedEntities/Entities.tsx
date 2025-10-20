@@ -7,9 +7,9 @@ type Props = {
 	entities: EntityData[];
 };
 
-export const RelatedEntities = ({ entityType, entities }: Props) => {
+export const Entities = ({ entityType, entities }: Props) => {
 	return (
-		<section>
+		<section className="mb-4">
 			<h2>Related {EntityTypePlurals[entityType]}</h2>
 			<div className="grid grid-cols-5 gap-2">
 				{entities.map((entity) => (

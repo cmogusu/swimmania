@@ -7,7 +7,7 @@ export class DeleteInputData {
 	readonly entityId: number;
 	readonly relatedEntityType: EntityType;
 	readonly relatedEntityId: number;
-	readonly relationshipType?: RelationshipType;
+	readonly relationshipType: RelationshipType;
 
 	validate: Validate;
 
@@ -32,7 +32,11 @@ export class DeleteInputData {
 		this.validate.id(this.entityId);
 		this.validate.entityType(this.relatedEntityType);
 		this.validate.id(this.relatedEntityId);
-		this.validate.relationshipType(this.relationshipType);
+		this.validate.relationshipType(
+			this.entityType,
+			this.relatedEntityType,
+			this.relationshipType,
+		);
 	}
 
 	getSanitized() {

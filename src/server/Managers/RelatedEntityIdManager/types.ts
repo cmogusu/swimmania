@@ -28,7 +28,7 @@ export type RawInsertRelatedInputData = BaseRelatedData & {
 
 export type RawDeleteByIdRelatedInputData = BaseRelatedData & {
 	relatedEntityId: number;
-	relationshipType?: RelationshipType;
+	relationshipType: RelationshipType;
 };
 
 export type RawDeleteRelatedInputData = RawGetRelatedInputData & {
@@ -49,8 +49,3 @@ export type RelatedEntityDatabaseOutputData =
 	RelatedEntityDatabaseRawOutputData;
 
 export type RelatedEntityValueType = boolean | number | string;
-
-export type RelationshipDescription = {
-	title: string;
-	description: string;
-};

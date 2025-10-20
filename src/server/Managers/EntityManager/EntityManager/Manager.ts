@@ -1,4 +1,4 @@
-import type { EntityType, IPaginated, RelationshipType } from "../../../types";
+import type { EntityType, IPaginated } from "@/server/types";
 import { ImageManager } from "../../ImageManager";
 import { MetadataManager } from "../../MetadataManager";
 import { Entities } from "../Entities";
@@ -29,8 +29,6 @@ import { Database } from "./Database";
 export class EntityManager {
 	entityType: EntityType;
 	db: Database;
-
-	relationships: Record<string, EntityType[]> = {};
 
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
@@ -179,15 +177,5 @@ export class EntityManager {
 
 	merge(a: Record<string, unknown>, b: Record<string, unknown>) {
 		return { ...a, ...b };
-	}
-
-	validateRelationship(
-		relatedEntityType: EntityType,
-		relationshipType: RelationshipType,
-	) {
-		const relationship = this.relationships[relationshipType];
-		if (!relationship?.includes(relatedEntityType)) {
-			throw Error("Invalid relationship");
-		}
 	}
 }

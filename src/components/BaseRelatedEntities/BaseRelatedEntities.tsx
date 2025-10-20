@@ -6,7 +6,7 @@ import type {
 	RelationshipType,
 } from "@/server/types";
 import { Loading } from "../Loading";
-import { RelatedEntities } from "./RelatedEntities";
+import { Entities } from "./Entities";
 
 type Props = {
 	entityId: number;
@@ -15,7 +15,7 @@ type Props = {
 	relationshipType: RelationshipType;
 };
 
-export const Related = async ({
+export const BaseRelatedEntities = async ({
 	entityId,
 	entityType,
 	relatedEntityType,
@@ -33,7 +33,7 @@ export const Related = async ({
 	return (
 		<Suspense fallback={<Loading />}>
 			{entities?.length ? (
-				<RelatedEntities entities={entities} entityType={relatedEntityType} />
+				<Entities entities={entities} entityType={relatedEntityType} />
 			) : null}
 		</Suspense>
 	);

@@ -29,9 +29,6 @@ export class RelatedEntityManager {
 			name,
 		} = rawRelatedEntity;
 
-		const entityManager = entityManagerFactory.getInstance(entityType);
-		entityManager.validateRelationship(relatedEntityType, relationshipType);
-
 		let relatedEntityId: number | undefined = rawRelatedEntity.entityId;
 		if (!relatedEntityId) {
 			relatedEntityId = await this.getEntityId(rawRelatedEntity);
@@ -40,7 +37,7 @@ export class RelatedEntityManager {
 		this.entityIdCache.set(relatedEntityType, name, relatedEntityId);
 		await this.relatedEntityIdManager.insert({
 			entityId,
-			entityType: entityManager.entityType,
+			entityType,
 			relatedEntityId,
 			relatedEntityType,
 			relationshipType,
@@ -79,10 +76,6 @@ export class RelatedEntityManager {
 		pageSize?: number,
 	): Promise<Entities> {
 		const { type: relatedEntityType, relationshipType } = relatedEntity;
-
-		// const entityManager = entityManagerFactory.getInstance(entityType);
-		// entityManager.validateRelationship(relatedEntityType, relationshipType);
-
 		const entityIds = await this.relatedEntityIdManager.getRelated({
 			entityId,
 			entityType,
