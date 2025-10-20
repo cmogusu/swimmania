@@ -64,7 +64,7 @@ export type EntitiesData = {
 };
 
 export type RelationshipTypeDescription = {
-	title: string;
+	getTitle: (relatedEntityType: EntityType) => string;
 	description: string;
 };
 

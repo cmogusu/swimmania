@@ -33,7 +33,11 @@ export const BaseRelatedEntities = async ({
 	return (
 		<Suspense fallback={<Loading />}>
 			{entities?.length ? (
-				<Entities entities={entities} entityType={relatedEntityType} />
+				<Entities
+					entities={entities}
+					entityType={relatedEntityType}
+					relationshipType={relationshipType}
+				/>
 			) : null}
 		</Suspense>
 	);

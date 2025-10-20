@@ -38,41 +38,50 @@ export const EntityTypesKeys = Object.keys(EntityTypes);
 
 export const EntityTypesValues = Object.values(EntityTypes);
 
-export const RelationshipTypes: Record<
+// TODO - Fix for inverse relationships eg coach works at pool vs pool has these coaches working there
+export const RelationshipDescriptions: Record<
 	RelationshipType,
 	RelationshipTypeDescription
 > = {
 	isAlso: {
-		title: "Is same as",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Is also a ${relatedEntityType}`,
 		description: "The entities are the same person. Eg a coach is a swimmer",
 	},
 	worksAt: {
-		title: "Works in",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Works at these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "Works in said location. Eg a coach works in a school",
 	},
 	trainsAt: {
-		title: "Works in",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Trains at these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "Works in said location. Eg a coach works in a school",
 	},
 	canBeFoundAt: {
-		title: "Can be found at",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Can be found at these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "Eg a lifeguard can be found in a pool",
 	},
 	manages: {
-		title: "Manages",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Manages these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "Eg a coach manages a team",
 	},
 	contains: {
-		title: "Contains",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Includes these ${EntityTypePlurals[relatedEntityType]}`,
 		description:
 			"Eg a swim meet contains many swimming events which can in turn contain swimming results",
 	},
 	participatedIn: {
-		title: "Participated in",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Participated in these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "A swimmer can participate in a swimming meet, or event",
 	},
 	parentOf: {
-		title: "Parent of",
+		getTitle: (relatedEntityType: EntityType) =>
+			`Parent of these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "Entity is parent to a swimmer",
 	},
 };
