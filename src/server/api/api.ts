@@ -2,9 +2,11 @@ import {
 	entityManagerFactory,
 	imageManagerFactory,
 	metadataManagerFactory,
+	relatedEntityManagerFactory,
 } from "@/server/Managers";
 import { POSTS_PER_PAGE } from "../constants";
 import type { MetadataValue } from "../Managers/MetadataManager";
+import type { RelationshipType } from "../Managers/RelatedEntityIdManager";
 import { Log } from "../services";
 import type { EntitiesData, EntityData, EntityType } from "../types";
 
@@ -40,7 +42,7 @@ export class Api {
 	async getEntities(
 		entityType: EntityType,
 		page: number = 1,
-	): Promise<EntitiesData> {
+	): Promise<EntitiesData | undefined> {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
 			const entities = await entityManager.getAll({
@@ -50,6 +52,31 @@ export class Api {
 				pageSize: this.pageSize,
 				pageNumber: page,
 			});
+
+			return entities.toJSON();
+		} catch (error: unknown) {
+			this.log.error("Unable to get entries", error as Error);
+		}
+	}
+
+	async getRelatedEntities(
+		entityType: EntityType,
+		entityId: number,
+		relatedEntityType: EntityType,
+		relationshipType: RelationshipType,
+		pageNumber: number = 1,
+	): Promise<EntitiesData> {
+		try {
+			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
+			const entities = await relatedEntityManager.getRelated(
+				entityType,
+				entityId,
+				{
+					type: relatedEntityType,
+					relationshipType,
+				},
+				pageNumber,
+			);
 
 			return entities.toJSON();
 		} catch (error: unknown) {

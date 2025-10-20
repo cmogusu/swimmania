@@ -16,7 +16,9 @@ export class RelatedEntityIdManager {
 		this.db = new Database();
 	}
 
-	getRelated(rawRelatedEntityData: RawGetRelatedInputData): Promise<number[]> {
+	async getRelated(
+		rawRelatedEntityData: RawGetRelatedInputData,
+	): Promise<number[]> {
 		return this.getAll(rawRelatedEntityData, true);
 	}
 

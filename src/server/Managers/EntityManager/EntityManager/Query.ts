@@ -22,7 +22,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`SELECT * FROM \`entity\` WHERE type = ? LIMIT ? OFFSET ?;`,
+			`SELECT * FROM \`entity\` WHERE type=? LIMIT ? OFFSET ?;`,
 			[entityType, limit, offset],
 		);
 	}
@@ -46,7 +46,7 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`SELECT * FROM \`entity\` WHERE id=? and type =? Limit 1;`,
+			`SELECT * FROM \`entity\` WHERE id=? and type=? Limit 1;`,
 			[entityId, entityType],
 		);
 	}
@@ -59,8 +59,8 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`SELECT * FROM \`entity\` WHERE type =? and id in (?) Limit 1;`,
-			[entityType, entityIds.join(",")],
+			`SELECT * FROM \`entity\` WHERE type=? and id in (${entityIds.join(",")});`,
+			[entityType],
 		);
 	}
 

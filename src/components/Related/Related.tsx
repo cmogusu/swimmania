@@ -1,27 +1,37 @@
-"use client";
-
-import { Suspense, use } from "react";
-import { useEntityContext } from "@/front/context";
+import { Suspense } from "react";
 import { api } from "@/server/api";
-import type { EntityType } from "@/server/types";
+import type { RelationshipType } from "@/server/Managers/RelatedEntityIdManager/types";
+import type { EntitiesData, EntityType } from "@/server/types";
 import { Loading } from "../Loading";
-import { EntityCard } from "./EntityCard";
+import { RelatedEntities } from "./RelatedEntities";
 
 type Props = {
+	entityId: number;
+	entityType: EntityType;
 	relatedEntityType: EntityType;
+	relationshipType: RelationshipType;
 };
 
-export const Related = ({ relatedEntityType }: Props) => {
-	const { entityId, entityType } = useEntityContext();
-	const { entities } = use(
-		api.getRelatedEntities(entityType, entityId, relatedEntityType),
+export const Related = async ({
+	entityId,
+	entityType,
+	relatedEntityType,
+	relationshipType,
+}: Props) => {
+	const entitiesData: EntitiesData = await api.getRelatedEntities(
+		entityType,
+		entityId,
+		relatedEntityType,
+		relationshipType,
 	);
+
+	const { entities } = entitiesData || {};
 
 	return (
 		<Suspense fallback={<Loading />}>
-			{entities?.map((entity) => (
-				<EntityCard key={entity.id} {...entity} />
-			))}
+			{entities?.length ? (
+				<RelatedEntities entities={entities} entityType={relatedEntityType} />
+			) : null}
 		</Suspense>
 	);
 };

@@ -61,7 +61,10 @@ export class EntityManager {
 		const inputData = new GetByIdsInputData(rawInputs);
 		inputData.validateData();
 
-		const rawEntities = await this.db.getByIds(this.entityType, inputData);
+		const rawEntities: RawEntity[] = rawInputs.entityIds.length
+			? await this.db.getByIds(this.entityType, inputData)
+			: [];
+
 		const entities = await this.createEntities(rawEntities, inputData);
 		return entities;
 	}

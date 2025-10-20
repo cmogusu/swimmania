@@ -80,8 +80,8 @@ export class RelatedEntityManager {
 	): Promise<Entities> {
 		const { type: relatedEntityType, relationshipType } = relatedEntity;
 
-		const entityManager = entityManagerFactory.getInstance(entityType);
-		entityManager.validateRelationship(relatedEntityType, relationshipType);
+		// const entityManager = entityManagerFactory.getInstance(entityType);
+		// entityManager.validateRelationship(relatedEntityType, relationshipType);
 
 		const entityIds = await this.relatedEntityIdManager.getRelated({
 			entityId,

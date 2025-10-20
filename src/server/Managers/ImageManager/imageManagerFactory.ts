@@ -1,13 +1,13 @@
 import { ImageManager } from "./ImageManager";
 
 export const imageManagerFactory = {
-	_imageManager: undefined as ImageManager | undefined,
+	manager: undefined as ImageManager | undefined,
 
 	getInstance() {
-		if (!this._imageManager) {
-			this._imageManager = new ImageManager();
+		if (!this.manager) {
+			this.manager = new ImageManager();
 		}
 
-		return this._imageManager;
+		return this.manager;
 	},
 };

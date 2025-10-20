@@ -1,6 +1,6 @@
-import type { RowDataPacket } from "mysql2";
 import { BaseQuery } from "../../services";
 import type { RelationshipType } from "../types";
+import { extractIds } from "./utils";
 
 export class Query extends BaseQuery {
 	getRelated(
@@ -27,16 +27,8 @@ export class Query extends BaseQuery {
 		);
 
 		return this.exec(
-			`SELECT DISTINCT ? AS id FROM \`relations\` WHERE ?=? AND relationship=? AND relationshipType=? LIMIT ? OFFSET ?;`,
-			[
-				relatedColumn,
-				activeColumn,
-				entityId,
-				relationship,
-				relationshipType,
-				limit,
-				offset,
-			],
+			`SELECT DISTINCT ${relatedColumn} AS id FROM \`relations\` WHERE ${activeColumn}=? AND relationship=? AND relationshipType=? LIMIT ? OFFSET ?;`,
+			[entityId, relationship, relationshipType, limit, offset],
 		);
 	}
 
@@ -57,7 +49,7 @@ export class Query extends BaseQuery {
 			offset,
 		});
 
-		const [relatedEntityIds] = await this.getRelated(
+		const [relatedEntityIdObj] = await this.getRelated(
 			entityType,
 			entityId,
 			relatedEntityType,
@@ -66,11 +58,12 @@ export class Query extends BaseQuery {
 			0,
 		);
 
+		const relatedEntityIds = extractIds(relatedEntityIdObj);
 		return this.exec(
 			`SELECT id FROM \`entity\` WHERE type=? AND id NOT IN (?) AND relationshipType=? LIMIT ? OFFSET ?`,
 			[
 				relatedEntityType,
-				(relatedEntityIds as RowDataPacket[]).join(","),
+				relatedEntityIds.join(","),
 				relationshipType,
 				limit,
 				offset,
