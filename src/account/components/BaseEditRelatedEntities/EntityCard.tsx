@@ -18,9 +18,7 @@ export const EntityCard = ({ children, entity }: Props) => {
 			</figure>
 			<div className="card-body">
 				<a href={`/${type}/${id}`}>
-					<h4 className="card-title">
-						{name} - {type}
-					</h4>
+					<h4 className="card-title">{name}</h4>
 				</a>
 				<p className="text-xs">{location}</p>
 				<div className="card-actions justify-end">{children}</div>

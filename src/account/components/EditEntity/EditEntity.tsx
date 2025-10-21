@@ -1,5 +1,5 @@
 import { api, type EntityType } from "@/server";
-import { BaseEditRelatedEntities } from "../BaseEditRelatedEntities";
+import { EditRelatedEntities } from "../EditRelatedEntities";
 import { EditImages } from "./EditImages";
 import { EditMetadata } from "./EditMetadata";
 import { EntityForm } from "./EntityForm";
@@ -40,12 +40,7 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 				/>
 			)}
 
-			<BaseEditRelatedEntities
-				entityId={6}
-				entityType="pool"
-				relatedEntityType="coach"
-				relationshipType="worksAt"
-			/>
+			<EditRelatedEntities entityId={entityId} entityType={entityType} />
 		</div>
 	);
 };
