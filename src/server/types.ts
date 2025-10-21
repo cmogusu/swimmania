@@ -15,12 +15,19 @@ export type EntityType =
 export type RelationshipType =
 	| "isAlso"
 	| "worksAt"
+	| "worksAt_inverse"
 	| "trainsAt"
+	| "trainsAt_inverse"
 	| "canBeFoundAt"
+	| "canBeFoundAt_inverse"
 	| "manages"
+	| "manages_inverse"
 	| "contains"
+	| "contains_inverse"
 	| "participatedIn"
-	| "parentOf";
+	| "participatedIn_inverse"
+	| "parentOf"
+	| "parentOf_inverse";
 
 export type PaginationOptions = {
 	pageNumber?: number;

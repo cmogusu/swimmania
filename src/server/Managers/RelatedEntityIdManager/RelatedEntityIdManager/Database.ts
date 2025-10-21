@@ -1,5 +1,6 @@
-// TODO: Delete this class and use query class directly
+// TODO: Delete this class and use query class directly?
 
+import type { RelationshipType } from "@/server/types";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
 	DeleteAllInputData,
@@ -18,13 +19,17 @@ export class Database extends BaseDatabase {
 		this.query = new Query();
 	}
 
+	removeInverseRelationship(relationshipType: RelationshipType) {
+		return relationshipType.replace("_inverse", "") as RelationshipType;
+	}
+
 	async getRelated(relationData: GetInputData): Promise<number[]> {
 		const metadata = relationData.getSanitized();
 		const [entityIds] = await this.query.getRelated(
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
-			metadata.relationshipType,
+			this.removeInverseRelationship(metadata.relationshipType),
 			metadata.pageSize,
 			metadata.offset,
 		);
@@ -38,7 +43,7 @@ export class Database extends BaseDatabase {
 			metadata.entityType,
 			metadata.entityId,
 			metadata.relatedEntityType,
-			metadata.relationshipType,
+			this.removeInverseRelationship(metadata.relationshipType),
 			metadata.pageSize,
 			metadata.offset,
 		);
@@ -53,7 +58,7 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relatedEntityId,
-			metadata.relationshipType,
+			this.removeInverseRelationship(metadata.relationshipType),
 		);
 
 		return insertData;
@@ -66,7 +71,7 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relatedEntityId,
-			metadata.relationshipType,
+			this.removeInverseRelationship(metadata.relationshipType),
 		);
 
 		return deleteData;
