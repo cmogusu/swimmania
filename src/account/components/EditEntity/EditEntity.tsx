@@ -1,4 +1,5 @@
 import { api, type EntityType } from "@/server";
+import { BaseEditRelatedEntities } from "../BaseEditRelatedEntities";
 import { EditImages } from "./EditImages";
 import { EditMetadata } from "./EditMetadata";
 import { EntityForm } from "./EntityForm";
@@ -31,10 +32,19 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 
 			{show && <EditImages entityId={entityId} images={images} />}
 
-			<EditMetadata
-				entityType={entityType}
-				entityId={entityId}
-				metadata={metadata}
+			{show && (
+				<EditMetadata
+					entityType={entityType}
+					entityId={entityId}
+					metadata={metadata}
+				/>
+			)}
+
+			<BaseEditRelatedEntities
+				entityId={6}
+				entityType="pool"
+				relatedEntityType="coach"
+				relationshipType="worksAt"
 			/>
 		</div>
 	);

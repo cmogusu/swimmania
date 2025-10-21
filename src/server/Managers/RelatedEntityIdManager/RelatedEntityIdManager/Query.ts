@@ -104,13 +104,14 @@ export class Query extends BaseQuery {
 		entityId: number,
 		relatedEntityType: string,
 		relatedEntityId: number,
-		relationshipType?: RelationshipType,
+		relationshipType: RelationshipType,
 	) {
 		this.throwIfNotSet({
 			entityType,
 			entityId,
 			relatedEntityType,
 			relatedEntityId,
+			relationshipType,
 		});
 
 		const { entityId1, entityId2, relationship } = this.getColumns(
@@ -120,13 +121,9 @@ export class Query extends BaseQuery {
 			relatedEntityId,
 		);
 
-		const relationshipTypeClause = relationshipType
-			? ` AND relationshipType = ${relationshipType}`
-			: "";
-
 		return this.exec(
-			`DELETE FROM \`relations\` WHERE entityId1=? AND entityId2=? AND relationship=? ?;`,
-			[entityId1, entityId2, relationship, relationshipTypeClause],
+			`DELETE FROM \`relations\` WHERE entityId1=? AND entityId2=? AND relationship=? AND relationshipType=?;`,
+			[entityId1, entityId2, relationship, relationshipType],
 		);
 	}
 

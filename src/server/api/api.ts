@@ -69,7 +69,7 @@ export class Api {
 		relatedEntityType: EntityType,
 		relationshipType: RelationshipType,
 		pageNumber: number = 1,
-	): Promise<EntitiesData> {
+	): Promise<EntitiesData | undefined> {
 		try {
 			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
 			const entities = await relatedEntityManager.getRelated(
@@ -85,6 +85,56 @@ export class Api {
 			return entities.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
+		}
+	}
+
+	async addRelatedEntities(
+		entityType: EntityType,
+		entityId: number,
+		relatedEntityType: EntityType,
+		relatedEntityId: number,
+		relationshipType: RelationshipType,
+	): Promise<{ id: number } | undefined> {
+		try {
+			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
+			const insertData = await relatedEntityManager.insertRelated(
+				entityType,
+				entityId,
+				{
+					id: relatedEntityId,
+					type: relatedEntityType,
+					relationshipType,
+				},
+			);
+
+			return insertData;
+		} catch (error: unknown) {
+			this.log.error("Unable to add related entities", error as Error);
+		}
+	}
+
+	async removeRelatedEntities(
+		entityType: EntityType,
+		entityId: number,
+		relatedEntityType: EntityType,
+		relatedEntityId: number,
+		relationshipType: RelationshipType,
+	): Promise<{ id: number } | undefined> {
+		try {
+			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
+			const deleteData = await relatedEntityManager.deleteRelated(
+				entityType,
+				entityId,
+				{
+					id: relatedEntityId,
+					type: relatedEntityType,
+					relationshipType,
+				},
+			);
+
+			return deleteData;
+		} catch (error: unknown) {
+			this.log.error("Unable to remove related entities", error as Error);
 		}
 	}
 

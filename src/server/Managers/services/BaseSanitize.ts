@@ -1,4 +1,4 @@
-import DOMPurify from "dompurify";
+// import DOMPurify from "dompurify";
 
 export class BaseSanitize {
 	id(id?: number) {
@@ -26,7 +26,9 @@ export class BaseSanitize {
 	}
 
 	sanitizeString = (v: string) => {
-		return DOMPurify.sanitize(v);
+		// TODO: Fix sanitize function
+		// return DOMPurify.sanitize(v);
+		return v;
 	};
 
 	optionalSanitizeString = (v?: string) => {

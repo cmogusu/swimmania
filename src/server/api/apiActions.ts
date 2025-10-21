@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { seedEntityFactory } from "../seed";
-import type { EntityType } from "../types";
+import type { EntityType, RelationshipType } from "../types";
 import { isUndefined } from "../utils";
 import { api } from "./api";
 
@@ -132,6 +132,46 @@ export async function insertMetadata(formData: FormData) {
 		Number(data.entityId),
 		data.name as string,
 		data.value as string,
+	);
+
+	reloadEditPage(data.entityType, data.entityId);
+}
+
+export async function addRelatedEntity(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityType",
+		"entityId",
+		"relatedEntityType",
+		"relatedEntityId",
+		"relationshipType",
+	]);
+
+	await api.addRelatedEntities(
+		data.entityType as EntityType,
+		Number(data.entityId),
+		data.relatedEntityType as EntityType,
+		Number(data.relatedEntityId),
+		data.relationshipType as RelationshipType,
+	);
+
+	reloadEditPage(data.entityType, data.entityId);
+}
+
+export async function removeRelatedEntity(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityType",
+		"entityId",
+		"relatedEntityType",
+		"relatedEntityId",
+		"relationshipType",
+	]);
+
+	await api.removeRelatedEntities(
+		data.entityType as EntityType,
+		Number(data.entityId),
+		data.relatedEntityType as EntityType,
+		Number(data.relatedEntityId),
+		data.relationshipType as RelationshipType,
 	);
 
 	reloadEditPage(data.entityType, data.entityId);

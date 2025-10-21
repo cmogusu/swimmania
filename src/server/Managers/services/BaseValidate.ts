@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { EntityTypesKeys, MAX_TEXT_LENGTH } from "@/server/constants";
+import type { EntityType } from "@/server/types";
 
 export class BaseValidate {
 	idValidator = z.coerce
@@ -39,7 +40,7 @@ export class BaseValidate {
 	}
 
 	entityType(entityType?: string) {
-		return this.entityTypeValidator.parse(entityType);
+		return this.entityTypeValidator.parse(entityType) as EntityType;
 	}
 
 	age(age: number) {

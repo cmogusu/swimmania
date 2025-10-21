@@ -1,3 +1,5 @@
+// TODO: Move this into bulk import manager. Not needed for normal related entity use
+
 // Basic implementation of in-memory cache. This is a temporary solution and should be replaced with a better solution.
 export class EntityIdCache {
 	store: Record<string, number> = {};

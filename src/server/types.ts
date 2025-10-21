@@ -47,7 +47,7 @@ export type MetadataData = {
 
 export type EntityData = {
 	id: number;
-	type: string;
+	type: EntityType;
 	name: string;
 	description: string | undefined;
 	location: string | undefined;

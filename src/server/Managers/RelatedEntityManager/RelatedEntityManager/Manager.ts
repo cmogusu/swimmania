@@ -4,17 +4,14 @@ import { RelatedEntityIdManager } from "../../RelatedEntityIdManager";
 import type {
 	RawDeleteRelatedEntityInputs,
 	RawGetRelatedEntityInputs,
+	RawInsertNewRelatedEntityInputs,
 	RawInsertRelatedEntityInputs,
 } from "../types";
-import { EntityIdCache } from "./EntityIdCache";
 
 export class RelatedEntityManager {
-	entityIdCache: EntityIdCache;
-
 	relatedEntityIdManager: RelatedEntityIdManager;
 
 	constructor() {
-		this.entityIdCache = new EntityIdCache();
 		this.relatedEntityIdManager = new RelatedEntityIdManager();
 	}
 
@@ -24,17 +21,28 @@ export class RelatedEntityManager {
 		rawRelatedEntity: RawInsertRelatedEntityInputs,
 	) {
 		const {
+			id: relatedEntityId,
 			type: relatedEntityType,
 			relationshipType,
-			name,
 		} = rawRelatedEntity;
 
-		let relatedEntityId: number | undefined = rawRelatedEntity.entityId;
-		if (!relatedEntityId) {
-			relatedEntityId = await this.getEntityId(rawRelatedEntity);
-		}
+		await this.relatedEntityIdManager.insert({
+			entityId,
+			entityType,
+			relatedEntityId,
+			relatedEntityType,
+			relationshipType,
+		});
+	}
 
-		this.entityIdCache.set(relatedEntityType, name, relatedEntityId);
+	async insertNewRelated(
+		entityType: EntityType,
+		entityId: number,
+		rawRelatedEntity: RawInsertNewRelatedEntityInputs,
+	) {
+		const { type: relatedEntityType, relationshipType } = rawRelatedEntity;
+
+		const relatedEntityId = await this.getEntityId(rawRelatedEntity);
 		await this.relatedEntityIdManager.insert({
 			entityId,
 			entityType,
@@ -51,20 +59,20 @@ export class RelatedEntityManager {
 	) {
 		const {
 			type: relatedEntityType,
-			entityId: relatedEntityId,
+			id: relatedEntityId,
 			relationshipType,
 		} = rawRelatedEntity;
 
-		if (relatedEntityType && relatedEntityId) {
-			return this.relatedEntityIdManager.deleteById({
-				entityType,
-				entityId,
-				relatedEntityType,
-				relatedEntityId,
-				relationshipType,
-			});
-		}
+		return this.relatedEntityIdManager.deleteById({
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			relationshipType,
+		});
+	}
 
+	async deleteAllRelated(entityId: number) {
 		return this.relatedEntityIdManager.deleteAll({ entityId });
 	}
 
@@ -93,18 +101,10 @@ export class RelatedEntityManager {
 		return entities;
 	}
 
-	async getEntityId(rawRelatedEntity: RawInsertRelatedEntityInputs) {
-		const { type: relatedEntityType, name: relatedEntityName } =
-			rawRelatedEntity;
+	async getEntityId(rawRelatedEntity: RawInsertNewRelatedEntityInputs) {
+		const { type: relatedEntityType } = rawRelatedEntity;
 
 		let relatedEntityId: number | undefined;
-		if (this.entityIdCache.has(relatedEntityType, relatedEntityName)) {
-			relatedEntityId = this.entityIdCache.get(
-				relatedEntityType,
-				relatedEntityName,
-			);
-		}
-
 		const relatedEntityManager =
 			entityManagerFactory.getInstance(relatedEntityType);
 

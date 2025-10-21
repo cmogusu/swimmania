@@ -66,6 +66,7 @@ export class Database extends BaseDatabase {
 			metadata.entityId,
 			metadata.relatedEntityType,
 			metadata.relatedEntityId,
+			metadata.relationshipType,
 		);
 
 		return deleteData;

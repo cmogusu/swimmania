@@ -1,10 +1,6 @@
 import { Suspense } from "react";
 import { api } from "@/server/api";
-import type {
-	EntitiesData,
-	EntityType,
-	RelationshipType,
-} from "@/server/types";
+import type { EntityType, RelationshipType } from "@/server/types";
 import { Loading } from "../Loading";
 import { Entities } from "./Entities";
 
@@ -21,7 +17,7 @@ export const BaseRelatedEntities = async ({
 	relatedEntityType,
 	relationshipType,
 }: Props) => {
-	const entitiesData: EntitiesData = await api.getRelatedEntities(
+	const entitiesData = await api.getRelatedEntities(
 		entityType,
 		entityId,
 		relatedEntityType,
