@@ -158,6 +158,18 @@ export const EntityRelationships: Record<
 		["contains_inverse", "swimMeet"],
 	],
 	swimResult: [["contains_inverse", "swimEvent"]],
-
 	parent: [["parentOf", "swimmer"]],
+};
+
+export const EntitiesPageMetadata: Record<EntityType, string[]> = {
+	pool: ["poolDimensions.length", "isHeated", "cleanliness"],
+	coach: ["performance", "experience", "ratePerHour.ksh"],
+	swimmer: ["dob"],
+	school: ["averageSchoolFees.ksh"],
+	team: ["membershipFee.ksh"],
+	lifeguard: ["dob"],
+	swimMeet: ["startEndDates.startDate", "course"],
+	swimEvent: ["eventNumber", "swimStroke", "swimDistance"],
+	swimResult: ["rank", "time"],
+	parent: ["parentOf", "swimmer"],
 };

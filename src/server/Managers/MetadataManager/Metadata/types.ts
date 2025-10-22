@@ -28,6 +28,8 @@ export type MetadataTypeInputs = {
 	prefix?: string;
 	suffix?: string;
 	sortIndex?: number;
+	// biome-ignore lint/suspicious/noExplicitAny: Fix this later
+	computeFunction?: (_value: any) => any;
 };
 
 export type MetadataPropertyInitializer = (

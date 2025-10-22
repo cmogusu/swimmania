@@ -1,4 +1,5 @@
 export * from "./BooleanPropertyType";
+export * from "./ComputedPropertyType";
 export * from "./DatePropertyType";
 export * from "./LatitudePropertyType";
 export * from "./LongitudePropertyType";

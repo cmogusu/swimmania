@@ -21,7 +21,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						title: "Start date",
 						...rawMetadata,
 					}),
-				width: (rawMetadata?: RawMetadata) =>
+				endDate: (rawMetadata?: RawMetadata) =>
 					new DatePropertyType({
 						name: "endDate",
 						title: "End date",
