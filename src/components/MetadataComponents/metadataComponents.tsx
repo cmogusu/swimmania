@@ -1,29 +1,21 @@
+import type { ReactNode } from "react";
 import {
-	type EntityType,
 	entityMetadataFactory,
 	type IMetadataPropertyType,
-	type MetadataData,
-} from "@/server";
-import { metadataComponents } from "./metadataComponents";
+} from "@/server/Managers/MetadataManager";
+import type { EntityType, MetadataData } from "@/server/types";
+import { childComponents } from "./childComponents";
+import { ParentType } from "./ParentType";
+import type { MetadataTypeProps } from "./types";
 
-type Props = {
-	entityType: EntityType;
-	metadata: MetadataData[] | undefined;
+type ComponentType = (props: MetadataTypeProps) => ReactNode | null;
+
+export const metadataComponents: Record<string, ComponentType> = {
+	...childComponents,
+	parent: ParentType,
 };
 
-export const Metadata = ({ entityType, metadata }: Props) => {
-	const metadataComponents = getMetadataComponents(entityType, metadata);
-
-	return (
-		<section className="mb-4">
-			<h2>Metadata</h2>
-			<hr className="w-50 mb-4" />
-			<div>{metadataComponents}</div>
-		</section>
-	);
-};
-
-const getMetadataComponents = (
+export const getMetadataComponents = (
 	entityType: EntityType,
 	metadata: MetadataData[] | undefined,
 ) => {

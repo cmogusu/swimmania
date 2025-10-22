@@ -1,10 +1,10 @@
-import type { EntityType } from "@/server/types";
-import type { RawMetadata } from "../../../Managers/MetadataManager";
+import type { EntityType, RawMetadata } from "@/server/types";
 import {
 	DeleteInputData,
 	FilterInputData,
 	GetAllInputData,
 	GetByIdInputData,
+	GetListInputData,
 	InsertInputData,
 	UpdateInputData,
 } from "../InputData";
@@ -13,6 +13,7 @@ import type {
 	RawFilterByMetadataInputs,
 	RawGetAllMetadataInputs,
 	RawGetByIdMetadataInputs,
+	RawGetListMetadataInputs,
 	RawInsertMetadataInputs,
 	RawUpdateMetadataInputs,
 } from "../types";
@@ -30,6 +31,14 @@ export class MetadataManager {
 		metadataInputs.validateData();
 
 		const rawMetadataArr: RawMetadata[] = await this.db.getAll(metadataInputs);
+		return rawMetadataArr;
+	}
+
+	async getList(rawInputs: RawGetListMetadataInputs): Promise<RawMetadata[]> {
+		const metadataInputs = new GetListInputData(rawInputs);
+		metadataInputs.validateData();
+
+		const rawMetadataArr: RawMetadata[] = await this.db.getList(metadataInputs);
 		return rawMetadataArr;
 	}
 

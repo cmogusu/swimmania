@@ -1,11 +1,10 @@
 import type {
 	MetadataFilter,
 	MetadataValue,
-	SchemaType,
-} from "../../../Managers/MetadataManager";
-import type { EntityType } from "../../../types";
-import { isString } from "../../../utils";
-import { BaseQuery } from "../../services";
+} from "@/server/Managers/MetadataManager";
+import { BaseQuery } from "@/server/Managers/services";
+import type { EntityType, SchemaType } from "@/server/types";
+import { isString } from "@/server/utils";
 
 const METADATA_TYPE_TO_COLUMN: Record<SchemaType, string> = {
 	boolean: "value_tiny",
@@ -25,16 +24,23 @@ const COLUMNS = `id, entityId, entityType, name, itemIndex, COALESCE(value_tiny,
 export class Query extends BaseQuery {
 	getAll(entityId: number) {
 		this.throwIfNotSet({ entityId });
+		return this.exec(`SELECT ${COLUMNS} FROM \`metadata\` Where entityId=?;`, [
+			entityId,
+		]);
+	}
+
+	getList(entityType: EntityType, entityId: number, names: string[]) {
+		this.throwIfNotSet({ entityType, entityId, metadataName: names?.[0] });
 		return this.exec(
-			`SELECT ${COLUMNS} FROM \`metadata\` Where entityId = ?;`,
-			[entityId],
+			`SELECT ${COLUMNS} FROM \`metadata\` Where entityId=? AND entityType=? AND name in ('${names.join("','")}');`,
+			[entityId, entityType],
 		);
 	}
 
 	getById(entityId: number, metadataId: number) {
 		this.throwIfNotSet({ entityId, metadataId });
 		return this.exec(
-			`SELECT ${COLUMNS} FROM \`metadata\` Where id = ? and entityId = ?;`,
+			`SELECT ${COLUMNS} FROM \`metadata\` Where id=? and entityId=?;`,
 			[metadataId, entityId],
 		);
 	}
@@ -50,7 +56,7 @@ export class Query extends BaseQuery {
 			)
 			.join("AND ");
 		return this.exec(
-			`SELECT entityId FROM \`metadata\` WHERE entityType = ? AND ?`,
+			`SELECT entityId FROM \`metadata\` WHERE entityType=? AND ?`,
 			[entityType, whereClause],
 		);
 	}
@@ -107,9 +113,9 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return this.exec(
-			`Delete FROM \`metadata\` Where id = ? and entityId = ? `,
-			[metadataId, entityId],
-		);
+		return this.exec(`Delete FROM \`metadata\` Where id=? and entityId=? `, [
+			metadataId,
+			entityId,
+		]);
 	}
 }

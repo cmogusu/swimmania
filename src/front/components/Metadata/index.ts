@@ -1,1 +1,1 @@
-export * from "../../../components/Metadata/Metadata";
+export * from "../../../components/MetadataComponents/Metadata";

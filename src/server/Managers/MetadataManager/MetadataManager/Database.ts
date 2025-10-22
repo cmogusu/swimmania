@@ -1,12 +1,11 @@
-// TODO: Delete this class and use query class directly
-
-import type { RawMetadata } from "../../../Managers/MetadataManager";
+import type { RawMetadata } from "@/server/types";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
 	DeleteInputData,
 	FilterInputData,
 	GetAllInputData,
 	GetByIdInputData,
+	GetListInputData,
 	InsertInputData,
 	UpdateInputData,
 } from "../InputData";
@@ -23,6 +22,16 @@ export class Database extends BaseDatabase {
 	async getAll(metadataData: GetAllInputData): Promise<RawMetadata[]> {
 		const { entityId } = metadataData.getSanitized();
 		const [rawMetadataArr] = await this.query.getAll(entityId);
+		return rawMetadataArr as RawMetadata[];
+	}
+
+	async getList(metadataData: GetListInputData): Promise<RawMetadata[]> {
+		const { entityId, entityType, names } = metadataData.getSanitized();
+		const [rawMetadataArr] = await this.query.getList(
+			entityType,
+			entityId,
+			names,
+		);
 		return rawMetadataArr as RawMetadata[];
 	}
 

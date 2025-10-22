@@ -1,4 +1,4 @@
-import { metadataComponents } from "@/components/Metadata";
+import { metadataComponents } from "@/components/MetadataComponents";
 import {
 	type EntityType,
 	entityMetadataFactory,

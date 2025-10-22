@@ -7,6 +7,12 @@ export type RawGetAllMetadataInputs = PaginationOptions & {
 	entityId: number;
 };
 
+export type RawGetListMetadataInputs = PaginationOptions & {
+	entityType: EntityType;
+	entityId: number;
+	names: string[];
+};
+
 export type RawGetByIdMetadataInputs = {
 	entityType: EntityType;
 	id: number;

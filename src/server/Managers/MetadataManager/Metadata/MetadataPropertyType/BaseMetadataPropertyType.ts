@@ -1,11 +1,9 @@
-import type { MetadataData } from "@/server/types";
+import type { MetadataData, RawMetadata, SchemaType } from "@/server/types";
 import { isSet, isUndefined } from "@/server/utils";
 import type {
 	IMetadataPropertyType,
 	MetadataTypeInputs,
 	MetadataValue,
-	RawMetadata,
-	SchemaType,
 } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";

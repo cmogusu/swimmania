@@ -1,10 +1,9 @@
-import type { MetadataData } from "@/server/types";
+import type { MetadataData, RawMetadata } from "@/server/types";
 import type {
 	IMetadataPropertyType,
 	MetadataPropertyInitializer,
 	MetadataValue,
 	ParentTypeInputs,
-	RawMetadata,
 } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 

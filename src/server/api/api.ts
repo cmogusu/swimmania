@@ -222,15 +222,32 @@ export class Api {
 	) {
 		try {
 			const imageManager = imageManagerFactory.getInstance();
-			const updateData = await imageManager.insert({
+			return await imageManager.insert({
 				entityId,
 				alt,
 				filepath,
 				isDefault,
 			});
-			return updateData;
 		} catch (error: unknown) {
 			const errorMessage = "Unable to create image";
+			this.log.error(errorMessage, error as Error);
+		}
+	}
+
+	async getMetadataList(
+		entityType: EntityType,
+		entityId: number,
+		names: string[],
+	) {
+		try {
+			const metadataManager = metadataManagerFactory.getInstance();
+			return await metadataManager.getList({
+				entityType,
+				entityId,
+				names,
+			});
+		} catch (error: unknown) {
+			const errorMessage = "Unable to update metadata";
 			this.log.error(errorMessage, error as Error);
 		}
 	}
@@ -244,14 +261,13 @@ export class Api {
 	) {
 		try {
 			const metadataManager = metadataManagerFactory.getInstance();
-			const updateData = await metadataManager.update({
+			return await metadataManager.update({
 				entityType,
 				id,
 				entityId,
 				name,
 				value,
 			});
-			return updateData;
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update metadata";
 			this.log.error(errorMessage, error as Error);

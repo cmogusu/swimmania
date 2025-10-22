@@ -1,6 +1,10 @@
-import type { EntityType, PaginationOptions } from "../../types";
+import type {
+	EntityType,
+	PaginationOptions,
+	RawMetadata,
+} from "@/server/types";
 import type { RawImageInputs } from "../ImageManager";
-import type { MetadataFilter, RawMetadata } from "../MetadataManager";
+import type { MetadataFilter } from "../MetadataManager";
 
 // Outputs
 export type RawEntity = {

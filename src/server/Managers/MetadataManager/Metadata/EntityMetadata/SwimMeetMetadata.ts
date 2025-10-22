@@ -1,10 +1,11 @@
+import type { RawMetadata } from "@/server/types";
 import {
 	DatePropertyType,
 	OptionsPropertyType,
 	ParentPropertyType,
 	TimePropertyType,
 } from "../MetadataPropertyType";
-import type { MetadataPropertyInitializer, RawMetadata } from "../types";
+import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getMetadataProperties, getPropertyInstance } from "./utils";
 

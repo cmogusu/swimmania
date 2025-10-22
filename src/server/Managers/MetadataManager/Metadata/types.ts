@@ -1,33 +1,15 @@
-import type { EntityType, MetadataData } from "@/server/types";
+import type {
+	MetadataComparator,
+	MetadataData,
+	RawMetadata,
+	SchemaType,
+} from "@/server/types";
 
 export type MetadataValue = boolean | number | string;
-
-export type MetadataComparator = "=" | "!=" | "<" | "<=" | ">" | ">=";
 
 export type MetadataFilter = RawMetadata & {
 	comparator: MetadataComparator;
 };
-
-export type RawMetadata = {
-	id?: number;
-	name: string;
-	value?: MetadataValue;
-	entityType?: EntityType;
-	entityId?: number;
-	itemIndex?: number;
-};
-
-export type SchemaType =
-	| "parent"
-	| "number"
-	| "ratings"
-	| "boolean"
-	| "options"
-	| "text"
-	| "latitude"
-	| "longitude"
-	| "time"
-	| "date";
 
 export type Option = {
 	key: string;
@@ -80,7 +62,9 @@ export interface IMetadataPropertyType {
 
 export interface IEntityMetadata {
 	metadata: IMetadataPropertyType[];
+	getNames: () => string[];
 	dbValue: MetadataData[];
+
 	validateFilter: (filter: MetadataFilter) => void;
 	validateFilters: (filters?: MetadataFilter[]) => void;
 

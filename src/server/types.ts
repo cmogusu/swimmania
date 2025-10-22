@@ -29,6 +29,29 @@ export type RelationshipType =
 	| "parentOf"
 	| "parentOf_inverse";
 
+export type SchemaType =
+	| "parent"
+	| "number"
+	| "ratings"
+	| "boolean"
+	| "options"
+	| "text"
+	| "latitude"
+	| "longitude"
+	| "time"
+	| "date";
+
+export type RawMetadata = {
+	id?: number;
+	name: string;
+	value?: MetadataValue;
+	entityType?: EntityType;
+	entityId?: number;
+	itemIndex?: number;
+};
+
+export type MetadataComparator = "=" | "!=" | "<" | "<=" | ">" | ">=";
+
 export type PaginationOptions = {
 	pageNumber?: number;
 	pageSize?: number;

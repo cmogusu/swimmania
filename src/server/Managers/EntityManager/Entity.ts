@@ -1,6 +1,5 @@
 import { isUndefined } from "@/server/utils";
-import type { RawMetadata } from "../../Managers/MetadataManager";
-import type { EntityType } from "../../types";
+import type { EntityType, RawMetadata } from "../../types";
 import type { Image, ImageManager } from "../ImageManager";
 import type { MetadataManager } from "../MetadataManager";
 import type { ILoadableEntity, RawEntity } from "./types";

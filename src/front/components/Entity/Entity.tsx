@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { RelatedEntities } from "@/components";
+import { MetadataList } from "@/components/MetadataList";
 import { DefaultSiteImage } from "@/constants";
 import { EntityContextProvider } from "@/front/context";
-import type { EntityData, EntityType } from "@/server/types";
+import type { EntityData, EntityType, RawMetadata } from "@/server/types";
 import { Metadata } from "../Metadata";
 import { Images } from "./Images";
 
@@ -10,6 +11,8 @@ type Props = {
 	entityType: EntityType;
 	entity: EntityData;
 };
+
+const show = false;
 
 export const Entity = async ({ entityType, entity }: Props) => {
 	const {
@@ -46,9 +49,28 @@ export const Entity = async ({ entityType, entity }: Props) => {
 				<p className="text-2xl">{description}</p>
 			</section>
 
-			<RelatedEntities entityType={entityType} entityId={entityId} />
-			<Images images={images} />
-			<Metadata entityType={entityType} metadata={metadata} />
+			{show && <RelatedEntities entityType={entityType} entityId={entityId} />}
+			{show && <Images images={images} />}
+			{show && <Metadata entityType={entityType} metadata={metadata} />}
+			<MetadataList
+				entityId={entityId}
+				entityType={entityType}
+				names={[
+					"poolShape",
+					"poolDimensions",
+					"hostInstitutionType",
+					"crowdiness",
+				]}
+				render={(metadataArr: RawMetadata[]) => (
+					<div>
+						{metadataArr.map((metadata) => (
+							<div key={metadata.name}>
+								{metadata.name} - {metadata.value}
+							</div>
+						))}
+					</div>
+				)}
+			/>
 		</EntityContextProvider>
 	);
 };

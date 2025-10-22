@@ -1,11 +1,10 @@
-import type { MetadataData } from "@/server/types";
+import type { MetadataData, RawMetadata } from "@/server/types";
 import { isSet, isUndefined } from "@/server/utils";
 import type {
 	IEntityMetadata,
 	IMetadataPropertyType,
 	MetadataFilter,
 	MetadataValue,
-	RawMetadata,
 } from "../types";
 
 export class BaseEntityMetadata implements IEntityMetadata {
@@ -13,10 +12,19 @@ export class BaseEntityMetadata implements IEntityMetadata {
 	[key: string]: any;
 	metadata: IMetadataPropertyType[] = [];
 
-	setValues(rawMetadataArr: RawMetadata[]) {
-		rawMetadataArr.forEach((rawMetadata: RawMetadata) => {
-			this.setValue(rawMetadata);
-		});
+	getNames() {
+		const names = [];
+
+		for (const property of this.metadata) {
+			if (property.type === "parent") {
+				const childNames = property.children?.map((p) => p.name) || [];
+				names.push(...childNames);
+			} else {
+				names.push(property.name);
+			}
+		}
+
+		return names;
 	}
 
 	setValue(rawMetadata: RawMetadata) {

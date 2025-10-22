@@ -1,9 +1,5 @@
-import type { EntityType } from "@/server/types";
-import type {
-	IEntityMetadata,
-	IMetadataPropertyType,
-	RawMetadata,
-} from "../types";
+import type { EntityType, RawMetadata } from "@/server/types";
+import type { IEntityMetadata, IMetadataPropertyType } from "../types";
 import { CoachMetadata } from "./CoachMetadata";
 import { LifeguardMetadata } from "./LifeguardMetadata";
 import { ParentMetadata } from "./ParentMetadata";
