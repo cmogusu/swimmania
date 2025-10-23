@@ -1,5 +1,10 @@
 import type { RawMetadata } from "@/server/types";
-import { TextPropertyType } from "../MetadataPropertyType";
+import {
+	LatitudePropertyType,
+	LongitudePropertyType,
+	ParentPropertyType,
+	TextPropertyType,
+} from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getMetadataProperties, getPropertyInstance } from "./utils";
@@ -35,6 +40,27 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			title: "Date of birth",
 			sortIndex: 6,
 			...rawMetadata,
+		}),
+
+	location: () =>
+		new ParentPropertyType({
+			name: "location",
+			title: "Location",
+			childInitializers: {
+				lat: (rawMetadata?: RawMetadata) =>
+					new LatitudePropertyType({
+						name: "location.lat",
+						title: "Latitude",
+						...rawMetadata,
+					}),
+				lng: (rawMetadata?: RawMetadata) =>
+					new LongitudePropertyType({
+						name: "location.lng",
+						title: "Longitude",
+						...rawMetadata,
+					}),
+			},
+			sortIndex: 8,
 		}),
 };
 

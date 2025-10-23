@@ -14,6 +14,7 @@ const SUFFIX = " Hrs";
 
 export class TimePropertyType extends BaseMetadataPropertyType {
 	dbColumnType: string = "time";
+
 	validate: Validate;
 	sanitize: Sanitize;
 

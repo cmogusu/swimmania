@@ -1,18 +1,31 @@
 import { faker } from "@faker-js/faker";
-import { addLeadingZero, isNumber, isString } from "@/server/utils";
+import {
+	addLeadingZero,
+	isNumber,
+	isString,
+	isUndefined,
+} from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
+import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { TimePropertyType } from "./TimePropertyType";
+import { type Validate, ValidateInstance } from "./Validate";
 
 // TODO: implement this
 export class DatePropertyType extends TimePropertyType {
 	dbColumnType = "date";
+	validate: Validate;
+	sanitize: Sanitize;
 
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {
-		super(inputs);
+		const { value, ...rest } = inputs;
+		super(rest);
 
+		this.validate = ValidateInstance;
+		this.sanitize = SanitizeInstance;
 		this.type = "date";
+		if (!isUndefined(value)) this.value = value as string;
 	}
 
 	get value(): number {

@@ -1,6 +1,8 @@
 import type { RawMetadata } from "@/server/types";
 import {
 	DatePropertyType,
+	LatitudePropertyType,
+	LongitudePropertyType,
 	OptionsPropertyType,
 	ParentPropertyType,
 	TimePropertyType,
@@ -55,6 +57,27 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			title: "Start time",
 			sortIndex: 2,
 			...rawMetadata,
+		}),
+
+	location: () =>
+		new ParentPropertyType({
+			name: "location",
+			title: "Location",
+			childInitializers: {
+				lat: (rawMetadata?: RawMetadata) =>
+					new LatitudePropertyType({
+						name: "location.lat",
+						title: "Latitude",
+						...rawMetadata,
+					}),
+				lng: (rawMetadata?: RawMetadata) =>
+					new LongitudePropertyType({
+						name: "location.lng",
+						title: "Longitude",
+						...rawMetadata,
+					}),
+			},
+			sortIndex: 4,
 		}),
 };
 
