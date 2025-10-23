@@ -1,5 +1,5 @@
-import type { ImageData } from "@/server";
-import { insertImage } from "@/server";
+import { insertImage } from "@/server/api";
+import type { ImageData } from "@/server/types";
 import { ImageForm } from "./ImageForm";
 
 type Props = {

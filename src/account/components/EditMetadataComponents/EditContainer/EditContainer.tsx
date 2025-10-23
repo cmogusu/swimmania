@@ -1,7 +1,8 @@
 import Form from "next/form";
 import type { ReactNode } from "react";
-import type { EntityType, IMetadataPropertyType } from "@/server";
-import { insertMetadata, updateMetadata } from "@/server";
+import { insertMetadata, updateMetadata } from "@/server/api";
+import type { IMetadataPropertyType } from "@/server/Managers/MetadataManager";
+import type { EntityType } from "@/server/types";
 import { SubmitButton } from "../../SubmitButton";
 
 type Props = {

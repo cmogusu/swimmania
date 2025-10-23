@@ -66,7 +66,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					new TimePropertyType({
 						name: "workingHours.opening",
 						title: "Opening",
-						value: "8:00",
+						value: "08:00",
 						...rawMetadata,
 					}),
 				closing: (rawMetadata?: RawMetadata) =>
@@ -82,6 +82,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 };
 
 export class CoachMetadata extends BaseEntityMetadata {
+	dbTableName: string = "coach_metadata";
+
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {

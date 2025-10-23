@@ -1,8 +1,5 @@
-import {
-	addEntity as addEntityAction,
-	type EntityData,
-	type EntityType,
-} from "@/server";
+import { addEntity as addEntityAction } from "@/server/api";
+import type { EntityData, EntityType } from "@/server/types";
 import { EditImages, EditMetadata, EntityForm } from "../EditEntity";
 
 type Props = {

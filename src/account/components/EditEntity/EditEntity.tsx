@@ -1,4 +1,5 @@
-import { api, type EntityType } from "@/server";
+import { api } from "@/server/api";
+import type { EntityType } from "@/server/types";
 import { EditRelatedEntities } from "../EditRelatedEntities";
 import { EditImages } from "./EditImages";
 import { EditMetadata } from "./EditMetadata";

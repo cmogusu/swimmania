@@ -1,7 +1,8 @@
 "use client";
+import type { PropsWithChildren } from "react";
 import { useFormStatus } from "react-dom";
 
-type Props = {
+type Props = PropsWithChildren & {
 	buttonText: string;
 };
 

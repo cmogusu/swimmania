@@ -39,6 +39,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 };
 
 export class LifeguardMetadata extends BaseEntityMetadata {
+	dbTableName: string = "lifeguard_metadata";
+
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {

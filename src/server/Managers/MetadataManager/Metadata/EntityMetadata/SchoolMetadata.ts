@@ -33,6 +33,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 };
 
 export class SchoolMetadata extends BaseEntityMetadata {
+	dbTableName: string = "school_metadata";
+
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {

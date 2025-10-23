@@ -4,6 +4,9 @@ import type { Option, OptionsTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class OptionsPropertyType extends BaseMetadataPropertyType {
+	// TODO: replace with enum eg dbColumnType = ENUM('available', 'out_of_stock', 'discontinued')
+	dbColumnType = "varchar(255)";
+
 	declare _value: string;
 	options: Option[] = [];
 

@@ -1,21 +1,19 @@
 import type { MetadataData, RawMetadata, SchemaType } from "@/server/types";
 import { isSet, isUndefined } from "@/server/utils";
 import type {
+	DbTableColumn,
 	IMetadataPropertyType,
 	MetadataTypeInputs,
 	MetadataValue,
 } from "../types";
-import { type Sanitize, SanitizeInstance } from "./Sanitize";
-import { type Validate, ValidateInstance } from "./Validate";
 
 export class BaseMetadataPropertyType implements IMetadataPropertyType {
+	dbColumnType: string = "varchar(255)";
+
 	type: SchemaType = "text";
 	id: number = -1;
 	name: string;
 	_value!: MetadataValue;
-
-	validate: Validate;
-	sanitize: Sanitize;
 
 	title: string = "";
 	editTitle: string = "";
@@ -33,6 +31,15 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 
 	sortIndex: number = 100;
 
+	// Used only in parent metadata type
+	public get names(): string[] {
+		return [];
+	}
+
+	getDbTableColumns(): DbTableColumn[] {
+		return [] as DbTableColumn[];
+	}
+
 	constructor({
 		id,
 		name,
@@ -45,6 +52,7 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		prefix,
 		suffix,
 		sortIndex,
+		dbColumnType,
 	}: MetadataTypeInputs) {
 		if (!isUndefined(id)) this.id = id;
 		if (!isUndefined(title)) this.title = title;
@@ -56,10 +64,19 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		if (!isUndefined(suffix)) this.suffix = suffix;
 		if (!isUndefined(sortIndex)) this.sortIndex = sortIndex;
 		if (!isUndefined(value)) this.value = value;
+		if (!isUndefined(dbColumnType)) this.dbColumnType = dbColumnType;
 		this.name = name;
+	}
 
-		this.validate = ValidateInstance;
-		this.sanitize = SanitizeInstance;
+	getDbTableColumn(): DbTableColumn {
+		if (!this.dbColumnType) {
+			throw Error("Database table column type not set");
+		}
+
+		return {
+			name: this.name,
+			type: this.dbColumnType,
+		};
 	}
 
 	set(target: unknown, source?: unknown) {

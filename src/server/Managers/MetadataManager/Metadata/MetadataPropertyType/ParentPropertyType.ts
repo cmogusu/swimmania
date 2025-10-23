@@ -1,5 +1,6 @@
 import type { MetadataData, RawMetadata } from "@/server/types";
 import type {
+	DbTableColumn,
 	IMetadataPropertyType,
 	MetadataPropertyInitializer,
 	MetadataValue,
@@ -18,6 +19,14 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 
 		this.type = "parent";
 		this.childInitializers = inputs.childInitializers;
+	}
+
+	get names() {
+		return this.children.map((p) => p.name);
+	}
+
+	getDbTableColumns(): DbTableColumn[] {
+		return this.children.map((p) => p.getDbTableColumn());
 	}
 
 	createChildInstance(name: string, rawMetadata?: RawMetadata) {

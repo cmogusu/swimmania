@@ -8,6 +8,8 @@ import {
 	InsertInputData,
 	UpdateInputData,
 } from "../InputData";
+import { entityMetadataFactory } from "../Metadata/EntityMetadata";
+import type { DbTableColumn } from "../Metadata/types";
 import type {
 	RawDeleteMetadataInputs,
 	RawFilterByMetadataInputs,
@@ -18,6 +20,7 @@ import type {
 	RawUpdateMetadataInputs,
 } from "../types";
 import { Database } from "./Database";
+import { arrayToObject, getExtraColumnNames, getMissingColumns } from "./utils";
 
 export class MetadataManager {
 	db: Database;
@@ -111,5 +114,65 @@ export class MetadataManager {
 		const metadataInputs = new FilterInputData(rawInputs);
 		metadataInputs.validateData();
 		return this.db.filterBy(metadataInputs);
+	}
+
+	async getDbTableColumnNames(
+		entityType: EntityType,
+	): Promise<{ dbTableName: string; schemaTableName: string }[]> {
+		const entityMetadata = entityMetadataFactory.getInstance(
+			entityType,
+			undefined,
+			true,
+		);
+
+		const dbTableName = entityMetadata.dbTableName;
+		const dbTableColumns = entityMetadata.getDbTableColumns();
+		const tableExists = await this.db.doesMetadataTableExist(dbTableName);
+		const currentColumnNames = tableExists
+			? await this.db.getTableColumnNames(dbTableName)
+			: [];
+
+		const currentColumnNamesObj = arrayToObject(currentColumnNames);
+		return dbTableColumns.map(({ name }: DbTableColumn) => ({
+			dbTableName: currentColumnNamesObj[name] ? name : "",
+			schemaTableName: name,
+		}));
+	}
+
+	async syncDatabase(entityType: EntityType) {
+		const entityMetadata = entityMetadataFactory.getInstance(
+			entityType,
+			undefined,
+			true,
+		);
+
+		const dbTableName = entityMetadata.dbTableName;
+		const dbTableColumns = entityMetadata.getDbTableColumns();
+		const tableExists = await this.db.doesMetadataTableExist(dbTableName);
+
+		if (!tableExists) {
+			await this.db.createMetadataTable(dbTableName, dbTableColumns);
+			return;
+		}
+
+		const currentColumnNames = await this.db.getTableColumnNames(dbTableName);
+		const currentColumnNamesObj = arrayToObject(currentColumnNames);
+		const missingColumns = getMissingColumns(
+			dbTableColumns,
+			currentColumnNamesObj,
+		);
+
+		if (missingColumns.length) {
+			await this.db.addTableColumns(dbTableName, missingColumns);
+		}
+
+		const extraColumnNames = getExtraColumnNames(
+			dbTableColumns,
+			currentColumnNamesObj,
+		);
+
+		if (extraColumnNames.length) {
+			await this.db.deleteTableColumns(dbTableName, extraColumnNames);
+		}
 	}
 }

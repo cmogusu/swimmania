@@ -4,6 +4,8 @@ import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class TextPropertyType extends BaseMetadataPropertyType {
+	dbColumnType: string = "varchar(255)";
+
 	declare _value: string;
 
 	constructor(inputs: MetadataTypeInputs) {

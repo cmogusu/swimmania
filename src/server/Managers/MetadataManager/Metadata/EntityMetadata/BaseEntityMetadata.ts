@@ -1,6 +1,7 @@
 import type { MetadataData, RawMetadata } from "@/server/types";
 import { isSet, isUndefined } from "@/server/utils";
 import type {
+	DbTableColumn,
 	IEntityMetadata,
 	IMetadataPropertyType,
 	MetadataFilter,
@@ -10,21 +11,22 @@ import type {
 export class BaseEntityMetadata implements IEntityMetadata {
 	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
 	[key: string]: any;
+
+	dbTableName: string = "";
 	metadata: IMetadataPropertyType[] = [];
 
-	getNames() {
-		const names = [];
+	get names() {
+		return this.metadata.flatMap((property) =>
+			property.type === "parent" ? property.names : property.name,
+		);
+	}
 
-		for (const property of this.metadata) {
-			if (property.type === "parent") {
-				const childNames = property.children?.map((p) => p.name) || [];
-				names.push(...childNames);
-			} else {
-				names.push(property.name);
-			}
-		}
-
-		return names;
+	getDbTableColumns(): DbTableColumn[] {
+		return this.metadata.flatMap((property) =>
+			property.type === "parent"
+				? property.getDbTableColumns()
+				: property.getDbTableColumn(),
+		);
 	}
 
 	setValue(rawMetadata: RawMetadata) {

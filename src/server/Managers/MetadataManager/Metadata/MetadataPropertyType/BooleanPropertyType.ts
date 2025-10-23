@@ -2,6 +2,8 @@ import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class BooleanPropertyType extends BaseMetadataPropertyType {
+	dbColumnType = "tinyint";
+
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {

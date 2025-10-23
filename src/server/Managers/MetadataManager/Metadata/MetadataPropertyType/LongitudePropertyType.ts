@@ -7,6 +7,8 @@ const MAX_VALUE = 180;
 const SUFFIX = "°";
 
 export class LongitudePropertyType extends NumberPropertyType {
+	dbColumnType = "double";
+
 	constructor(inputs: MetadataTypeInputs) {
 		super({
 			...inputs,

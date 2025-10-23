@@ -1,6 +1,6 @@
 import Image from "next/image";
-import type { ImageData } from "@/server";
-import { updateImage } from "@/server";
+import { updateImage } from "@/server/api";
+import type { ImageData } from "@/server/types";
 import { AddImage } from "./AddImage";
 import { ImageForm } from "./ImageForm";
 

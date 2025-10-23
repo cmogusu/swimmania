@@ -55,7 +55,7 @@ export class Query extends BaseQuery {
 		this.throwIfNotSet({
 			entityType,
 			entityIds,
-			firstEntityId: entityIds[0],
+			entityIdsLength: entityIds?.length,
 		});
 
 		return this.exec(

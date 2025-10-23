@@ -1,20 +1,36 @@
 import { faker } from "@faker-js/faker";
-import { addLeadingZero, isNumber, isString } from "@/server/utils";
+import {
+	addLeadingZero,
+	isNumber,
+	isString,
+	isUndefined,
+} from "@/server/utils";
 import type { MetadataTypeInputs, MetadataValue } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
+import { type Sanitize, SanitizeInstance } from "./Sanitize";
+import { type Validate, ValidateInstance } from "./Validate";
 
 const SUFFIX = " Hrs";
 
 export class TimePropertyType extends BaseMetadataPropertyType {
+	dbColumnType: string = "time";
+	validate: Validate;
+	sanitize: Sanitize;
+
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {
+		const { value, ...rest } = inputs;
 		super({
-			...inputs,
+			...rest,
 			suffix: SUFFIX,
 		});
 
+		this.validate = ValidateInstance;
+		this.sanitize = SanitizeInstance;
+
 		this.type = "time";
+		if (!isUndefined(value)) this.value = value as string;
 	}
 
 	get value(): number {
@@ -23,8 +39,10 @@ export class TimePropertyType extends BaseMetadataPropertyType {
 
 	// Expected format is 08:30
 	set value(v: string) {
-		this.validateValue(v);
-		this._value = this.sanitizeValue(v);
+		if (v) {
+			this.validateValue(v);
+			this._value = this.sanitizeValue(v);
+		}
 	}
 
 	validateValue(v: MetadataValue): void {

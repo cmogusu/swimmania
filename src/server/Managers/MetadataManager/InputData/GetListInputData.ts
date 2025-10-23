@@ -36,7 +36,7 @@ export class GetListInputData {
 		return {
 			entityId: this.sanitize.id(this.entityId),
 			entityType: this.entityType,
-			names: this.entityMetadata.getNames(),
+			names: this.entityMetadata.names,
 		};
 	}
 

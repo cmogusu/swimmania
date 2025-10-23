@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { DefaultSiteImage } from "@/constants";
-import { api, type EntityType } from "@/server";
-
+import { api } from "@/server/api";
+import type { EntityType } from "@/server/types";
 import { Images } from "./Images";
 import { Metadata } from "./Metadata";
 

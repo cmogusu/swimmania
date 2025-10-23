@@ -1,4 +1,6 @@
+import { EntityTypes } from "@/server/constants";
 import type {
+	DbTableColumn,
 	MetadataFilter,
 	MetadataValue,
 } from "@/server/Managers/MetadataManager";
@@ -117,5 +119,68 @@ export class Query extends BaseQuery {
 			metadataId,
 			entityId,
 		]);
+	}
+
+	doesMetadataTableExist(tableName: string) {
+		this.throwIfNotSet({ tableName });
+		return this.exec(`SHOW TABLES LIKE '${tableName}';`, [tableName]);
+	}
+
+	createMetadataTable(tableName: string, columns: DbTableColumn[]) {
+		this.throwIfNotSet({
+			tableName,
+			columnsLength: columns?.length,
+		});
+
+		const entityTypes = Object.keys(EntityTypes);
+		return this.exec(
+			`
+			CREATE TABLE ${tableName} (
+				\`id\` INT(11) PRIMARY KEY AUTO_INCREMENT,
+				\`entityId\` int(11) NOT NULL,
+				\`entityType\` enum('${entityTypes.join("','")}') DEFAULT NULL,
+				\`itemIndex\` int(11) DEFAULT 0,
+				${columns
+					.map(
+						({ name, type }: DbTableColumn) =>
+							`\`${name}\` ${type} DEFAULT NULL`,
+					)
+					.join(", ")}
+			);`,
+			[],
+		);
+	}
+
+	getDefaultTableColumnNames(): string[] {
+		return ["id", "entityId", "entityType", "itemIndex"];
+	}
+
+	getTableColumns(tableName: string) {
+		this.throwIfNotSet({ tableName });
+		return this.exec(`SHOW COLUMNS FROM \`${tableName}\`;`, []);
+	}
+
+	addTableColumn(tableName: string, column: DbTableColumn) {
+		this.throwIfNotSet({
+			tableName,
+			column,
+		});
+
+		return this.exec(
+			`ALTER TABLE ${tableName} ADD COLUMN \`${column.name}\` ${column.type} DEFAULT NULL;`,
+			[],
+		);
+	}
+
+	deleteTableColumns(tableName: string, columnName: string) {
+		this.throwIfNotSet({
+			tableName,
+			columnName,
+		});
+
+		return this.exec(
+			`ALTER TABLE ${tableName} DROP COLUMN \`${columnName}\`;`,
+			[],
+		);
 	}
 }

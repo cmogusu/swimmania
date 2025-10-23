@@ -1,5 +1,5 @@
-import type { EntityData, EntityType } from "@/server";
-import { api } from "@/server";
+import { api } from "@/server/api";
+import type { EntityData, EntityType } from "@/server/types";
 import { Entity } from "./Entity";
 
 type EntitiesProps = {

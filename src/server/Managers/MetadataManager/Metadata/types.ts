@@ -28,6 +28,7 @@ export type MetadataTypeInputs = {
 	prefix?: string;
 	suffix?: string;
 	sortIndex?: number;
+	dbColumnType?: string;
 	// biome-ignore lint/suspicious/noExplicitAny: Fix this later
 	computeFunction?: (_value: any) => any;
 };
@@ -44,12 +45,18 @@ export type OptionsTypeInputs = MetadataTypeInputs & {
 	options: Option[];
 };
 
+export type DbTableColumn = {
+	name: string;
+	type: string;
+};
+
 export interface IMetadataPropertyType {
 	id: number;
 	type: SchemaType;
 	itemIndex?: number;
 	title: string;
 	name: string;
+	names: string[];
 	value: MetadataValue;
 	dbValue: MetadataData[];
 	formattedValue: string;
@@ -60,12 +67,17 @@ export interface IMetadataPropertyType {
 	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;
 	createAllChildInstances: () => void;
 	setSeedData: () => void;
+	getDbTableColumn: () => DbTableColumn;
+	getDbTableColumns: () => DbTableColumn[];
 }
 
 export interface IEntityMetadata {
 	metadata: IMetadataPropertyType[];
-	getNames: () => string[];
+	names: string[];
+
 	dbValue: MetadataData[];
+	dbTableName: string;
+	getDbTableColumns: () => DbTableColumn[];
 
 	validateFilter: (filter: MetadataFilter) => void;
 	validateFilters: (filters?: MetadataFilter[]) => void;

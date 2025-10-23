@@ -1,5 +1,5 @@
-import type { EntityData, EntityType } from "@/server";
-import { updateEntity } from "@/server";
+import { updateEntity } from "@/server/api";
+import type { EntityData, EntityType } from "@/server/types";
 import { ClientEntityForm } from "./ClientEntityForm";
 import { HiddenInputs } from "./HiddenInputs";
 import { SubmitButton } from "./SubmitButton";

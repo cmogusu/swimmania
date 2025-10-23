@@ -5,6 +5,8 @@ import { TimePropertyType } from "./TimePropertyType";
 
 // TODO: implement this
 export class DatePropertyType extends TimePropertyType {
+	dbColumnType = "date";
+
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {

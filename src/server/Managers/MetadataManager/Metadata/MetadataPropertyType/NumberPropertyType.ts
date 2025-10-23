@@ -4,6 +4,8 @@ import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class NumberPropertyType extends BaseMetadataPropertyType {
+	dbColumnType = "int(11)";
+
 	declare _value: number;
 
 	allowedComparators: string[] = ["=", "<>", "<", "<=", ">", ">="];

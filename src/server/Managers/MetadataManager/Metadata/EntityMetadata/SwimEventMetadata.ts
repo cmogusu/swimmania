@@ -151,6 +151,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 };
 
 export class SwimEventMetadata extends BaseEntityMetadata {
+	dbTableName: string = "swm_event_metadata";
+
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {

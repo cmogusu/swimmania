@@ -6,6 +6,8 @@ const MIN_VALUE = 1;
 const MAX_VALUE = 5;
 
 export class RatingsPropertyType extends NumberPropertyType {
+	dbColumnType = "tinyint";
+
 	declare _value: number;
 
 	constructor(inputs: MetadataTypeInputs) {
