@@ -1,40 +1,33 @@
-import { EntityTypes } from "@/server/constants";
+import { EntityMetadataDbTables } from "@/server/constants";
 import type {
 	DbTableColumn,
 	MetadataFilter,
-	MetadataValue,
 } from "@/server/Managers/MetadataManager";
 import { BaseQuery } from "@/server/Managers/services";
-import type { EntityType, SchemaType } from "@/server/types";
+import type { EntityType, RawMetadata } from "@/server/types";
 import { isString } from "@/server/utils";
-
-const METADATA_TYPE_TO_COLUMN: Record<SchemaType, string> = {
-	boolean: "value_tiny",
-	ratings: "value_tiny",
-	date: "value_time",
-	time: "value_time",
-	latitude: "value_lat",
-	longitude: "value_lng",
-	number: "value_num",
-	text: "value_text",
-	options: "value_text",
-	parent: "",
-};
+import { extractMetadataNamesAndValues } from "./utils";
 
 const COLUMNS = `id, entityId, entityType, name, itemIndex, COALESCE(value_tiny, value_time, value_num, value_text, value_lat, value_lng) as value`;
 
 export class Query extends BaseQuery {
-	getAll(entityId: number) {
-		this.throwIfNotSet({ entityId });
-		return this.exec(`SELECT ${COLUMNS} FROM \`metadata\` Where entityId=?;`, [
+	getAll(entityType: EntityType, entityId: number) {
+		this.throwIfNotSet({ entityType, entityId });
+
+		const tableName = EntityMetadataDbTables[entityType];
+		return this.exec(`SELECT * FROM \`${tableName}\` Where entityId=?;`, [
 			entityId,
 		]);
 	}
 
 	getList(entityType: EntityType, entityId: number, names: string[]) {
-		this.throwIfNotSet({ entityType, entityId, metadataName: names?.[0] });
+		this.throwIfNotSet({ entityType, entityId, namesLength: names?.length });
+
+		const joinedNames = names.join(", ");
+		const tableName = EntityMetadataDbTables[entityType];
+
 		return this.exec(
-			`SELECT ${COLUMNS} FROM \`metadata\` Where entityId=? AND entityType=? AND name in ('${names.join("','")}');`,
+			`SELECT ${joinedNames} FROM \`${tableName}\` Where entityId=?;`,
 			[entityId, entityType],
 		);
 	}
@@ -65,81 +58,80 @@ export class Query extends BaseQuery {
 
 	update(
 		metadataId: number,
-		entityId: number,
 		entityType: EntityType,
-		name: string,
-		value: MetadataValue,
-		type: SchemaType,
+		rawMetadataArr: RawMetadata[],
 	) {
 		this.throwIfNotSet({
 			metadataId,
-			entityId,
 			entityType,
-			name,
-			type,
-			value,
+			rawMetadataArrLength: rawMetadataArr?.length,
 		});
 
-		const columnName = METADATA_TYPE_TO_COLUMN[type];
-		return this.exec(
-			`UPDATE \`metadata\` SET entityId=?, entityType=?, name=?, type=?, ${columnName}=? WHERE id=?;`,
-			[entityId, entityType, name, type, value, metadataId],
-		);
+		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
+		const joinedNames = names.map((n) => `${n}=?`).join(" ");
+		const tableName = EntityMetadataDbTables[entityType];
+
+		return this.exec(`UPDATE \`${tableName}\` SET ${joinedNames} WHERE id=?;`, [
+			...values,
+			metadataId,
+		]);
 	}
 
 	insert(
 		entityId: number,
 		entityType: EntityType,
-		name: string,
-		value: MetadataValue,
-		type: SchemaType,
+		rawMetadataArr: RawMetadata[],
 	) {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
-			name,
-			type,
-			value,
+			rawMetadataArrLength: rawMetadataArr?.length,
 		});
 
-		const columnName = METADATA_TYPE_TO_COLUMN[type];
+		const tableName = EntityMetadataDbTables[entityType];
+		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
+		const joinedNames = names.join(", ");
+		const placeholders = Array(names.length).fill("?").join(",");
+
 		return this.exec(
-			`INSERT INTO \`metadata\` (entityId, entityType, name, type, ${columnName}) VALUES (?, ?, ?, ?, ?);`,
-			[entityId, entityType, name, type, value],
+			`INSERT INTO \`${tableName}\` (entityId, ${joinedNames}) VALUES (?, ${placeholders});`,
+			[entityId, ...values],
 		);
 	}
 
-	deleteById(metadataId: number, entityId: number) {
+	deleteById(entityType: EntityType, entityId: number, metadataId: number) {
 		this.throwIfNotSet({
+			entityType,
 			metadataId,
 			entityId,
 		});
 
-		return this.exec(`Delete FROM \`metadata\` Where id=? and entityId=? `, [
-			metadataId,
-			entityId,
-		]);
+		const tableName = EntityMetadataDbTables[entityType];
+		return this.exec(
+			`Delete FROM \`${tableName}\` Where id=? and entityId=? `,
+			[metadataId, entityId],
+		);
 	}
 
-	doesMetadataTableExist(tableName: string) {
-		this.throwIfNotSet({ tableName });
+	doesMetadataTableExist(entityType: EntityType) {
+		this.throwIfNotSet({ entityType });
+		const tableName = EntityMetadataDbTables[entityType];
 		return this.exec(`SHOW TABLES LIKE '${tableName}';`, [tableName]);
 	}
 
-	createMetadataTable(tableName: string, columns: DbTableColumn[]) {
+	createMetadataTable(entityType: EntityType, columns: DbTableColumn[]) {
 		this.throwIfNotSet({
-			tableName,
+			entityType,
 			columnsLength: columns?.length,
 		});
 
-		const entityTypes = Object.keys(EntityTypes);
+		// TODO: Remove entityType column and sync tables
+		const tableName = EntityMetadataDbTables[entityType];
 		return this.exec(
 			`
 			CREATE TABLE ${tableName} (
 				\`id\` INT(11) PRIMARY KEY AUTO_INCREMENT,
 				\`entityId\` int(11) NOT NULL,
-				\`entityType\` enum('${entityTypes.join("','")}') DEFAULT NULL,
-				\`itemIndex\` int(11) DEFAULT 0,
 				${columns
 					.map(
 						({ name, type }: DbTableColumn) =>
@@ -151,33 +143,32 @@ export class Query extends BaseQuery {
 		);
 	}
 
-	getDefaultTableColumnNames(): string[] {
-		return ["id", "entityId", "entityType", "itemIndex"];
-	}
-
-	getTableColumns(tableName: string) {
-		this.throwIfNotSet({ tableName });
+	getTableColumns(entityType: EntityType) {
+		this.throwIfNotSet({ entityType });
+		const tableName = EntityMetadataDbTables[entityType];
 		return this.exec(`SHOW COLUMNS FROM \`${tableName}\`;`, []);
 	}
 
-	addTableColumn(tableName: string, column: DbTableColumn) {
+	addTableColumn(entityType: EntityType, column: DbTableColumn) {
 		this.throwIfNotSet({
-			tableName,
+			entityType,
 			column,
 		});
 
+		const tableName = EntityMetadataDbTables[entityType];
 		return this.exec(
 			`ALTER TABLE ${tableName} ADD COLUMN \`${column.name}\` ${column.type} DEFAULT NULL;`,
 			[],
 		);
 	}
 
-	deleteTableColumns(tableName: string, columnName: string) {
+	deleteTableColumns(entityType: EntityType, columnName: string) {
 		this.throwIfNotSet({
-			tableName,
+			entityType,
 			columnName,
 		});
 
+		const tableName = EntityMetadataDbTables[entityType];
 		return this.exec(
 			`ALTER TABLE ${tableName} DROP COLUMN \`${columnName}\`;`,
 			[],

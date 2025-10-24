@@ -10,6 +10,7 @@ export const POSTS_PER_PAGE = 5;
 
 // Entity types
 export const EntityTypes = {
+	parent: "parent",
 	swimmer: "swimmer",
 	school: "school",
 	pool: "pool",
@@ -173,3 +174,18 @@ export const EntitiesPageMetadata: Record<EntityType, string[]> = {
 	swimResult: ["rank", "time"],
 	parent: ["parentOf", "swimmer"],
 };
+
+export const EntityMetadataDbTables: Record<EntityType, string> = {
+	parent: "parent_metadata",
+	swimmer: "swmmer_metadata",
+	school: "school_metadata",
+	pool: "pool_metadata",
+	team: "team_metadata",
+	coach: "coach_metadata",
+	swimMeet: "swm_meet_metadata",
+	lifeguard: "lifeguard_metadata",
+	swimResult: "swm_result_metadata",
+	swimEvent: "swm_event_metadata",
+};
+
+export const MetadataDbDefaultColumnNames = ["id", "entityId"];

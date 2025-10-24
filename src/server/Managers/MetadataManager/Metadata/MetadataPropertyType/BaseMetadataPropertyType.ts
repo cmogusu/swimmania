@@ -6,9 +6,11 @@ import type {
 	MetadataTypeInputs,
 	MetadataValue,
 } from "../types";
+import { type Validate, ValidateInstance } from "./Validate";
 
 export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	dbColumnType: string = "varchar(255)";
+	validate: Validate;
 
 	type: SchemaType = "text";
 	id: number = -1;
@@ -17,9 +19,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 
 	title: string = "";
 	editTitle: string = "";
-
-	min: number = Number.MIN_SAFE_INTEGER;
-	max: number = Number.MAX_SAFE_INTEGER;
 
 	prefix: string = "";
 	suffix: string = "";
@@ -46,19 +45,17 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		title,
 		value,
 		editTitle,
-		min,
-		max,
 		itemIndex,
 		prefix,
 		suffix,
 		sortIndex,
 		dbColumnType,
 	}: MetadataTypeInputs) {
+		this.validate = ValidateInstance;
+
 		if (!isUndefined(id)) this.id = id;
 		if (!isUndefined(title)) this.title = title;
 		if (!isUndefined(editTitle)) this.editTitle = editTitle;
-		if (!isUndefined(min)) this.min = min;
-		if (!isUndefined(max)) this.max = max;
 		if (!isUndefined(itemIndex)) this.itemIndex = itemIndex;
 		if (!isUndefined(prefix)) this.prefix = prefix;
 		if (!isUndefined(suffix)) this.suffix = suffix;
@@ -108,10 +105,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	}
 
 	validateValue(_?: MetadataValue) {}
-
-	sanitizeValue(v: MetadataValue) {
-		return v;
-	}
 
 	createChildInstance(_: string, __?: RawMetadata) {}
 	createAllChildInstances() {}

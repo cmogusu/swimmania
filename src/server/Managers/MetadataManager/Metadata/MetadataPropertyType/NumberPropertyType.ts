@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { isNumber } from "@/server/utils";
+import { isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -7,11 +7,17 @@ export class NumberPropertyType extends BaseMetadataPropertyType {
 	dbColumnType = "int(11)";
 
 	declare _value: number;
-
+	min: number = -1e6;
+	max: number = 1e6;
 	allowedComparators: string[] = ["=", "<>", "<", "<=", ">", ">="];
 
 	constructor(inputs: MetadataTypeInputs) {
-		super(inputs);
+		const { min, max, ...rest } = inputs;
+		super(rest);
+
+		if (!isUndefined(min)) this.min = min;
+		if (!isUndefined(max)) this.max = max;
+
 		this.type = "number";
 	}
 
@@ -20,23 +26,14 @@ export class NumberPropertyType extends BaseMetadataPropertyType {
 	}
 
 	set value(v: number | string) {
-		this.validateValue(v);
-		this._value = this.sanitizeValue(v);
+		this._value = this.validateValue(v);
 	}
 
-	validateValue(v?: unknown): void {
-		if (!isNumber(v)) {
-			throw Error("Invalid value. Number value expected");
-		}
-
-		const value = Number(v);
-		if (value > this.max || value < this.min) {
-			throw Error("Value out of permitted range");
-		}
-	}
-
-	sanitizeValue(v: number | string): number {
-		return Number(v);
+	validateValue(v?: unknown): number {
+		const { min, max, validate } = this;
+		return isUndefined(min) || isUndefined(max)
+			? validate.number(v)
+			: validate.minMaxNumber(min, max, v);
 	}
 
 	get formattedValue() {
@@ -44,7 +41,7 @@ export class NumberPropertyType extends BaseMetadataPropertyType {
 	}
 
 	setSeedData() {
-		const max = Math.min(this.max, 100);
-		this.value = faker.number.int({ max });
+		const { min, max } = this;
+		this.value = faker.number.int({ min, max });
 	}
 }

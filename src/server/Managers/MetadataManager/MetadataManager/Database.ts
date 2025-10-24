@@ -1,4 +1,5 @@
-import type { RawMetadata } from "@/server/types";
+import { MetadataDbDefaultColumnNames } from "@/server/constants";
+import type { EntityType, RawMetadata } from "@/server/types";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
 	DeleteInputData,
@@ -16,6 +17,7 @@ import {
 	formatColumnForDb,
 	formatColumnNameForDb,
 	formatColumnNameFromDb,
+	metadataResultToArray,
 } from "./utils";
 
 type DbColumn = {
@@ -31,9 +33,10 @@ export class Database extends BaseDatabase {
 	}
 
 	async getAll(metadataData: GetAllInputData): Promise<RawMetadata[]> {
-		const { entityId } = metadataData.getSanitized();
-		const [rawMetadataArr] = await this.query.getAll(entityId);
-		return rawMetadataArr as RawMetadata[];
+		const { entityId, entityType } = metadataData.getSanitized();
+		const [rawMetadataArr] = await this.query.getAll(entityType, entityId);
+		const results = (rawMetadataArr as Record<string, unknown>[])[0];
+		return metadataResultToArray(results);
 	}
 
 	async getList(metadataData: GetListInputData): Promise<RawMetadata[]> {
@@ -43,7 +46,9 @@ export class Database extends BaseDatabase {
 			entityId,
 			names,
 		);
-		return rawMetadataArr as RawMetadata[];
+
+		const results = (rawMetadataArr as Record<string, unknown>[])[0];
+		return metadataResultToArray(results);
 	}
 
 	async getByMetadataId(metadataData: GetByIdInputData): Promise<RawMetadata> {
@@ -55,70 +60,62 @@ export class Database extends BaseDatabase {
 
 	async filterBy(metadataData: FilterInputData): Promise<number[]> {
 		const { entityType, filters } = metadataData.getSanitized();
-		const [rawMetadataArr] = await this.query.filterBy(entityType, filters);
-		return rawMetadataArr as number[];
+		const [results] = await this.query.filterBy(entityType, filters);
+		return this.extractResultIds(results);
 	}
 
 	async update(metadataData: UpdateInputData) {
-		const { id, entityId, entityType, name, value, type } =
-			metadataData.getSanitized();
-
+		const { id, entityType, rawMetadataArr } = metadataData.getSanitized();
 		const [updateData] = await this.query.update(
 			id,
-			entityId,
 			entityType,
-			name,
-			value,
-			type,
+			rawMetadataArr,
 		);
+
 		return updateData;
 	}
 
 	async insert(metadataData: InsertInputData) {
-		const { entityId, entityType, name, value, type } =
+		const { entityId, entityType, rawMetadataArr } =
 			metadataData.getSanitized();
 
 		const [insertData] = await this.query.insert(
 			entityId,
 			entityType,
-			name,
-			value,
-			type,
+			rawMetadataArr,
 		);
 		return insertData;
 	}
 
 	async deleteById(metadataData: DeleteInputData) {
-		const { id, entityId } = metadataData.getSanitized();
-		const [deleteData] = await this.query.deleteById(id, entityId);
+		const { id, entityId, entityType } = metadataData.getSanitized();
+		const [deleteData] = await this.query.deleteById(entityType, id, entityId);
 
 		return deleteData;
 	}
 
-	async doesMetadataTableExist(tableName: string): Promise<boolean> {
-		const [tableNames] = await this.query.doesMetadataTableExist(tableName);
+	async doesMetadataTableExist(entityType: EntityType): Promise<boolean> {
+		const [tableNames] = await this.query.doesMetadataTableExist(entityType);
 		const tablesCount = (tableNames as unknown[])?.length;
 		return Boolean(tablesCount);
 	}
 
 	async createMetadataTable(
-		tableName: string,
+		entityType: EntityType,
 		columns: DbTableColumn[],
 	): Promise<boolean> {
 		const formatedColumns = columns.map(formatColumnForDb);
 		const [table] = await this.query.createMetadataTable(
-			tableName,
+			entityType,
 			formatedColumns,
 		);
 
 		return Boolean(table);
 	}
 
-	async getTableColumnNames(tableName: string) {
-		const defaultColumnNames = this.query.getDefaultTableColumnNames();
-		const defaultColumnNamesObj = arrayToObject(defaultColumnNames);
-
-		const [dbColumns] = await this.query.getTableColumns(tableName);
+	async getTableColumnNames(entityType: EntityType) {
+		const defaultColumnNamesObj = arrayToObject(MetadataDbDefaultColumnNames);
+		const [dbColumns] = await this.query.getTableColumns(entityType);
 		return (dbColumns as DbColumn[])
 			.map((column) => column.Field)
 			.filter((column) => !defaultColumnNamesObj[column])
@@ -126,12 +123,12 @@ export class Database extends BaseDatabase {
 	}
 
 	async addTableColumns(
-		tableName: string,
+		entityType: EntityType,
 		columns: DbTableColumn[],
 	): Promise<number> {
 		const formatedColumns = columns.map(formatColumnForDb);
 		const promises = formatedColumns.map((column) =>
-			this.query.addTableColumn(tableName, column),
+			this.query.addTableColumn(entityType, column),
 		);
 
 		const results = await Promise.all(promises);
@@ -139,12 +136,12 @@ export class Database extends BaseDatabase {
 	}
 
 	async deleteTableColumns(
-		tableName: string,
+		entityType: EntityType,
 		columnNames: string[],
 	): Promise<number> {
 		const formatedColumnNames = columnNames.map(formatColumnNameForDb);
 		const promises = formatedColumnNames.map((columnName) =>
-			this.query.deleteTableColumns(tableName, columnName),
+			this.query.deleteTableColumns(entityType, columnName),
 		);
 
 		const results = await Promise.all(promises);

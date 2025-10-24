@@ -224,8 +224,6 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 };
 
 export class PoolMetadata extends BaseEntityMetadata {
-	dbTableName: string = "pool_metadata";
-
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {

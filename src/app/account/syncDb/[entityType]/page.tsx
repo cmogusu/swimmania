@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { Page } from "@/account";
-import { EntityTypesKeys } from "@/server/constants";
+import { EntitiesNavBar } from "@/account/components/Header";
 import { metadataManagerFactory } from "@/server/Managers";
 import type { EntityType } from "@/server/types";
 
@@ -30,19 +30,7 @@ export default async function SyncMetadataTables({ params }: Props) {
 	return (
 		<Page breadcrumbs={breadcrumbs}>
 			<div className="mb-4">
-				<nav>
-					<ul className="w-full menu menu-horizontal">
-						{EntityTypesKeys.map((e) => (
-							<li key={e}>
-								{e === entityType ? (
-									<span className="active">{e}</span>
-								) : (
-									<a href={`/account/syncDb/${e}`}>{e}</a>
-								)}
-							</li>
-						))}
-					</ul>
-				</nav>
+				<EntitiesNavBar entityType={entityType} baseUrl="/account/syncDb" />
 
 				<h2 className="mb-2">{entityType}</h2>
 				<table className="w-100">

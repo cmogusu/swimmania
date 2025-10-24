@@ -1,7 +1,5 @@
 // TODO - Implement this
 
-import { faker } from "@faker-js/faker";
-import { isNumber } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -18,22 +16,10 @@ export class ComputedPropertyType extends BaseMetadataPropertyType {
 	}
 
 	set value(v: number | string) {
-		this.validateValue(v);
-		this._value = this.sanitizeValue(v);
+		this._value = this.validateValue(v);
 	}
 
-	validateValue(v?: unknown): void {
-		if (!isNumber(v)) {
-			throw Error("Invalid value. Number value expected");
-		}
-
-		const value = Number(v);
-		if (value > this.max || value < this.min) {
-			throw Error("Value out of permitted range");
-		}
-	}
-
-	sanitizeValue(v: number | string): number {
+	validateValue(v?: unknown) {
 		return Number(v);
 	}
 
@@ -41,8 +27,5 @@ export class ComputedPropertyType extends BaseMetadataPropertyType {
 		return `${this.value}`;
 	}
 
-	setSeedData() {
-		const max = Math.min(this.max, 100);
-		this.value = faker.number.int({ max });
-	}
+	setSeedData() {}
 }

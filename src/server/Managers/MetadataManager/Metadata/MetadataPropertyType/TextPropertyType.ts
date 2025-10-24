@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker";
-import { isNotSet, isString, sanitizeTextForDb } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -19,18 +18,11 @@ export class TextPropertyType extends BaseMetadataPropertyType {
 	}
 
 	set value(v: string) {
-		this.validateValue(v);
-		this._value = v;
+		this._value = this.validateValue(v);
 	}
 
-	validateValue(v?: unknown): void {
-		if (isNotSet(v) || !isString(v)) {
-			throw Error("Invalid value. String expected");
-		}
-	}
-
-	sanitizeValue(v: string): string {
-		return sanitizeTextForDb(v);
+	validateValue(v?: unknown): string {
+		return this.validate.string(v);
 	}
 
 	setSeedData() {

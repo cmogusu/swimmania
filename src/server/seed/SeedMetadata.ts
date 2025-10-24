@@ -13,11 +13,11 @@ export class SeedMetadata {
 
 	async insertItem(entityId: number) {
 		const rawMetadataArr = this.getSeedData();
-		await this.metadataManager.insertBulk(
-			this.entityType,
+		await this.metadataManager.insert({
+			entityType: this.entityType,
 			entityId,
 			rawMetadataArr,
-		);
+		});
 	}
 
 	getSeedData(): RawMetadata[] {

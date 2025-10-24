@@ -32,8 +32,6 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 };
 
 export class ParentMetadata extends BaseEntityMetadata {
-	dbTableName: string = "parent_metadata";
-
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {

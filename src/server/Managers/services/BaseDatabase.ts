@@ -1,6 +1,11 @@
 import type mysql from "mysql2/promise";
+import type { QueryResult } from "mysql2/promise";
 import { getConnectionPool } from "./DbConnectionPool";
 import { Log } from "./Log";
+
+type ResultWithId = {
+	id: number;
+};
 
 export class BaseDatabase {
 	log: Log;
@@ -24,5 +29,13 @@ export class BaseDatabase {
 
 			this.isDisposed = true;
 		}
+	}
+
+	extractResultIds(resultWithId: QueryResult): number[] {
+		if (!resultWithId) {
+			return [];
+		}
+
+		return (resultWithId as ResultWithId[]).map(({ id }) => id);
 	}
 }

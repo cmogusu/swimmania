@@ -9,7 +9,6 @@ import type {
 	InsertInputData,
 } from "../InputData";
 import { Query } from "./Query";
-import { extractIds } from "./utils";
 
 export class Database extends BaseDatabase {
 	query: Query;
@@ -34,7 +33,7 @@ export class Database extends BaseDatabase {
 			metadata.offset,
 		);
 
-		return extractIds(entityIds);
+		return this.extractResultIds(entityIds);
 	}
 
 	async getNonRelated(relationData: GetInputData): Promise<number[]> {
@@ -48,7 +47,7 @@ export class Database extends BaseDatabase {
 			metadata.offset,
 		);
 
-		return extractIds(entityIds);
+		return this.extractResultIds(entityIds);
 	}
 
 	async insert(relationData: InsertInputData) {

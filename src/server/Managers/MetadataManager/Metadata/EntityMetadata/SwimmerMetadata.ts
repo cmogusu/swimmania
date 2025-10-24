@@ -1,6 +1,7 @@
 import type { RawMetadata } from "@/server/types";
 import {
 	ComputedPropertyType,
+	DatePropertyType,
 	TextPropertyType,
 } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
@@ -33,7 +34,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		}),
 
 	dob: (rawMetadata?: RawMetadata) =>
-		new TextPropertyType({
+		new DatePropertyType({
 			name: "dob",
 			title: "Date of birth",
 			sortIndex: 6,
@@ -51,8 +52,6 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 };
 
 export class SwimmerMetadata extends BaseEntityMetadata {
-	dbTableName: string = "swmmer_metadata";
-
 	static propertyInitilizers = propertyInitializers;
 
 	static getPropertyInstance = (rawMetadata?: RawMetadata) => {

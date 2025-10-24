@@ -76,15 +76,10 @@ export interface IEntityMetadata {
 	names: string[];
 
 	dbValue: MetadataData[];
-	dbTableName: string;
 	getDbTableColumns: () => DbTableColumn[];
 
 	validateFilter: (filter: MetadataFilter) => void;
 	validateFilters: (filters?: MetadataFilter[]) => void;
 
-	sanitizeFilter: (filter: MetadataFilter) => MetadataFilter;
-	sanitizeFilters: (filters?: MetadataFilter[]) => MetadataFilter[];
-
-	validateMetadata: (name?: string, value?: MetadataValue) => void;
 	setSeedData: () => void;
 }

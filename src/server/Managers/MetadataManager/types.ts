@@ -1,5 +1,5 @@
-import type { EntityType, PaginationOptions } from "../../types";
-import type { MetadataFilter, MetadataValue } from "./Metadata/";
+import type { EntityType, PaginationOptions, RawMetadata } from "../../types";
+import type { MetadataFilter } from "./Metadata/";
 
 // Inputs
 export type RawGetAllMetadataInputs = PaginationOptions & {
@@ -26,14 +26,13 @@ export type RawUpdateMetadataInputs = RawInsertMetadataInputs & {
 export type RawInsertMetadataInputs = {
 	entityType: EntityType;
 	entityId: number;
-	name: string;
-	value?: MetadataValue;
-	itemIndex?: number;
+	rawMetadataArr: RawMetadata[];
 };
 
 export type RawDeleteMetadataInputs = {
 	id: number;
 	entityId: number;
+	entityType: EntityType;
 };
 
 export type RawFilterByMetadataInputs = PaginationOptions & {

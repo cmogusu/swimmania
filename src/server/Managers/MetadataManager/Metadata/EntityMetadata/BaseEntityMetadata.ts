@@ -5,14 +5,12 @@ import type {
 	IEntityMetadata,
 	IMetadataPropertyType,
 	MetadataFilter,
-	MetadataValue,
 } from "../types";
 
 export class BaseEntityMetadata implements IEntityMetadata {
 	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
 	[key: string]: any;
 
-	dbTableName: string = "";
 	metadata: IMetadataPropertyType[] = [];
 
 	get names() {
@@ -68,25 +66,7 @@ export class BaseEntityMetadata implements IEntityMetadata {
 			.filter(Boolean);
 	}
 
-	validateMetadata(name?: string, value?: MetadataValue) {
-		if (!name) {
-			throw Error("Metadata name required");
-		}
-
-		let property = this[name];
-		if (name.includes(".")) {
-			const [parentName, childName] = name.split(".");
-			property = this[parentName][childName];
-		}
-
-		if (!property) {
-			throw Error("Invalid metadata name");
-		}
-
-		property.validateValue(value);
-	}
-
-	validateFilter(filter: MetadataFilter): void {
+	validateFilter(filter: MetadataFilter): MetadataFilter {
 		const { name, comparator, value } = filter;
 		const property = this[name];
 
@@ -102,31 +82,20 @@ export class BaseEntityMetadata implements IEntityMetadata {
 			throw Error("Invalid comparator");
 		}
 
-		property.validateValue(value);
-	}
-
-	validateFilters(filters?: MetadataFilter[]): void {
-		if (!filters?.length) {
-			throw new Error("Filter array expected");
-		}
-		filters.map(this.validateFilter);
-	}
-
-	sanitizeFilter(filter: MetadataFilter): MetadataFilter {
-		const { name, comparator, value } = filter;
-
+		const validatedValue = property.validateValue(value);
 		return {
 			name,
 			comparator,
-			value: this[name].sanitizeValue(value),
+			value: validatedValue,
 		};
 	}
 
-	sanitizeFilters(filters?: MetadataFilter[]): MetadataFilter[] {
+	validateFilters(filters?: MetadataFilter[]): MetadataFilter[] {
 		if (!filters?.length) {
 			throw new Error("Filter array expected");
 		}
-		return filters.map(this.sanitizeFilter);
+
+		return filters.map(this.validateFilter);
 	}
 
 	toJSON() {

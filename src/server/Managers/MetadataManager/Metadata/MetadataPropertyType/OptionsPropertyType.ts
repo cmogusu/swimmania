@@ -4,7 +4,6 @@ import type { Option, OptionsTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class OptionsPropertyType extends BaseMetadataPropertyType {
-	// TODO: replace with enum eg dbColumnType = ENUM('available', 'out_of_stock', 'discontinued')
 	dbColumnType = "varchar(255)";
 
 	declare _value: string;
@@ -21,8 +20,11 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 			throw Error("Options not set");
 		}
 
+		const joinedOptionKeys = options.map((option) => option.key).join("', '");
+		this.dbColumnType = `ENUM('${joinedOptionKeys}')`;
 		this.options = options;
 		this.type = "options";
+
 		if (!isUndefined(value)) this.value = value as string;
 	}
 
@@ -31,11 +33,10 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 	}
 
 	set value(v: string) {
-		this.validateValue(v);
-		this._value = v;
+		this._value = this.validateValue(v);
 	}
 
-	validateValue(v?: unknown): void {
+	validateValue(v?: unknown): string {
 		if (isNotSet(v) || !isString(v)) {
 			throw Error("Invalid value. String expected");
 		}
@@ -45,10 +46,8 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 		if (!option) {
 			throw Error("Value not in options");
 		}
-	}
 
-	sanitizeValue(v: string): string {
-		return v.toLowerCase();
+		return option.key;
 	}
 
 	get formattedValue(): string {

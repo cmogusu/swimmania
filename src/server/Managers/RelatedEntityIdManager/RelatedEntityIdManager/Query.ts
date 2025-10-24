@@ -1,6 +1,5 @@
 import type { RelationshipType } from "@/server/types";
 import { BaseQuery } from "../../services";
-import { extractIds } from "./utils";
 
 export class Query extends BaseQuery {
 	getRelated(
@@ -58,7 +57,10 @@ export class Query extends BaseQuery {
 			0,
 		);
 
-		const relatedEntityIds = extractIds(relatedEntityIdObj);
+		const relatedEntityIds = (relatedEntityIdObj as { id: number }[]).map(
+			({ id }) => id,
+		);
+
 		return this.exec(
 			`SELECT id FROM \`entity\` WHERE type=? AND id NOT IN (?) AND relationshipType=? LIMIT ? OFFSET ?`,
 			[

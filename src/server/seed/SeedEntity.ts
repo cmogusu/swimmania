@@ -6,6 +6,7 @@ import {
 } from "../Managers/EntityManager";
 import { Log } from "../services";
 import type { EntityType } from "../types";
+import { isUndefined } from "../utils";
 import { SeedImage } from "./SeedImage";
 import { SeedMetadata } from "./SeedMetadata";
 
@@ -40,6 +41,22 @@ export class SeedEntity {
 			this.seedImage.insertItem(entityId),
 			this.seedMetadata.insertItem(entityId),
 		]);
+	}
+
+	insertImage(entityId: number) {
+		if (isUndefined(entityId)) {
+			throw Error("Entity id not set");
+		}
+
+		return this.seedImage.insertItem(entityId);
+	}
+
+	insertMetadata(entityId: number) {
+		if (isUndefined(entityId)) {
+			throw Error("Entity id not set");
+		}
+
+		return this.seedMetadata.insertItem(entityId);
 	}
 
 	getSeedData(): RawInsertEntityInputs {

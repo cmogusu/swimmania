@@ -67,6 +67,11 @@ export class MetadataManager {
 	}
 
 	async insert(rawInputs: RawInsertMetadataInputs) {
+		if (rawInputs.entityId === 5) {
+			console.log(rawInputs);
+			return { id: 6 };
+		}
+
 		const metadataInputs = new InsertInputData(rawInputs);
 		metadataInputs.validateData();
 		const insertData = await this.db.insert(metadataInputs);
@@ -78,22 +83,6 @@ export class MetadataManager {
 
 		// @ts-ignore
 		return { id: insertData.insertId };
-	}
-
-	async insertBulk(
-		entityType: EntityType,
-		entityId: number,
-		rawMetadataArr: RawMetadata[],
-	) {
-		const insertPromises = rawMetadataArr.map((rawMetadata) =>
-			this.insert({
-				entityType,
-				entityId,
-				...rawMetadata,
-			}),
-		);
-
-		await Promise.all(insertPromises);
 	}
 
 	async deleteById(rawInputs: RawDeleteMetadataInputs) {
@@ -125,11 +114,10 @@ export class MetadataManager {
 			true,
 		);
 
-		const dbTableName = entityMetadata.dbTableName;
 		const dbTableColumns = entityMetadata.getDbTableColumns();
-		const tableExists = await this.db.doesMetadataTableExist(dbTableName);
+		const tableExists = await this.db.doesMetadataTableExist(entityType);
 		const currentColumnNames = tableExists
-			? await this.db.getTableColumnNames(dbTableName)
+			? await this.db.getTableColumnNames(entityType)
 			: [];
 
 		const currentColumnNamesObj = arrayToObject(currentColumnNames);
@@ -146,16 +134,14 @@ export class MetadataManager {
 			true,
 		);
 
-		const dbTableName = entityMetadata.dbTableName;
 		const dbTableColumns = entityMetadata.getDbTableColumns();
-		const tableExists = await this.db.doesMetadataTableExist(dbTableName);
-
+		const tableExists = await this.db.doesMetadataTableExist(entityType);
 		if (!tableExists) {
-			await this.db.createMetadataTable(dbTableName, dbTableColumns);
+			await this.db.createMetadataTable(entityType, dbTableColumns);
 			return;
 		}
 
-		const currentColumnNames = await this.db.getTableColumnNames(dbTableName);
+		const currentColumnNames = await this.db.getTableColumnNames(entityType);
 		const currentColumnNamesObj = arrayToObject(currentColumnNames);
 		const missingColumns = getMissingColumns(
 			dbTableColumns,
@@ -163,7 +149,7 @@ export class MetadataManager {
 		);
 
 		if (missingColumns.length) {
-			await this.db.addTableColumns(dbTableName, missingColumns);
+			await this.db.addTableColumns(entityType, missingColumns);
 		}
 
 		const extraColumnNames = getExtraColumnNames(
@@ -172,7 +158,7 @@ export class MetadataManager {
 		);
 
 		if (extraColumnNames.length) {
-			await this.db.deleteTableColumns(dbTableName, extraColumnNames);
+			await this.db.deleteTableColumns(entityType, extraColumnNames);
 		}
 	}
 }

@@ -1,3 +1,4 @@
+import type { RawMetadata } from "@/server/types";
 import type { DbTableColumn } from "../Metadata/types";
 
 export const arrayToObject = (
@@ -10,6 +11,23 @@ export const arrayToObject = (
 		},
 		{} as Record<string, boolean>,
 	);
+};
+
+export const metadataResultToArray = (
+	metadataResults: Record<string, unknown>,
+): RawMetadata[] => {
+	const { id, entityId, ...remainingResults } = metadataResults;
+	const arr = [];
+	for (const name in remainingResults) {
+		arr.push({
+			id,
+			entityId,
+			name,
+			value: remainingResults[name],
+		} as RawMetadata);
+	}
+
+	return arr;
 };
 
 export const formatColumnForDb = (column: DbTableColumn): DbTableColumn => ({
@@ -38,4 +56,21 @@ export const getExtraColumnNames = (
 	});
 
 	return Object.keys(columnNamesClone);
+};
+
+export const extractMetadataNamesAndValues = (
+	rawMetadataArr: RawMetadata[],
+) => {
+	const length = rawMetadataArr.length;
+	const names = Array(length);
+	const values = Array(length);
+
+	let i = 0;
+	while (i < length) {
+		names[i] = rawMetadataArr[i].name;
+		values[i] = rawMetadataArr[i].value;
+		i += 1;
+	}
+
+	return { names, values };
 };

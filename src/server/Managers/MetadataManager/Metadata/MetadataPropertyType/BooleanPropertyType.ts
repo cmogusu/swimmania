@@ -4,7 +4,7 @@ import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 export class BooleanPropertyType extends BaseMetadataPropertyType {
 	dbColumnType = "tinyint";
 
-	declare _value: number;
+	declare _value: boolean;
 
 	constructor(inputs: MetadataTypeInputs) {
 		super(inputs);
@@ -12,19 +12,19 @@ export class BooleanPropertyType extends BaseMetadataPropertyType {
 		this.type = "boolean";
 	}
 
-	get value() {
+	get value(): boolean {
 		return this._value;
 	}
 
-	set value(v: number) {
-		this._value = this.sanitizeValue(v);
+	set value(v: boolean) {
+		this._value = this.validateValue(v);
 	}
 
-	sanitizeValue(v: boolean | number | string): number {
-		return v ? 1 : 0;
+	validateValue(v?: unknown): boolean {
+		return this.validate.boolean(v);
 	}
 
 	setSeedData() {
-		this.value = Math.random() > 0.5 ? 1 : 0;
+		this.value = Math.random() > 0.5;
 	}
 }

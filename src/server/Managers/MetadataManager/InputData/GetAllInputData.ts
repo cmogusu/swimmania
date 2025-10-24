@@ -36,6 +36,7 @@ export class GetAllInputData extends BaseInputData {
 
 	getSanitized() {
 		return {
+			entityType: this.entityType,
 			entityId: this.sanitize.id(this.entityId),
 			offset: this.offset,
 			pageSize: this.pageSize,

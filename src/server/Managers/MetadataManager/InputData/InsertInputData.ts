@@ -1,74 +1,46 @@
-import { isUndefined } from "@/server/utils";
-import type { EntityType } from "../../../types";
-import {
-	entityMetadataFactory,
-	type IMetadataPropertyType,
-	type MetadataValue,
-} from "..";
+import type { EntityType, RawMetadata } from "@/server/types";
+import { entityMetadataFactory, type IEntityMetadata } from "..";
+import { formatColumnNameForDb } from "../MetadataManager/utils";
 import type { RawInsertMetadataInputs } from "../types";
-import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class InsertInputData {
 	entityId: number;
 	entityType: EntityType;
-	name: string;
-	value?: MetadataValue;
-	itemIndex?: number = 0;
-
-	metadataProperty: IMetadataPropertyType;
+	rawMetadataArr: RawMetadata[];
+	entityMetadata: IEntityMetadata;
 
 	readonly validate: Validate;
-	readonly sanitize: Sanitize;
 
 	constructor(rawInputs: RawInsertMetadataInputs) {
-		const { name, value, entityType, entityId, itemIndex } = rawInputs;
+		const { entityType, entityId, rawMetadataArr } = rawInputs;
 		this.entityId = entityId;
 		this.entityType = entityType;
-		this.name = name;
-
-		if (!isUndefined(value)) this.value = value;
-		if (!isUndefined(itemIndex)) this.itemIndex = itemIndex;
-
-		this.metadataProperty = this.getMetadataPropertyInstance(
+		this.rawMetadataArr = rawMetadataArr;
+		this.entityMetadata = entityMetadataFactory.getInstance(
 			entityType,
-			rawInputs,
+			rawMetadataArr,
 		);
 
 		this.validate = ValidateInstance;
-		this.sanitize = SanitizeInstance;
 	}
 
 	validateData() {
-		// Important validation happens during creation of metadataProperty
-		this.validate.entityType(this.entityType);
-		this.validate.id(this.entityId);
-		this.validate.itemIndex(this.itemIndex);
+		// Metadata validation happens during creation of metadataProperty
+		this.entityType = this.validate.entityType(this.entityType);
+		this.entityId = this.validate.id(this.entityId);
 	}
 
 	getSanitized() {
-		const { name, value, type } = this.metadataProperty;
+		const formatedMetadata = this.entityMetadata.dbValue.map((v) => ({
+			...v,
+			name: formatColumnNameForDb(v.name),
+		}));
 
 		return {
-			name,
-			value,
-			type,
-			entityId: this.sanitize.id(this.entityId),
+			entityId: this.entityId,
 			entityType: this.entityType,
+			rawMetadataArr: formatedMetadata,
 		};
-	}
-
-	getMetadataPropertyInstance(
-		entityType: EntityType,
-		rawMetadata: RawInsertMetadataInputs,
-	) {
-		const property = entityMetadataFactory.getPropertyInstance(
-			entityType,
-			rawMetadata,
-		);
-
-		return property.type === "parent"
-			? property.getChild(rawMetadata.name)
-			: property;
 	}
 }

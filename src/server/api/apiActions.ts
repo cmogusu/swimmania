@@ -177,7 +177,7 @@ export async function removeRelatedEntity(formData: FormData) {
 	reloadEditPage(data.entityType, data.entityId);
 }
 
-export async function seedDb(formData: FormData) {
+export async function seedEntityType(formData: FormData) {
 	const { entityType, itemCount } = extractFormData(formData, [
 		"entityType",
 		"itemCount",
@@ -189,6 +189,32 @@ export async function seedDb(formData: FormData) {
 
 	const seeder = seedEntityFactory.getInstance(entityType as EntityType);
 	await seeder.insertItems(Number(itemCount));
+}
+
+export async function seedEntity(formData: FormData) {
+	const { entityType, entityId, entityProperty } = extractFormData(formData, [
+		"entityType",
+		"entityId",
+		"entityProperty",
+	]);
+
+	if (
+		isUndefined(entityType) ||
+		isUndefined(entityId) ||
+		isUndefined(entityProperty)
+	) {
+		throw Error("Entitytype, entityId or entityProperty not set");
+	}
+
+	const seeder = seedEntityFactory.getInstance(entityType as EntityType);
+	switch (entityProperty) {
+		case "images":
+			await seeder.insertImage(Number(entityId));
+			break;
+		case "metadata":
+			await seeder.insertMetadata(Number(entityId));
+			break;
+	}
 }
 
 const extractFormData = (
