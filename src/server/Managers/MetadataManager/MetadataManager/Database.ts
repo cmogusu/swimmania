@@ -145,7 +145,6 @@ export class Database extends BaseDatabase {
 		);
 
 		const results = await Promise.all(promises);
-		console.log(results);
 		return results.map((result) => result[0]).filter(Boolean).length;
 	}
 }

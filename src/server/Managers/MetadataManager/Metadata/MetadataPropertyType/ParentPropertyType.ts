@@ -45,14 +45,12 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 
 		this[childName] = initializer(rawMetadata);
 		this.children.push(this[childName]);
+		this[childName].name = `${this.name}.${childName}`;
 	}
 
 	createAllChildInstances() {
 		for (const childName in this.childInitializers) {
-			if (!this[childName]) {
-				this[childName] = this.childInitializers[childName]();
-				this.children.push(this[childName]);
-			}
+			this.createChildInstance(childName);
 		}
 	}
 

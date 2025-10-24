@@ -31,7 +31,7 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	sortIndex: number = 100;
 
 	// Used only in parent metadata type
-	public get names(): string[] {
+	get names(): string[] {
 		return [];
 	}
 

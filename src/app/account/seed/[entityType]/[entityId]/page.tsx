@@ -22,7 +22,7 @@ const baseBreadcrumbs = [
 	},
 ];
 
-export default async function SyncMetadataTables({ params }: Props) {
+export default async function SeedDb({ params }: Props) {
 	const { entityType, entityId } = await params;
 	if (!entityId) {
 		redirect(`/account/seed/${entityType}`);
@@ -42,7 +42,7 @@ export default async function SyncMetadataTables({ params }: Props) {
 	return (
 		<Page breadcrumbs={breadcrumbs}>
 			<div className="mb-4">
-				<EntitiesNavBar entityType={entityType} baseUrl="/account/syncDb" />
+				<EntitiesNavBar entityType={entityType} baseUrl="/account/seed" />
 
 				<h1 className="mb-2">Seed database for entity id: {entityId}</h1>
 				<form action={seedEntity}>

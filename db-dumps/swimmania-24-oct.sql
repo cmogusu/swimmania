@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 23, 2025 at 08:46 PM
+-- Generation Time: Oct 24, 2025 at 09:24 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -30,8 +30,6 @@ SET time_zone = "+00:00";
 CREATE TABLE `coach_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
   `performance` tinyint(4) DEFAULT NULL,
   `friendliness` tinyint(4) DEFAULT NULL,
   `experience` int(11) DEFAULT NULL,
@@ -42,6 +40,13 @@ CREATE TABLE `coach_metadata` (
   `location_lat` double DEFAULT NULL,
   `location_lng` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `coach_metadata`
+--
+
+INSERT INTO `coach_metadata` (`id`, `entityId`, `performance`, `friendliness`, `experience`, `ratePerHour_ksh`, `ratePerHour_usd`, `workingHours_opening`, `workingHours_closing`, `location_lat`, `location_lng`) VALUES
+(1, 57, 2, 2, 57188, -749840, -457283, '19:29:19', '09:50:29', -1.23201824951693, 36.74166987282876);
 
 -- --------------------------------------------------------
 
@@ -87,7 +92,22 @@ INSERT INTO `entity` (`id`, `name`, `type`, `description`, `location`, `insertTi
 (62, 'Alvena Hill', 'pool', 'if busy lazy so mmm supposing authentic cutlet fooey whose however yum yippee', 'Greene County Saudi Arabia', '2025-09-19 19:24:54'),
 (63, 'S Broad Street', 'pool', 'absent besmirch rapid righteously gee mobility gifted toward hunt yippee early yahoo verbally neatly horse unnaturally terraform willow swiftly with', 'Logan County Guyana', '2025-09-19 19:24:54'),
 (64, 'S Monroe Street', 'pool', 'object boohoo merrily pants mouser moralise yet in unexpectedly terribly guard blah upliftingly over reluctantly athwart amidst litter', 'Tayside Iran', '2025-09-19 19:24:54'),
-(65, 'Inter Clubs Swimming Championships', 'event', 'NCSA Inter-Clubs Swimming Championships April 11-13 2025', 'Kiota School, Dennis Pritt Road, Nairobi', '2025-09-22 17:22:59');
+(65, 'Inter Clubs Swimming Championships', 'event', 'NCSA Inter-Clubs Swimming Championships April 11-13 2025', 'Kiota School, Dennis Pritt Road, Nairobi', '2025-09-22 17:22:59'),
+(66, 'Beech Road', 'swimmer', 'community oof since midwife tut hm posh after planula excluding until', 'Montgomery County Antarctica', '2025-10-24 17:49:55'),
+(67, 'Beaulah Land', 'swimmer', 'tedious fen up scope nor honestly because boo fast irresponsible the curly', 'Washington County Bhutan', '2025-10-24 17:51:21'),
+(68, 'N 7th Street', 'swimmer', 'functional circa friendly yahoo ouch meanwhile er monstrous following nor', 'Tayside Bahrain', '2025-10-24 18:45:47'),
+(69, 'Peter Mews', 'swimmer', 'as via weighty contrail times rapidly sticky lashes the scale coaxingly friendly step-mother boohoo folklore foodstuffs at courageously near oof', 'Logan County American Samoa', '2025-10-24 18:48:15'),
+(70, 'Cassin Burgs', 'swimmer', 'but within readjust scrape coin faint even self-assured recount uselessly rubbery modulo enormously boss ouch', 'Leicestershire Aland Islands', '2025-10-24 18:48:48'),
+(71, 'Alisa Streets', 'swimmer', 'frantically inspect cutover arraign king growing hm via conceal community blushing psst fooey upbeat nectarine reboot stupendous dearly lady', 'Grant County Denmark', '2025-10-24 18:55:41'),
+(72, 'West Street', 'school', 'hmph barring wherever wholly neatly versus now hornet separately rekindle essence between bootleg which sleepily', 'Avon Cameroon', '2025-10-24 18:58:39'),
+(73, 'Turner Locks', 'school', 'in bravely whose hm beautifully utilized aha upon why within mooch fidget horn unbearably', 'Tayside Cuba', '2025-10-24 19:03:28'),
+(74, 'Wintheiser Shores', 'school', 'worth redesign retool but lack numb than enormously stable pfft yowza plus', 'Dorset Bosnia and Herzegovina', '2025-10-24 19:03:46'),
+(75, 'Georgette Freeway', 'school', 'since above hm scrape inject dash pfft yahoo spark sure-footed super signature jaggedly um monstrous usefully realistic any', 'Berkshire Honduras', '2025-10-24 19:04:04'),
+(76, 'Becker Ways', 'school', 'coaxingly resort blah insist meanwhile but innovate worth mmm fiddle writ joshingly boo yahoo helpfully however', 'Greene County Chad', '2025-10-24 19:04:04'),
+(77, 'First Street', 'school', 'scarily ouch miserably profuse verbally fragrant fearless as outside gum confute aboard geez duh oval immediately', 'Perry County Falkland Islands (Malvinas)', '2025-10-24 19:04:04'),
+(78, 'O\'Connell Tunnel', 'school', 'indeed meh oh degenerate grass and engender shampoo loyally gosh excited freely outlying across collaborate jovially however distant', 'Cleveland Gambia', '2025-10-24 19:04:04'),
+(79, 'Kozey Valleys', 'school', 'an yum modulo softly before but beautifully what within underplay forecast shiny regularly story alert hence once', 'Gwent Vanuatu', '2025-10-24 19:04:04'),
+(80, 'Karianne Glen', 'school', 'out against proofread accountability light throughout oh terrible information reporter bah curry weatherize disposer what oxidise on bah yowza', 'Lancashire Togo', '2025-10-24 19:04:47');
 
 -- --------------------------------------------------------
 
@@ -109,10 +129,6 @@ CREATE TABLE `image` (
 
 INSERT INTO `image` (`id`, `entityId`, `alt`, `filepath`, `isDefault`) VALUES
 (1, 6, 'image1 descrpt', '/images/pool-1.jpg', 0),
-(2, 6, 'better image2 description', '/images/pool-4.jpg', 1),
-(3, 6, 'desc', '/images/pool-3.jpg', 0),
-(4, 6, 'image 4 description againsted', '/images/pool-5.jpg', 0),
-(5, 6, 'desc', '/images/pool-2.jpg', 0),
 (8, 41, 'interesting hence requirement', '/images/pool-1.jpg', 1),
 (10, 43, 'scratch gratefully when best-seller excitedly aw', '/images/pool-3.jpg', 1),
 (11, 44, 'pale denitrify schedule cannon um', '/images/pool-6.jpg', 1),
@@ -135,7 +151,25 @@ INSERT INTO `image` (`id`, `entityId`, `alt`, `filepath`, `isDefault`) VALUES
 (28, 58, 'off now scorpion sleepily tune-up newsprint kissingly', '/images/pool-3.jpg', 1),
 (29, 59, 'although designation oh beyond colour brandish incidentally solemnly', '/images/pool-1.jpg', 1),
 (30, 60, 'dreamily heartbeat whoever insist', '/images/pool-3.jpg', 1),
-(31, 64, 'hammock unusual monster ack excepting joshingly swill', '/images/pool-4.jpg', 1);
+(31, 64, 'hammock unusual monster ack excepting joshingly swill', '/images/pool-4.jpg', 1),
+(32, 6, 'swiftly bah cuddly oil wearily or baptise', '/images/pool-7.jpg', 1),
+(33, 6, 'gleefully rationalise muted beneath considering wing amendment aw', '/images/pool-5.jpg', 1),
+(34, 6, 'furthermore pinion terribly anxiously defenseless', '/images/pool-5.jpg', 1),
+(35, 66, 'trench woot symbolise quickly by', '/images/pool-7.jpg', 1),
+(36, 67, 'of solution generally', '/images/pool-3.jpg', 1),
+(37, 68, 'excepting likewise hope', '/images/pool-1.jpg', 1),
+(38, 69, 'nor thankfully elderly huzzah', '/images/pool-3.jpg', 1),
+(39, 70, 'sometimes hastily whoever dilate', '/images/pool-7.jpg', 1),
+(40, 71, 'woefully ew phew bravely edge rue', '/images/pool-2.jpg', 1),
+(41, 72, 'hence unnaturally past obedience', '/images/pool-5.jpg', 1),
+(42, 73, 'hope carefully brr redound', '/images/pool-3.jpg', 1),
+(43, 74, 'between kinase limply than brandish', '/images/pool-5.jpg', 1),
+(44, 75, 'drat while gadzooks', '/images/pool-3.jpg', 1),
+(45, 76, 'though practical greatly', '/images/pool-3.jpg', 1),
+(46, 77, 'dream produce reluctantly sadly smoggy huzzah flight', '/images/pool-6.jpg', 1),
+(47, 78, 'like forearm harp wealthy massage light', '/images/pool-4.jpg', 1),
+(48, 79, 'archaeology mob indeed tightly', '/images/pool-6.jpg', 1),
+(49, 80, 'voluminous fooey times', '/images/pool-2.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -146,8 +180,6 @@ INSERT INTO `image` (`id`, `entityId`, `alt`, `filepath`, `isDefault`) VALUES
 CREATE TABLE `lifeguard_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
   `firstName` varchar(255) DEFAULT NULL,
   `surname` varchar(255) DEFAULT NULL,
   `thirdName` varchar(255) DEFAULT NULL,
@@ -641,10 +673,6 @@ INSERT INTO `metadata` (`id`, `entityId`, `entityType`, `name`, `value`, `itemIn
 CREATE TABLE `pool_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
-  `hostInstitutionType` varchar(255) DEFAULT NULL,
-  `poolShape` varchar(255) DEFAULT NULL,
   `poolDimensions_length` int(11) DEFAULT NULL,
   `poolDimensions_width` int(11) DEFAULT NULL,
   `operatingHours_opening` time DEFAULT NULL,
@@ -661,8 +689,18 @@ CREATE TABLE `pool_metadata` (
   `openToChildren` tinyint(4) DEFAULT NULL,
   `hasLaneRopes` tinyint(4) DEFAULT NULL,
   `isHeated` tinyint(4) DEFAULT NULL,
-  `operatingHours_closing` time DEFAULT NULL
+  `operatingHours_closing` time DEFAULT NULL,
+  `hostInstitutionType` enum('hotel','school','gym') DEFAULT NULL,
+  `poolShape` enum('round','rectangle','square','curvy') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pool_metadata`
+--
+
+INSERT INTO `pool_metadata` (`id`, `entityId`, `poolDimensions_length`, `poolDimensions_width`, `operatingHours_opening`, `crowdiness`, `openToPublic`, `entryFeeIn_ksh`, `entryFeeIn_usd`, `isIndoor`, `cleanliness`, `changingRoomCleanliness`, `hasOnDutyLifeguard`, `location_lat`, `location_lng`, `openToChildren`, `hasLaneRopes`, `isHeated`, `operatingHours_closing`, `hostInstitutionType`, `poolShape`) VALUES
+(1, 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '19:00:59', 'hotel', 'rectangle'),
+(2, 6, -870263, 837437, '01:32:20', 3, 0, -432005, 918964, 1, 1, 5, 1, -1.25489104578669, 36.87588352399299, 0, 1, 1, '01:08:50', 'gym', 'square');
 
 -- --------------------------------------------------------
 
@@ -702,13 +740,26 @@ INSERT INTO `relations` (`id`, `entityId1`, `entityId2`, `relationship`, `relati
 CREATE TABLE `school_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
   `averageSchoolFees_ksh` int(11) DEFAULT NULL,
   `averageSchoolFees_usd` int(11) DEFAULT NULL,
   `location_lat` double DEFAULT NULL,
   `location_lng` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `school_metadata`
+--
+
+INSERT INTO `school_metadata` (`id`, `entityId`, `averageSchoolFees_ksh`, `averageSchoolFees_usd`, `location_lat`, `location_lng`) VALUES
+(1, 72, -401848, -836373, -1.27996997728995, 36.723871457908245),
+(2, 73, 720242, 662308, -1.13589105602977, 36.82529539825214),
+(3, 74, -477244, -505827, -1.15762029338794, 36.87569740801951),
+(4, 76, -664887, -999816, -1.28641510969292, 36.79036022312516),
+(5, 75, -460486, 930078, -1.20646313415519, 36.790611139961186),
+(6, 79, 39554, -610125, -1.22082013096565, 36.80502940844136),
+(7, 77, 406569, -30953, -1.12411454546256, 36.8939381044727),
+(8, 78, -387028, 592201, -1.16601561962901, 36.808162235567586),
+(9, 80, 576881, -645377, -1.20467828965119, 36.88421683511817);
 
 -- --------------------------------------------------------
 
@@ -719,14 +770,20 @@ CREATE TABLE `school_metadata` (
 CREATE TABLE `swmmer_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
   `firstName` varchar(255) DEFAULT NULL,
   `surname` varchar(255) DEFAULT NULL,
   `thirdName` varchar(255) DEFAULT NULL,
-  `dob` varchar(255) DEFAULT NULL,
-  `age` varchar(255) DEFAULT NULL
+  `age` varchar(255) DEFAULT NULL,
+  `dob` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `swmmer_metadata`
+--
+
+INSERT INTO `swmmer_metadata` (`id`, `entityId`, `firstName`, `surname`, `thirdName`, `age`, `dob`) VALUES
+(1, 66, 'meanwhile husky', 'vivacious inscribe', 'instead until', NULL, '2025-07-23'),
+(2, 71, 'lined notwithstanding', 'instead oil', 'incidentally', NULL, '2025-12-02');
 
 -- --------------------------------------------------------
 
@@ -737,8 +794,6 @@ CREATE TABLE `swmmer_metadata` (
 CREATE TABLE `swm_event_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
   `eventNumber` int(11) DEFAULT NULL,
   `swimStroke` varchar(255) DEFAULT NULL,
   `swimDistance` varchar(255) DEFAULT NULL,
@@ -756,8 +811,6 @@ CREATE TABLE `swm_event_metadata` (
 CREATE TABLE `swm_meet_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
   `startDate` date DEFAULT NULL,
   `endDate` date DEFAULT NULL,
   `course` varchar(255) DEFAULT NULL,
@@ -775,8 +828,6 @@ CREATE TABLE `swm_meet_metadata` (
 CREATE TABLE `swm_result_metadata` (
   `id` int(11) NOT NULL,
   `entityId` int(11) NOT NULL,
-  `entityType` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent') DEFAULT NULL,
-  `itemIndex` int(11) DEFAULT 0,
   `rank` int(11) DEFAULT NULL,
   `firstName` varchar(255) DEFAULT NULL,
   `time` time DEFAULT NULL,
@@ -942,19 +993,19 @@ ALTER TABLE `unprocessed_swim_results`
 -- AUTO_INCREMENT for table `coach_metadata`
 --
 ALTER TABLE `coach_metadata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `entity`
 --
 ALTER TABLE `entity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `image`
 --
 ALTER TABLE `image`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `lifeguard_metadata`
@@ -972,7 +1023,7 @@ ALTER TABLE `metadata`
 -- AUTO_INCREMENT for table `pool_metadata`
 --
 ALTER TABLE `pool_metadata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `relations`
@@ -984,13 +1035,13 @@ ALTER TABLE `relations`
 -- AUTO_INCREMENT for table `school_metadata`
 --
 ALTER TABLE `school_metadata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `swmmer_metadata`
 --
 ALTER TABLE `swmmer_metadata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `swm_event_metadata`

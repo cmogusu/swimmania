@@ -49,13 +49,13 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			childInitializers: {
 				lat: (rawMetadata?: RawMetadata) =>
 					new LatitudePropertyType({
-						name: "location.lat",
+						name: "lat",
 						title: "Latitude",
 						...rawMetadata,
 					}),
 				lng: (rawMetadata?: RawMetadata) =>
 					new LongitudePropertyType({
-						name: "location.lng",
+						name: "lng",
 						title: "Longitude",
 						...rawMetadata,
 					}),

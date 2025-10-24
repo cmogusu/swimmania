@@ -41,8 +41,7 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 			throw Error("Invalid value. String expected");
 		}
 
-		const lowerCaseValue = v.toLowerCase();
-		const option = this.options.find((o) => o.key === lowerCaseValue);
+		const option = this.options.find((o) => o.key === v);
 		if (!option) {
 			throw Error("Value not in options");
 		}
@@ -63,6 +62,6 @@ export class OptionsPropertyType extends BaseMetadataPropertyType {
 	setSeedData() {
 		const max = this.options.length - 1;
 		const index = faker.number.int({ max });
-		this.value = this.options[index].value;
+		this.value = this.options[index].key;
 	}
 }

@@ -67,11 +67,6 @@ export class MetadataManager {
 	}
 
 	async insert(rawInputs: RawInsertMetadataInputs) {
-		if (rawInputs.entityId === 5) {
-			console.log(rawInputs);
-			return { id: 6 };
-		}
-
 		const metadataInputs = new InsertInputData(rawInputs);
 		metadataInputs.validateData();
 		const insertData = await this.db.insert(metadataInputs);

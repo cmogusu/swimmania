@@ -41,7 +41,7 @@ export class NumberPropertyType extends BaseMetadataPropertyType {
 	}
 
 	setSeedData() {
-		const { min, max } = this;
-		this.value = faker.number.int({ min, max });
+		const { max } = this;
+		this.value = faker.number.int({ max });
 	}
 }

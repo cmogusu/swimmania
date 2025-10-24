@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
-import { isUndefined } from "@/server/utils";
+import { addLeadingZero, isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
-import { TimePropertyType } from "./TimePropertyType";
+import { TextPropertyType } from "./TextPropertyType";
 
-export class DatePropertyType extends TimePropertyType {
+export class DatePropertyType extends TextPropertyType {
 	dbColumnType = "date";
 
 	declare _value: string;
@@ -20,7 +20,7 @@ export class DatePropertyType extends TimePropertyType {
 		return this._value;
 	}
 
-	// Expected format is 08:30
+	// Expected format is 2025-07-23
 	set value(v: string) {
 		this._value = this.validateValue(v);
 	}
@@ -30,6 +30,10 @@ export class DatePropertyType extends TimePropertyType {
 	}
 
 	setSeedData() {
-		this.value = faker.date.anytime().toUTCString();
+		const fakeDate = faker.date.anytime();
+		const year = fakeDate.getFullYear();
+		const month = fakeDate.getMonth() + 1;
+		const date = fakeDate.getDate();
+		this.value = `${year}-${addLeadingZero(month)}-${addLeadingZero(date)}`;
 	}
 }

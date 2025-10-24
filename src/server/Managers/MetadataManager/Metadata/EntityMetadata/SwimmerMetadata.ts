@@ -1,9 +1,5 @@
 import type { RawMetadata } from "@/server/types";
-import {
-	ComputedPropertyType,
-	DatePropertyType,
-	TextPropertyType,
-} from "../MetadataPropertyType";
+import { DatePropertyType, TextPropertyType } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getMetadataProperties, getPropertyInstance } from "./utils";
@@ -37,15 +33,6 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new DatePropertyType({
 			name: "dob",
 			title: "Date of birth",
-			sortIndex: 6,
-			...rawMetadata,
-		}),
-
-	age: (rawMetadata?: RawMetadata) =>
-		new ComputedPropertyType({
-			name: "compute_dob",
-			title: "Date of birth",
-			computeFunction: (dob: string) => dob,
 			sortIndex: 6,
 			...rawMetadata,
 		}),
