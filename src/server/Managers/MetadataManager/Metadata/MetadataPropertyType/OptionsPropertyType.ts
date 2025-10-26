@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { IOptionsMetadataPropertyType, Option } from "@/server/types";
-import { isNotSet, isString, isUndefined } from "@/server/utils";
+import { isNotSet, isSet, isString } from "@/server/utils";
 import type { OptionsTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -29,7 +29,7 @@ export class OptionsPropertyType
 		this.options = options;
 		this.type = "options";
 
-		if (!isUndefined(value)) this.value = value as string;
+		if (isSet(value)) this.value = value as string;
 	}
 
 	get value() {
@@ -55,7 +55,7 @@ export class OptionsPropertyType
 
 	get formattedValue(): string {
 		const { options, value } = this;
-		if (isUndefined(value)) {
+		if (isSet(value)) {
 			return "";
 		}
 

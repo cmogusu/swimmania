@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { addLeadingZero, isUndefined } from "@/server/utils";
+import { addLeadingZero, isSet } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { TextPropertyType } from "./TextPropertyType";
 
@@ -13,7 +13,7 @@ export class DatePropertyType extends TextPropertyType {
 		super(rest);
 
 		this.type = "date";
-		if (!isUndefined(value)) this.value = value as string;
+		if (isSet(value)) this.value = value as string;
 	}
 
 	get value(): string {
@@ -26,14 +26,26 @@ export class DatePropertyType extends TextPropertyType {
 	}
 
 	validateValue(v?: unknown): string {
-		return this.validate.date(v as string);
+		const date = getDateString(v as string);
+		return this.validate.date(date);
 	}
 
 	setSeedData() {
 		const fakeDate = faker.date.anytime();
-		const year = fakeDate.getFullYear();
-		const month = fakeDate.getMonth() + 1;
-		const date = fakeDate.getDate();
-		this.value = `${year}-${addLeadingZero(month)}-${addLeadingZero(date)}`;
+		this.value = getFormatedDateStrings(fakeDate);
 	}
 }
+
+/**
+ * The date from mysql is a Date instance while that from the client is a string. This returns string value
+ */
+const getDateString = (date: string | Date): string => {
+	return date instanceof Date ? getFormatedDateStrings(date) : date;
+};
+
+const getFormatedDateStrings = (date: Date): string => {
+	const year = date.getFullYear();
+	const month = date.getMonth() + 1;
+	const dayDate = date.getDate();
+	return `${year}-${addLeadingZero(month)}-${addLeadingZero(dayDate)}`;
+};

@@ -6,7 +6,7 @@ import type {
 	MetadataValue,
 	RawMetadata,
 } from "@/server/types";
-import { isUndefined } from "@/server/utils";
+import { isSet } from "@/server/utils";
 import type { MetadataPropertyInitializer, ParentTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -41,10 +41,9 @@ export class ParentPropertyType
 	createChildInstance(name: string, rawMetadata?: RawMetadata) {
 		const childName = name.includes(".") ? name.split(".")[1] : name;
 		if (this[childName]) {
-			if (!isUndefined(rawMetadata?.value)) {
-				this[childName].id = rawMetadata.id;
-				this[childName].value = rawMetadata.value;
-			}
+			const { id, value } = rawMetadata || {};
+			if (isSet(id)) this[childName].id = id;
+			if (isSet(value)) this[childName].value = value;
 			return;
 		}
 

@@ -1,3 +1,4 @@
+import type { IParentMetadataPropertyType } from "@/server/types";
 import { childComponents } from "./childComponents";
 import type { EditProps } from "./types";
 
@@ -6,7 +7,7 @@ export const EditParentType = ({
 	entityId,
 	metadataType,
 }: EditProps) => {
-	const { children, title } = metadataType;
+	const { children, title } = metadataType as IParentMetadataPropertyType;
 
 	if (!children?.[0]) {
 		throw Error("Parent has no children");

@@ -15,6 +15,10 @@ export const arrayToObject = (
 export const metadataResultToArray = (
 	metadataResults: Record<string, unknown>,
 ): RawMetadata[] => {
+	if (!metadataResults) {
+		return [];
+	}
+
 	const { id, entityId, ...remainingResults } = metadataResults;
 	const arr = [];
 	for (const name in remainingResults) {

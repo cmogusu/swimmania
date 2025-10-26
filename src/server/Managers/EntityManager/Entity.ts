@@ -8,11 +8,11 @@ export class Entity {
 	id: number;
 	name: string;
 	entityType: EntityType;
-	description?: string;
-	location?: string;
-	defaultImage?: Image;
-	images?: Image[];
-	metadata?: RawMetadata[];
+	description: string | undefined;
+	location: string | undefined;
+	defaultImage: Image | undefined;
+	images: Image[] | undefined;
+	metadata: RawMetadata[] | undefined;
 
 	constructor({ id, name, type, description, location }: RawEntity) {
 		this.id = id;

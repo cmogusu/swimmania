@@ -27,6 +27,7 @@ export function getConnectionPool(log: Log) {
 		queueLimit: 0,
 		enableKeepAlive: true,
 		keepAliveInitialDelay: 0,
+		timezone: "Z",
 	});
 
 	log.appLogic("Initialized connection to database");

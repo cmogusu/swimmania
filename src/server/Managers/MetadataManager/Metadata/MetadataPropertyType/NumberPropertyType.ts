@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { INumberMetadataPropertyType } from "@/server/types";
-import { clamp, isUndefined } from "@/server/utils";
+import { clamp, isSet, isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -23,7 +23,7 @@ export class NumberPropertyType
 		if (!isUndefined(max)) this.max = max;
 
 		this.type = "number";
-		if (!isUndefined(inputs.value)) this.value = inputs.value as number;
+		if (isSet(inputs.value)) this.value = inputs.value as number;
 	}
 
 	get value() {

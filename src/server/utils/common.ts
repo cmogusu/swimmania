@@ -141,7 +141,7 @@ export const isUndefined = (v: unknown): v is undefined => v === undefined;
 
 export const isNotSet = (v: unknown): boolean => isUndefined(v) && isNull(v);
 
-export const isSet = (v: unknown): boolean => !isUndefined(v) && !isNull(v);
+export const isSet = (v: unknown) => !isUndefined(v) && !isNull(v);
 
 export const clamp = (v: number | string, min: number, max: number): number =>
 	Math.max(min, Math.min(Number(v), max));

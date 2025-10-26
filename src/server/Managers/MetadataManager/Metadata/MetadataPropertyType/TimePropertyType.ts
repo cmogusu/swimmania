@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { MetadataValue } from "@/server/types";
-import { addLeadingZero, isUndefined } from "@/server/utils";
+import { addLeadingZero, isSet } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -20,7 +20,7 @@ export class TimePropertyType extends BaseMetadataPropertyType {
 
 		this.type = "time";
 
-		if (!isUndefined(value)) this.value = value as string;
+		if (isSet(value)) this.value = value as string;
 	}
 
 	get value(): string {

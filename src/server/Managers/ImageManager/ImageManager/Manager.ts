@@ -24,14 +24,18 @@ export class ImageManager {
 		return rawImages.map((img) => new Image(img));
 	}
 
-	async getDefault(rawImageData: ImageDefaultRawInputs): Promise<Image> {
+	async getDefault(
+		rawImageData: ImageDefaultRawInputs,
+	): Promise<Image | undefined> {
 		const imageData = new ImageInputData(rawImageData);
 		imageData.validateDefaultInputs();
 		const rawImage = await this.db.getDefault(imageData);
-		return new Image(rawImage);
+		return rawImage ? new Image(rawImage) : undefined;
 	}
 
-	async getByImageId(rawImageData: ImageGetByIdRawInputs): Promise<Image> {
+	async getByImageId(
+		rawImageData: ImageGetByIdRawInputs,
+	): Promise<Image | undefined> {
 		const imageData = new ImageInputData(rawImageData);
 		imageData.validateGetByIdInputs();
 		const rawImages = await this.db.getByImageId(imageData);

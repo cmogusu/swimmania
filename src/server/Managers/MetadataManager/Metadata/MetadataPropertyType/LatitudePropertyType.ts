@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { isUndefined } from "@/server/utils";
+import { isSet } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { NumberPropertyType } from "./NumberPropertyType";
 
@@ -19,7 +19,7 @@ export class LatitudePropertyType extends NumberPropertyType {
 		});
 
 		this.type = "latitude";
-		if (!isUndefined(inputs.value)) this.value = inputs.value as number;
+		if (isSet(inputs.value)) this.value = inputs.value as number;
 	}
 
 	setSeedData() {
