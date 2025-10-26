@@ -14,8 +14,7 @@ const show = false;
 
 export const EditEntity = async ({ entityType, entityId }: Props) => {
 	const entity = await api.getEntity(entityType, entityId);
-	const { images, metadata } = entity || {};
-	console.log("---", metadata);
+	const { images } = entity || {};
 
 	if (!entity) {
 		return "Oops, item not found";
@@ -34,15 +33,11 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 
 			{show && <EditImages entityId={entityId} images={images} />}
 
-			{show && (
-				<EditMetadata
-					entityType={entityType}
-					entityId={entityId}
-					metadata={metadata}
-				/>
-			)}
+			<EditMetadata entityType={entityType} entityId={entityId} />
 
-			<EditRelatedEntities entityId={entityId} entityType={entityType} />
+			{show && (
+				<EditRelatedEntities entityId={entityId} entityType={entityType} />
+			)}
 		</div>
 	);
 };

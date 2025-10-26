@@ -1,5 +1,3 @@
-import type { MetadataValue } from "./Managers/MetadataManager";
-
 export type EntityType =
 	| "coach"
 	| "lifeguard"
@@ -45,9 +43,7 @@ export type RawMetadata = {
 	id?: number;
 	name: string;
 	value?: MetadataValue;
-	entityType?: EntityType;
 	entityId?: number;
-	itemIndex?: number;
 };
 
 export type MetadataComparator = "=" | "!=" | "<" | "<=" | ">" | ">=";

@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -11,6 +12,7 @@ export class TextPropertyType extends BaseMetadataPropertyType {
 		super(inputs);
 
 		this.type = "text";
+		if (!isUndefined(inputs.value)) this.value = inputs.value as string;
 	}
 
 	get value() {

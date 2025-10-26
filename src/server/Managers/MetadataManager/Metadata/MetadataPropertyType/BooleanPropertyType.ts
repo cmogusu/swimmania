@@ -1,3 +1,4 @@
+import { isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -10,6 +11,7 @@ export class BooleanPropertyType extends BaseMetadataPropertyType {
 		super(inputs);
 
 		this.type = "boolean";
+		if (!isUndefined(inputs.value)) this.value = inputs.value as boolean;
 	}
 
 	get value(): boolean {

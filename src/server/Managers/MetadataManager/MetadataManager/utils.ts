@@ -1,5 +1,4 @@
-import type { RawMetadata } from "@/server/types";
-import type { DbTableColumn } from "../Metadata/types";
+import type { DbTableColumn, RawMetadata } from "@/server/types";
 
 export const arrayToObject = (
 	arr: (string | number)[],
@@ -22,7 +21,7 @@ export const metadataResultToArray = (
 		arr.push({
 			id,
 			entityId,
-			name,
+			name: formatColumnNameFromDb(name),
 			value: remainingResults[name],
 		} as RawMetadata);
 	}

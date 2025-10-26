@@ -19,8 +19,8 @@ export class GetByIdInputData implements ILoadableEntity {
 	}: RawGetByIdEntityInputs) {
 		this.entityId = entityId;
 
-		this.loadImages = sanitizeBoolean(loadImages, true);
-		this.loadMetadata = sanitizeBoolean(loadMetadata, true);
+		this.loadImages = sanitizeBoolean(loadImages, false);
+		this.loadMetadata = sanitizeBoolean(loadMetadata, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, true);
 
 		this.validate = ValidateInstance;

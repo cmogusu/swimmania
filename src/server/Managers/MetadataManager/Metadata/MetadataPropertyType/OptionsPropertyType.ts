@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
+import type { Option } from "@/server/types";
 import { isNotSet, isString, isUndefined } from "@/server/utils";
-import type { Option, OptionsTypeInputs } from "../types";
+import type { OptionsTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class OptionsPropertyType extends BaseMetadataPropertyType {

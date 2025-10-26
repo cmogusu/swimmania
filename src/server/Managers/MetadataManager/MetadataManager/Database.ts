@@ -1,5 +1,5 @@
 import { MetadataDbDefaultColumnNames } from "@/server/constants";
-import type { EntityType, RawMetadata } from "@/server/types";
+import type { DbTableColumn, EntityType, RawMetadata } from "@/server/types";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
 	DeleteInputData,
@@ -10,7 +10,6 @@ import type {
 	InsertInputData,
 	UpdateInputData,
 } from "../InputData";
-import type { DbTableColumn } from "../Metadata/types";
 import { Query } from "./Query";
 import {
 	arrayToObject,

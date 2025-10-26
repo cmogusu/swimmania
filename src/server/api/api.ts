@@ -11,6 +11,7 @@ import type {
 	EntitiesData,
 	EntityData,
 	EntityType,
+	RawMetadata,
 	RelationshipType,
 } from "../types";
 
@@ -252,6 +253,24 @@ export class Api {
 		}
 	}
 
+	async getMetadata(
+		entityType: EntityType,
+		entityId: number,
+	): Promise<RawMetadata[] | undefined> {
+		try {
+			const metadataManager = metadataManagerFactory.getInstance();
+			const metadata = await metadataManager.getAll({
+				entityId,
+				entityType,
+			});
+
+			return metadata;
+		} catch (error: unknown) {
+			console.log(error);
+			this.log.error("Unable to get metadata", error as Error);
+		}
+	}
+
 	async updateMetadata(
 		entityType: EntityType,
 		id: number,
@@ -265,8 +284,12 @@ export class Api {
 				entityType,
 				id,
 				entityId,
-				name,
-				value,
+				rawMetadataArr: [
+					{
+						name,
+						value,
+					},
+				],
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update metadata";
@@ -285,8 +308,12 @@ export class Api {
 			const updateData = await metadataManager.insert({
 				entityType,
 				entityId,
-				name,
-				value,
+				rawMetadataArr: [
+					{
+						name,
+						value,
+					},
+				],
 			});
 			return updateData;
 		} catch (error: unknown) {

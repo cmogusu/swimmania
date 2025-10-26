@@ -33,6 +33,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "experience",
 			title: "Years of experience",
 			sortIndex: 4,
+			min: 0,
+			max: 70,
 			...rawMetadata,
 		}),
 
@@ -46,6 +48,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						name: "ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
+						min: 0,
+						max: 1e5,
 						...rawMetadata,
 					}),
 				usd: (rawMetadata?: RawMetadata) =>
@@ -53,6 +57,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						name: "usd",
 						prefix: "Usd ",
 						title: "Usd",
+						min: 0,
+						max: 1e5,
 						...rawMetadata,
 					}),
 			},

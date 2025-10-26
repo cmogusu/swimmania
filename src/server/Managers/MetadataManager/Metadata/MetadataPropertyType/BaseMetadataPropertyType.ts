@@ -45,7 +45,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		id,
 		name,
 		title,
-		value,
 		editTitle,
 		itemIndex,
 		prefix,
@@ -62,7 +61,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		if (!isUndefined(prefix)) this.prefix = prefix;
 		if (!isUndefined(suffix)) this.suffix = suffix;
 		if (!isUndefined(sortIndex)) this.sortIndex = sortIndex;
-		if (!isUndefined(value)) this.value = value;
 		if (!isUndefined(dbColumnType)) this.dbColumnType = dbColumnType;
 		this.name = name;
 	}

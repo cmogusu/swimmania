@@ -1,5 +1,9 @@
-import type { EntityType, PaginationOptions, RawMetadata } from "../../types";
-import type { MetadataFilter } from "./Metadata/";
+import type {
+	EntityType,
+	MetadataFilter,
+	PaginationOptions,
+	RawMetadata,
+} from "@/server/types";
 
 // Inputs
 export type RawGetAllMetadataInputs = PaginationOptions & {

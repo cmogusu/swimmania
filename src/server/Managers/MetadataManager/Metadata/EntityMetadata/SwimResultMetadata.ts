@@ -13,6 +13,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new NumberPropertyType({
 			name: "rank",
 			title: "Position",
+			min: 0,
+			max: 1e5,
 			sortIndex: 0,
 			...rawMetadata,
 		}),
@@ -29,7 +31,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TextPropertyType({
 			name: "firstName",
 			title: "First name",
-			sortIndex: 0,
+			sortIndex: 4,
 			...rawMetadata,
 		}),
 
@@ -37,7 +39,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TextPropertyType({
 			name: "thirdName",
 			title: "Third name or Initial",
-			sortIndex: 4,
+			sortIndex: 6,
 			...rawMetadata,
 		}),
 
@@ -45,7 +47,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TextPropertyType({
 			name: "ageGroup",
 			title: "Age group",
-			sortIndex: 4,
+			sortIndex: 8,
 			...rawMetadata,
 		}),
 
@@ -53,7 +55,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TimePropertyType({
 			name: "time",
 			title: "Time",
-			sortIndex: 0,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 };

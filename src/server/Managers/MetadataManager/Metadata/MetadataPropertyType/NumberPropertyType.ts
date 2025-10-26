@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { isUndefined } from "@/server/utils";
+import { clamp, isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
@@ -19,6 +19,7 @@ export class NumberPropertyType extends BaseMetadataPropertyType {
 		if (!isUndefined(max)) this.max = max;
 
 		this.type = "number";
+		if (!isUndefined(inputs.value)) this.value = inputs.value as number;
 	}
 
 	get value() {
@@ -33,7 +34,7 @@ export class NumberPropertyType extends BaseMetadataPropertyType {
 		const { min, max, validate } = this;
 		return isUndefined(min) || isUndefined(max)
 			? validate.number(v)
-			: validate.minMaxNumber(min, max, v);
+			: validate.minMaxNumber(min, max, clamp(v, min, max)); // TODO: Remove this clamping. Its only needed for dev work.
 	}
 
 	get formattedValue() {
