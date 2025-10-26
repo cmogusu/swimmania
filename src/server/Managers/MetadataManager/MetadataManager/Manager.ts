@@ -1,4 +1,4 @@
-import type { EntityType, RawMetadata } from "@/server/types";
+import type { DbTableColumn, EntityType, RawMetadata } from "@/server/types";
 import {
 	DeleteInputData,
 	FilterInputData,
@@ -9,7 +9,6 @@ import {
 	UpdateInputData,
 } from "../InputData";
 import { entityMetadataFactory } from "../Metadata/EntityMetadata";
-import type { DbTableColumn } from "../Metadata/types";
 import type {
 	RawDeleteMetadataInputs,
 	RawFilterByMetadataInputs,

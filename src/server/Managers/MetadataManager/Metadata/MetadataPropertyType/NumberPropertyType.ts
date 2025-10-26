@@ -1,9 +1,13 @@
 import { faker } from "@faker-js/faker";
+import type { INumberMetadataPropertyType } from "@/server/types";
 import { clamp, isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-export class NumberPropertyType extends BaseMetadataPropertyType {
+export class NumberPropertyType
+	extends BaseMetadataPropertyType
+	implements INumberMetadataPropertyType
+{
 	dbColumnType = "int(11)";
 
 	declare _value: number;

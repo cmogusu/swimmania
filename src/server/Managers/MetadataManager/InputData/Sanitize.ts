@@ -10,10 +10,6 @@ export class Sanitize extends BaseSanitize {
 	type(v: string) {
 		return this.sanitizeString(v);
 	}
-
-	itemIndex(v?: number): number {
-		return v ? Number(v) : 0;
-	}
 }
 
 export const SanitizeInstance = new Sanitize();

@@ -1,14 +1,19 @@
 import type {
 	DbTableColumn,
 	IMetadataPropertyType,
+	IParentMetadataPropertyType,
 	MetadataData,
 	MetadataValue,
 	RawMetadata,
 } from "@/server/types";
+import { isUndefined } from "@/server/utils";
 import type { MetadataPropertyInitializer, ParentTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-export class ParentPropertyType extends BaseMetadataPropertyType {
+export class ParentPropertyType
+	extends BaseMetadataPropertyType
+	implements IParentMetadataPropertyType
+{
 	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
 	[key: string]: any;
 	children: IMetadataPropertyType[] = [];
@@ -25,16 +30,21 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 		return this.children.map((p) => p.name);
 	}
 
+	getDbTableColumn(): DbTableColumn {
+		throw Error("Can't get column of parent");
+	}
+
 	getDbTableColumns(): DbTableColumn[] {
 		return this.children.map((p) => p.getDbTableColumn());
 	}
 
 	createChildInstance(name: string, rawMetadata?: RawMetadata) {
 		const childName = name.includes(".") ? name.split(".")[1] : name;
-		if (this[childName] && rawMetadata?.value) {
-			this[childName].id = rawMetadata.id;
-			this[childName].value = rawMetadata.value;
-			this[childName].itemIndex = rawMetadata.itemIndex;
+		if (this[childName]) {
+			if (!isUndefined(rawMetadata?.value)) {
+				this[childName].id = rawMetadata.id;
+				this[childName].value = rawMetadata.value;
+			}
 			return;
 		}
 
@@ -44,8 +54,8 @@ export class ParentPropertyType extends BaseMetadataPropertyType {
 		}
 
 		this[childName] = initializer(rawMetadata);
-		this.children.push(this[childName]);
 		this[childName].name = `${this.name}.${childName}`;
+		this.children.push(this[childName]);
 	}
 
 	createAllChildInstances() {

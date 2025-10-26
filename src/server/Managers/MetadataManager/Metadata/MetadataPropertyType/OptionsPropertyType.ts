@@ -1,10 +1,13 @@
 import { faker } from "@faker-js/faker";
-import type { Option } from "@/server/types";
+import type { IOptionsMetadataPropertyType, Option } from "@/server/types";
 import { isNotSet, isString, isUndefined } from "@/server/utils";
 import type { OptionsTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
-export class OptionsPropertyType extends BaseMetadataPropertyType {
+export class OptionsPropertyType
+	extends BaseMetadataPropertyType
+	implements IOptionsMetadataPropertyType
+{
 	dbColumnType = "varchar(255)";
 
 	declare _value: string;

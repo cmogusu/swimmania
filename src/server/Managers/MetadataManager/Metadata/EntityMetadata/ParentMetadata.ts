@@ -6,7 +6,7 @@ import {
 } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
-import { getMetadataProperties, getPropertyInstance } from "./utils";
+import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 	location: () =>
@@ -44,17 +44,10 @@ export class ParentMetadata extends BaseEntityMetadata {
 	) {
 		super();
 
-		const properties = getMetadataProperties(
+		this.initializeAndSetProperties(
 			ParentMetadata.propertyInitilizers,
 			rawMetadataArr,
 			intializeAllProperties,
 		);
-
-		for (const propertyName in properties) {
-			this[propertyName] = properties[propertyName];
-			this.metadata.push(this[propertyName]);
-		}
-
-		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
 	}
 }

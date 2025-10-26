@@ -109,23 +109,33 @@ export type DbTableColumn = {
 export interface IMetadataPropertyType {
 	id: number;
 	type: SchemaType;
-	itemIndex?: number;
 	title: string;
 	name: string;
-	names: string[];
 	value: MetadataValue;
 	dbValue: MetadataData[];
 	formattedValue: string;
-	children?: IMetadataPropertyType[];
-	options?: Option[];
 	sortIndex: number;
+	setSeedData: () => void;
+	getDbTableColumn: () => DbTableColumn;
+}
+
+export type INumberMetadataPropertyType = IMetadataPropertyType & {
+	min: number;
+	max: number;
+};
+
+export type IOptionsMetadataPropertyType = IMetadataPropertyType & {
+	options: Option[];
+};
+
+export type IParentMetadataPropertyType = IMetadataPropertyType & {
+	names: string[];
+	children: IMetadataPropertyType[];
 	getChild: (childName: string) => IMetadataPropertyType;
 	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;
 	createAllChildInstances: () => void;
-	setSeedData: () => void;
-	getDbTableColumn: () => DbTableColumn;
 	getDbTableColumns: () => DbTableColumn[];
-}
+};
 
 export interface IEntityMetadata {
 	metadata: IMetadataPropertyType[];

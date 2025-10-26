@@ -13,7 +13,6 @@ export type MetadataTypeInputs = {
 	editTitle?: string;
 	min?: number;
 	max?: number;
-	itemIndex?: number;
 	prefix?: string;
 	suffix?: string;
 	sortIndex?: number;

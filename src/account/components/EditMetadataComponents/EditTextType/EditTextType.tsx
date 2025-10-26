@@ -1,9 +1,13 @@
-import type { EntityType, IMetadataPropertyType } from "@/server/types";
-import { EditContainer } from "../EditContainer";
 import type { EditProps } from "../types";
+import { RenderItem } from "./RenderItem";
+import type { InputType } from "./types";
 
-type InputType = "text" | "number" | "time" | "date";
-type Props = EditProps & { inputType?: InputType };
+type Props = EditProps & {
+	inputType?: InputType;
+	min?: number;
+	max?: number;
+	step?: number;
+};
 
 export const EditTextType = ({
 	entityType,
@@ -12,12 +16,15 @@ export const EditTextType = ({
 	childrenMetadata,
 	parentTitle,
 	inputType = "text",
+	min,
+	max,
+	step,
 }: Props) => {
 	if (childrenMetadata?.length) {
 		return (
 			<div className="border-t border-base-200 mb-4">
 				<h3 className="mb-3">{parentTitle}</h3>
-				<div className="pl-4">
+				<div className={`w-full pl-4 flex flex-col-${childrenMetadata.length}`}>
 					{childrenMetadata?.map((m) => (
 						<RenderItem
 							key={m.name}
@@ -25,6 +32,9 @@ export const EditTextType = ({
 							entityId={entityId}
 							metadataType={m}
 							inputType={inputType}
+							min={min}
+							max={max}
+							step={step}
 						/>
 					))}
 				</div>
@@ -38,41 +48,9 @@ export const EditTextType = ({
 			entityId={entityId}
 			metadataType={metadataType}
 			inputType={inputType}
+			min={min}
+			max={max}
+			step={step}
 		/>
-	);
-};
-
-type RenderItemProps = {
-	entityType: EntityType;
-	entityId: number;
-	metadataType: IMetadataPropertyType;
-	inputType: InputType;
-};
-
-export const RenderItem = ({
-	entityType,
-	entityId,
-	metadataType,
-	inputType,
-}: RenderItemProps) => {
-	const { title, formattedValue } = metadataType;
-
-	return (
-		<EditContainer
-			entityType={entityType}
-			entityId={entityId}
-			metadataType={metadataType}
-		>
-			<label className="floating-label mb-3">
-				<span>{title}</span>
-				<input
-					className="input input-sm"
-					type={inputType || "text"}
-					name="value"
-					placeholder={title}
-					defaultValue={formattedValue}
-				/>
-			</label>
-		</EditContainer>
 	);
 };

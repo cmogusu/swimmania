@@ -1,3 +1,4 @@
+import type { IOptionsMetadataPropertyType } from "@/server/types";
 import { EditContainer } from "./EditContainer";
 import type { EditProps } from "./types";
 
@@ -6,7 +7,8 @@ export const EditOptionsType = ({
 	entityId,
 	metadataType,
 }: EditProps) => {
-	const { title, value, options } = metadataType;
+	const { title, value, options } =
+		metadataType as IOptionsMetadataPropertyType;
 
 	if (!options?.length) {
 		throw Error("Options not set");

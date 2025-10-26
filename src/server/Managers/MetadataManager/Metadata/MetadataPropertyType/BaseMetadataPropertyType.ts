@@ -25,28 +25,16 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	prefix: string = "";
 	suffix: string = "";
 
-	itemIndex: number = 0;
-
 	allowedComparators: string[] = ["=", "<>"];
 	parent: IMetadataPropertyType | undefined;
 
 	sortIndex: number = 100;
-
-	// Used only in parent metadata type
-	get names(): string[] {
-		return [];
-	}
-
-	getDbTableColumns(): DbTableColumn[] {
-		return [] as DbTableColumn[];
-	}
 
 	constructor({
 		id,
 		name,
 		title,
 		editTitle,
-		itemIndex,
 		prefix,
 		suffix,
 		sortIndex,
@@ -57,7 +45,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		if (!isUndefined(id)) this.id = id;
 		if (!isUndefined(title)) this.title = title;
 		if (!isUndefined(editTitle)) this.editTitle = editTitle;
-		if (!isUndefined(itemIndex)) this.itemIndex = itemIndex;
 		if (!isUndefined(prefix)) this.prefix = prefix;
 		if (!isUndefined(suffix)) this.suffix = suffix;
 		if (!isUndefined(sortIndex)) this.sortIndex = sortIndex;

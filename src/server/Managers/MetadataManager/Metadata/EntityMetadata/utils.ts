@@ -1,4 +1,8 @@
-import type { IMetadataPropertyType, RawMetadata } from "@/server/types";
+import type {
+	IMetadataPropertyType,
+	IParentMetadataPropertyType,
+	RawMetadata,
+} from "@/server/types";
 import type { MetadataPropertyInitializer } from "../types";
 
 // Always returns parent metadata property
@@ -20,12 +24,15 @@ export function getPropertyInstance(
 
 	const propertyInstance = initializer(rawMetadata);
 	if (childName) {
-		propertyInstance.createChildInstance(childName, rawMetadata);
+		(propertyInstance as IParentMetadataPropertyType).createChildInstance(
+			childName,
+			rawMetadata,
+		);
 	}
 
 	const { type } = propertyInstance;
 	if (type === "parent" && intializeAllProperties) {
-		propertyInstance.createAllChildInstances();
+		(propertyInstance as IParentMetadataPropertyType).createAllChildInstances();
 	}
 
 	return propertyInstance;
@@ -43,7 +50,9 @@ export function getMetadataProperties(
 		const [propertyName] = name.split(".");
 
 		if (properties[propertyName]?.type === "parent") {
-			properties[propertyName].createChildInstance(name, rawMetadata);
+			(
+				properties[propertyName] as IParentMetadataPropertyType
+			).createChildInstance(name, rawMetadata);
 			return;
 		}
 

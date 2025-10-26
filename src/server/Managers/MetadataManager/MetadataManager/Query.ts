@@ -1,14 +1,15 @@
 import { EntityMetadataDbTables } from "@/server/constants";
+import { BaseQuery } from "@/server/Managers/services";
 import type {
 	DbTableColumn,
+	EntityType,
 	MetadataFilter,
-} from "@/server/Managers/MetadataManager";
-import { BaseQuery } from "@/server/Managers/services";
-import type { EntityType, RawMetadata } from "@/server/types";
+	RawMetadata,
+} from "@/server/types";
 import { isString } from "@/server/utils";
 import { extractMetadataNamesAndValues } from "./utils";
 
-const COLUMNS = `id, entityId, entityType, name, itemIndex, COALESCE(value_tiny, value_time, value_num, value_text, value_lat, value_lng) as value`;
+const COLUMNS = `id, entityId, entityType, name, COALESCE(value_tiny, value_time, value_num, value_text, value_lat, value_lng) as value`;
 
 export class Query extends BaseQuery {
 	getAll(entityType: EntityType, entityId: number) {

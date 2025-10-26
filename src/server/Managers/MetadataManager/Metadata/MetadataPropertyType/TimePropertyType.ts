@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
+import type { MetadataValue } from "@/server/types";
 import { addLeadingZero, isUndefined } from "@/server/utils";
-import type { MetadataTypeInputs, MetadataValue } from "../types";
+import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 const SUFFIX = " Hrs";

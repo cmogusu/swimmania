@@ -2,11 +2,14 @@ import type {
 	DbTableColumn,
 	IEntityMetadata,
 	IMetadataPropertyType,
+	IParentMetadataPropertyType,
 	MetadataData,
 	MetadataFilter,
 	RawMetadata,
 } from "@/server/types";
 import { isSet, isUndefined } from "@/server/utils";
+import type { MetadataPropertyInitializer } from "../types";
+import { getMetadataProperties } from "./utils";
 
 export class BaseEntityMetadata implements IEntityMetadata {
 	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
@@ -14,27 +17,47 @@ export class BaseEntityMetadata implements IEntityMetadata {
 
 	metadata: IMetadataPropertyType[] = [];
 
+	initializeAndSetProperties(
+		propertyInitilizers: Record<string, MetadataPropertyInitializer>,
+		rawMetadataArr?: RawMetadata[],
+		intializeAllProperties: boolean = false,
+	) {
+		const properties = getMetadataProperties(
+			propertyInitilizers,
+			rawMetadataArr,
+			intializeAllProperties,
+		);
+
+		for (const propertyName in properties) {
+			this[propertyName] = properties[propertyName];
+			this.metadata.push(this[propertyName]);
+		}
+
+		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
+	}
+
 	get names() {
 		return this.metadata.flatMap((property) =>
-			property.type === "parent" ? property.names : property.name,
+			property.type === "parent"
+				? (property as IParentMetadataPropertyType).names
+				: property.name,
 		);
 	}
 
 	getDbTableColumns(): DbTableColumn[] {
 		return this.metadata.flatMap((property) =>
 			property.type === "parent"
-				? property.getDbTableColumns()
+				? (property as IParentMetadataPropertyType).getDbTableColumns()
 				: property.getDbTableColumn(),
 		);
 	}
 
 	setValue(rawMetadata: RawMetadata) {
-		const { id, name, value, itemIndex } = rawMetadata;
+		const { id, name, value } = rawMetadata;
 		const property = this.getProperty(name);
 
 		if (!isUndefined(id)) property.id = id;
 		if (!isUndefined(value)) property.value = value;
-		if (!isUndefined(itemIndex)) property.itemIndex = itemIndex;
 	}
 
 	getProperty(name: string): IMetadataPropertyType {
