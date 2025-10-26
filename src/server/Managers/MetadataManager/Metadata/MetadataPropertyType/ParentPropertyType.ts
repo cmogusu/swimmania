@@ -1,11 +1,11 @@
-import type { MetadataData, RawMetadata } from "@/server/types";
 import type {
 	DbTableColumn,
 	IMetadataPropertyType,
-	MetadataPropertyInitializer,
+	MetadataData,
 	MetadataValue,
-	ParentTypeInputs,
-} from "../types";
+	RawMetadata,
+} from "@/server/types";
+import type { MetadataPropertyInitializer, ParentTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 export class ParentPropertyType extends BaseMetadataPropertyType {

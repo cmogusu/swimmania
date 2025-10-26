@@ -1,10 +1,10 @@
 import { metadataComponents } from "@/components/MetadataComponents";
-import {
-	type EntityType,
-	entityMetadataFactory,
-	type IMetadataPropertyType,
-	type MetadataData,
-} from "@/server";
+import { entityMetadataFactory } from "@/server/Managers";
+import type {
+	EntityType,
+	IMetadataPropertyType,
+	MetadataData,
+} from "@/server/types";
 
 type Props = {
 	entityType: EntityType;

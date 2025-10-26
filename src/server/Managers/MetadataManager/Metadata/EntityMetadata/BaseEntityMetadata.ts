@@ -1,11 +1,12 @@
-import type { MetadataData, RawMetadata } from "@/server/types";
-import { isSet, isUndefined } from "@/server/utils";
 import type {
 	DbTableColumn,
 	IEntityMetadata,
 	IMetadataPropertyType,
+	MetadataData,
 	MetadataFilter,
-} from "../types";
+	RawMetadata,
+} from "@/server/types";
+import { isSet, isUndefined } from "@/server/utils";
 
 export class BaseEntityMetadata implements IEntityMetadata {
 	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this

@@ -1,5 +1,5 @@
 import { TiTick, TiTimes } from "react-icons/ti";
-import { isUndefined } from "@/server";
+import { isUndefined } from "@/server/utils";
 import type { MetadataTypeProps } from "./types";
 
 export const BooleanType = ({

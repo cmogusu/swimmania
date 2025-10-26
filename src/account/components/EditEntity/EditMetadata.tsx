@@ -1,9 +1,9 @@
-import {
-	type EntityType,
-	entityMetadataFactory,
-	type IMetadataPropertyType,
-	type MetadataData,
-} from "@/server";
+import { entityMetadataFactory } from "@/server/Managers";
+import type {
+	EntityType,
+	IMetadataPropertyType,
+	MetadataData,
+} from "@/server/types";
 import { editMetadataComponents } from "../EditMetadataComponents";
 
 type Props = {
@@ -44,9 +44,9 @@ const getMetadataComponents = (
 
 	return entityMetadata.metadata.map((metadataType: IMetadataPropertyType) => {
 		const { name, type } = metadataType;
-		const MetadataComponent = editMetadataComponents[type];
+		const EditMetadataComponent = editMetadataComponents[type];
 		return (
-			<MetadataComponent
+			<EditMetadataComponent
 				key={name}
 				entityId={entityId}
 				entityType={entityType}

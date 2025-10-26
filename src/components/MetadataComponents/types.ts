@@ -1,4 +1,4 @@
-import type { IMetadataPropertyType } from "@/server";
+import type { IMetadataPropertyType } from "@/server/types";
 
 export type MetadataTypeProps = {
 	parentTitle?: string;

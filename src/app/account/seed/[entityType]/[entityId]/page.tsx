@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Page, SubmitButton } from "@/account";
 import { EntitiesNavBar } from "@/account/components/Header";
-import { seedEntity } from "@/server/api";
+import { seedEntity } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 
 type Props = {

@@ -1,4 +1,4 @@
-import type { EntityType, IMetadataPropertyType } from "@/server";
+import type { EntityType, IMetadataPropertyType } from "@/server/types";
 
 export type EditProps = {
 	entityType: EntityType;

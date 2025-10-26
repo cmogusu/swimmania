@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/a11y/noLabelWithoutControl: No better solution found */
-import { isUndefined } from "@/server";
+import { isUndefined } from "@/server/utils";
 import { EditContainer } from "./EditContainer";
 import type { EditProps } from "./types";
 

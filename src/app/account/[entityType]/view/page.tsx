@@ -1,6 +1,6 @@
 import { Entities, Page } from "@/account";
-import type { EntityType } from "@/server";
-import { EntityTypePlurals } from "@/server";
+import { EntityTypePlurals } from "@/server/constants";
+import type { EntityType } from "@/server/types";
 
 type Props = {
 	params: Promise<{ entityType: EntityType }>;

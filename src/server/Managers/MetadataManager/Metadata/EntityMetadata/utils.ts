@@ -1,8 +1,5 @@
-import type { RawMetadata } from "@/server/types";
-import type {
-	IMetadataPropertyType,
-	MetadataPropertyInitializer,
-} from "../types";
+import type { IMetadataPropertyType, RawMetadata } from "@/server/types";
+import type { MetadataPropertyInitializer } from "../types";
 
 // Always returns parent metadata property
 export function getPropertyInstance(

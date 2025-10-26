@@ -1,4 +1,4 @@
-import { getApiKey } from "@/server";
+import { getApiKey } from "@/server/serverFunctions";
 import { EditMap } from "../Map";
 import { EditContainer } from "./EditContainer";
 import type { EditProps } from "./types";

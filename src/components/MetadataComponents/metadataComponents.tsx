@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
-import {
-	entityMetadataFactory,
-	type IMetadataPropertyType,
-} from "@/server/Managers/MetadataManager";
-import type { EntityType, MetadataData } from "@/server/types";
+import { entityMetadataFactory } from "@/server/Managers";
+import type {
+	EntityType,
+	IMetadataPropertyType,
+	MetadataData,
+} from "@/server/types";
 import { childComponents } from "./childComponents";
 import { ParentType } from "./ParentType";
 import type { MetadataTypeProps } from "./types";

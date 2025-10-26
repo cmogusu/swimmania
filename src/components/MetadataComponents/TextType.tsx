@@ -1,4 +1,4 @@
-import { isUndefined } from "@/server";
+import { isUndefined } from "@/server/utils";
 import type { MetadataTypeProps } from "./types";
 
 export const TextType = ({

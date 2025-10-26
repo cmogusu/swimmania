@@ -1,5 +1,5 @@
-import type { MetadataFilter } from "@/server/Managers/MetadataManager";
 import { BaseInputData } from "@/server/Managers/services/BaseInputData";
+import type { MetadataFilter } from "@/server/types";
 import type { ILoadableEntity, RawGetAllEntityInputs } from "../types";
 import { sanitizeBoolean } from "./utils";
 

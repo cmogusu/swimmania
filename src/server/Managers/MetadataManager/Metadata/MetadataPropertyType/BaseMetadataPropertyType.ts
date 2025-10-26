@@ -1,11 +1,13 @@
-import type { MetadataData, RawMetadata, SchemaType } from "@/server/types";
-import { isSet, isUndefined } from "@/server/utils";
 import type {
 	DbTableColumn,
 	IMetadataPropertyType,
-	MetadataTypeInputs,
+	MetadataData,
 	MetadataValue,
-} from "../types";
+	RawMetadata,
+	SchemaType,
+} from "@/server/types";
+import { isSet, isUndefined } from "@/server/utils";
+import type { MetadataTypeInputs } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class BaseMetadataPropertyType implements IMetadataPropertyType {

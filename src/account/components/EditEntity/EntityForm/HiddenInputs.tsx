@@ -1,4 +1,4 @@
-import type { EntityType } from "@/server";
+import type { EntityType } from "@/server/types";
 
 type Props = {
 	entityType: EntityType;

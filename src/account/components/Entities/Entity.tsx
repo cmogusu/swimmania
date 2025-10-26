@@ -3,8 +3,8 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { IoMdOpen } from "react-icons/io";
 import { DefaultSiteImage } from "@/constants";
-import type { EntityData, EntityType } from "@/server";
 import { deleteEntity } from "@/server/api/apiActions";
+import type { EntityData, EntityType } from "@/server/types";
 
 type Props = {
 	entityType: EntityType;

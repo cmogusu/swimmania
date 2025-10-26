@@ -1,6 +1,6 @@
 import z from "zod";
-import type { MetadataFilter } from "@/server/Managers/MetadataManager";
 import { BaseValidate } from "@/server/Managers/services/BaseValidate";
+import type { MetadataFilter } from "@/server/types";
 
 export class Validate extends BaseValidate {
 	locationValidator = z.optional(z.string().min(2).max(255));

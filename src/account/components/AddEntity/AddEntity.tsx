@@ -1,4 +1,4 @@
-import { addEntity as addEntityAction } from "@/server/api";
+import { addEntity as addEntityAction } from "@/server/api/apiActions";
 import type { EntityData, EntityType } from "@/server/types";
 import { EditImages, EditMetadata, EntityForm } from "../EditEntity";
 

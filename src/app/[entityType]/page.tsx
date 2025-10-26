@@ -7,7 +7,9 @@ import {
 	SelectedEntityContextProvider,
 } from "@/front/context";
 import { EntitiesPage, PageLayout } from "@/front/pages";
-import { api, type EntityType, EntityTypePlurals } from "@/server";
+import { api } from "@/server/api";
+import { EntityTypePlurals } from "@/server/constants";
+import type { EntityType } from "@/server/types";
 
 type Props = {
 	params: Promise<{ entityType: EntityType }>;

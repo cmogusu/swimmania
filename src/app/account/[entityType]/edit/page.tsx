@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import type { EntityType } from "@/server";
+import type { EntityType } from "@/server/types";
 
 type Props = {
 	params: Promise<{ entityType: EntityType }>;

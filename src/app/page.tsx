@@ -7,7 +7,7 @@ import {
 	SelectedEntityContextProvider,
 } from "@/front/context";
 import { HomePage, PageLayout } from "@/front/pages";
-import { api } from "@/server";
+import { api } from "@/server/api";
 
 type Props = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

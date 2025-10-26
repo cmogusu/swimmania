@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/a11y/useAriaPropsSupportedByRole: aria-label is needed here */
-import { isUndefined } from "@/server";
+import { isUndefined } from "@/server/utils";
 import type { MetadataTypeProps } from "./types";
 
 export const RatingsType = ({ metadataType }: MetadataTypeProps) => {

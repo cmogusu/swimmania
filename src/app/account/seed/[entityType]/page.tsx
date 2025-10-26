@@ -1,6 +1,6 @@
 import { Page, SubmitButton } from "@/account";
 import { EntitiesNavBar } from "@/account/components/Header";
-import { seedEntityType } from "@/server/api";
+import { seedEntityType } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 
 type Props = {

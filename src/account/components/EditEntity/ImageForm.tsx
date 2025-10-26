@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ImageData } from "@/server";
+import type { ImageData } from "@/server/types";
 
 type EditImageProps = {
 	entityId: number;

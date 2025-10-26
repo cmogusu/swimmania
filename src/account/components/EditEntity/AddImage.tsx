@@ -1,4 +1,4 @@
-import { insertImage } from "@/server/api";
+import { insertImage } from "@/server/api/apiActions";
 import type { ImageData } from "@/server/types";
 import { ImageForm } from "./ImageForm";
 

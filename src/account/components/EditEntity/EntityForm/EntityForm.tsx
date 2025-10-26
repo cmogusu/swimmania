@@ -1,4 +1,4 @@
-import { updateEntity } from "@/server/api";
+import { updateEntity } from "@/server/api/apiActions";
 import type { EntityData, EntityType } from "@/server/types";
 import { ClientEntityForm } from "./ClientEntityForm";
 import { HiddenInputs } from "./HiddenInputs";
