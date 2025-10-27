@@ -1,76 +1,35 @@
-import Image from "next/image";
-import { RelatedEntities } from "@/components";
-import { MetadataList } from "@/components/MetadataList";
-import { DefaultSiteImage } from "@/constants";
+import dynamic from "next/dynamic";
 import { EntityContextProvider } from "@/front/context";
-import type { EntityData, EntityType, RawMetadata } from "@/server/types";
-import { Metadata } from "../Metadata";
-import { Images } from "./Images";
+import type { EntityType } from "@/server/types";
+import type { EntityProps } from "./EntityComponents/types";
 
-type Props = {
-	entityType: EntityType;
-	entity: EntityData;
+type Component = React.ComponentType<EntityProps>;
+
+const entityComponents: Record<EntityType, Component> = {
+	parent: dynamic(() => import("./EntityComponents/Parent")),
+	swimmer: dynamic(() => import("./EntityComponents/Swimmer")),
+	school: dynamic(() => import("./EntityComponents/School")),
+	pool: dynamic(() => import("./EntityComponents/Pool")),
+	team: dynamic(() => import("./EntityComponents/Team")),
+	coach: dynamic(() => import("./EntityComponents/Coach")),
+	lifeguard: dynamic(() => import("./EntityComponents/Lifeguard")),
+	swimMeet: dynamic(() => import("./EntityComponents/SwimMeet")),
+	swimEvent: dynamic(() => import("./EntityComponents/SwimEvent")),
+	swimResult: dynamic(() => import("./EntityComponents/SwimResult")),
 };
 
-const show = false;
-
-export const Entity = async ({ entityType, entity }: Props) => {
-	const {
-		id: entityId,
-		name,
-		description,
-		location,
-		defaultImage,
-		images,
-		metadata,
-	} = entity || {};
-	const image = defaultImage || DefaultSiteImage;
+export const Entity = async (props: EntityProps) => {
+	const { entity, entityType } = props;
 
 	if (!entity) {
-		return "Sorry, item not found";
+		return "Oops!, item not found";
 	}
 
+	const EntityComponent = entityComponents[entityType];
+
 	return (
-		<EntityContextProvider entityId={entityId} entityType={entityType}>
-			<section className="mb-4">
-				<h1>{name}</h1>
-				<hr className="w-50 mb-4" />
-				<div className="mb-4">
-					<Image
-						alt={image.alt}
-						className="size-10 rounded-box"
-						width={1000}
-						height={667}
-						src={image.src}
-					/>
-				</div>
-				{location && <div className="text-5xl">{location}</div>}
-
-				<p className="text-2xl">{description}</p>
-			</section>
-
-			{show && <RelatedEntities entityType={entityType} entityId={entityId} />}
-			{show && <Images images={images} />}
-			{show && <Metadata entityType={entityType} metadata={metadata} />}
-			<MetadataList
-				entityId={entityId}
-				entityType={entityType}
-				names={[
-					"poolShape",
-					"poolDimensions",
-					"hostInstitutionType",
-					"crowdiness",
-				]}
-				render={(metadataArr: RawMetadata[]) => (
-					<div>
-						{metadataArr.map((metadata) => (
-							<div key={metadata.name}>
-								{metadata.name} - {metadata.value}
-							</div>
-						))}
-					</div>
-				)}
-			/>
+		<EntityContextProvider entityId={entity.id} entityType={entityType}>
+			<EntityComponent entity={entity} entityType={entityType} />
 		</EntityContextProvider>
 	);
 };

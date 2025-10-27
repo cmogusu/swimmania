@@ -3,7 +3,7 @@ import { expect, test } from "vitest";
 import "@testing-library/dom";
 import { DefaultSiteImage } from "@/constants";
 import type { EntityData } from "@/server/types";
-import { EntityCard } from "../EntityCard";
+import { EntityCard } from "../Entity";
 
 const mockDefaultImage = {
 	id: 5,

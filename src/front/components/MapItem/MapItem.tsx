@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { useCallback, useEffect } from "react";
 import {
-	// useEntityScrollObserverContext,
+	// useVisibleEntityIdsContext,
 } from "@/front/context";
 
 export const MapItem = () => {
-	// const { visibleEntityIdsRef } = useEntityScrollObserverContext();
+	// const { visibleEntityIdsRef } = useVisibleEntityIdsContext();
 
 	const handlePageScroll = useCallback(() => {
 		// requestIdleCallback(() => {

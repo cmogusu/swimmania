@@ -1,16 +1,16 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef } from "react";
-import { useEntityScrollObserverContext } from "@/front/context";
+import { useVisibleEntityIdsContext } from "@/front/context";
 
 type Props = {
 	children: ReactNode;
 	entityId: number;
 };
 
-export const EntityCardContainer = ({ entityId, children }: Props) => {
+export const EntityContainer = ({ entityId, children }: Props) => {
 	const divRef = useRef<HTMLDivElement>(null);
-	const { setEntityContainerElement } = useEntityScrollObserverContext();
+	const { setEntityContainerElement } = useVisibleEntityIdsContext();
 
 	useEffect(() => {
 		if (divRef.current) {

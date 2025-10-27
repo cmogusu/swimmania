@@ -29,7 +29,7 @@ const initialContext = {
 	},
 };
 
-const EntityScrollObserverContext = createContext<ContextType>(initialContext);
+const VisibleEntityIdsContext = createContext<ContextType>(initialContext);
 
 type Props = {
 	children: ReactNode;
@@ -91,14 +91,14 @@ export const ContextProvider = ({ children }: Props) => {
 	);
 
 	return (
-		<EntityScrollObserverContext value={context}>
+		<VisibleEntityIdsContext value={context}>
 			{children}
-		</EntityScrollObserverContext>
+		</VisibleEntityIdsContext>
 	);
 };
 
-export const useEntityScrollObserverContext = () =>
-	useContext(EntityScrollObserverContext);
+export const useVisibleEntityIdsContext = () =>
+	useContext(VisibleEntityIdsContext);
 
-export const EntityScrollObserverContextProvider =
+export const VisibleEntityIdsContextProvider =
 	withServerSafetyHoc(ContextProvider);

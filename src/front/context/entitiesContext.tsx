@@ -59,7 +59,12 @@ export const EntitiesContextProvider = ({
 
 		setIsLoading(true);
 		getEntities(entityType, nextPage)
-			.then(({ entities, nextPage, hasMore }: EntitiesData) => {
+			.then((entitiesData: EntitiesData | undefined) => {
+				if (!entitiesData) {
+					return;
+				}
+
+				const { entities, nextPage, hasMore } = entitiesData;
 				setEntities((prevEntities) => prevEntities.concat(entities));
 				setNextPage(nextPage);
 				setHasMore(hasMore);

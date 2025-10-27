@@ -3,8 +3,8 @@ import { EntityDrawerContainer } from "@/front/components/EntityDrawer/";
 import {
 	EntitiesContextProvider,
 	EntityDrawerContextProvider,
-	EntityScrollObserverContextProvider,
 	SelectedEntityContextProvider,
+	VisibleEntityIdsContextProvider,
 } from "@/front/context";
 import { EntitiesPage, PageLayout } from "@/front/pages";
 import { api } from "@/server/api";
@@ -39,7 +39,7 @@ export default async function Home({ params, searchParams }: Props) {
 			entityType={entityType}
 		>
 			<SelectedEntityContextProvider>
-				<EntityScrollObserverContextProvider>
+				<VisibleEntityIdsContextProvider>
 					<EntityDrawerContextProvider>
 						<EntityDrawerContainer>
 							<PageLayout>
@@ -50,7 +50,7 @@ export default async function Home({ params, searchParams }: Props) {
 							</PageLayout>
 						</EntityDrawerContainer>
 					</EntityDrawerContextProvider>
-				</EntityScrollObserverContextProvider>
+				</VisibleEntityIdsContextProvider>
 			</SelectedEntityContextProvider>
 		</EntitiesContextProvider>
 	);

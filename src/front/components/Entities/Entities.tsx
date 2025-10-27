@@ -1,6 +1,6 @@
 import type { EntitiesData, EntityType } from "@/server/types";
 import { ClientEntities } from "./ClientEntities";
-import { EntityCard } from "./EntityCard";
+import { Entity } from "./Entity";
 import { LoadMore } from "./LoadMore";
 
 type Props = {
@@ -17,9 +17,9 @@ export const Entities = ({ entityType, entitiesData }: Props) => {
 
 	return (
 		<div>
-			<ClientEntities>
+			<ClientEntities entityType={entityType}>
 				{entities.map((entity) => (
-					<EntityCard key={entity.id} entity={entity} />
+					<Entity key={entity.id} entity={entity} entityType={entityType} />
 				))}
 			</ClientEntities>
 

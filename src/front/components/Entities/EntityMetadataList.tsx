@@ -1,25 +1,30 @@
-import { type ReactNode, Suspense } from "react";
+import { type JSX, Suspense } from "react";
+import { Loading } from "@/components/Loading";
 import { api } from "@/server/api";
 import type { EntityType, RawMetadata } from "@/server/types";
-import { Loading } from "../Loading";
 
 type Props = {
 	entityType: EntityType;
 	entityId: number;
 	names: string[];
-	render: (metadataArr: RawMetadata[]) => ReactNode;
+	render: (metadataArr: RawMetadata[]) => JSX.Element;
 };
 
-export const MetadataList = async ({
+export const EntityMetadataList = async ({
 	render,
 	entityType,
 	entityId,
 	names,
 }: Props) => {
+	if (!names.length) {
+		return null;
+	}
+
 	const metadataArr = await api.getMetadataList(entityType, entityId, names);
+
 	return (
 		<Suspense fallback={<Loading />}>
-			{metadataArr ? render(metadataArr) : null}
+			{metadataArr?.length ? render(metadataArr) : null}
 		</Suspense>
 	);
 };

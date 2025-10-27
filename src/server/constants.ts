@@ -15,11 +15,11 @@ export const EntityTypes = {
 	school: "school",
 	pool: "pool",
 	team: "team",
-	swimMeet: "swimMeet",
 	coach: "coach",
 	lifeguard: "lifeguard",
-	swimResult: "swimResult",
+	swimMeet: "swimMeet",
 	swimEvent: "swimEvent",
+	swimResult: "swimResult",
 };
 
 export const EntityTypePlurals: Record<EntityType, string> = {
@@ -29,10 +29,10 @@ export const EntityTypePlurals: Record<EntityType, string> = {
 	pool: "Pools",
 	team: "Teams",
 	coach: "Coaches",
-	swimMeet: "Swimming Meets",
 	lifeguard: "Lifeguards",
-	swimResult: "Swimming Results",
+	swimMeet: "Swimming Meets",
 	swimEvent: "Swimming Events",
+	swimResult: "Swimming Results",
 };
 
 export const EntityTypesKeys = Object.keys(EntityTypes);
@@ -162,7 +162,7 @@ export const EntityRelationships: Record<
 	parent: [["parentOf", "swimmer"]],
 };
 
-export const EntitiesPageMetadata: Record<EntityType, string[]> = {
+export const EntitiesMetadataList: Record<EntityType, string[]> = {
 	pool: ["poolDimensions.length", "isHeated", "cleanliness"],
 	coach: ["performance", "experience", "ratePerHour.ksh"],
 	swimmer: ["dob"],
