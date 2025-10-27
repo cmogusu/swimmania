@@ -163,13 +163,30 @@ export const EntityRelationships: Record<
 };
 
 export const EntitiesMetadataList: Record<EntityType, string[]> = {
-	pool: ["poolDimensions.length", "isHeated", "cleanliness"],
-	coach: ["performance", "experience", "ratePerHour.ksh"],
+	pool: [
+		"poolDimensions.length",
+		"isHeated",
+		"cleanliness",
+		"location.lat",
+		"location.lng",
+	],
+	coach: [
+		"performance",
+		"experience",
+		"ratePerHour.ksh",
+		"location.lat",
+		"location.lng",
+	],
 	swimmer: ["dob"],
-	school: ["averageSchoolFees.ksh"],
+	school: ["averageSchoolFees.ksh", "location.lat", "location.lng"],
 	team: ["membershipFee.ksh"],
-	lifeguard: ["dob"],
-	swimMeet: ["startEndDates.startDate", "course"],
+	lifeguard: ["dob", "location.lat", "location.lng"],
+	swimMeet: [
+		"startEndDates.startDate",
+		"course",
+		"location.lat",
+		"location.lng",
+	],
 	swimEvent: ["eventNumber", "swimStroke", "swimDistance"],
 	swimResult: ["rank", "time"],
 	parent: ["parentOf", "swimmer"],

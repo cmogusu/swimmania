@@ -43,7 +43,7 @@ export class Database extends BaseDatabase {
 		const [rawMetadataArr] = await this.query.getList(
 			entityType,
 			entityId,
-			names,
+			names.map(formatColumnNameForDb),
 		);
 
 		const results = (rawMetadataArr as Record<string, unknown>[])[0];

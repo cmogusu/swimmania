@@ -10,6 +10,7 @@ export default async function ExpPage() {
 	console.log(session);
 	return (
 		<div>
+			<h1>hello</h1>
 			<form action={handleSubmit}>
 				<input type="hidden" name="token" defaultValue={userToken} />
 				<input type="submit" className="btn btn-sm" />

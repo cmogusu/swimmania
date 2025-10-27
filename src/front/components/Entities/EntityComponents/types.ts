@@ -7,5 +7,6 @@ export type EntityProps = PropsWithChildren & {
 };
 
 export type MetadataProps = {
+	entityId: number;
 	metadataArr: RawMetadata[];
 };

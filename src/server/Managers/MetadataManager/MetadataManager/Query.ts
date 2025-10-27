@@ -29,7 +29,7 @@ export class Query extends BaseQuery {
 
 		return this.exec(
 			`SELECT ${joinedNames} FROM \`${tableName}\` Where entityId=?;`,
-			[entityId, entityType],
+			[entityId],
 		);
 	}
 

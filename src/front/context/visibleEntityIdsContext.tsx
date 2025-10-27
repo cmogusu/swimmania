@@ -35,7 +35,7 @@ type Props = {
 	children: ReactNode;
 };
 
-export const ContextProvider = ({ children }: Props) => {
+const ContextProvider = ({ children }: Props) => {
 	const visibleEntityIdsRef = useRef<Set<number>>(initialSet);
 	const divContainerElementsRef =
 		useRef<WeakMap<HTMLDivElement, number>>(initialWeakMap);

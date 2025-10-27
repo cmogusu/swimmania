@@ -51,7 +51,7 @@ export const Entity = async ({ entity, entityType }: Props) => {
 					entityType={entityType}
 					names={entityMetadataList}
 					render={(metadataArr: RawMetadata[]) => (
-						<MetadataComponent metadataArr={metadataArr} />
+						<MetadataComponent entityId={entity.id} metadataArr={metadataArr} />
 					)}
 				/>
 			</EntityComponent>

@@ -18,6 +18,9 @@ export default async function Home({ searchParams }: Props) {
 
 	const entityType = "pool";
 	const entitiesData = await api.getEntities(entityType, Number(page));
+	if (!entitiesData) {
+		return "Oops! No data found";
+	}
 
 	return (
 		<AppProfiler>
