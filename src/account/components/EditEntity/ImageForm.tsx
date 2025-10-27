@@ -1,17 +1,19 @@
 import Image from "next/image";
-import type { ImageData } from "@/server/types";
+import { updateImage } from "@/server/api/apiActions";
+import type { EntityType, ImageData } from "@/server/types";
 
 type EditImageProps = {
+	entityType: EntityType;
 	entityId: number;
 	image: ImageData;
-	action: (formData: FormData) => void;
 };
 
-export const ImageForm = ({ entityId, image, action }: EditImageProps) => {
+export const ImageForm = ({ entityType, entityId, image }: EditImageProps) => {
 	const { id, alt, src, isDefault } = image;
 
 	return (
-		<form action={action}>
+		<form action={updateImage}>
+			<input type="hidden" name="entityType" value={entityType} />
 			<input type="hidden" name="entityId" value={entityId} />
 			<input type="hidden" name="id" value={id} />
 

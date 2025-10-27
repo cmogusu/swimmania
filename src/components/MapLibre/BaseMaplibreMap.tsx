@@ -2,84 +2,64 @@
 
 import {
 	FullscreenControl,
-	type LngLatLike,
 	Map as MapLibre,
 	NavigationControl,
 } from "maplibre-gl";
+import type { LatLng } from "@/types";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useImperativeHandle, useRef, useState } from "react";
-import type { MapRef } from "@/account/components/Map/type";
-import { MapContainer } from "@/components/MapContainer";
+import { useEffect, useRef } from "react";
 import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/constants";
 import { logInfo } from "@/utilities/log";
 
-type Props = {
+export type BaseMaplibreProps = {
 	styleUrl: string;
-	center?: LngLatLike;
+	center?: LatLng;
 	zoom?: number;
-	ref: React.ForwardedRef<MapRef>;
+	setMaplibre: (map: MapLibre) => void;
 };
 
-export function BaseMaplibreMap({ styleUrl, center, zoom, ref }: Props) {
-	const initialMapCenter = center || DEFAULT_MAP_CENTER;
-	const initialZoom = zoom || DEFAULT_MAP_ZOOM;
-
-	const [mapCenter, setMapCenter] = useState<LngLatLike>(initialMapCenter);
+export default function BaseMaplibreMap({
+	center,
+	zoom,
+	styleUrl,
+	setMaplibre,
+}: BaseMaplibreProps) {
 	const divRef = useRef<HTMLDivElement>(null);
-	const mapRef = useRef<MapLibre>(null);
-
-	useImperativeHandle(ref, () => {
-		return {
-			setCenterOnClick: (onMapClick) => {
-				if (!mapRef.current) {
-					// throw Error("map instance not set");
-					return;
-				}
-
-				mapRef.current.on("click", (event) => {
-					const newCenter = event.lngLat.toArray();
-					setMapCenter(newCenter);
-					onMapClick(newCenter);
-				});
-			},
-		};
-	}, []);
+	const mapZoom = zoom || DEFAULT_MAP_ZOOM;
+	const mapCenter = center?.lat && center?.lng ? center : DEFAULT_MAP_CENTER;
 
 	useEffect(() => {
 		if (!styleUrl) {
 			throw Error("style url not set");
 		}
 
-		if (!divRef.current || divRef.current.querySelector("canvas")) {
+		if (!divRef.current) {
 			return;
 		}
 
 		logInfo("Creating maplibre map instance");
-		mapRef.current = renderMap(
+		const { unsubscribe, ref } = renderMap(
 			divRef.current,
 			styleUrl,
 			mapCenter,
-			initialZoom,
+			mapZoom,
 		);
-		return () => {
-			if (mapRef.current) {
-				logInfo("Removing maplibre map");
-				mapRef.current.remove();
-			}
-		};
-	}, [styleUrl, mapCenter, initialZoom]);
 
-	return (
-		<MapContainer>
-			<div className="w-full h-full" ref={divRef} />
-		</MapContainer>
-	);
+		setMaplibre(ref);
+
+		return () => {
+			logInfo("Removing maplibre map");
+			unsubscribe();
+		};
+	}, [styleUrl, mapCenter, mapZoom, setMaplibre]);
+
+	return <div className="w-full h-full" ref={divRef} />;
 }
 
 export function renderMap(
 	container: HTMLDivElement,
 	styleUrl: string,
-	center: LngLatLike,
+	center: LatLng,
 	zoom: number,
 ) {
 	const map = new MapLibre({
@@ -103,13 +83,13 @@ export function renderMap(
 		"top-left",
 	);
 
-	map.on("click", (event) => {
-		logInfo(event.lngLat);
-	});
+	const unsubscribe = () => {
+		map.remove();
+		container.innerHTML = "";
+	};
 
-	map.on("zoom", () => {
-		logInfo(map.getZoom());
-	});
-
-	return map;
+	return {
+		ref: map,
+		unsubscribe,
+	};
 }

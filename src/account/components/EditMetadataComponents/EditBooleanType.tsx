@@ -10,9 +10,10 @@ export const EditBooleanType = ({
 
 	return (
 		<EditContainer
+			id={metadataType.id}
+			name={metadataType.name}
 			entityType={entityType}
 			entityId={entityId}
-			metadataType={metadataType}
 		>
 			<fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4 mb-3">
 				<legend className="fieldset-legend">{title}</legend>

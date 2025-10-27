@@ -29,6 +29,10 @@ export default async function Home({ params, searchParams }: Props) {
 	const { page = 1 } = await searchParams;
 	const entitiesData = await api.getEntities(entityType, Number(page));
 
+	if (!entitiesData) {
+		return "Ooops! No entities found";
+	}
+
 	return (
 		<EntitiesContextProvider
 			entitiesData={entitiesData}

@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
-import { Page } from "@/account";
 import { EntitiesNavBar } from "@/account/components/Header";
+import { Page } from "@/account/components/Page";
 import { metadataManagerFactory } from "@/server/Managers";
 import type { EntityType } from "@/server/types";
 

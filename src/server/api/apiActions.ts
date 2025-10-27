@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { seedEntityFactory } from "../seed";
-import type { EntityType, RelationshipType } from "../types";
+import type { EntityType, MetadataValue, RelationshipType } from "../types";
 import { isUndefined } from "../utils";
 import { api } from "./api";
 
@@ -26,42 +26,27 @@ export async function updateEntity(formData: FormData) {
 		"name",
 		"description",
 		"location",
-		"currentPath",
 	]);
 
-	await api.updateEntity(
-		data.entityType as EntityType,
-		Number(data.entityId),
-		data.name as string,
-		data.description as string,
-		data.location as string,
-	);
+	const entityId = Number(data.entityId);
+	const entityType = data.entityType as EntityType;
+	const name = data.name as string;
+	const description = data.description as string;
+	const location = data.location as string;
 
-	reloadEditPage(data.entityType, data.entityId);
-}
-
-export async function addEntity(formData: FormData) {
-	const data = extractFormData(formData, [
-		"entityType",
-		"name",
-		"description",
-		"location",
-	]);
-
-	const response = await api.addEntity(
-		data.entityType as EntityType,
-		data.name as string,
-		data.description as string,
-		data.location as string,
-	);
-
-	if (response?.id) {
-		redirect(`/account/${data.entityType}/edit/${response.id}/`);
+	if (entityId > -1) {
+		await api.updateEntity(entityType, entityId, name, description, location);
+		reloadEditPage(entityType, `${entityId}`);
+		return;
 	}
+
+	const response = await api.addEntity(entityType, name, description, location);
+	redirect(`/account/${entityType}/edit/${response?.id}/`);
 }
 
 export async function updateImage(formData: FormData) {
 	const data = extractFormData(formData, [
+		"entityType",
 		"entityId",
 		"id",
 		"alt",
@@ -69,32 +54,52 @@ export async function updateImage(formData: FormData) {
 		"isDefault",
 	]);
 
-	await api.updateImage(
-		Number(data.entityId),
-		Number(data.id),
-		data.alt as string,
-		data.filepath as string,
-		Boolean(data.isDefault),
-	);
+	const entityType = data.entityType as EntityType;
+	const entityId = Number(data.entityId);
+	const id = Number(data.id);
+	const alt = data.alt as string;
+	const filepath = data.filepath as string;
+	const isDefault = Boolean(data.isDefault);
 
-	reloadEditPage(data.entityType, data.entityId);
+	if (id > -1) {
+		await api.updateImage(entityId, id, alt, filepath, isDefault);
+	} else {
+		await api.insertImage(entityId, alt, filepath, isDefault);
+	}
+
+	reloadEditPage(entityType, `${entityId}`);
 }
 
-export async function insertImage(formData: FormData) {
+export async function updateLocationMetadata(formData: FormData) {
 	const data = extractFormData(formData, [
+		"entityType",
+		"id",
 		"entityId",
-		"alt",
-		"filepath",
-		"isDefault",
+		"latName",
+		"latValue",
+		"lngName",
+		"lngValue",
 	]);
 
-	const response = await api.insertImage(
-		Number(data.entityId),
-		data.alt as string,
-		data.filepath as string,
-		Boolean(data.isDefault),
-	);
-	console.log(response);
+	const id = Number(data.id);
+	const entityId = Number(data.entityId);
+	const entityType = data.entityType as EntityType;
+	const metadataArr = [
+		{
+			name: data.latName as string,
+			value: Number(data.latValue),
+		},
+		{
+			name: data.lngName as string,
+			value: Number(data.lngValue),
+		},
+	];
+
+	if (id > -1) {
+		await api.updateMetadata(entityType, id, entityId, metadataArr);
+	} else {
+		await api.insertMetadata(entityType, entityId, metadataArr);
+	}
 
 	reloadEditPage(data.entityType, data.entityId);
 }
@@ -108,31 +113,21 @@ export async function updateMetadata(formData: FormData) {
 		"value",
 	]);
 
-	await api.updateMetadata(
-		data.entityType as EntityType,
-		Number(data.id),
-		Number(data.entityId),
-		data.name as string,
-		data.value as string,
-	);
+	const id = Number(data.id);
+	const entityId = Number(data.entityId);
+	const entityType = data.entityType as EntityType;
+	const metadataArr = [
+		{
+			name: data.name as string,
+			value: data.value as MetadataValue,
+		},
+	];
 
-	reloadEditPage(data.entityType, data.entityId);
-}
-
-export async function insertMetadata(formData: FormData) {
-	const data = extractFormData(formData, [
-		"entityType",
-		"entityId",
-		"name",
-		"value",
-	]);
-
-	await api.insertMetadata(
-		data.entityType as EntityType,
-		Number(data.entityId),
-		data.name as string,
-		data.value as string,
-	);
+	if (id > -1) {
+		await api.updateMetadata(entityType, id, entityId, metadataArr);
+	} else {
+		await api.insertMetadata(entityType, entityId, metadataArr);
+	}
 
 	reloadEditPage(data.entityType, data.entityId);
 }

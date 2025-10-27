@@ -1,5 +1,6 @@
-import { Page, SubmitButton } from "@/account";
 import { EntitiesNavBar } from "@/account/components/Header";
+import { Page } from "@/account/components/Page";
+import { SubmitButton } from "@/components/SubmitButton";
 import { seedEntityType } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 
@@ -58,7 +59,11 @@ export default async function SeedDb({ params }: Props) {
 						</label>
 					</fieldset>
 
-					<SubmitButton buttonText="Seed" />
+					<SubmitButton buttonText="Seed">
+						<button type="button" className="btn btn-sm">
+							Seed
+						</button>
+					</SubmitButton>
 				</form>
 			</div>
 		</Page>

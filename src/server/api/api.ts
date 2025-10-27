@@ -4,8 +4,8 @@ import {
 	metadataManagerFactory,
 	relatedEntityManagerFactory,
 } from "@/server/Managers";
+import type { MetadataValue } from "@/server/types";
 import { POSTS_PER_PAGE } from "../constants";
-import type { MetadataValue } from "../Managers/MetadataManager";
 import { Log } from "../services";
 import type {
 	EntitiesData,
@@ -98,17 +98,11 @@ export class Api {
 	): Promise<{ id: number } | undefined> {
 		try {
 			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
-			const insertData = await relatedEntityManager.insertRelated(
-				entityType,
-				entityId,
-				{
-					id: relatedEntityId,
-					type: relatedEntityType,
-					relationshipType,
-				},
-			);
-
-			return insertData;
+			return await relatedEntityManager.insertRelated(entityType, entityId, {
+				id: relatedEntityId,
+				type: relatedEntityType,
+				relationshipType,
+			});
 		} catch (error: unknown) {
 			this.log.error("Unable to add related entities", error as Error);
 		}
@@ -159,13 +153,12 @@ export class Api {
 	) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
-			const updateData = await entityManager.update({
+			return await entityManager.update({
 				entityId,
 				name,
 				description,
 				location,
 			});
-			return updateData;
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update entity";
 			this.log.error(errorMessage, error as Error);
@@ -180,12 +173,11 @@ export class Api {
 	) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
-			const insertData = await entityManager.insert({
+			return await entityManager.insert({
 				name,
 				description,
 				location,
 			});
-			return insertData;
 		} catch (error: unknown) {
 			const errorMessage = "Unable to add entity";
 			this.log.error(errorMessage, error as Error);
@@ -201,14 +193,13 @@ export class Api {
 	) {
 		try {
 			const imageManager = imageManagerFactory.getInstance();
-			const updateData = await imageManager.update({
+			return await imageManager.update({
 				id,
 				entityId,
 				alt,
 				filepath,
 				isDefault,
 			});
-			return updateData;
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update image";
 			this.log.error(errorMessage, error as Error);
@@ -259,12 +250,10 @@ export class Api {
 	): Promise<RawMetadata[] | undefined> {
 		try {
 			const metadataManager = metadataManagerFactory.getInstance();
-			const metadata = await metadataManager.getAll({
+			return await metadataManager.getAll({
 				entityId,
 				entityType,
 			});
-
-			return metadata;
 		} catch (error: unknown) {
 			console.log(error);
 			this.log.error("Unable to get metadata", error as Error);
@@ -275,8 +264,7 @@ export class Api {
 		entityType: EntityType,
 		id: number,
 		entityId: number,
-		name: string,
-		value: MetadataValue,
+		rawMetadataArr: RawMetadata[],
 	) {
 		try {
 			const metadataManager = metadataManagerFactory.getInstance();
@@ -284,12 +272,7 @@ export class Api {
 				entityType,
 				id,
 				entityId,
-				rawMetadataArr: [
-					{
-						name,
-						value,
-					},
-				],
+				rawMetadataArr,
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update metadata";
@@ -300,22 +283,15 @@ export class Api {
 	async insertMetadata(
 		entityType: EntityType,
 		entityId: number,
-		name: string,
-		value: MetadataValue,
+		rawMetadataArr: RawMetadata[],
 	) {
 		try {
 			const metadataManager = metadataManagerFactory.getInstance();
-			const updateData = await metadataManager.insert({
+			return await metadataManager.insert({
 				entityType,
 				entityId,
-				rawMetadataArr: [
-					{
-						name,
-						value,
-					},
-				],
+				rawMetadataArr,
 			});
-			return updateData;
 		} catch (error: unknown) {
 			console.log(error);
 			const errorMessage = "Unable to insert metadata";

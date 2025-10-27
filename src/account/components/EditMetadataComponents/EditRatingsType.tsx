@@ -16,9 +16,10 @@ export const EditRatingsType = ({
 
 	return (
 		<EditContainer
+			id={metadataType.id}
+			name={metadataType.name}
 			entityType={entityType}
 			entityId={entityId}
-			metadataType={metadataType}
 		>
 			<div>
 				<label className="floating-label mb-3">

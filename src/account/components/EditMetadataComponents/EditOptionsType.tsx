@@ -16,9 +16,10 @@ export const EditOptionsType = ({
 
 	return (
 		<EditContainer
+			id={metadataType.id}
+			name={metadataType.name}
 			entityType={entityType}
 			entityId={entityId}
-			metadataType={metadataType}
 		>
 			<fieldset className="fieldset">
 				<legend className="fieldset-legend">{title}</legend>

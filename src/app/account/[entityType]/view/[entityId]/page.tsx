@@ -1,4 +1,5 @@
-import { Entity, Page } from "@/account";
+import { Entity } from "@/account/components/Entity";
+import { Page } from "@/account/components/Page";
 import { EntityTypePlurals } from "@/server/constants";
 import type { EntityType } from "@/server/types";
 

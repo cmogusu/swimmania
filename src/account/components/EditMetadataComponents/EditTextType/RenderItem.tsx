@@ -30,9 +30,10 @@ export const RenderItem = ({
 
 	return (
 		<EditContainer
+			id={metadataType.id}
+			name={metadataType.name}
 			entityType={entityType}
 			entityId={entityId}
-			metadataType={metadataType}
 		>
 			<label className="floating-label mb-3">
 				<span>{title}</span>

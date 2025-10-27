@@ -1,14 +1,12 @@
-import type { LatLng, LngLat } from "./types";
+import type { LatLng } from "./types";
 
 export const TOAST_RENDER_DELAY_MS = 5000;
 
-export const API_KEY_PLACEHOLDER = "XXX-API-KEY-XXX";
-
-const defaultLat = 38.886986812976716;
-const defaultLng = -77.02802728158858;
 export const DEFAULT_MAP_ZOOM = 12.3;
-export const DEFAULT_MAP_CENTER: LngLat = [defaultLng, defaultLat];
-export const DEFAULT_MAP_CENTER_LATLNG: LatLng = [defaultLat, defaultLng];
+export const DEFAULT_MAP_CENTER: LatLng = {
+	lng: -77.02802728158858,
+	lat: 38.886986812976716,
+};
 
 export const BaseImageUploadUrl: string = "/upload";
 

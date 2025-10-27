@@ -1,4 +1,3 @@
-import { addEntity as addEntityAction } from "@/server/api/apiActions";
 import type { EntityData, EntityType } from "@/server/types";
 import { EditImages, EditMetadata, EntityForm } from "../EditEntity";
 
@@ -10,28 +9,17 @@ const show = false;
 
 export const AddEntity = async ({ entityType }: Props) => {
 	const entity = createEmptyEntity(entityType);
-	const { images, metadata } = entity || {};
+	const { images } = entity || {};
 
 	return (
 		<div>
 			<section>
 				<h1 className="mb-4">Add</h1>
-				<EntityForm
-					entityId={-1}
-					entityType={entityType}
-					entity={entity}
-					action={addEntityAction}
-				/>
+				<EntityForm entityId={-1} entityType={entityType} entity={entity} />
 			</section>
 
 			{show && <EditImages entityId={-1} images={images} />}
-			{show && (
-				<EditMetadata
-					entityType={entityType}
-					entityId={-1}
-					metadata={metadata}
-				/>
-			)}
+			{show && <EditMetadata entityType={entityType} entityId={-1} />}
 		</div>
 	);
 };

@@ -1,5 +1,5 @@
-import type { EntityType, RawMetadata } from "@/server/types";
-import { entityMetadataFactory, type IEntityMetadata } from "..";
+import type { EntityType, IEntityMetadata, RawMetadata } from "@/server/types";
+import { entityMetadataFactory } from "..";
 import type { RawGetListMetadataInputs } from "../types";
 import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";

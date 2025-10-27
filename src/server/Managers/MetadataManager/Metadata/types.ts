@@ -17,6 +17,7 @@ export type MetadataTypeInputs = {
 	suffix?: string;
 	sortIndex?: number;
 	dbColumnType?: string;
+	step?: number;
 	// biome-ignore lint/suspicious/noExplicitAny: Fix this later
 	computeFunction?: (_value: any) => any;
 };

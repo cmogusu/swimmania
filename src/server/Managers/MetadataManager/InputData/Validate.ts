@@ -9,7 +9,7 @@ export class Validate extends BaseValidate {
 	);
 
 	filters(f: unknown) {
-		this.filterValidator.parse(f);
+		return this.filterValidator.parse(f);
 	}
 }
 

@@ -128,6 +128,10 @@ export type IOptionsMetadataPropertyType = IMetadataPropertyType & {
 	options: Option[];
 };
 
+export type ITimeMetadataPropertyType = IMetadataPropertyType & {
+	step: number;
+};
+
 export type IParentMetadataPropertyType = IMetadataPropertyType & {
 	names: string[];
 	children: IMetadataPropertyType[];
@@ -144,8 +148,8 @@ export interface IEntityMetadata {
 	dbValue: MetadataData[];
 	getDbTableColumns: () => DbTableColumn[];
 
-	validateFilter: (filter: MetadataFilter) => void;
-	validateFilters: (filters?: MetadataFilter[]) => void;
+	validateFilter: (filter: MetadataFilter) => MetadataFilter;
+	validateFilters: (filters?: MetadataFilter[]) => MetadataFilter[];
 
 	setSeedData: () => void;
 }

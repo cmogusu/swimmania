@@ -69,7 +69,7 @@ export class Query extends BaseQuery {
 		});
 
 		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
-		const joinedNames = names.map((n) => `${n}=?`).join(" ");
+		const joinedNames = names.map((n) => `${n}=?`).join(", ");
 		const tableName = EntityMetadataDbTables[entityType];
 
 		return this.exec(`UPDATE \`${tableName}\` SET ${joinedNames} WHERE id=?;`, [

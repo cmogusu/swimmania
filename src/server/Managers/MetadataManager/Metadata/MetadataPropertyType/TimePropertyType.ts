@@ -1,25 +1,29 @@
 import { faker } from "@faker-js/faker";
-import type { MetadataValue } from "@/server/types";
-import { addLeadingZero, isSet } from "@/server/utils";
+import type { ITimeMetadataPropertyType, MetadataValue } from "@/server/types";
+import { addLeadingZero, isSet, isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { BaseMetadataPropertyType } from "./BaseMetadataPropertyType";
 
 const SUFFIX = " Hrs";
 
-export class TimePropertyType extends BaseMetadataPropertyType {
+export class TimePropertyType
+	extends BaseMetadataPropertyType
+	implements ITimeMetadataPropertyType
+{
 	dbColumnType: string = "time";
+	step: number = 1;
 
 	declare _value: string;
 
 	constructor(inputs: MetadataTypeInputs) {
-		const { value, ...rest } = inputs;
+		const { value, step, ...rest } = inputs;
 		super({
 			...rest,
 			suffix: SUFFIX,
 		});
 
 		this.type = "time";
-
+		if (!isUndefined(step)) this.step = step;
 		if (isSet(value)) this.value = value as string;
 	}
 

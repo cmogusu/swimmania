@@ -1,9 +1,9 @@
+import { EditSingleLocationMap } from "@/components/MapLibre";
 import { getApiKey } from "@/server/serverFunctions";
-import { EditMap } from "../Map";
-import { EditContainer } from "./EditContainer";
+import type { LatLng } from "@/types";
 import type { EditProps } from "./types";
 
-export const EditLatitudeType = ({
+export const EditLatitudeType = async ({
 	entityType,
 	entityId,
 	parentTitle,
@@ -13,40 +13,33 @@ export const EditLatitudeType = ({
 		return null;
 	}
 
-	const mapTilerApiKey = getApiKey("maptiler");
-	const styleUrl = `https://api.maptiler.com/maps/backdrop/style.json?key=${mapTilerApiKey}`;
+	const maptilerApiKey = await getApiKey("maptiler");
+	const styleUrl = `https://api.maptiler.com/maps/backdrop/style.json?key=${maptilerApiKey}`;
 
 	const latMetadata = childrenMetadata.find((m) => m.type === "latitude");
 	const lngMetadata = childrenMetadata.find((m) => m.type === "longitude");
 
-	if (!lngMetadata || !lngMetadata) {
+	if (!latMetadata?.name || !lngMetadata?.name) {
 		throw Error("missing lat or lang");
 	}
 
-	const lat = latMetadata?.value as number;
-	const lng = lngMetadata?.value as number;
+	const center: LatLng = {
+		lat: latMetadata?.value as number,
+		lng: lngMetadata?.value as number,
+	};
 
 	return (
-		<div>
+		<div className="mb-4">
 			<h3>{parentTitle}</h3>
-			<EditMap styleUrl={styleUrl} lat={lat as number} lng={lng as number} />
-			<EditContainer
+			<EditSingleLocationMap
+				id={latMetadata.id}
+				latName={latMetadata.name}
+				lngName={lngMetadata.name}
 				entityId={entityId}
 				entityType={entityType}
-				// biome-ignore lint/style/noNonNullAssertion: A check for this exists above
-				metadataType={latMetadata!}
-			>
-				<input type="hidden" name="value" value={lat} />
-			</EditContainer>
-
-			<EditContainer
-				entityId={entityId}
-				entityType={entityType}
-				// biome-ignore lint/style/noNonNullAssertion: A check for this exists above
-				metadataType={lngMetadata!}
-			>
-				<input type="hidden" name="value" value={lng} />
-			</EditContainer>
+				styleUrl={styleUrl}
+				center={center}
+			/>
 		</div>
 	);
 };
