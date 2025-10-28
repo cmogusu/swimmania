@@ -13,7 +13,7 @@ export function ResponsiveMapContainer({ children }: Props) {
 	const { width, height } = useGetDimensions(divRef);
 
 	return (
-		<div ref={divRef} className="w-full">
+		<div ref={divRef} className="w-full h-full">
 			<div
 				className="bg-gray-100 map-container w-full"
 				style={{ height: `${height}px` }}

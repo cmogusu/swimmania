@@ -1,6 +1,6 @@
 import type { EntitiesData, EntityType } from "@/server/types";
 import { Entities } from "../components/Entities";
-import { MapItem } from "../components/MapItem";
+import { EntitiesMap } from "../components/EntitiesMap";
 import { EntityLocationContextProvider } from "../context";
 
 type Props = {
@@ -15,9 +15,7 @@ export const HomePage = ({ entityType, entitiesData }: Props) => (
 				<Entities entityType={entityType} entitiesData={entitiesData} />
 			</div>
 			<div className="col-start-2 col-end-3 relative">
-				<div className="sticky top-4">
-					<MapItem />
-				</div>
+				<EntitiesMap />
 			</div>
 		</section>
 	</EntityLocationContextProvider>
