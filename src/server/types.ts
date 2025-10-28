@@ -159,3 +159,10 @@ export type MetadataValue = boolean | number | string;
 export type MetadataFilter = RawMetadata & {
 	comparator: MetadataComparator;
 };
+
+export type ApiKeys = {
+	mapbox: string;
+	maptiler: string;
+	tomtom: string;
+	azure: string;
+};

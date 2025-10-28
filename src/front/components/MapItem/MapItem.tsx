@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect } from "react";
+import { MultipleLocationsMap } from "@/components/MapLibre";
 import {
 	// useVisibleEntityIdsContext,
 	useEntityLocationContext,
@@ -28,15 +28,13 @@ export const MapItem = () => {
 	// 	};
 	// }, [handlePageScroll]);
 
+	if (!entityLocations.length) {
+		return null;
+	}
+
 	return (
 		<div>
-			<Image
-				className="w-full"
-				src="/images/map-placeholder.jpeg"
-				alt="MapGuru logo"
-				height={20}
-				width={70}
-			/>
+			<MultipleLocationsMap locations={entityLocations} />
 		</div>
 	);
 };

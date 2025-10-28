@@ -3,8 +3,6 @@ export type LatLng = {
 	lng: number;
 };
 
-export type EntityLocation = {
+export type EntityLatLng = LatLng & {
 	entityId: number;
-	lat: number;
-	lng: number;
 };

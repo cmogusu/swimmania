@@ -1,8 +1,8 @@
 "use client";
 
-import { type Map as MapLibre, type MapMouseEvent, Marker } from "maplibre-gl";
+import type { Map as MapLibre, MapMouseEvent } from "maplibre-gl";
 import dynamic from "next/dynamic";
-import { type ComponentType, useEffect, useRef, useState } from "react";
+import { type ComponentType, useEffect, useState } from "react";
 import { SubmitButton } from "@/components/SubmitButton";
 import { DEFAULT_MAP_CENTER } from "@/constants";
 import { updateLocationMetadata } from "@/server/api/apiActions";
@@ -10,6 +10,7 @@ import type { EntityType } from "@/server/types";
 import type { LatLng } from "@/types";
 import { MapContainer } from "../MapContainer";
 import type { BaseMaplibreProps } from "./BaseMaplibreMap";
+import { useRenderMarker } from "./useRenderMarker";
 
 type Props = {
 	id: number;
@@ -17,7 +18,6 @@ type Props = {
 	lngName: string;
 	entityId: number;
 	entityType: EntityType;
-	styleUrl: string;
 	center?: LatLng;
 	zoom?: number;
 };
@@ -34,33 +34,15 @@ export const EditSingleLocationMap = ({
 	entityType,
 	center,
 	zoom,
-	styleUrl,
 }: Props) => {
 	const initialMapCenter =
 		center?.lat && center?.lng ? center : DEFAULT_MAP_CENTER;
 
 	const [mapCenter, setMapCenter] = useState<LatLng>(initialMapCenter);
 	const [maplibre, setMaplibre] = useState<MapLibre | undefined>();
-	const markerRef = useRef<Marker | null>(null);
 	const buttonText = id === -1 ? "Insert" : "Update";
 
-	useEffect(() => {
-		if (!maplibre) {
-			return;
-		}
-
-		const marker = createMarker(maplibre, initialMapCenter);
-		markerRef.current = marker;
-		return () => {
-			marker.remove();
-		};
-	}, [maplibre, initialMapCenter]);
-
-	useEffect(() => {
-		if (markerRef.current) {
-			markerRef.current.setLngLat(mapCenter);
-		}
-	}, [mapCenter]);
+	useRenderMarker(maplibre, initialMapCenter, initialMapCenter);
 
 	useEffect(() => {
 		if (maplibre) {
@@ -76,7 +58,6 @@ export const EditSingleLocationMap = ({
 		<div className="mb-4">
 			<MapContainer>
 				<BaseMaplibreMap
-					styleUrl={styleUrl}
 					center={center}
 					zoom={zoom}
 					setMaplibre={setMaplibre}
@@ -105,14 +86,4 @@ const handleMapClicks = (
 		const { lat, lng } = event.lngLat;
 		onMapClick({ lat, lng });
 	});
-};
-
-const createMarker = (maplibre: MapLibre, position: LatLng) => {
-	const marker = new Marker({
-		color: "#199601",
-	});
-
-	marker.setLngLat(position);
-	marker.addTo(maplibre);
-	return marker;
 };

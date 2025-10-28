@@ -7,7 +7,6 @@ import type { MetadataProps } from "../types";
 
 export default function ({ entityId, metadataArr }: MetadataProps) {
 	const { setEntityLocation } = useEntityLocationContext();
-	console.log(entityId, metadataArr);
 
 	useEffect(() => {
 		const metadataObj = arrayToObj(metadataArr);

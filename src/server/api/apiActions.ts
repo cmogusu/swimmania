@@ -11,6 +11,14 @@ export async function getEntities(entityType: EntityType, pageNumber: number) {
 	return await api.getEntities(entityType, pageNumber);
 }
 
+export async function getMetadata(
+	entityType: EntityType,
+	entityId: number,
+	names: string[],
+) {
+	return await api.getMetadataList(entityType, entityId, names);
+}
+
 export async function deleteEntity(formData: FormData) {
 	const entityId = formData.get("entityId");
 	const entityType = formData.get("entityType");

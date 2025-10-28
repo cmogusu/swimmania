@@ -2,23 +2,18 @@
 
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import type { ApiKeys } from "@/server/types";
 import { withServerSafetyHoc } from "./withServerSafetyHoc";
 
-export interface ApiKeysContextType {
-	mapboxApiKey: string;
-	maptilerApiKey: string;
-	tomtomApiKey: string;
-	azureApiKey: string;
+type ApiKeysContextType = ApiKeys & {
 	areKeysSet: boolean;
-}
-
-type ApiKeys = Omit<ApiKeysContextType, "areKeysSet">;
+};
 
 export const initialKeys = {
-	mapboxApiKey: "",
-	maptilerApiKey: "",
-	tomtomApiKey: "",
-	azureApiKey: "",
+	mapbox: "",
+	maptiler: "",
+	tomtom: "",
+	azure: "",
 	areKeysSet: false,
 };
 

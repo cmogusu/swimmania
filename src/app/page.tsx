@@ -1,3 +1,4 @@
+import { ApiContextProvider } from "@/context";
 import { AppProfiler } from "@/front/components/AppProfiler/AppProfiler";
 import { EntityDrawerContainer } from "@/front/components/EntityDrawer/";
 import {
@@ -8,6 +9,7 @@ import {
 } from "@/front/context";
 import { HomePage, PageLayout } from "@/front/pages";
 import { api } from "@/server/api";
+import { getApiKeys } from "@/server/serverFunctions";
 
 type Props = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -16,7 +18,7 @@ type Props = {
 export default async function Home({ searchParams }: Props) {
 	const { page = 1 } = await searchParams;
 
-	const entityType = "pool";
+	const entityType = "lifeguard";
 	const entitiesData = await api.getEntities(entityType, Number(page));
 	if (!entitiesData) {
 		return "Oops! No data found";
@@ -31,14 +33,16 @@ export default async function Home({ searchParams }: Props) {
 				<SelectedEntityContextProvider>
 					<VisibleEntityIdsContextProvider>
 						<EntityDrawerContextProvider>
-							<EntityDrawerContainer>
-								<PageLayout>
-									<HomePage
-										entitiesData={entitiesData}
-										entityType={entityType}
-									/>
-								</PageLayout>
-							</EntityDrawerContainer>
+							<ApiContextProvider getApiKeys={getApiKeys}>
+								<EntityDrawerContainer>
+									<PageLayout>
+										<HomePage
+											entitiesData={entitiesData}
+											entityType={entityType}
+										/>
+									</PageLayout>
+								</EntityDrawerContainer>
+							</ApiContextProvider>
 						</EntityDrawerContextProvider>
 					</VisibleEntityIdsContextProvider>
 				</SelectedEntityContextProvider>

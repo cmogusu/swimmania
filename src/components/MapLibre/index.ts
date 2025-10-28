@@ -1,2 +1,3 @@
 export * from "./EditSingleLocationMap";
-export * from "./SingleItemMap";
+export * from "./MultipleLocationsMap";
+export * from "./SingleLocationMap";

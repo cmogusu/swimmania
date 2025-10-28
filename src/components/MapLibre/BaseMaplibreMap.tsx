@@ -9,10 +9,10 @@ import type { LatLng } from "@/types";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/constants";
+import { useApiKeyContext } from "@/context";
 import { logInfo } from "@/utilities/log";
 
 export type BaseMaplibreProps = {
-	styleUrl: string;
 	center?: LatLng;
 	zoom?: number;
 	setMaplibre: (map: MapLibre) => void;
@@ -21,16 +21,16 @@ export type BaseMaplibreProps = {
 export default function BaseMaplibreMap({
 	center,
 	zoom,
-	styleUrl,
 	setMaplibre,
 }: BaseMaplibreProps) {
+	const { maptiler: maptilerApiKey } = useApiKeyContext();
 	const divRef = useRef<HTMLDivElement>(null);
 	const mapZoom = zoom || DEFAULT_MAP_ZOOM;
 	const mapCenter = center?.lat && center?.lng ? center : DEFAULT_MAP_CENTER;
 
 	useEffect(() => {
-		if (!styleUrl) {
-			throw Error("style url not set");
+		if (!maptilerApiKey) {
+			return;
 		}
 
 		if (!divRef.current) {
@@ -38,6 +38,7 @@ export default function BaseMaplibreMap({
 		}
 
 		logInfo("Creating maplibre map instance");
+		const styleUrl = `https://api.maptiler.com/maps/backdrop/style.json?key=${maptilerApiKey}`;
 		const { unsubscribe, ref } = renderMap(
 			divRef.current,
 			styleUrl,
@@ -51,7 +52,7 @@ export default function BaseMaplibreMap({
 			logInfo("Removing maplibre map");
 			unsubscribe();
 		};
-	}, [styleUrl, mapCenter, mapZoom, setMaplibre]);
+	}, [maptilerApiKey, mapCenter, mapZoom, setMaplibre]);
 
 	return <div className="w-full h-full" ref={divRef} />;
 }

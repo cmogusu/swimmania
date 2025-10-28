@@ -1,5 +1,5 @@
 import type { EntitiesData, EntityType } from "@/server/types";
-import { ClientEntities } from "./ClientEntities";
+// import { ClientEntities } from "./ClientEntities";
 import { Entity } from "./Entity";
 import { LoadMore } from "./LoadMore";
 

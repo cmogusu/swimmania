@@ -8,17 +8,17 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import type { EntityLocation } from "@/types";
+import type { EntityLatLng } from "@/types";
 import { withServerSafetyHoc } from "./withServerSafetyHoc";
 
 interface ContextType {
-	entityLocations: EntityLocation[];
-	setEntityLocation: (entityLocation: EntityLocation) => () => void;
+	entityLocations: EntityLatLng[];
+	setEntityLocation: (entityLocation: EntityLatLng) => () => void;
 }
 
 const initialContext = {
 	entityLocations: [],
-	setEntityLocation: (_entityLocation: EntityLocation) => () => {},
+	setEntityLocation: (_entityLocation: EntityLatLng) => () => {},
 };
 
 const EntityLocationContext = createContext<ContextType>(initialContext);
@@ -28,9 +28,9 @@ type Props = {
 };
 
 const ContextProvider = ({ children }: Props) => {
-	const [entityLocations, setEntityLocations] = useState<EntityLocation[]>([]);
+	const [entityLocations, setEntityLocations] = useState<EntityLatLng[]>([]);
 
-	const setEntityLocation = useCallback((entityLocation: EntityLocation) => {
+	const setEntityLocation = useCallback((entityLocation: EntityLatLng) => {
 		setEntityLocations((prevLocations) => [...prevLocations, entityLocation]);
 
 		return () => {

@@ -1,5 +1,4 @@
 import { EditSingleLocationMap } from "@/components/MapLibre";
-import { getApiKey } from "@/server/serverFunctions";
 import type { LatLng } from "@/types";
 import type { EditProps } from "./types";
 
@@ -12,9 +11,6 @@ export const EditLatitudeType = async ({
 	if (!childrenMetadata?.length) {
 		return null;
 	}
-
-	const maptilerApiKey = await getApiKey("maptiler");
-	const styleUrl = `https://api.maptiler.com/maps/backdrop/style.json?key=${maptilerApiKey}`;
 
 	const latMetadata = childrenMetadata.find((m) => m.type === "latitude");
 	const lngMetadata = childrenMetadata.find((m) => m.type === "longitude");
@@ -37,7 +33,6 @@ export const EditLatitudeType = async ({
 				lngName={lngMetadata.name}
 				entityId={entityId}
 				entityType={entityType}
-				styleUrl={styleUrl}
 				center={center}
 			/>
 		</div>

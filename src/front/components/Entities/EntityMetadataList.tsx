@@ -1,6 +1,6 @@
 import { type JSX, Suspense } from "react";
 import { Loading } from "@/components/Loading";
-import { api } from "@/server/api";
+import { getMetadata } from "@/server/api/apiActions";
 import type { EntityType, RawMetadata } from "@/server/types";
 
 type Props = {
@@ -20,7 +20,7 @@ export const EntityMetadataList = async ({
 		return null;
 	}
 
-	const metadataArr = await api.getMetadataList(entityType, entityId, names);
+	const metadataArr = await getMetadata(entityType, entityId, names);
 
 	return (
 		<Suspense fallback={<Loading />}>

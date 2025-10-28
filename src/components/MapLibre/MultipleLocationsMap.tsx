@@ -1,71 +1,88 @@
 "use client";
 
-import type { Map as MapLibre } from "maplibre-gl";
+import { center as turfCenter, points as turfPoints } from "@turf/turf";
+import type { Map as MapLibre, Marker } from "maplibre-gl";
 import dynamic from "next/dynamic";
-import { type ComponentType, useEffect, useRef, useState } from "react";
-import { SubmitButton } from "@/components/SubmitButton";
-import type { EntityType } from "@/server/types";
-import type { LatLng } from "@/types";
+import {
+	type ComponentType,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
+import type { EntityLatLng, LatLng } from "@/types";
+import { MapContainer } from "../MapContainer";
 import type { BaseMaplibreProps } from "./BaseMaplibreMap";
+import { createMarker } from "./utils";
 
 const BaseMaplibreMap: ComponentType<BaseMaplibreProps> = dynamic(
 	() => import("./BaseMaplibreMap"),
 );
 
 type Props = {
-	id: number;
-	latName: string;
-	lngName: string;
-	entityId: number;
-	entityType: EntityType;
-	styleUrl: string;
-	center: LatLng;
+	locations: EntityLatLng[];
 };
 
-export const EditSingleLocationMap = async ({
-	id,
-	latName,
-	lngName,
-	entityId,
-	entityType,
-	center,
-	styleUrl,
-}: Props) => {
-	const [mapCenter, setMapCenter] = useState<LatLng>(center);
-	const mapRef = useRef<MapLibre | null>(null);
-	const buttonText = id === -1 ? "Insert" : "Update";
+export const MultipleLocationsMap = ({ locations }: Props) => {
+	const initialMapCenter = useGetLocationsCenter(locations);
+	const [maplibre, setMaplibre] = useState<MapLibre | undefined>();
 
-	useEffect(() => {
-		const { current: maplibre } = mapRef;
-
-		if (!maplibre) {
-			return;
-		}
-
-		maplibre.on("click", (event) => {
-			console.log(event);
-			// setMapCenter()
-		});
-	}, []);
+	useFitLocations(maplibre, locations);
+	useRenderMarkers(maplibre, locations);
 
 	return (
 		<div className="mb-4">
-			<BaseMaplibreMap styleUrl={styleUrl} center={mapCenter} mapRef={mapRef} />
-			<form action="">
-				<input type="hidden" name="entityType" defaultValue={entityType} />
-				<input type="hidden" name="id" defaultValue={id} />
-				<input type="hidden" name="entityId" defaultValue={entityId} />
-				<input type="hidden" name="latName" defaultValue={latName} />
-				<input type="hidden" name="latValue" value={mapCenter.lat} />
-				<input type="hidden" name="lngName" defaultValue={lngName} />
-				<input type="hidden" name="lngValue" value={mapCenter.lng} />
-
-				<SubmitButton buttonText={buttonText}>
-					<button className="btn btn-sm" type="submit">
-						{buttonText}
-					</button>
-				</SubmitButton>
-			</form>
+			<MapContainer>
+				<BaseMaplibreMap center={initialMapCenter} setMaplibre={setMaplibre} />
+			</MapContainer>
 		</div>
 	);
 };
+
+const useFitLocations = (
+	maplibre: MapLibre | undefined,
+	locations: EntityLatLng[],
+) => {
+	useEffect(() => {
+		if (!maplibre || !locations.length) {
+			return;
+		}
+
+		const bounds = maplibre.getBounds();
+		locations.forEach((l) => bounds.extend(l));
+		maplibre.fitBounds(bounds);
+	}, [maplibre, locations]);
+};
+
+const useRenderMarkers = (
+	maplibre: MapLibre | undefined,
+	locations: EntityLatLng[],
+) => {
+	const markersRefs = useRef<Record<string, Marker>>({});
+
+	useEffect(() => {
+		if (!maplibre || !locations.length) {
+			return;
+		}
+
+		locations.forEach((location) => {
+			const { entityId } = location;
+			if (!markersRefs.current[entityId]) {
+				markersRefs.current[entityId] = createMarker(maplibre, location);
+			}
+		});
+
+		return () => {
+			for (const markerId in markersRefs.current) {
+				markersRefs.current[markerId].remove();
+			}
+		};
+	}, [maplibre, locations]);
+};
+
+const useGetLocationsCenter = (locations: LatLng[]): LatLng =>
+	useMemo(() => {
+		const features = turfPoints(locations.map((l) => [l.lng, l.lat]));
+		const [lng, lat] = turfCenter(features).geometry.coordinates;
+		return { lng, lat };
+	}, [locations]);
