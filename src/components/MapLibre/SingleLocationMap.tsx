@@ -4,7 +4,7 @@ import type { Map as MapLibre } from "maplibre-gl";
 import dynamic from "next/dynamic";
 import { type ComponentType, useState } from "react";
 import type { LatLng } from "@/types";
-import { MapContainer } from "../MapContainer";
+import { FixedMapContainer } from "../MapContainer";
 import type { BaseMaplibreProps } from "./BaseMaplibreMap";
 import { useRenderMarker } from "./useRenderMarker";
 
@@ -28,13 +28,13 @@ export const SingleLocationMap = ({ center, zoom }: Props) => {
 
 	return (
 		<div className="mb-4">
-			<MapContainer>
+			<FixedMapContainer>
 				<BaseMaplibreMap
 					center={center}
 					zoom={zoom}
 					setMaplibre={setMaplibre}
 				/>
-			</MapContainer>
+			</FixedMapContainer>
 		</div>
 	);
 };

@@ -11,7 +11,7 @@ import {
 	useState,
 } from "react";
 import type { EntityLatLng, LatLng } from "@/types";
-import { MapContainer } from "../MapContainer";
+import { ResponsiveMapContainer } from "../MapContainer";
 import type { BaseMaplibreProps } from "./BaseMaplibreMap";
 import { createMarker } from "./utils";
 
@@ -32,9 +32,9 @@ export const MultipleLocationsMap = ({ locations }: Props) => {
 
 	return (
 		<div className="mb-4">
-			<MapContainer>
+			<ResponsiveMapContainer>
 				<BaseMaplibreMap center={initialMapCenter} setMaplibre={setMaplibre} />
-			</MapContainer>
+			</ResponsiveMapContainer>
 		</div>
 	);
 };

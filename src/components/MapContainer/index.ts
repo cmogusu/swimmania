@@ -1,1 +1,2 @@
-export * from "./MapContainer";
+export * from "./FixedMapContainer";
+export * from "./ResponsiveMapContainer";

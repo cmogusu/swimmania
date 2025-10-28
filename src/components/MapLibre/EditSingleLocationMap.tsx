@@ -8,7 +8,7 @@ import { DEFAULT_MAP_CENTER } from "@/constants";
 import { updateLocationMetadata } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 import type { LatLng } from "@/types";
-import { MapContainer } from "../MapContainer";
+import { FixedMapContainer } from "../MapContainer";
 import type { BaseMaplibreProps } from "./BaseMaplibreMap";
 import { useRenderMarker } from "./useRenderMarker";
 
@@ -56,13 +56,13 @@ export const EditSingleLocationMap = ({
 
 	return (
 		<div className="mb-4">
-			<MapContainer>
+			<FixedMapContainer>
 				<BaseMaplibreMap
 					center={center}
 					zoom={zoom}
 					setMaplibre={setMaplibre}
 				/>
-			</MapContainer>
+			</FixedMapContainer>
 			<form action={updateLocationMetadata}>
 				<input type="hidden" name="entityType" defaultValue={entityType} />
 				<input type="hidden" name="id" defaultValue={id} />
