@@ -2,7 +2,7 @@
 
 import { type ReactNode, useRef } from "react";
 import { ImgHeightToWidthRatio } from "@/constants";
-import "./style.css";
+import { DimensionsContextProvider } from "./MapDimensionsContext";
 import { useGetDimensions } from "./useGetDimensions";
 
 type Props = {
@@ -20,12 +20,9 @@ export function FixedMapContainer({
 
 	return (
 		<div ref={divRef} className="w-full">
-			<div
-				className="bg-gray-100 map-container w-full"
-				style={{ height: `${height}px` }}
-			>
-				{!!width && children}
-			</div>
+			<DimensionsContextProvider width={width} height={height}>
+				{children}
+			</DimensionsContextProvider>
 		</div>
 	);
 }

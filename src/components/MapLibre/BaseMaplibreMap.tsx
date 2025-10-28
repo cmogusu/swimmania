@@ -8,25 +8,24 @@ import {
 import type { LatLng } from "@/types";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
-import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/constants";
 import { useApiKeyContext } from "@/context";
-import { logInfo } from "@/utilities/log";
+import { logError, logInfo } from "@/utilities/log";
+import { useMapDimesionsContext } from "../MapContainer/MapDimensionsContext";
 
-export type BaseMaplibreProps = {
-	center?: LatLng;
-	zoom?: number;
+export type Props = {
 	setMaplibre: (map: MapLibre) => void;
 };
 
-export default function BaseMaplibreMap({
-	center,
-	zoom,
-	setMaplibre,
-}: BaseMaplibreProps) {
+const MAP_ZOOM = 1;
+const MAP_CENTER = {
+	lat: 0.1,
+	lng: 0.1,
+};
+
+export function BaseMaplibreMap({ setMaplibre }: Props) {
 	const { maptiler: maptilerApiKey } = useApiKeyContext();
+	const { width, height } = useMapDimesionsContext();
 	const divRef = useRef<HTMLDivElement>(null);
-	const mapZoom = zoom || DEFAULT_MAP_ZOOM;
-	const mapCenter = center?.lat && center?.lng ? center : DEFAULT_MAP_CENTER;
 
 	useEffect(() => {
 		if (!maptilerApiKey) {
@@ -42,8 +41,8 @@ export default function BaseMaplibreMap({
 		const { unsubscribe, ref } = renderMap(
 			divRef.current,
 			styleUrl,
-			mapCenter,
-			mapZoom,
+			MAP_CENTER,
+			MAP_ZOOM,
 		);
 
 		setMaplibre(ref);
@@ -52,9 +51,22 @@ export default function BaseMaplibreMap({
 			logInfo("Removing maplibre map");
 			unsubscribe();
 		};
-	}, [maptilerApiKey, mapCenter, mapZoom, setMaplibre]);
+	}, [maptilerApiKey, setMaplibre]);
 
-	return <div className="w-full h-full" ref={divRef} />;
+	if (!width) {
+		logError(
+			"Map width and height not specified. Make sure to wrap map in MapContainer",
+		);
+		return null;
+	}
+
+	return (
+		<div
+			className="bg-gray-100"
+			style={{ width: `{width}px`, height: `${height}px` }}
+			ref={divRef}
+		/>
+	);
 }
 
 export function renderMap(

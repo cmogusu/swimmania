@@ -1,4 +1,3 @@
-import { AppProfiler } from "@/components/AppProfiler/AppProfiler";
 import { EntityDrawerContainer } from "@/components/EntityDrawer";
 import {
 	ApiContextProvider,
@@ -25,28 +24,26 @@ export default async function Home({ searchParams }: Props) {
 	}
 
 	return (
-		<AppProfiler>
-			<EntitiesContextProvider
-				entitiesData={entitiesData}
-				entityType={entityType}
-			>
-				<SelectedEntityContextProvider>
-					<VisibleEntityIdsContextProvider>
-						<EntityDrawerContextProvider>
-							<ApiContextProvider getApiKeys={getApiKeys}>
-								<EntityDrawerContainer>
-									<PageLayout>
-										<HomePage
-											entitiesData={entitiesData}
-											entityType={entityType}
-										/>
-									</PageLayout>
-								</EntityDrawerContainer>
-							</ApiContextProvider>
-						</EntityDrawerContextProvider>
-					</VisibleEntityIdsContextProvider>
-				</SelectedEntityContextProvider>
-			</EntitiesContextProvider>
-		</AppProfiler>
+		<EntitiesContextProvider
+			entitiesData={entitiesData}
+			entityType={entityType}
+		>
+			<SelectedEntityContextProvider>
+				<VisibleEntityIdsContextProvider>
+					<EntityDrawerContextProvider>
+						<ApiContextProvider getApiKeys={getApiKeys}>
+							<EntityDrawerContainer>
+								<PageLayout>
+									<HomePage
+										entitiesData={entitiesData}
+										entityType={entityType}
+									/>
+								</PageLayout>
+							</EntityDrawerContainer>
+						</ApiContextProvider>
+					</EntityDrawerContextProvider>
+				</VisibleEntityIdsContextProvider>
+			</SelectedEntityContextProvider>
+		</EntitiesContextProvider>
 	);
 }

@@ -9,7 +9,7 @@ import { updateLocationMetadata } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 import type { LatLng } from "@/types";
 import { FixedMapContainer } from "../MapContainer";
-import type { BaseMaplibreProps } from "./BaseMaplibreMap";
+import type { MaplibreProps } from "./MaplibreMap";
 import { useRenderMarker } from "./useRenderMarker";
 
 type Props = {
@@ -22,8 +22,8 @@ type Props = {
 	zoom?: number;
 };
 
-const BaseMaplibreMap: ComponentType<BaseMaplibreProps> = dynamic(
-	() => import("./BaseMaplibreMap"),
+const MaplibreMap: ComponentType<MaplibreProps> = dynamic(
+	() => import("./MaplibreMap"),
 );
 
 export const EditSingleLocationMap = ({
@@ -57,11 +57,7 @@ export const EditSingleLocationMap = ({
 	return (
 		<div className="mb-4">
 			<FixedMapContainer>
-				<BaseMaplibreMap
-					center={center}
-					zoom={zoom}
-					setMaplibre={setMaplibre}
-				/>
+				<MaplibreMap center={center} zoom={zoom} setMaplibre={setMaplibre} />
 			</FixedMapContainer>
 			<form action={updateLocationMetadata}>
 				<input type="hidden" name="entityType" defaultValue={entityType} />

@@ -1,21 +1,9 @@
+import { revalidatePath } from "next/cache";
 import { MultipleLocationsMap } from "@/components/MapLibre";
 import { ApiContextProvider } from "@/context";
 import { getApiKeys } from "@/server/serverFunctions";
 
-export default async function ExpPage() {
-	return (
-		<div>
-			<h1>hello</h1>
-			<div style={{ width: "400px" }}>
-				<ApiContextProvider getApiKeys={getApiKeys}>
-					<MultipleLocationsMap locations={locations} />
-				</ApiContextProvider>
-			</div>
-		</div>
-	);
-}
-
-const locations = [
+const allLocations = [
 	{
 		entityId: 81,
 		lat: -1.27483214278864,
@@ -42,3 +30,41 @@ const locations = [
 		lng: 36.80121492186542,
 	},
 ];
+
+let count = 5;
+let locations = allLocations.slice(0, count);
+
+export default async function ExpPage() {
+	return (
+		<div>
+			<h1>
+				hello c:{count} l:{locations.length}
+			</h1>
+
+			<div>
+				<ApiContextProvider getApiKeys={getApiKeys}>
+					<div style={{ width: "400px", height: "400px" }}>
+						<MultipleLocationsMap locations={locations} />
+					</div>
+				</ApiContextProvider>
+
+				<ul>
+					{locations.map((l) => (
+						<li key={l.entityId}>{l.entityId}</li>
+					))}
+				</ul>
+			</div>
+
+			<form action={changeLocations}>
+				<input className="btn btn-sm" type="submit" value="change locations" />
+			</form>
+		</div>
+	);
+}
+
+async function changeLocations() {
+	"use server";
+	count -= 1;
+	locations = allLocations.slice(0, count).reverse();
+	revalidatePath(`/play`);
+}

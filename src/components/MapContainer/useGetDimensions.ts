@@ -14,7 +14,6 @@ export const useGetDimensions = (divRef: RefObject<HTMLDivElement | null>) => {
 				!isEqual(width, dimensionsStore.width) ||
 				!isEqual(height, dimensionsStore.height)
 			) {
-				console.log("how can this be");
 				dimensionsStore = {
 					width,
 					height,
