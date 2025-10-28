@@ -1,13 +1,13 @@
-import { ApiContextProvider } from "@/context";
-import { AppProfiler } from "@/front/components/AppProfiler/AppProfiler";
-import { EntityDrawerContainer } from "@/front/components/EntityDrawer/";
+import { AppProfiler } from "@/components/AppProfiler/AppProfiler";
+import { EntityDrawerContainer } from "@/components/EntityDrawer";
 import {
+	ApiContextProvider,
 	EntitiesContextProvider,
 	EntityDrawerContextProvider,
 	SelectedEntityContextProvider,
 	VisibleEntityIdsContextProvider,
-} from "@/front/context";
-import { HomePage, PageLayout } from "@/front/pages";
+} from "@/context";
+import { HomePage, PageLayout } from "@/pageComponents";
 import { api } from "@/server/api";
 import { getApiKeys } from "@/server/serverFunctions";
 

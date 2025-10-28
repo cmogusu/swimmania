@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { EntityDrawerContainer } from "@/front/components/EntityDrawer/";
+import { EntityDrawerContainer } from "@/components/EntityDrawer";
 import {
 	EntitiesContextProvider,
 	EntityDrawerContextProvider,
 	SelectedEntityContextProvider,
 	VisibleEntityIdsContextProvider,
-} from "@/front/context";
-import { EntitiesPage, PageLayout } from "@/front/pages";
+} from "@/context";
+import { EntitiesPage, PageLayout } from "@/pageComponents";
 import { api } from "@/server/api";
 import { EntityTypePlurals } from "@/server/constants";
 import type { EntityType } from "@/server/types";

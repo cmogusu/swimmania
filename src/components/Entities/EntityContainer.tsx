@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef } from "react";
-import { useVisibleEntityIdsContext } from "@/front/context";
+import { useVisibleEntityIdsContext } from "@/context";
 
 type Props = {
 	children: ReactNode;

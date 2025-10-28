@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useId } from "react";
-import { useEntityDrawerContext } from "@/front/context";
+import { useEntityDrawerContext } from "@/context";
 import { EntityDrawer } from "./EntityDrawer";
 
 type Props = {

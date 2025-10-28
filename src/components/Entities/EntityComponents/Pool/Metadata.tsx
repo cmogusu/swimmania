@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useEntityLocationContext } from "@/front/context";
+import { useEntityLocationContext } from "@/context";
 import type { MetadataValue, RawMetadata } from "@/server/types";
 import type { MetadataProps } from "../types";
 
@@ -24,7 +24,7 @@ export default function ({ entityId, metadataArr }: MetadataProps) {
 	return (
 		<div>
 			{metadataArr.map((m) => (
-				<div key={m.id}>
+				<div key={m.name}>
 					{m.name}: {m.value}
 				</div>
 			))}

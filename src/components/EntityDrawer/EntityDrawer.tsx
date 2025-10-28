@@ -1,9 +1,6 @@
 "use client";
 
-import {
-	useEntityDrawerContext,
-	useSelectedEntityContext,
-} from "@/front/context";
+import { useEntityDrawerContext, useSelectedEntityContext } from "@/context";
 
 export const EntityDrawer = () => {
 	const { entity } = useSelectedEntityContext();

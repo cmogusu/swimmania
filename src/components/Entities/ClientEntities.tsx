@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEntitiesContext } from "@/front/context";
+import { useEntitiesContext } from "@/context";
 import type { EntityType } from "@/server/types";
 import { Entity } from "./Entity";
 

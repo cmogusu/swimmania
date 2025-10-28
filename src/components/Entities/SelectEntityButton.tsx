@@ -1,10 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import {
-	useEntityDrawerContext,
-	useSelectedEntityContext,
-} from "@/front/context";
+import { useEntityDrawerContext, useSelectedEntityContext } from "@/context";
 
 type Props = {
 	entityId: number;

@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { EntityContextProvider } from "@/front/context";
+import { EntityContextProvider } from "@/context";
 import type { EntityType } from "@/server/types";
 import type { EntityProps } from "./EntityComponents/types";
 

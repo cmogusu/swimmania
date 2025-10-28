@@ -5,7 +5,9 @@ import { MultipleLocationsMap } from "@/components/MapLibre";
 import {
 	// useVisibleEntityIdsContext,
 	useEntityLocationContext,
-} from "@/front/context";
+} from "@/context";
+
+const show = false;
 
 export const MapItem = () => {
 	const { entityLocations } = useEntityLocationContext();
@@ -28,7 +30,7 @@ export const MapItem = () => {
 	// 	};
 	// }, [handlePageScroll]);
 
-	if (!entityLocations.length) {
+	if (!show || !entityLocations.length) {
 		return null;
 	}
 

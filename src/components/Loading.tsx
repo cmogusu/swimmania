@@ -1,7 +1,7 @@
 "use client";
 
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useEntitiesContext } from "@/front/context";
+import { useEntitiesContext } from "@/context";
 
 export const Loading = () => {
 	const { isLoading } = useEntitiesContext();

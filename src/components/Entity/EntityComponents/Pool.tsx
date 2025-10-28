@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { RelatedEntities } from "@/components";
 import { DefaultSiteImage } from "@/constants";
-import { EntityContextProvider } from "@/front/context";
+import { EntityContextProvider } from "@/context";
 import { Images } from "../Images";
 import type { EntityProps } from "./types";
 

@@ -1,4 +1,4 @@
-import { EntityPage, PageLayout } from "@/front/pages";
+import { EntityPage, PageLayout } from "@/pageComponents";
 import { api } from "@/server/api";
 import type { EntityType } from "@/server/types";
 
