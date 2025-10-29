@@ -1,45 +1,24 @@
 "use client";
 
-// import { useEffect } from "react";
-// import { MultipleLocationsMap } from "@/components/MapLibre";
+import { useEffect } from "react";
+import { MultipleLocationsMap } from "@/components/MapLibre";
 import {
-	// useVisibleEntityIdsContext,
 	useEntityLocationContext,
+	useVisibleEntityIdsContext,
 } from "@/context";
-
-import { ResponsiveMapContainer } from "../MapContainer";
 
 export const EntitiesMap = () => {
 	const { entityLocations } = useEntityLocationContext();
-	// const { visibleEntityIdsRef } = useVisibleEntityIdsContext();
+	const { visibleEntityIds } = useVisibleEntityIdsContext();
 
-	// useEffect(() => {
-	// 	console.log(entityLocations);
-	// }, [entityLocations]);
-
-	// const handlePageScroll = useCallback(() => {
-	// 	requestIdleCallback(() => {
-	// 		console.log(visibleEntityIdsRef.current);
-	// 	});
-	// }, []);
-
-	// useEffect(() => {
-	// 	window.addEventListener("scroll", handlePageScroll);
-	// 	return () => {
-	// 		window.removeEventListener("scroll", handlePageScroll);
-	// 	};
-	// }, [handlePageScroll]);
-
-	if (!entityLocations.length) {
-		return null;
-	}
+	useEffect(() => {
+		console.log(visibleEntityIds);
+	}, [visibleEntityIds]);
 
 	return (
 		<div className="sticky top-0">
 			<div className="h-dvh bg-amber-500">
-				<ResponsiveMapContainer>
-					<div className="w-full h-full bg-pink-400">hello world</div>
-				</ResponsiveMapContainer>
+				<MultipleLocationsMap locations={entityLocations} />
 			</div>
 		</div>
 	);

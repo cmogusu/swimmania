@@ -2,28 +2,29 @@
 
 import {
 	createContext,
+	type Dispatch,
 	type ReactNode,
-	type RefObject,
+	type SetStateAction,
 	useCallback,
 	useContext,
 	useMemo,
 	useRef,
+	useState,
 } from "react";
 import { logError } from "@/utilities/log";
 import { withServerSafetyHoc } from "./withServerSafetyHoc";
 
 interface ContextType {
-	visibleEntityIdsRef: RefObject<Set<number>>;
+	visibleEntityIds: number[];
 	setEntityContainerElement: (
 		divContainerElement: HTMLDivElement,
 		entityId: number,
 	) => () => void;
 }
 
-const initialSet = new Set<number>();
 const initialWeakMap = new WeakMap<HTMLDivElement, number>();
 const initialContext = {
-	visibleEntityIdsRef: { current: new Set<number>() },
+	visibleEntityIds: [],
 	setEntityContainerElement: () => {
 		return () => {};
 	},
@@ -36,35 +37,23 @@ type Props = {
 };
 
 const ContextProvider = ({ children }: Props) => {
-	const visibleEntityIdsRef = useRef<Set<number>>(initialSet);
+	const [visibleEntityIds, setVisibleEntityIds] = useState<number[]>([]);
 	const divContainerElementsRef =
 		useRef<WeakMap<HTMLDivElement, number>>(initialWeakMap);
 
 	const onIntersect = useCallback((entries: IntersectionObserverEntry[]) => {
-		const visibleIds = visibleEntityIdsRef.current;
-		entries.forEach(({ isIntersecting, target }) => {
-			const entityId = divContainerElementsRef.current.get(
-				target as HTMLDivElement,
-			);
-
-			if (!entityId) {
-				logError("Container element not found");
-				return;
-			}
-
-			if (isIntersecting) {
-				visibleIds.add(entityId);
-			} else if (visibleIds.has(entityId)) {
-				visibleIds.delete(entityId);
-			}
-		});
+		const { added, removed } = getChangedEntityIds(
+			entries,
+			divContainerElementsRef.current,
+		);
+		updateState(setVisibleEntityIds, added, removed);
 	}, []);
 
 	const observer = useMemo(
 		() =>
 			new IntersectionObserver(onIntersect, {
 				rootMargin: "0px",
-				threshold: 1,
+				threshold: 0.5,
 			}),
 		[onIntersect],
 	);
@@ -84,10 +73,10 @@ const ContextProvider = ({ children }: Props) => {
 
 	const context = useMemo(
 		() => ({
-			visibleEntityIdsRef,
+			visibleEntityIds,
 			setEntityContainerElement,
 		}),
-		[setEntityContainerElement],
+		[visibleEntityIds, setEntityContainerElement],
 	);
 
 	return (
@@ -102,3 +91,67 @@ export const useVisibleEntityIdsContext = () =>
 
 export const VisibleEntityIdsContextProvider =
 	withServerSafetyHoc(ContextProvider);
+
+const getChangedEntityIds = (
+	entries: IntersectionObserverEntry[],
+	elements: WeakMap<HTMLDivElement, number>,
+) =>
+	entries.reduce(
+		(acc, { isIntersecting, target }) => {
+			const entityId = elements.get(target as HTMLDivElement);
+
+			if (!entityId) {
+				logError("Container element not found");
+				return acc;
+			}
+
+			if (isIntersecting) {
+				acc.added.push(entityId);
+			} else {
+				acc.removed.push(entityId);
+			}
+
+			return acc;
+		},
+		{ added: [] as number[], removed: [] as number[] },
+	);
+
+const updateState = (
+	setVisibleIds: Dispatch<SetStateAction<number[]>>,
+	addedIds: number[],
+	removedIds: number[],
+) => {
+	if (addedIds.length) {
+		setVisibleIds((prevIds) => prevIds.concat(addedIds));
+	}
+
+	if (removedIds.length) {
+		setVisibleIds((prevIds) => subtractArrays(prevIds, removedIds));
+	}
+};
+
+const subtractArrays = (arr1: number[], arr2: number[]): number[] => {
+	const sortedArr1: number[] = sort(arr1);
+	const sortedArr2: number[] = sort(arr2);
+
+	let i = 0;
+	let j = 0;
+	while (i < sortedArr1.length && j < sortedArr2.length) {
+		const id1 = sortedArr1[i];
+		const id2 = sortedArr2[j];
+
+		if (id1 === id2) {
+			delete sortedArr1[i];
+			i += 1;
+			j += 1;
+		} else if (id1 < id2) {
+			i += 1;
+		} else {
+			j += 1;
+		}
+	}
+
+	return sortedArr1.filter(Boolean);
+};
+
+const sort = (arr: number[]) => arr.slice().sort((v1, v2) => v1 - v2);

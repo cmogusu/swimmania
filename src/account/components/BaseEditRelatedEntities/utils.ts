@@ -36,4 +36,4 @@ export const getNonRelatedEntities = (
 };
 
 const sort = (entities: EntityData[]) =>
-	entities.toSorted((e1, e2) => e1.id - e2.id);
+	entities.slice().sort((e1, e2) => e1.id - e2.id);
