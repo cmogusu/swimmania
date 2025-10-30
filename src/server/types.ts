@@ -165,4 +165,5 @@ export type ApiKeys = {
 	maptiler: string;
 	tomtom: string;
 	azure: string;
+	google: string;
 };

@@ -4,6 +4,7 @@ export * from "./entitiesContext";
 export * from "./entityContext";
 export * from "./entityDrawerContext";
 export * from "./entityLocationContext";
+export * from "./mapDimensionsContext";
 export * from "./modalRender";
 export * from "./selectedEntityContext";
 export * from "./toastContext";

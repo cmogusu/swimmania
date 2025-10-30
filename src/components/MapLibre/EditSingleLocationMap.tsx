@@ -3,12 +3,11 @@
 import type { Map as MapLibre, MapMouseEvent } from "maplibre-gl";
 import dynamic from "next/dynamic";
 import { type ComponentType, useEffect, useState } from "react";
-import { SubmitButton } from "@/components/SubmitButton";
 import { DEFAULT_MAP_CENTER } from "@/constants";
-import { updateLocationMetadata } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 import type { LatLng } from "@/types";
 import { FixedMapContainer } from "../MapContainer";
+import { EditLocationForm } from "./EditLocationForm";
 import type { MaplibreProps } from "./MaplibreMap";
 import { useRenderMarker } from "./useRenderMarker";
 
@@ -40,7 +39,6 @@ export const EditSingleLocationMap = ({
 
 	const [mapCenter, setMapCenter] = useState<LatLng>(initialMapCenter);
 	const [maplibre, setMaplibre] = useState<MapLibre | undefined>();
-	const buttonText = id === -1 ? "Insert" : "Update";
 
 	useRenderMarker(maplibre, initialMapCenter, initialMapCenter);
 
@@ -59,17 +57,16 @@ export const EditSingleLocationMap = ({
 			<FixedMapContainer>
 				<MaplibreMap center={center} zoom={zoom} setMaplibre={setMaplibre} />
 			</FixedMapContainer>
-			<form action={updateLocationMetadata}>
-				<input type="hidden" name="entityType" defaultValue={entityType} />
-				<input type="hidden" name="id" defaultValue={id} />
-				<input type="hidden" name="entityId" defaultValue={entityId} />
-				<input type="hidden" name="latName" defaultValue={latName} />
-				<input type="hidden" name="lngName" defaultValue={lngName} />
-				<input type="hidden" name="latValue" value={mapCenter.lat} />
-				<input type="hidden" name="lngValue" value={mapCenter.lng} />
-
-				<SubmitButton buttonText={buttonText} isDisabled={isSubmitDisabled} />
-			</form>
+			<EditLocationForm
+				id={id}
+				entityId={entityId}
+				entityType={entityType}
+				latName={latName}
+				lngName={lngName}
+				latValue={mapCenter.lat}
+				lngValue={mapCenter.lng}
+				isSubmitDisabled={isSubmitDisabled}
+			/>
 		</div>
 	);
 };

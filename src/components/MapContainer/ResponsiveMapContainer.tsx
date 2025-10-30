@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useRef } from "react";
-import { DimensionsContextProvider } from "./MapDimensionsContext";
+import { DimensionsContextProvider } from "@/context/mapDimensionsContext";
 import { useGetDimensions } from "./useGetDimensions";
 
 type Props = {

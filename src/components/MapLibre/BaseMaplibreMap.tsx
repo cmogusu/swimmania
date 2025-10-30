@@ -9,8 +9,8 @@ import type { LatLng } from "@/types";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { useApiKeyContext } from "@/context";
+import { useMapDimesionsContext } from "@/context/mapDimensionsContext";
 import { logError, logInfo } from "@/utilities/log";
-import { useMapDimesionsContext } from "../MapContainer/MapDimensionsContext";
 
 export type Props = {
 	setMaplibre: (map: MapLibre) => void;

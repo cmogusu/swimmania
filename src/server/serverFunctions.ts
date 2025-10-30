@@ -7,12 +7,14 @@ assert.ok(process.env.MAPBOX_API_KEY, "Mapbox api key not set");
 assert.ok(process.env.MAPTILER_API_KEY, "Maptile api key not set");
 assert.ok(process.env.TOMTOM_API_KEY, "Tomtom api key not set");
 assert.ok(process.env.AZURE_API_KEY, "Azure api key not set");
+assert.ok(process.env.GOOGLE_API_KEY, "Azure api key not set");
 
 const apiKeys: ApiKeys = {
 	mapbox: process.env.MAPBOX_API_KEY ?? "",
 	maptiler: process.env.MAPTILER_API_KEY ?? "",
 	tomtom: process.env.TOMTOM_API_KEY ?? "",
 	azure: process.env.AZURE_API_KEY ?? "",
+	google: process.env.GOOGLE_API_KEY ?? "",
 };
 
 export const getApiKey = async (key: string): Promise<string> =>
