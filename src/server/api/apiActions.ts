@@ -7,6 +7,10 @@ import type { EntityType, MetadataValue, RelationshipType } from "../types";
 import { isUndefined } from "../utils";
 import { api } from "./api";
 
+export async function getLoggedInUserId() {
+	return 122;
+}
+
 export async function getEntities(entityType: EntityType, pageNumber: number) {
 	return await api.getEntities(entityType, pageNumber);
 }
@@ -33,7 +37,7 @@ export async function updateEntity(formData: FormData) {
 		"entityId",
 		"name",
 		"description",
-		"location",
+		"userId",
 	]);
 
 	const entityId = Number(data.entityId);
@@ -43,13 +47,15 @@ export async function updateEntity(formData: FormData) {
 	const description = data.description as string;
 
 	if (entityId > -1) {
-		await api.updateEntity(entityType, entityId, name, description, userId);
+		await api.updateEntity(entityType, entityId, name, userId, description);
 		reloadEditPage(entityType, `${entityId}`);
 		return;
 	}
 
-	const response = await api.addEntity(entityType, name, description, userId);
-	redirect(`/account/${entityType}/edit/${response?.id}/`);
+	const response = await api.addEntity(entityType, name, userId, description);
+	if (response?.id) {
+		redirect(`/account/${entityType}/edit/${response?.id}/`);
+	}
 }
 
 export async function updateImage(formData: FormData) {

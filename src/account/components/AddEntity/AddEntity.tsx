@@ -1,3 +1,4 @@
+import { getLoggedInUserId } from "@/server/api";
 import type { EntityData, EntityType } from "@/server/types";
 import { EditImages, EditMetadata, EntityForm } from "../EditEntity";
 
@@ -8,6 +9,7 @@ type Props = {
 const show = false;
 
 export const AddEntity = async ({ entityType }: Props) => {
+	const loggedInUserId = await getLoggedInUserId();
 	const entity = createEmptyEntity(entityType);
 	const { images } = entity || {};
 
@@ -15,7 +17,12 @@ export const AddEntity = async ({ entityType }: Props) => {
 		<div>
 			<section>
 				<h1 className="mb-4">Add</h1>
-				<EntityForm entityId={-1} entityType={entityType} entity={entity} />
+				<EntityForm
+					entityId={-1}
+					entityType={entityType}
+					entity={entity}
+					userId={loggedInUserId}
+				/>
 			</section>
 
 			{show && <EditImages entityId={-1} images={images} />}

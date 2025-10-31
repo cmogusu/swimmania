@@ -22,6 +22,7 @@ const entityComponents: Record<EntityType, EntityComponentType> = {
 	swimMeet: dynamic(() => import("./EntityComponents/SwimMeet/Entity")),
 	swimEvent: dynamic(() => import("./EntityComponents/SwimEvent/Entity")),
 	swimResult: dynamic(() => import("./EntityComponents/SwimResult/Entity")),
+	user: dynamic(() => import("./EntityComponents/User/Entity")),
 };
 
 type MetadataComponentType = React.ComponentType<MetadataProps>;
@@ -36,6 +37,7 @@ const metadataComponents: Record<EntityType, MetadataComponentType> = {
 	swimMeet: dynamic(() => import("./EntityComponents/SwimMeet/Metadata")),
 	swimEvent: dynamic(() => import("./EntityComponents/SwimEvent/Metadata")),
 	swimResult: dynamic(() => import("./EntityComponents/SwimResult/Metadata")),
+	user: dynamic(() => import("./EntityComponents/User/Metadata")),
 };
 
 export const Entity = async ({ entity, entityType }: Props) => {

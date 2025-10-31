@@ -14,8 +14,8 @@ export const EntityTypes: Record<EntityType, string> = {
 	lifeguard: "lifeguard",
 	swimMeet: "swimMeet",
 	swimEvent: "swimEvent",
-	swimResult: "SwimResult",
-	user: "User",
+	swimResult: "swimResult",
+	user: "user",
 };
 
 export const EntityTypePlurals: Record<EntityType, string> = {

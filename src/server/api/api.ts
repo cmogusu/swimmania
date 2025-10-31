@@ -37,7 +37,6 @@ export class Api {
 
 			return entity.toJSON();
 		} catch (error: unknown) {
-			console.log(error);
 			this.log.error("Unable to get entries", error as Error);
 		}
 	}
@@ -144,17 +143,17 @@ export class Api {
 	async updateEntity(
 		entityType: EntityType,
 		entityId: number,
-		name?: string,
+		name: string,
+		userId: number,
 		description?: string,
-		userId?: number,
 	) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
 			return await entityManager.update({
 				entityId,
 				name,
-				description,
 				userId,
+				description,
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update entity";
@@ -165,15 +164,15 @@ export class Api {
 	async addEntity(
 		entityType: EntityType,
 		name: string,
-		description: string,
 		userId: number,
+		description: string,
 	) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
 			return await entityManager.insert({
 				name,
-				description,
 				userId,
+				description,
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to add entity";

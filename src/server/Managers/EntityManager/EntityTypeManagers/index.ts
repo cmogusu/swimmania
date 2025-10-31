@@ -8,3 +8,4 @@ export * from "./SwimMeetManager";
 export * from "./SwimmerManager";
 export * from "./SwimResultManager";
 export * from "./TeamManager";
+export * from "./UserManager";

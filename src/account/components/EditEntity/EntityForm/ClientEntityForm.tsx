@@ -11,13 +11,11 @@ import {
 import { updateEntity } from "@/server/api/apiActions";
 import {
 	EditEntityDescriptionText,
-	EditEntityLocationText,
 	EditEntityNameText,
 } from "@/server/constants";
 import { Validate } from "@/server/Managers/EntityManager/InputData/Validate";
 import type { EntityData, EntityType } from "@/server/types";
 import { HiddenInputs } from "./HiddenInputs";
-import { LocationInput } from "./LocationInput";
 import { SubmitButton } from "./SubmitButton";
 import { TextareaInput } from "./TextareaInput";
 import { TextInput } from "./TextInput";
@@ -26,6 +24,7 @@ type Props = PropsWithChildren & {
 	entityType: EntityType;
 	entityId: number;
 	entity: EntityData;
+	userId: number;
 };
 
 type ValidationErrors = Record<string, string>;
@@ -57,33 +56,30 @@ export const ClientEntityForm = (props: Props) => {
 	);
 
 	return (
-		<div>
-			<form action={formAction}>
-				<HiddenInputs entityType={props.entityType} entityId={props.entityId} />
-
-				<TextInput
-					name="name"
-					title={EditEntityNameText[props.entityType]}
-					error={errors.name}
-					value={entity.name}
-					onChange={handleUpdate}
-				/>
-
-				<TextareaInput
-					name="description"
-					title={EditEntityDescriptionText[props.entityType]}
-					error={errors.description}
-					value={entity.description}
-					onChange={handleUpdate}
-				/>
-
-				<SubmitButton entityId={props.entityId} />
-			</form>
-			<LocationInput
-				entityId={props.entityId}
+		<form action={formAction}>
+			<HiddenInputs
 				entityType={props.entityType}
-				title={EditEntityLocationText[props.entityType]}
+				entityId={props.entityId}
+				userId={props.userId}
 			/>
-		</div>
+
+			<TextInput
+				name="name"
+				title={EditEntityNameText[props.entityType]}
+				error={errors.name}
+				value={entity.name}
+				onChange={handleUpdate}
+			/>
+
+			<TextareaInput
+				name="description"
+				title={EditEntityDescriptionText[props.entityType]}
+				error={errors.description}
+				value={entity.description}
+				onChange={handleUpdate}
+			/>
+
+			<SubmitButton entityId={props.entityId} />
+		</form>
 	);
 };

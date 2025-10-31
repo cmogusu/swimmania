@@ -14,6 +14,7 @@ import { SwimMeetMetadata } from "./SwimMeetMetadata";
 import { SwimmerMetadata } from "./SwimmerMetadata";
 import { SwimResultMetadata } from "./SwimResultMetadata";
 import { TeamMetadata } from "./TeamMetadata";
+import { UserMetadata } from "./UserMetadata";
 
 type EntityMetadataClassType = {
 	new (
@@ -34,6 +35,7 @@ const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
 	swimResult: SwimResultMetadata,
 	lifeguard: LifeguardMetadata,
 	parent: ParentMetadata,
+	user: UserMetadata,
 };
 
 export const entityMetadataFactory = {

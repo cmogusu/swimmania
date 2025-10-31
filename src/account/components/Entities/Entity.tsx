@@ -9,9 +9,10 @@ import type { EntityData, EntityType } from "@/server/types";
 type Props = {
 	entityType: EntityType;
 	entity: EntityData;
+	isEditable: boolean;
 };
 
-export const Entity = ({ entityType, entity }: Props) => {
+export const Entity = ({ entityType, entity, isEditable }: Props) => {
 	const { id, name, description, defaultImage } = entity;
 	const image = defaultImage || DefaultSiteImage;
 
@@ -39,19 +40,30 @@ export const Entity = ({ entityType, entity }: Props) => {
 			>
 				<IoMdOpen />
 			</a>
-			<a
-				href={`/account/${entityType}/edit/${id}`}
-				className="btn btn-square btn-ghost"
-			>
-				<CiEdit />
-			</a>
-			<form action={deleteEntity}>
-				<input type="hidden" name="entityId" value={id} />
-				<input type="hidden" name="entityType" value={entityType} />
-				<button type="submit" className="btn btn-square btn-ghost">
-					<AiOutlineDelete />
-				</button>
-			</form>
+			{isEditable && <EditElements entityId={id} entityType={entityType} />}
 		</li>
 	);
 };
+
+type EditElementsProps = {
+	entityType: EntityType;
+	entityId: number;
+};
+
+const EditElements = ({ entityType, entityId }: EditElementsProps) => (
+	<>
+		<a
+			href={`/account/${entityType}/edit/${entityId}`}
+			className="btn btn-square btn-ghost"
+		>
+			<CiEdit />
+		</a>
+		<form action={deleteEntity}>
+			<input type="hidden" name="entityId" value={entityId} />
+			<input type="hidden" name="entityType" value={entityType} />
+			<button type="submit" className="btn btn-square btn-ghost">
+				<AiOutlineDelete />
+			</button>
+		</form>
+	</>
+);

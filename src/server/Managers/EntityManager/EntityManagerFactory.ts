@@ -12,6 +12,7 @@ import {
 	SwimmerManager,
 	SwimResultManager,
 	TeamManager,
+	UserManager,
 } from "./EntityTypeManagers";
 
 const managerClasses: Record<EntityType, new () => EntityManager> = {
@@ -25,6 +26,7 @@ const managerClasses: Record<EntityType, new () => EntityManager> = {
 	swimMeet: SwimMeetManager,
 	swimmer: SwimmerManager,
 	swimEvent: SwimEventManager,
+	user: UserManager,
 };
 
 const entityManagers: Record<string, EntityManager> = {};
@@ -36,6 +38,7 @@ export const entityManagerFactory = {
 		}
 
 		if (!(entityType in EntityTypes)) {
+			console.log(entityType, EntityTypes);
 			throw Error("Invalid entity type");
 		}
 

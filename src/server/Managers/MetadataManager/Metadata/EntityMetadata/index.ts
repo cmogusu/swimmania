@@ -8,3 +8,4 @@ export * from "./SwimMeetMetadata";
 export * from "./SwimmerMetadata";
 export * from "./SwimResultMetadata";
 export * from "./TeamMetadata";
+export * from "./UserMetadata";

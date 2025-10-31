@@ -15,7 +15,7 @@ export class RelatedEntityManager {
 		this.relatedEntityIdManager = new RelatedEntityIdManager();
 	}
 
-	async insertRelated(
+	insertRelated(
 		entityType: EntityType,
 		entityId: number,
 		rawRelatedEntity: RawInsertRelatedEntityInputs,
@@ -26,7 +26,7 @@ export class RelatedEntityManager {
 			relationshipType,
 		} = rawRelatedEntity;
 
-		await this.relatedEntityIdManager.insert({
+		return this.relatedEntityIdManager.insert({
 			entityId,
 			entityType,
 			relatedEntityId,
@@ -43,7 +43,7 @@ export class RelatedEntityManager {
 		const { type: relatedEntityType, relationshipType } = rawRelatedEntity;
 
 		const relatedEntityId = await this.getEntityId(rawRelatedEntity);
-		await this.relatedEntityIdManager.insert({
+		return this.relatedEntityIdManager.insert({
 			entityId,
 			entityType,
 			relatedEntityId,
