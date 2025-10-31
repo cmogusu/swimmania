@@ -10,6 +10,7 @@ import { GoogleMap } from "./GoogleMap";
 import { LocationAutocomplete } from "./LocationAutocomplete";
 
 export type LocationAutocompleteWithMapProps = {
+	title?: string;
 	location?: LatLng;
 	locationName?: string;
 	setLocation: (location: LatLng) => void;
@@ -17,6 +18,7 @@ export type LocationAutocompleteWithMapProps = {
 };
 
 export default function LocationAutocompleteWithMap({
+	title,
 	location,
 	locationName,
 	setLocation,
@@ -56,6 +58,7 @@ export default function LocationAutocompleteWithMap({
 	return (
 		<APIProvider apiKey={googleApiKey}>
 			<LocationAutocomplete
+				title={title}
 				locationName={locationName}
 				setLocationName={setLocationName}
 				onPlaceSelect={handlePlaceSelect}

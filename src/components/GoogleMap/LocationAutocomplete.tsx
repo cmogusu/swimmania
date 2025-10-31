@@ -10,12 +10,14 @@ import {
 } from "react";
 
 type Props = {
+	title: string | undefined;
 	locationName: string | undefined;
 	setLocationName: (v: string) => void;
 	onPlaceSelect: (place: google.maps.places.PlaceResult) => void;
 };
 
 export const LocationAutocomplete = ({
+	title,
 	locationName,
 	setLocationName,
 	onPlaceSelect,
@@ -31,14 +33,15 @@ export const LocationAutocomplete = ({
 	);
 
 	return (
-		<div className="autocomplete-container">
+		<label className="floating-label mb-3 min-h-16">
+			<span>{title}</span>
 			<input
 				ref={inputRef}
 				className="input input-sm"
 				value={locationName}
 				onChange={handleChange}
 			/>
-		</div>
+		</label>
 	);
 };
 

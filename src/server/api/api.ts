@@ -5,7 +5,7 @@ import {
 	relatedEntityManagerFactory,
 } from "@/server/Managers";
 import type { MetadataValue } from "@/server/types";
-import { POSTS_PER_PAGE } from "../constants";
+import { POSTS_PER_PAGE } from "../constants/global";
 import { Log } from "../services";
 import type {
 	EntitiesData,

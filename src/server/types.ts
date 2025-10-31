@@ -8,7 +8,12 @@ export type EntityType =
 	| "school"
 	| "swimMeet"
 	| "swimEvent"
-	| "swimResult";
+	| "swimResult"
+	| "user";
+
+export type PublicEntityType = Omit<EntityType, "user">;
+
+export type PrivateEntityType = Extract<EntityType, "user">;
 
 export type RelationshipType =
 	| "isAlso"

@@ -9,12 +9,14 @@ type Props = {
 	entityId: number;
 	entityType: EntityType;
 	locationName: string | undefined;
+	title: string;
 };
 
 export const LocationInput = ({
 	entityId,
 	entityType,
 	locationName,
+	title,
 }: Props) => {
 	const { isFetchComplete, locationMetadata } = useGetMetadata(
 		entityType,
@@ -27,13 +29,16 @@ export const LocationInput = ({
 	}
 
 	return (
-		<EditSingleLocationMap
-			metadataId={metadataId}
-			entityId={entityId}
-			entityType={entityType}
-			locationName={locationName}
-			location={location}
-		/>
+		<div>
+			<h4>{title}</h4>
+			<EditSingleLocationMap
+				metadataId={metadataId}
+				entityId={entityId}
+				entityType={entityType}
+				locationName={locationName}
+				location={location}
+			/>
+		</div>
 	);
 };
 

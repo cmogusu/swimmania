@@ -1,4 +1,9 @@
 import { updateEntity } from "@/server/api/apiActions";
+import {
+	EditEntityDescriptionText,
+	EditEntityLocationText,
+	EditEntityNameText,
+} from "@/server/constants";
 import type { EntityData, EntityType } from "@/server/types";
 import { ClientEntityForm } from "./ClientEntityForm";
 import { HiddenInputs } from "./HiddenInputs";
@@ -23,11 +28,15 @@ export const EntityForm = (props: Props) => {
 				<form action={updateEntity}>
 					<HiddenInputs entityType={entityType} entityId={entityId} />
 
-					<TextInput name="name" title="Name" value={name} />
+					<TextInput
+						name="name"
+						title={EditEntityNameText[entityType]}
+						value={name}
+					/>
 
 					<TextareaInput
 						name="description"
-						title="Description"
+						title={EditEntityDescriptionText[entityType]}
 						value={description}
 					/>
 
@@ -40,6 +49,7 @@ export const EntityForm = (props: Props) => {
 					entityId={entityId}
 					entityType={entityType}
 					locationName={location}
+					title={EditEntityLocationText[entityType]}
 				/>
 			</div>
 		</ClientEntityForm>

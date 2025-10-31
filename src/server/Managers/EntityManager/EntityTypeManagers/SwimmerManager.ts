@@ -6,10 +6,6 @@ const entityType = "swimmer";
 export class SwimmerManager extends EntityManager {
 	entityType: EntityType = entityType;
 
-	relationships: Record<string, EntityType[]> = {
-		trainsAt: ["pool", "school"],
-	};
-
 	constructor() {
 		super(entityType);
 	}
