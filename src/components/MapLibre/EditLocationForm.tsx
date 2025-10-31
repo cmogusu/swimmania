@@ -32,10 +32,8 @@ export const EditLocationForm = ({
 			<input type="hidden" name="entityType" defaultValue={entityType} />
 			<input type="hidden" name="id" defaultValue={metadataId} />
 			<input type="hidden" name="entityId" defaultValue={entityId} />
-			<input type="hidden" name="latName" defaultValue="location.lat" />
-			<input type="hidden" name="lngName" defaultValue="location.lng" />
-			<input type="hidden" name="latValue" value={latValue} />
-			<input type="hidden" name="lngValue" value={lngValue} />
+			<input type="hidden" name="lat" value={latValue} />
+			<input type="hidden" name="lng" value={lngValue} />
 			<input type="hidden" name="locationName" value={locationName} />
 			{children}
 			<SubmitButton buttonText={buttonText} isDisabled={isSubmitDisabled} />

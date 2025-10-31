@@ -47,9 +47,9 @@ export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 
 export type RawInsertEntityInputs = {
 	name: string;
+	userId: number;
 	description?: string;
 	images?: RawImageInputs[];
-	userId: number;
 };
 
 export type RawDeleteEntityInputs = {
@@ -59,8 +59,8 @@ export type RawDeleteEntityInputs = {
 export type RawEntityInputs = {
 	id?: number;
 	name: string;
-	description?: string;
 	userId: number;
+	description?: string;
 	images?: RawImageInputs[];
 };
 

@@ -7,7 +7,6 @@ export class GetByNameInputData implements ILoadableEntity {
 
 	loadDefaultImage: boolean;
 	loadImages: boolean;
-	loadMetadata: boolean;
 
 	validate: Validate;
 
@@ -15,12 +14,10 @@ export class GetByNameInputData implements ILoadableEntity {
 		name,
 		loadDefaultImage,
 		loadImages,
-		loadMetadata,
 	}: RawGetByNameEntityInputs) {
 		this.name = name;
 
 		this.loadImages = sanitizeBoolean(loadImages, false);
-		this.loadMetadata = sanitizeBoolean(loadMetadata, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, false);
 
 		this.validate = ValidateInstance;

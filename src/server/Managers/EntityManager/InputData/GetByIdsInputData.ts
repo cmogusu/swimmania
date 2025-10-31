@@ -11,7 +11,6 @@ export class GetByIdsInputData
 
 	loadDefaultImage: boolean;
 	loadImages: boolean;
-	loadMetadata: boolean;
 
 	validate: Validate;
 
@@ -21,7 +20,6 @@ export class GetByIdsInputData
 		pageNumber,
 		loadDefaultImage,
 		loadImages,
-		loadMetadata,
 	}: RawGetByIdsEntityInputs) {
 		super();
 
@@ -30,7 +28,6 @@ export class GetByIdsInputData
 		this.pageNumber = pageNumber;
 
 		this.loadImages = sanitizeBoolean(loadImages, false);
-		this.loadMetadata = sanitizeBoolean(loadMetadata, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, true);
 
 		this.validate = ValidateInstance;

@@ -39,16 +39,16 @@ export async function updateEntity(formData: FormData) {
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
 	const name = data.name as string;
+	const userId = Number(data.userId);
 	const description = data.description as string;
-	const location = data.location as string;
 
 	if (entityId > -1) {
-		await api.updateEntity(entityType, entityId, name, description, location);
+		await api.updateEntity(entityType, entityId, name, description, userId);
 		reloadEditPage(entityType, `${entityId}`);
 		return;
 	}
 
-	const response = await api.addEntity(entityType, name, description, location);
+	const response = await api.addEntity(entityType, name, description, userId);
 	redirect(`/account/${entityType}/edit/${response?.id}/`);
 }
 
@@ -81,39 +81,30 @@ export async function updateImage(formData: FormData) {
 export async function updateLocationMetadata(formData: FormData) {
 	const data = extractFormData(formData, [
 		"entityType",
-		"id",
 		"entityId",
-		"latName",
-		"latValue",
-		"lngName",
-		"lngValue",
+		"id",
+		"lat",
+		"lng",
 		"locationName",
 	]);
 
 	const id = Number(data.id);
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
-	const locationName = data.locationName as string;
 	const metadataArr = [
 		{
-			name: data.latName as string,
+			name: "location.lat",
 			value: Number(data.latValue),
 		},
 		{
-			name: data.lngName as string,
+			name: "location.lng",
 			value: Number(data.lngValue),
 		},
+		{
+			name: "location.name",
+			value: data.locationName as string,
+		},
 	];
-
-	if (locationName) {
-		await api.updateEntity(
-			entityType,
-			entityId,
-			undefined,
-			undefined,
-			locationName,
-		);
-	}
 
 	if (id > -1) {
 		await api.updateMetadata(entityType, id, entityId, metadataArr);

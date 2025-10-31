@@ -79,8 +79,8 @@ export class Database extends BaseDatabase {
 			entityType,
 			cleanEntity.entityId,
 			cleanEntity.name,
+			cleanEntity.userId,
 			cleanEntity.description,
-			cleanEntity.location,
 		);
 
 		return updateData;
@@ -91,8 +91,8 @@ export class Database extends BaseDatabase {
 		const [insertData] = await this.query.insert(
 			entityType,
 			cleanEntity.name,
+			cleanEntity.userId,
 			cleanEntity.description,
-			cleanEntity.location,
 		);
 
 		return insertData;

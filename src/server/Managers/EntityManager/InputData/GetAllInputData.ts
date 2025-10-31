@@ -8,7 +8,6 @@ export class GetAllInputData extends BaseInputData implements ILoadableEntity {
 
 	loadDefaultImage: boolean;
 	loadImages: boolean;
-	loadMetadata: boolean;
 
 	constructor({
 		filters,
@@ -16,7 +15,6 @@ export class GetAllInputData extends BaseInputData implements ILoadableEntity {
 		pageNumber,
 		loadDefaultImage,
 		loadImages,
-		loadMetadata,
 	}: RawGetAllEntityInputs) {
 		super();
 
@@ -25,7 +23,6 @@ export class GetAllInputData extends BaseInputData implements ILoadableEntity {
 		this.pageNumber = pageNumber;
 
 		this.loadImages = sanitizeBoolean(loadImages, false);
-		this.loadMetadata = sanitizeBoolean(loadMetadata, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, true);
 	}
 

@@ -7,7 +7,6 @@ export class GetByIdInputData implements ILoadableEntity {
 
 	loadDefaultImage: boolean;
 	loadImages: boolean;
-	loadMetadata: boolean;
 
 	validate: Validate;
 
@@ -15,12 +14,10 @@ export class GetByIdInputData implements ILoadableEntity {
 		entityId,
 		loadDefaultImage,
 		loadImages,
-		loadMetadata,
 	}: RawGetByIdEntityInputs) {
 		this.entityId = entityId;
 
 		this.loadImages = sanitizeBoolean(loadImages, false);
-		this.loadMetadata = sanitizeBoolean(loadMetadata, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, true);
 
 		this.validate = ValidateInstance;
