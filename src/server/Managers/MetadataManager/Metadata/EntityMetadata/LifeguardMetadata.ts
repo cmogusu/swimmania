@@ -59,6 +59,12 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						title: "Longitude",
 						...rawMetadata,
 					}),
+				name: (rawMetadata?: RawMetadata) =>
+					new TextPropertyType({
+						name: "name",
+						title: "Name",
+						...rawMetadata,
+					}),
 			},
 			sortIndex: 8,
 		}),

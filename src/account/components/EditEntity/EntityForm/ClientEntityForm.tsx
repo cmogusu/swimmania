@@ -9,6 +9,11 @@ import {
 	useState,
 } from "react";
 import { updateEntity } from "@/server/api/apiActions";
+import {
+	EditEntityDescriptionText,
+	EditEntityLocationText,
+	EditEntityNameText,
+} from "@/server/constants";
 import { Validate } from "@/server/Managers/EntityManager/InputData/Validate";
 import type { EntityData, EntityType } from "@/server/types";
 import { HiddenInputs } from "./HiddenInputs";
@@ -58,7 +63,7 @@ export const ClientEntityForm = (props: Props) => {
 
 				<TextInput
 					name="name"
-					title="Name"
+					title={EditEntityNameText[props.entityType]}
 					error={errors.name}
 					value={entity.name}
 					onChange={handleUpdate}
@@ -66,7 +71,7 @@ export const ClientEntityForm = (props: Props) => {
 
 				<TextareaInput
 					name="description"
-					title="Description"
+					title={EditEntityDescriptionText[props.entityType]}
 					error={errors.description}
 					value={entity.description}
 					onChange={handleUpdate}
@@ -77,7 +82,7 @@ export const ClientEntityForm = (props: Props) => {
 			<LocationInput
 				entityId={props.entityId}
 				entityType={props.entityType}
-				locationName={entity.location}
+				title={EditEntityLocationText[props.entityType]}
 			/>
 		</div>
 	);

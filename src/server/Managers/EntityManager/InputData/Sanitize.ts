@@ -1,12 +1,8 @@
+import type { MetadataFilter } from "@/server/types";
 import { isString } from "@/server/utils";
-import type { MetadataFilter } from "../../MetadataManager";
 import { BaseSanitize } from "../../services/BaseSanitize";
 
 export class Sanitize extends BaseSanitize {
-	location(location?: string) {
-		return this.optionalSanitizeString(location);
-	}
-
 	filters(filters?: MetadataFilter[]) {
 		if (!filters) {
 			return;

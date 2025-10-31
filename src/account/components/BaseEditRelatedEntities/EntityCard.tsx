@@ -8,7 +8,7 @@ type Props = PropsWithChildren & {
 };
 
 export const EntityCard = ({ children, entity }: Props) => {
-	const { id, name, location, type, defaultImage } = entity || {};
+	const { id, name, type, defaultImage } = entity || {};
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
@@ -20,7 +20,6 @@ export const EntityCard = ({ children, entity }: Props) => {
 				<a href={`/${type}/${id}`}>
 					<h4 className="card-title">{name}</h4>
 				</a>
-				<p className="text-xs">{location}</p>
 				<div className="card-actions justify-end">{children}</div>
 			</div>
 		</div>

@@ -14,8 +14,7 @@ const show = false;
 
 export const Entity = async ({ entityType, entityId }: Props) => {
 	const entity = await api.getEntity(entityType, entityId);
-	const { name, description, location, defaultImage, images, metadata } =
-		entity || {};
+	const { name, description, defaultImage, images } = entity || {};
 	const image = defaultImage || DefaultSiteImage;
 
 	if (!entity) {
@@ -36,13 +35,12 @@ export const Entity = async ({ entityType, entityId }: Props) => {
 						src={image.src}
 					/>
 				</div>
-				{location && <div className="text-5xl">{location}</div>}
 
 				<p className="text-2xl">{description}</p>
 			</section>
 
 			{show && <Images images={images} />}
-			<Metadata entityType={entityType} metadata={metadata} />
+			<Metadata entityId={entityId} entityType={entityType} />
 		</div>
 	);
 };

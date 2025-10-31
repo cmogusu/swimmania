@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const EntityCard = ({ entity }: Props) => {
-	const { id, name, location, type, defaultImage } = entity || {};
+	const { id, name, type, defaultImage } = entity || {};
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
@@ -19,7 +19,6 @@ export const EntityCard = ({ entity }: Props) => {
 				<a href={`/${type}/${id}`}>
 					<h2 className="card-title">{name}</h2>
 				</a>
-				<p className="text-xs">{location}</p>
 			</div>
 		</div>
 	);

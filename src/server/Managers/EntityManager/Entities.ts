@@ -1,6 +1,5 @@
 import type { IPaginated, RelationshipType } from "@/server/types";
 import type { ImageManager } from "../ImageManager";
-import type { MetadataManager } from "../MetadataManager";
 import { Entity } from "./Entity";
 import type { ILoadableEntity, RawEntity } from "./types";
 
@@ -8,7 +7,6 @@ export class Entities {
 	entities: Entity[];
 	loadRelatedDataAndPaginationOptions: ILoadableEntity & IPaginated;
 	imageManager: ImageManager;
-	metadataManager: MetadataManager;
 
 	isRelatedEntities: boolean = false;
 	relationshipType?: RelationshipType;
@@ -17,12 +15,10 @@ export class Entities {
 		rawEntities: RawEntity[] | undefined,
 		loadRelatedDataAndPaginationOptions: ILoadableEntity & IPaginated,
 		imageManager: ImageManager,
-		metadataManager: MetadataManager,
 	) {
 		this.loadRelatedDataAndPaginationOptions =
 			loadRelatedDataAndPaginationOptions;
 		this.imageManager = imageManager;
-		this.metadataManager = metadataManager;
 		this.entities = (rawEntities || []).map((e) => new Entity(e));
 	}
 
@@ -31,7 +27,6 @@ export class Entities {
 			entity.loadRelatedData(
 				this.loadRelatedDataAndPaginationOptions,
 				this.imageManager,
-				this.metadataManager,
 			),
 		);
 

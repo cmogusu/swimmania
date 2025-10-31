@@ -2,7 +2,6 @@ import type {
 	EntityType,
 	MetadataFilter,
 	PaginationOptions,
-	RawMetadata,
 } from "@/server/types";
 import type { RawImageInputs } from "../ImageManager";
 
@@ -12,13 +11,12 @@ export type RawEntity = {
 	name: string;
 	type: EntityType;
 	description?: string;
-	location?: string;
+	userId: number;
 };
 
 export type EntityLoadRelatedDataOptions = {
 	loadImages?: boolean;
 	loadDefaultImage?: boolean;
-	loadMetadata?: boolean;
 };
 
 // Inputs
@@ -44,14 +42,14 @@ export type RawGetByNameEntityInputs = EntityLoadRelatedDataOptions & {
 
 export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 	entityId: number;
+	userId: number;
 };
 
 export type RawInsertEntityInputs = {
-	name?: string;
+	name: string;
 	description?: string;
-	location?: string;
 	images?: RawImageInputs[];
-	metadata?: RawMetadata[];
+	userId: number;
 };
 
 export type RawDeleteEntityInputs = {
@@ -62,13 +60,11 @@ export type RawEntityInputs = {
 	id?: number;
 	name: string;
 	description?: string;
-	location?: string;
+	userId: number;
 	images?: RawImageInputs[];
-	metadata?: RawMetadata[];
 };
 
 export interface ILoadableEntity {
 	loadImages: boolean;
 	loadDefaultImage: boolean;
-	loadMetadata: boolean;
 }

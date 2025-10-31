@@ -1,4 +1,5 @@
 import { metadataComponents } from "@/components/MetadataComponents";
+import { api } from "@/server/api";
 import { entityMetadataFactory } from "@/server/Managers";
 import type {
 	EntityType,
@@ -7,12 +8,16 @@ import type {
 } from "@/server/types";
 
 type Props = {
+	entityId: number;
 	entityType: EntityType;
-	metadata: MetadataData[] | undefined;
 };
 
-export const Metadata = ({ entityType, metadata }: Props) => {
-	const metadataComponents = getMetadataComponents(entityType, metadata);
+export const Metadata = async ({ entityId, entityType }: Props) => {
+	const metadata = await api.getMetadata(entityType, entityId);
+	const metadataComponents = getMetadataComponents(
+		entityType,
+		(metadata as MetadataData[]) || [],
+	);
 
 	return (
 		<section className="mb-4">

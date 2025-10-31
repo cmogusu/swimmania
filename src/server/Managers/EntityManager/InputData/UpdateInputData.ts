@@ -8,17 +8,18 @@ export class UpdateInputData extends InsertInputData {
 	constructor(rawInputs: RawUpdateEntityInputs) {
 		super(rawInputs);
 
-		const { entityId, name, description, location } = rawInputs;
+		const { entityId, name, description, userId } = rawInputs;
 
 		this.name = name;
 		this.entityId = entityId;
 		if (!isUndefined(description)) this.description = description;
-		if (!isUndefined(location)) this.location = location;
+		if (!isUndefined(userId)) this.userId = userId;
 	}
 
 	validateData() {
 		super.validateData();
 		this.validate.id(this.entityId);
+		this.validate.id(this.userId);
 	}
 
 	getSanitized() {

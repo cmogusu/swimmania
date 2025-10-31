@@ -20,7 +20,7 @@ type Props = {
 
 export const EntityForm = (props: Props) => {
 	const { entityType, entityId, entity } = props;
-	const { name, location, description } = entity;
+	const { name, description } = entity;
 
 	return (
 		<ClientEntityForm {...props}>
@@ -48,7 +48,6 @@ export const EntityForm = (props: Props) => {
 				<LocationInput
 					entityId={entityId}
 					entityType={entityType}
-					locationName={location}
 					title={EditEntityLocationText[entityType]}
 				/>
 			</div>

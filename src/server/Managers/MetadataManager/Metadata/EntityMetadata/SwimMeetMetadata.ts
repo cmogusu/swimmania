@@ -5,6 +5,7 @@ import {
 	LongitudePropertyType,
 	OptionsPropertyType,
 	ParentPropertyType,
+	TextPropertyType,
 	TimePropertyType,
 } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
@@ -74,6 +75,12 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
+						...rawMetadata,
+					}),
+				name: (rawMetadata?: RawMetadata) =>
+					new TextPropertyType({
+						name: "name",
+						title: "Name",
 						...rawMetadata,
 					}),
 			},

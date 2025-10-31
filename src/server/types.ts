@@ -81,10 +81,9 @@ export type EntityData = {
 	type: EntityType;
 	name: string;
 	description: string | undefined;
-	location: string | undefined;
+	userId: number;
 	defaultImage: ImageData | undefined;
 	images: ImageData[] | undefined;
-	metadata: MetadataData[] | undefined;
 	relationshipType?: string;
 };
 

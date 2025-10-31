@@ -107,11 +107,11 @@ export class Query extends BaseQuery {
 		entityId: number,
 		name?: string,
 		description?: string,
-		location?: string,
+		userId?: number,
 	) {
 		this.throwIfNotSet({ entityId, entityType });
 
-		const { names, values } = getUpdateValues({ name, description, location });
+		const { names, values } = getUpdateValues({ name, description, userId });
 		const joinedNames = names.map((n) => `${n}=?`).join(", ");
 
 		return this.exec(
@@ -124,7 +124,7 @@ export class Query extends BaseQuery {
 		entityType: string,
 		name: string,
 		description?: string,
-		location?: string,
+		userId?: number,
 	) {
 		this.throwIfNotSet({
 			entityType,
@@ -132,13 +132,15 @@ export class Query extends BaseQuery {
 		});
 
 		return this.exec(
-			`INSERT INTO \`entity\` (name, type, location, description) VALUES (?, ?, ?, ?);`,
-			[name, entityType, location || null, description || null],
+			`INSERT INTO \`entity\` (name, type, description, userId) VALUES (?, ?, ?, ?);`,
+			[name, entityType, description || null, userId || null],
 		);
 	}
 }
 
-const getUpdateValues = (fields: Record<string, string | undefined>) => {
+const getUpdateValues = (
+	fields: Record<string, string | number | undefined>,
+) => {
 	const names = [];
 	const values = [];
 

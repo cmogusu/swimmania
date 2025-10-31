@@ -8,21 +8,16 @@ import type { EntityType, RawMetadata } from "@/server/types";
 type Props = {
 	entityId: number;
 	entityType: EntityType;
-	locationName: string | undefined;
-	title: string;
+	title: string | undefined;
 };
 
-export const LocationInput = ({
-	entityId,
-	entityType,
-	locationName,
-	title,
-}: Props) => {
+export const LocationInput = ({ entityId, entityType, title }: Props) => {
 	const { isFetchComplete, locationMetadata } = useGetMetadata(
 		entityType,
 		entityId,
 	);
-	const { location, metadataId } = useGetLocation(locationMetadata);
+	const { location, locationName, metadataId } =
+		useGetLocation(locationMetadata);
 
 	if (!entityId || !isFetchComplete) {
 		return null;
@@ -35,7 +30,7 @@ export const LocationInput = ({
 				metadataId={metadataId}
 				entityId={entityId}
 				entityType={entityType}
-				locationName={locationName}
+				locationName={locationName as string}
 				location={location}
 			/>
 		</div>
@@ -44,19 +39,18 @@ export const LocationInput = ({
 
 const useGetMetadata = (entityType: EntityType, entityId: number) => {
 	const [isFetchComplete, setIsFetchComplete] = useState<boolean>(false);
-	const [locationMetadata, setLlocationMetadata] = useState<RawMetadata[]>();
+	const [locationMetadata, setLocationMetadata] = useState<RawMetadata[]>();
 
 	useEffect(() => {
 		if (!entityId || !entityType) {
 			return;
 		}
 
-		getMetadata(entityType, entityId, ["location.lat", "location.lng"]).then(
-			(metadata) => {
-				setLlocationMetadata(metadata);
-				setIsFetchComplete(true);
-			},
-		);
+		const metadataNames = ["location.lat", "location.lng", "location.name"];
+		getMetadata(entityType, entityId, metadataNames).then((metadata) => {
+			setLocationMetadata(metadata);
+			setIsFetchComplete(true);
+		});
 	}, [entityType, entityId]);
 
 	return { isFetchComplete, locationMetadata };
@@ -67,8 +61,9 @@ const useGetLocation = (locationMetadata: RawMetadata[] | undefined) => {
 		return {};
 	}
 
-	const latValue = locationMetadata?.find((m) => m.name === "location.lat");
-	const lngValue = locationMetadata?.find((m) => m.name === "location.lng");
+	const latValue = getValue(locationMetadata, "location.lat");
+	const lngValue = getValue(locationMetadata, "location.lng");
+	const locationName = getValue(locationMetadata, "location.name");
 	const location =
 		latValue?.value && lngValue?.value
 			? {
@@ -77,5 +72,12 @@ const useGetLocation = (locationMetadata: RawMetadata[] | undefined) => {
 				}
 			: undefined;
 
-	return { location, metadataId: latValue?.id };
+	return {
+		location,
+		locationName: locationName?.value,
+		metadataId: latValue?.id,
+	};
 };
+
+const getValue = (metadataArr: RawMetadata[], name: string) =>
+	metadataArr?.find((m) => m.name === name);

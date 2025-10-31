@@ -71,7 +71,6 @@ export class SwimResultData {
 			name,
 			loadImages: false,
 			loadDefaultImage: false,
-			loadMetadata: false,
 		});
 
 		if (entity) {
@@ -81,7 +80,7 @@ export class SwimResultData {
 		const { id: entityId } = await entityManager.insert({
 			name,
 			description: "",
-			location: "",
+			userId: 3,
 		});
 
 		this.entityId = entityId;
@@ -92,7 +91,7 @@ export class SwimResultData {
 		return {
 			name: this.swimmerName,
 			description: this.swimmerName,
-			location: "",
+			userId: 3,
 		};
 	}
 

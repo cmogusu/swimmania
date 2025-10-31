@@ -4,7 +4,6 @@ import {
 	metadataManagerFactory,
 	relatedEntityManagerFactory,
 } from "@/server/Managers";
-import type { MetadataValue } from "@/server/types";
 import { POSTS_PER_PAGE } from "../constants/global";
 import { Log } from "../services";
 import type {
@@ -33,7 +32,6 @@ export class Api {
 			const entity = await entityManager.getById({
 				entityId,
 				loadImages: true,
-				loadMetadata: true,
 				loadDefaultImage: true,
 			});
 
@@ -52,7 +50,6 @@ export class Api {
 			const entityManager = entityManagerFactory.getInstance(entityType);
 			const entities = await entityManager.getAll({
 				loadImages: false,
-				loadMetadata: false,
 				loadDefaultImage: true,
 				pageSize: this.pageSize,
 				pageNumber: page,
@@ -149,7 +146,7 @@ export class Api {
 		entityId: number,
 		name?: string,
 		description?: string,
-		location?: string,
+		userId?: number,
 	) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
@@ -157,7 +154,7 @@ export class Api {
 				entityId,
 				name,
 				description,
-				location,
+				userId,
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update entity";
@@ -169,14 +166,14 @@ export class Api {
 		entityType: EntityType,
 		name: string,
 		description: string,
-		location: string,
+		userId: number,
 	) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
 			return await entityManager.insert({
 				name,
 				description,
-				location,
+				userId,
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to add entity";

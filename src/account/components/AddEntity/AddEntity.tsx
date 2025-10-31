@@ -30,9 +30,8 @@ const createEmptyEntity = (entityType: EntityType): EntityData => {
 		type: entityType,
 		name: "",
 		description: "",
-		location: "",
+		userId: -1,
 		defaultImage: undefined,
 		images: [],
-		metadata: [],
 	};
 };

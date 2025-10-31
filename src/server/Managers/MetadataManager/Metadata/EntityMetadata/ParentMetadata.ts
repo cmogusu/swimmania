@@ -3,6 +3,7 @@ import {
 	LatitudePropertyType,
 	LongitudePropertyType,
 	ParentPropertyType,
+	TextPropertyType,
 } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
@@ -24,6 +25,12 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
+						...rawMetadata,
+					}),
+				name: (rawMetadata?: RawMetadata) =>
+					new TextPropertyType({
+						name: "name",
+						title: "Name",
 						...rawMetadata,
 					}),
 			},

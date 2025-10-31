@@ -1,7 +1,6 @@
 import { isUndefined } from "@/server/utils";
-import type { EntityType, RawMetadata } from "../../types";
+import type { EntityType } from "../../types";
 import type { Image, ImageManager } from "../ImageManager";
-import type { MetadataManager } from "../MetadataManager";
 import type { ILoadableEntity, RawEntity } from "./types";
 
 export class Entity {
@@ -9,18 +8,17 @@ export class Entity {
 	name: string;
 	entityType: EntityType;
 	description: string | undefined;
-	location: string | undefined;
+	userId: number;
 	defaultImage: Image | undefined;
 	images: Image[] | undefined;
-	metadata: RawMetadata[] | undefined;
 
-	constructor({ id, name, type, description, location }: RawEntity) {
+	constructor({ id, name, type, description, userId }: RawEntity) {
 		this.id = id;
 		this.entityType = type;
 		this.name = name;
+		this.userId = userId;
 
 		if (!isUndefined(description)) this.description = description;
-		if (!isUndefined(location)) this.location = location;
 	}
 
 	async loadImages(imageManager: ImageManager) {
@@ -34,32 +32,20 @@ export class Entity {
 		});
 	}
 
-	async loadMetadata(metadataManager: MetadataManager) {
-		this.metadata = await metadataManager.getAll({
-			entityId: this.id,
-			entityType: this.entityType,
-		});
-	}
-
 	async loadRelatedData(
 		inputData: ILoadableEntity,
 		imageManager: ImageManager,
-		metadataManager: MetadataManager,
 	) {
-		const loadTasks: Promise<unknown>[] = [];
+		const promises: Promise<unknown>[] = [];
 		if (inputData.loadImages) {
-			loadTasks.push(this.loadImages(imageManager));
+			promises.push(this.loadImages(imageManager));
 		}
 
 		if (inputData.loadDefaultImage) {
-			loadTasks.push(this.loadDefaultImage(imageManager));
+			promises.push(this.loadDefaultImage(imageManager));
 		}
 
-		if (inputData.loadMetadata) {
-			loadTasks.push(this.loadMetadata(metadataManager));
-		}
-
-		await Promise.all(loadTasks);
+		await Promise.all(promises);
 	}
 
 	toJSON() {
@@ -68,10 +54,9 @@ export class Entity {
 			type: this.entityType,
 			name: this.name,
 			description: this.description,
-			location: this.location,
+			userId: this.userId,
 			defaultImage: this.defaultImage?.toJSON(),
 			images: this.images?.map((img) => img.toJSON()),
-			metadata: this.metadata,
 		};
 	}
 }

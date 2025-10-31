@@ -63,7 +63,7 @@ export class SeedEntity {
 		return {
 			name: faker.location.street(),
 			description: faker.word.words({ count: { min: 10, max: 20 } }),
-			location: `${faker.location.county()} ${faker.location.country()}`,
+			userId: 3,
 		};
 	}
 }

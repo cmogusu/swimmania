@@ -16,10 +16,8 @@ const mockEntity: EntityData = {
 	type: "pool",
 	name: "Best pool",
 	description: "This is the best pool",
-	location: "Nairobi",
 	defaultImage: mockDefaultImage,
 	images: [],
-	metadata: [],
 };
 
 test("has correct header", () => {

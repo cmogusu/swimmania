@@ -72,7 +72,7 @@ export class EntityManager {
 
 		const rawEntity = await this.db.getById(this.entityType, inputData);
 		const entity = new Entity(rawEntity);
-		entity.loadRelatedData(inputData, this.imageManager, this.metadataManager);
+		entity.loadRelatedData(inputData, this.imageManager);
 
 		return entity;
 	}
@@ -83,7 +83,7 @@ export class EntityManager {
 
 		const rawEntity = await this.db.getByName(this.entityType, inputData);
 		const entity = new Entity(rawEntity);
-		entity.loadRelatedData(inputData, this.imageManager, this.metadataManager);
+		entity.loadRelatedData(inputData, this.imageManager);
 
 		return entity;
 	}
@@ -150,12 +150,7 @@ export class EntityManager {
 		rawEntities: RawEntity[],
 		inputData: ILoadableEntity & IPaginated,
 	) {
-		const entities = new Entities(
-			rawEntities,
-			inputData,
-			this.imageManager,
-			this.metadataManager,
-		);
+		const entities = new Entities(rawEntities, inputData, this.imageManager);
 
 		await entities.loadRelatedData();
 		return entities;
