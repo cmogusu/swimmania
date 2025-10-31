@@ -102,20 +102,6 @@ export class EntityManager {
 	}
 
 	async insert(rawInputs: RawInsertEntityInputs) {
-		const insertData = await this.insertEntity(rawInputs);
-
-		if (rawInputs.metadata) {
-			await this.metadataManager.insertBulk(
-				this.entityType,
-				insertData.id,
-				rawInputs.metadata,
-			);
-		}
-
-		return insertData;
-	}
-
-	async insertEntity(rawInputs: RawInsertEntityInputs) {
 		const inputData = new InsertInputData(rawInputs);
 		inputData.validateData();
 		const insertData = await this.db.insert(this.entityType, inputData);

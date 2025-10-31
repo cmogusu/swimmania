@@ -12,6 +12,7 @@ import { updateEntity } from "@/server/api/apiActions";
 import { Validate } from "@/server/Managers/EntityManager/InputData/Validate";
 import type { EntityData, EntityType } from "@/server/types";
 import { HiddenInputs } from "./HiddenInputs";
+import { LocationInput } from "./LocationInput";
 import { SubmitButton } from "./SubmitButton";
 import { TextareaInput } from "./TextareaInput";
 import { TextInput } from "./TextInput";
@@ -51,32 +52,33 @@ export const ClientEntityForm = (props: Props) => {
 	);
 
 	return (
-		<form action={formAction}>
-			<HiddenInputs entityType={props.entityType} entityId={props.entityId} />
+		<div>
+			<form action={formAction}>
+				<HiddenInputs entityType={props.entityType} entityId={props.entityId} />
 
-			<TextInput
-				name="name"
-				title="Name"
-				error={errors.name}
-				value={entity.name}
-				onChange={handleUpdate}
-			/>
-			<TextInput
-				name="location"
-				title="Location"
-				error={errors.location}
-				value={entity.location}
-				onChange={handleUpdate}
-			/>
-			<TextareaInput
-				name="description"
-				title="Description"
-				error={errors.description}
-				value={entity.description}
-				onChange={handleUpdate}
-			/>
+				<TextInput
+					name="name"
+					title="Name"
+					error={errors.name}
+					value={entity.name}
+					onChange={handleUpdate}
+				/>
 
-			<SubmitButton entityId={props.entityId} />
-		</form>
+				<TextareaInput
+					name="description"
+					title="Description"
+					error={errors.description}
+					value={entity.description}
+					onChange={handleUpdate}
+				/>
+
+				<SubmitButton entityId={props.entityId} />
+			</form>
+			<LocationInput
+				entityId={props.entityId}
+				entityType={props.entityType}
+				locationName={entity.location}
+			/>
+		</div>
 	);
 };

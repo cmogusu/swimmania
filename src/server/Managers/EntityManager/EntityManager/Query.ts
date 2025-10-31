@@ -105,15 +105,18 @@ export class Query extends BaseQuery {
 	update(
 		entityType: EntityType,
 		entityId: number,
-		name: string,
+		name?: string,
 		description?: string,
 		location?: string,
 	) {
-		this.throwIfNotSet({ entityId, entityType, name });
+		this.throwIfNotSet({ entityId, entityType });
+
+		const { names, values } = getUpdateValues({ name, description, location });
+		const joinedNames = names.map((n) => `${n}=?`).join(", ");
 
 		return this.exec(
-			`UPDATE \`entity\` SET name=?, location=?, description=? WHERE id=? and type=?;`,
-			[name, location || null, description || null, entityId, entityType],
+			`UPDATE \`entity\` SET ${joinedNames} WHERE id=? and type=?;`,
+			[...values, entityId, entityType],
 		);
 	}
 
@@ -134,3 +137,18 @@ export class Query extends BaseQuery {
 		);
 	}
 }
+
+const getUpdateValues = (fields: Record<string, string | undefined>) => {
+	const names = [];
+	const values = [];
+
+	for (const fieldName in fields) {
+		const fieldValue = fields[fieldName];
+		if (fieldValue) {
+			names.push(fieldName);
+			values.push(fieldValue);
+		}
+	}
+
+	return { names, values };
+};

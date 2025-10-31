@@ -4,38 +4,39 @@ import { updateLocationMetadata } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 
 type Props = PropsWithChildren & {
-	id: number;
+	metadataId: number | undefined;
 	entityId: number;
 	entityType: EntityType;
-	latName: string;
-	lngName: string;
 	latValue: number | undefined;
 	lngValue: number | undefined;
+	locationName: string | undefined;
 	isSubmitDisabled: boolean;
 };
 
 export const EditLocationForm = ({
-	id,
+	metadataId,
 	entityId,
 	entityType,
-	latName,
-	lngName,
 	latValue,
 	lngValue,
+	locationName,
 	isSubmitDisabled,
 	children,
 }: Props) => {
-	const buttonText = id === -1 ? "Insert" : "Update";
+	const buttonText = metadataId === -1 ? "Insert" : "Update";
+
+	console.log(locationName);
 
 	return (
 		<form action={updateLocationMetadata}>
 			<input type="hidden" name="entityType" defaultValue={entityType} />
-			<input type="hidden" name="id" defaultValue={id} />
+			<input type="hidden" name="id" defaultValue={metadataId} />
 			<input type="hidden" name="entityId" defaultValue={entityId} />
-			<input type="hidden" name="latName" defaultValue={latName} />
-			<input type="hidden" name="lngName" defaultValue={lngName} />
+			<input type="hidden" name="latName" defaultValue="location.lat" />
+			<input type="hidden" name="lngName" defaultValue="location.lng" />
 			<input type="hidden" name="latValue" value={latValue} />
 			<input type="hidden" name="lngValue" value={lngValue} />
+			<input type="hidden" name="locationName" value={locationName} />
 			{children}
 			<SubmitButton buttonText={buttonText} isDisabled={isSubmitDisabled} />
 		</form>

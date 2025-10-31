@@ -1,6 +1,6 @@
 "use client";
 
-import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
+import { importLibrary } from "@googlemaps/js-api-loader";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { useCallback, useEffect, useState } from "react";
 import { useApiKeyContext } from "@/context";
@@ -16,16 +16,15 @@ export type LocationAutocompleteWithMapProps = {
 	setLocationName: (locationName: string) => void;
 };
 
-export default function LocationAutocompleteWithMap(
-	props: LocationAutocompleteWithMapProps,
-) {
-	const [location, setLocation] = useState<LatLng | undefined>(props.location);
+export default function LocationAutocompleteWithMap({
+	location,
+	locationName,
+	setLocation,
+	setLocationName,
+}: LocationAutocompleteWithMapProps) {
 	const [viewport, setViewport] = useState<
 		google.maps.LatLngBounds | undefined
 	>();
-	const [locationName, setLocationName] = useState<string | undefined>(
-		props.locationName,
-	);
 	const { google: googleApiKey } = useApiKeyContext();
 	const geocoder = useGetGeocoder(googleApiKey);
 
@@ -37,7 +36,7 @@ export default function LocationAutocompleteWithMap(
 			if (viewport) setViewport(viewport);
 			if (locationName) setLocationName(locationName);
 		},
-		[],
+		[setLocationName, setLocation],
 	);
 
 	const handleSetLocation = useCallback(
@@ -47,7 +46,7 @@ export default function LocationAutocompleteWithMap(
 				if (locationName) setLocationName(locationName);
 			});
 		},
-		[geocoder],
+		[geocoder, setLocationName],
 	);
 
 	if (!googleApiKey) {
@@ -58,6 +57,7 @@ export default function LocationAutocompleteWithMap(
 		<APIProvider apiKey={googleApiKey}>
 			<LocationAutocomplete
 				locationName={locationName}
+				setLocationName={setLocationName}
 				onPlaceSelect={handlePlaceSelect}
 			/>
 			<GoogleMap
@@ -77,11 +77,7 @@ const useGetGeocoder = (googleApiKey: string) => {
 			return;
 		}
 
-		setOptions({
-			key: googleApiKey,
-			v: "beta",
-		});
-
+		// TODO: update to use useMapsLibrary("geocoding");
 		importLibrary("geocoding")
 			.then(({ Geocoder }) => new Geocoder())
 			.then(setGeocoder)

@@ -9,15 +9,11 @@ import { EditLocationForm } from "../MapLibre/EditLocationForm";
 import type { LocationAutocompleteWithMapProps } from "./LocationAutocompleteWithMap";
 
 type Props = {
-	id: number;
-	locationName?: string;
-	latName: string;
-	lngName: string;
-	latValue: number;
-	lngValue: number;
+	metadataId: number | undefined;
 	entityId: number;
 	entityType: EntityType;
-	center?: LatLng;
+	location: LatLng | undefined;
+	locationName: string | undefined;
 	zoom?: number;
 };
 
@@ -25,36 +21,20 @@ const LocationAutocompleteWithMap: ComponentType<LocationAutocompleteWithMapProp
 	dynamic(() => import("./LocationAutocompleteWithMap"));
 
 export const EditSingleLocationMap = ({
-	id,
-	latName,
-	lngName,
-	latValue,
-	lngValue,
+	metadataId,
 	entityId,
 	entityType,
-	center,
-	...rest
+	...props
 }: Props) => {
-	const initialLocation =
-		latValue || lngValue
-			? {
-					lat: latValue,
-					lng: lngValue,
-				}
-			: undefined;
-
-	const [location, setLocation] = useState<LatLng | undefined>(initialLocation);
+	const [location, setLocation] = useState<LatLng | undefined>(props.location);
 	const [locationName, setLocationName] = useState<string | undefined>(
-		rest.locationName,
+		props.locationName,
 	);
-	const isSubmitDisabled = getIsSubmitDisabled(
-		locationName,
-		location,
-		initialLocation,
-	);
+
+	const isSubmitDisabled = !locationName || !location?.lat || !location?.lng;
 
 	return (
-		<div className="mb-4">
+		<div className="mb-4" style={{ width: "500px" }}>
 			<FixedMapContainer>
 				<LocationAutocompleteWithMap
 					location={location}
@@ -64,32 +44,14 @@ export const EditSingleLocationMap = ({
 				/>
 			</FixedMapContainer>
 			<EditLocationForm
-				id={id}
+				metadataId={metadataId}
 				entityId={entityId}
 				entityType={entityType}
-				latName={latName}
-				lngName={lngName}
 				latValue={location?.lat}
 				lngValue={location?.lng}
+				locationName={locationName}
 				isSubmitDisabled={isSubmitDisabled}
-			>
-				<input type="hidden" name="location" value={locationName} />
-			</EditLocationForm>
+			/>
 		</div>
-	);
-};
-
-const getIsSubmitDisabled = (
-	locationName: string | undefined,
-	location: LatLng | undefined,
-	initialLocation: LatLng | undefined,
-) => {
-	if (!locationName || !location) {
-		return true;
-	}
-
-	return (
-		location?.lat === initialLocation?.lat &&
-		location?.lng === initialLocation?.lng
 	);
 };

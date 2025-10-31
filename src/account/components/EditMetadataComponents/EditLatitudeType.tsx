@@ -19,7 +19,7 @@ export const EditLatitudeType = async ({
 		throw Error("missing lat or lang");
 	}
 
-	const center: LatLng = {
+	const location: LatLng = {
 		lat: latMetadata?.value as number,
 		lng: lngMetadata?.value as number,
 	};
@@ -28,12 +28,10 @@ export const EditLatitudeType = async ({
 		<div className="mb-4">
 			<h3>{parentTitle}</h3>
 			<EditSingleLocationMap
-				id={latMetadata.id}
-				latName={latMetadata.name}
-				lngName={lngMetadata.name}
+				metadataId={latMetadata.id}
 				entityId={entityId}
 				entityType={entityType}
-				center={center}
+				location={location}
 			/>
 		</div>
 	);

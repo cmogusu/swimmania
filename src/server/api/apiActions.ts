@@ -87,11 +87,13 @@ export async function updateLocationMetadata(formData: FormData) {
 		"latValue",
 		"lngName",
 		"lngValue",
+		"locationName",
 	]);
 
 	const id = Number(data.id);
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
+	const locationName = data.locationName as string;
 	const metadataArr = [
 		{
 			name: data.latName as string,
@@ -102,6 +104,16 @@ export async function updateLocationMetadata(formData: FormData) {
 			value: Number(data.lngValue),
 		},
 	];
+
+	if (locationName) {
+		await api.updateEntity(
+			entityType,
+			entityId,
+			undefined,
+			undefined,
+			locationName,
+		);
+	}
 
 	if (id > -1) {
 		await api.updateMetadata(entityType, id, entityId, metadataArr);

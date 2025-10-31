@@ -2,6 +2,7 @@ import { updateEntity } from "@/server/api/apiActions";
 import type { EntityData, EntityType } from "@/server/types";
 import { ClientEntityForm } from "./ClientEntityForm";
 import { HiddenInputs } from "./HiddenInputs";
+import { LocationInput } from "./LocationInput";
 import { SubmitButton } from "./SubmitButton";
 import { TextareaInput } from "./TextareaInput";
 import { TextInput } from "./TextInput";
@@ -18,21 +19,29 @@ export const EntityForm = (props: Props) => {
 
 	return (
 		<ClientEntityForm {...props}>
-			<form action={updateEntity}>
-				<HiddenInputs entityType={entityType} entityId={entityId} />
+			<div>
+				<form action={updateEntity}>
+					<HiddenInputs entityType={entityType} entityId={entityId} />
 
-				<TextInput name="name" title="Name" value={name} />
-				<TextInput name="location" title="Location" value={location} />
-				<TextareaInput
-					name="description"
-					title="Description"
-					value={description}
+					<TextInput name="name" title="Name" value={name} />
+
+					<TextareaInput
+						name="description"
+						title="Description"
+						value={description}
+					/>
+
+					<SubmitButton entityId={entityId}>
+						<button type="submit">submit</button>
+					</SubmitButton>
+				</form>
+
+				<LocationInput
+					entityId={entityId}
+					entityType={entityType}
+					locationName={location}
 				/>
-
-				<SubmitButton entityId={entityId}>
-					<button type="submit">submit</button>
-				</SubmitButton>
-			</form>
+			</div>
 		</ClientEntityForm>
 	);
 };

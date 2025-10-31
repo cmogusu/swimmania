@@ -53,9 +53,7 @@ export class BaseValidate {
 	}
 
 	description(description?: string) {
-		if (description) {
-			return this.descriptionValidator.parse(description);
-		}
+		return this.descriptionValidator.parse(description);
 	}
 
 	entityType(entityType?: string) {

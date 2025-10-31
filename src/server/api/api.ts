@@ -147,9 +147,9 @@ export class Api {
 	async updateEntity(
 		entityType: EntityType,
 		entityId: number,
-		name: string,
-		description: string,
-		location: string,
+		name?: string,
+		description?: string,
+		location?: string,
 	) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);

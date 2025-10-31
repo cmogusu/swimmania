@@ -9,8 +9,6 @@ import type {
 import { isString } from "@/server/utils";
 import { extractMetadataNamesAndValues } from "./utils";
 
-const COLUMNS = `id, entityId, entityType, name, COALESCE(value_tiny, value_time, value_num, value_text, value_lat, value_lng) as value`;
-
 export class Query extends BaseQuery {
 	getAll(entityType: EntityType, entityId: number) {
 		this.throwIfNotSet({ entityType, entityId });
@@ -28,16 +26,8 @@ export class Query extends BaseQuery {
 		const tableName = EntityMetadataDbTables[entityType];
 
 		return this.exec(
-			`SELECT ${joinedNames} FROM \`${tableName}\` Where entityId=?;`,
+			`SELECT id, entityId, ${joinedNames} FROM \`${tableName}\` Where entityId=?;`,
 			[entityId],
-		);
-	}
-
-	getById(entityId: number, metadataId: number) {
-		this.throwIfNotSet({ entityId, metadataId });
-		return this.exec(
-			`SELECT ${COLUMNS} FROM \`metadata\` Where id=? and entityId=?;`,
-			[metadataId, entityId],
 		);
 	}
 

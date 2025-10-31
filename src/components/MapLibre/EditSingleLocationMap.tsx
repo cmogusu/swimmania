@@ -12,12 +12,10 @@ import type { MaplibreProps } from "./MaplibreMap";
 import { useRenderMarker } from "./useRenderMarker";
 
 type Props = {
-	id: number;
-	latName: string;
-	lngName: string;
+	metadataId: number;
 	entityId: number;
 	entityType: EntityType;
-	center?: LatLng;
+	location?: LatLng;
 	zoom?: number;
 };
 
@@ -26,16 +24,14 @@ const MaplibreMap: ComponentType<MaplibreProps> = dynamic(
 );
 
 export const EditSingleLocationMap = ({
-	id,
-	latName,
-	lngName,
+	metadataId,
 	entityId,
 	entityType,
-	center,
+	location,
 	zoom,
 }: Props) => {
 	const initialMapCenter =
-		center?.lat && center?.lng ? center : DEFAULT_MAP_CENTER;
+		location?.lat && location?.lng ? location : DEFAULT_MAP_CENTER;
 
 	const [mapCenter, setMapCenter] = useState<LatLng>(initialMapCenter);
 	const [maplibre, setMaplibre] = useState<MapLibre | undefined>();
@@ -55,14 +51,12 @@ export const EditSingleLocationMap = ({
 	return (
 		<div className="mb-4">
 			<FixedMapContainer>
-				<MaplibreMap center={center} zoom={zoom} setMaplibre={setMaplibre} />
+				<MaplibreMap center={location} zoom={zoom} setMaplibre={setMaplibre} />
 			</FixedMapContainer>
 			<EditLocationForm
-				id={id}
+				metadataId={metadataId}
 				entityId={entityId}
 				entityType={entityType}
-				latName={latName}
-				lngName={lngName}
 				latValue={mapCenter.lat}
 				lngValue={mapCenter.lng}
 				isSubmitDisabled={isSubmitDisabled}

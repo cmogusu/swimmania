@@ -4,7 +4,7 @@ import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class InsertInputData {
-	name: string;
+	name?: string;
 	description?: string;
 	location?: string;
 
@@ -12,7 +12,7 @@ export class InsertInputData {
 	sanitize: Sanitize;
 
 	constructor({ name, description, location }: RawInsertEntityInputs) {
-		this.name = name;
+		if (!isUndefined(name)) this.name = name;
 		if (!isUndefined(description)) this.description = description;
 		if (!isUndefined(location)) this.location = location;
 
@@ -21,14 +21,19 @@ export class InsertInputData {
 	}
 
 	validateData() {
-		this.validate.name(this.name);
-		this.validate.description(this.description);
-		this.validate.location(this.location);
+		const { name, description, location, validate } = this;
+		if (!name && !description && !location) {
+			throw Error("No value set");
+		}
+
+		if (name) this.name = validate.name(name);
+		if (description) this.description = validate.description(description);
+		if (location) this.location = validate.location(location);
 	}
 
 	getSanitized() {
 		return {
-			name: this.sanitize.name(this.name),
+			name: this.name ? this.sanitize.name(this.name) : undefined,
 			description: this.sanitize.description(this.description),
 			location: this.sanitize.location(this.location),
 		};

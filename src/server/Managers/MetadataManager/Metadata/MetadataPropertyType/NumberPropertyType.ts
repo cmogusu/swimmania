@@ -38,7 +38,7 @@ export class NumberPropertyType
 		const { min, max, validate } = this;
 		return isUndefined(min) || isUndefined(max)
 			? validate.number(v)
-			: validate.minMaxNumber(min, max, clamp(v, min, max)); // TODO: Remove this clamping. Its only needed for dev work.
+			: validate.minMaxNumber(min, max, clamp(v as number, min, max)); // TODO: Remove this clamping. Its only needed for dev work.
 	}
 
 	get formattedValue() {

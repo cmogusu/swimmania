@@ -24,18 +24,16 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 		<div>
 			<section>
 				<h1 className="mb-4">Edit: {entity.name}</h1>
-				{show && (
-					<EntityForm
-						entityType={entityType}
-						entityId={entityId}
-						entity={entity}
-					/>
-				)}
+				<EntityForm
+					entityType={entityType}
+					entityId={entityId}
+					entity={entity}
+				/>
 			</section>
 
 			{show && <EditImages entityId={entityId} images={images} />}
 
-			<EditMetadata entityType={entityType} entityId={entityId} />
+			{show && <EditMetadata entityType={entityType} entityId={entityId} />}
 
 			{show && (
 				<EditRelatedEntities entityId={entityId} entityType={entityType} />

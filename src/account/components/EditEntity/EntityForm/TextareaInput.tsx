@@ -18,7 +18,7 @@ export const TextareaInput = ({
 	title,
 	...props
 }: Props) => (
-	<label className="floating-label mb-3">
+	<label className="floating-label mb-3 min-h-16">
 		<span>{title}</span>
 		<textarea
 			className={`input input-sm ${error ? "input-error" : ""}`}

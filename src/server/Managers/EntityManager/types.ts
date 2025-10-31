@@ -1,10 +1,10 @@
 import type {
 	EntityType,
+	MetadataFilter,
 	PaginationOptions,
 	RawMetadata,
 } from "@/server/types";
 import type { RawImageInputs } from "../ImageManager";
-import type { MetadataFilter } from "../MetadataManager";
 
 // Outputs
 export type RawEntity = {
@@ -47,7 +47,7 @@ export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 };
 
 export type RawInsertEntityInputs = {
-	name: string;
+	name?: string;
 	description?: string;
 	location?: string;
 	images?: RawImageInputs[];
