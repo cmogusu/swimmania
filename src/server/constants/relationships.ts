@@ -17,35 +17,49 @@ export const EntityRelationships: Record<
 		["trainsAt_inverse", "team"],
 		["canBeFoundAt_inverse", "swimMeet"],
 		["canBeFoundAt", "school"],
+		["rating", "rating"],
 	],
 	coach: [
 		["worksAt", "school"],
 		["worksAt", "pool"],
 		["isAlso", "swimmer"],
 		["isAlso", "lifeguard"],
+		["rating", "rating"],
 	],
 	swimmer: [
 		["trainsAt", "school"],
 		["trainsAt", "pool"],
 		["parentOf_inverse", "parent"],
+		["comment", "comment"],
 	],
 	school: [
 		["contains", "pool"],
 		["trainsAt_inverse", "swimmer"],
+		["rating", "rating"],
 	],
-	team: [["trainsAt", "pool"]],
-	lifeguard: [["worksAt", "pool"]],
+	team: [
+		["trainsAt", "pool"],
+		["rating", "rating"],
+	],
+	lifeguard: [
+		["worksAt", "pool"],
+		["rating", "rating"],
+	],
 	swimMeet: [
 		["canBeFoundAt", "pool"],
 		["contains", "swimEvent"],
+		["rating", "rating"],
 	],
 	swimEvent: [
 		["contains", "swimResult"],
 		["contains_inverse", "swimMeet"],
+		["comment", "comment"],
 	],
 	swimResult: [["contains_inverse", "swimEvent"]],
 	parent: [["parentOf", "swimmer"]],
 	user: [],
+	comment: [["contains_inverse", "school"]],
+	rating: [["contains_inverse", "school"]],
 };
 
 export const RelationshipDescriptions: Record<
@@ -127,5 +141,23 @@ export const RelationshipDescriptions: Record<
 		getTitle: (relatedEntityType: EntityType) =>
 			`Is child of these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "",
+	},
+	comment: {
+		getTitle: () => "Comments",
+		description: "Entity is parent to a swimmer",
+	},
+	comment_inverse: {
+		getTitle: (relatedEntityType: EntityType) =>
+			`Comments of these ${EntityTypePlurals[relatedEntityType]}`,
+		description: "Entity is parent to a swimmer",
+	},
+	rating: {
+		getTitle: () => `Ratings`,
+		description: "Ratings of entity",
+	},
+	rating_inverse: {
+		getTitle: (relatedEntityType: EntityType) =>
+			`Ratings of these ${EntityTypePlurals[relatedEntityType]}`,
+		description: "Rating belonging to entity type",
 	},
 };

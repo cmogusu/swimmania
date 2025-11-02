@@ -16,6 +16,9 @@ const entityComponents: Record<EntityType, Component> = {
 	swimMeet: dynamic(() => import("./EntityComponents/SwimMeet")),
 	swimEvent: dynamic(() => import("./EntityComponents/SwimEvent")),
 	swimResult: dynamic(() => import("./EntityComponents/SwimResult")),
+	user: dynamic(() => import("./EntityComponents/Pool")),
+	comment: dynamic(() => import("./EntityComponents/Pool")),
+	rating: dynamic(() => import("./EntityComponents/Pool")),
 };
 
 export const Entity = async (props: EntityProps) => {

@@ -16,6 +16,8 @@ export const EntityTypes: Record<EntityType, string> = {
 	swimEvent: "swimEvent",
 	swimResult: "swimResult",
 	user: "user",
+	comment: "comment",
+	rating: "rating",
 };
 
 export const EntityTypePlurals: Record<EntityType, string> = {
@@ -30,6 +32,8 @@ export const EntityTypePlurals: Record<EntityType, string> = {
 	swimEvent: "Swimming Events",
 	swimResult: "Swimming Results",
 	user: "Users",
+	comment: "Comments",
+	rating: "Ratings",
 };
 
 export const EntityTypesKeys = Object.keys(EntityTypes);

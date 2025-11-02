@@ -1,22 +1,131 @@
+import type { File } from "node:buffer";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import {
+	access,
+	constants,
+	mkdir,
+	readdir,
+	rename,
+	stat,
+	writeFile,
+} from "node:fs/promises";
+import path from "node:path";
 import * as z from "zod";
+import { UPLOADS_FOLDER } from "@/server/constants/paths";
 
-export default async function ExpPage() {
-	const num = 36.87588352399299;
-	const min = -180;
-	const max = 180;
-	const x = z.coerce
-		.number()
-		.min(min, "Too small")
-		.max(max, "Too large")
-		.parse(num);
-	console.log(x);
+export default async function Page() {
 	return (
-		<div>
-			<h1>hello</h1>
+		<div className="p-6">
+			<form action={handleUpload}>
+				<div>
+					<input
+						className="input input-md input-primary"
+						type="file"
+						accept="image/*"
+						name="image"
+					/>
+				</div>
+				<div>
+					<input
+						type="datetime-local"
+						name="dateTime"
+						className="input input-md input-primary"
+					/>
+				</div>
+				<button className="btn btn-sm" type="submit">
+					Upload Image
+				</button>
+			</form>
 		</div>
 	);
 }
 
-// const num = -1.25489104578669;
-// const min = -90;
-// const max = 90;
+async function handleUpload(formData: FormData) {
+	"use server";
+
+	const dateTime = formData.get("dateTime") as string;
+	console.log(dateTime);
+
+	try {
+		z.iso.datetime({ local: true }).parse(dateTime);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+export async function x() {
+	const files = await readdir(UPLOADS_FOLDER);
+	const promises = files.map((f) => {
+		const filePath = path.join(UPLOADS_FOLDER, f);
+		return stat(filePath);
+	});
+
+	const fileStats = await Promise.all(promises);
+	const sorted = fileStats.sort((f1, f2) => f1.birthtimeMs - f2.birthtimeMs);
+	for (const fileStat of sorted) {
+		console.log(fileStat);
+	}
+}
+
+export async function upload() {
+	const filePath = "/Users/clive/www/swimmania/public/uploads/camel.jpg";
+	const hash =
+		"febf88ea4051355e7918b87cf19c9602a9c8223dbe2eb5ca15b7d469823254c7";
+
+	const folderPath = getFolderPath(hash);
+	await createFolder(folderPath);
+	await moveFileIntoFolder(folderPath, filePath);
+}
+
+async function moveFileIntoFolder(folderPath: string, filePath: string) {
+	const fileName = path.basename(filePath);
+	const fileNameInFolder = path.join(folderPath, fileName);
+	try {
+		await access(fileNameInFolder);
+	} catch (_e) {
+		await rename(filePath, fileNameInFolder);
+	}
+}
+
+const getFolderPath = (folderName: string) =>
+	path.join(UPLOADS_FOLDER, folderName);
+
+export async function createFolder(folderPath: string) {
+	try {
+		await access(folderPath, constants.W_OK);
+	} catch (_e) {
+		await mkdir(folderPath);
+	}
+}
+
+export function getFileHash(filePath: string) {
+	return new Promise((resolve) => {
+		const hash = crypto.createHash("sha256");
+		const stream = fs.createReadStream(filePath);
+
+		stream.on("error", (error) => console.log(error));
+		stream.on("data", (chunk) => hash.update(chunk));
+		stream.on("end", () => {
+			resolve(hash.digest("hex"));
+		});
+	});
+}
+
+export async function uploadFile(file: File) {
+	const arrayBuffer = await file.arrayBuffer();
+	const buffer = new Uint8Array(arrayBuffer);
+	const filePath = path.join(UPLOADS_FOLDER, file.name);
+	await writeFile(filePath, buffer);
+
+	return filePath;
+}
+
+export async function getFile(formData: FormData): Promise<File> {
+	const file = formData.get("image") as unknown as File;
+	if (!file) {
+		throw Error("No file uploaded");
+	}
+
+	return file as File;
+}

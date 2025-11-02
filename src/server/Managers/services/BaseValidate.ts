@@ -9,12 +9,14 @@ export class BaseValidate {
 
 	idsValidator = z.array(this.idValidator);
 	nameValidator = z.string().min(2, "Too short").max(255, "Too long");
+	emailValidator = z.email();
 	descriptionValidator = z
 		.string()
 		.min(2, "Too short")
 		.max(MAX_TEXT_LENGTH, "Too long");
 
 	entityTypeValidator = z.enum(EntityTypesKeys);
+	genderValidator = z.enum(["male", "female"]);
 	ageValidator = z.coerce
 		.number("Number expected")
 		.positive("Positive number expected")
@@ -22,7 +24,10 @@ export class BaseValidate {
 
 	timeValidator = z.iso.time("Invalid time"); // Format: "03:15:00"
 	dateValidator = z.iso.date("Invalid date"); // Format: "2020-01-01"
-	genderValidator = z.enum(["male", "female"]);
+	dateTimeValidator = z.iso.datetime({
+		local: true,
+		message: "Invalid datetime",
+	}); // Format 2025-11-12 15:55:58
 
 	booleanValidator = z.coerce.boolean("Invalid boolean");
 	numberValidator = z.coerce.number("Invalid number");
@@ -38,6 +43,10 @@ export class BaseValidate {
 
 	name(name?: string) {
 		return this.nameValidator.parse(name);
+	}
+
+	email(email?: string) {
+		return this.emailValidator.parse(email);
 	}
 
 	boolean(bool?: unknown) {
@@ -70,6 +79,10 @@ export class BaseValidate {
 
 	date(date: string): string {
 		return this.dateValidator.parse(date);
+	}
+
+	dateTime(dateTime: string): string {
+		return this.dateTimeValidator.parse(dateTime);
 	}
 
 	gender(gender: string): string {

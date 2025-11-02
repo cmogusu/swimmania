@@ -51,7 +51,7 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 
 			{show && <EditImages entityId={entityId} images={images} />}
 
-			{show && <EditMetadata entityType={entityType} entityId={entityId} />}
+			<EditMetadata entityType={entityType} entityId={entityId} />
 
 			{show && (
 				<EditRelatedEntities entityId={entityId} entityType={entityType} />

@@ -46,6 +46,10 @@ const getMetadataComponents = (
 	return entityMetadata.metadata.map((metadataType: IMetadataPropertyType) => {
 		const { name, type } = metadataType;
 		const EditMetadataComponent = editMetadataComponents[type];
+		if (!EditMetadataComponent) {
+			return null;
+		}
+
 		return (
 			<EditMetadataComponent
 				key={name}

@@ -22,4 +22,6 @@ export const childComponents: Record<string, ComponentType> = {
 	longitude: LongitudeType,
 	time: TimeType,
 	date: DateType,
+	dateTime: TextType,
+	email: TextType,
 };

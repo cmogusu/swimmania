@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 24, 2025 at 11:26 PM
+-- Generation Time: Oct 31, 2025 at 04:44 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -48,9 +48,9 @@ CREATE TABLE `coach_metadata` (
 INSERT INTO `coach_metadata` (`id`, `entityId`, `performance`, `friendliness`, `experience`, `ratePerHour_ksh`, `ratePerHour_usd`, `workingHours_opening`, `workingHours_closing`, `location_lat`, `location_lng`) VALUES
 (1, 57, 2, 2, 57188, -749840, -457283, '19:29:19', '09:50:29', -1.23201824951693, 36.74166987282876),
 (2, 81, 1, 5, 918900, 960121, -464315, '21:43:34', '08:07:51', -1.15408591001772, 36.82770075335528),
-(3, 81, 1, 5, -382027, 572037, 437710, '23:03:51', '20:46:20', -1.18515150588124, 36.84186913039588),
 (4, 108, 2, 3, 594860, 166891, 321256, '15:47:05', '19:28:46', -1.17570614390815, 36.80378748888529),
-(5, 118, 3, 2, 908529, 2261, 878508, '13:36:04', '05:34:19', -1.12331345830633, 36.76906475630724);
+(5, 118, 3, 2, 908529, 2261, 878508, '13:36:04', '05:34:19', -1.12331345830633, 36.76906475630724),
+(6, 46, NULL, NULL, NULL, NULL, 1, NULL, '20:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -64,95 +64,96 @@ CREATE TABLE `entity` (
   `type` enum('swimmer','school','pool','team','swimMeet','coach','lifeguard','swimResult','swimEvent','parent') DEFAULT NULL,
   `description` text DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `insertTime` timestamp NULL DEFAULT current_timestamp()
+  `insertTime` timestamp NULL DEFAULT current_timestamp(),
+  `userId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `entity`
 --
 
-INSERT INTO `entity` (`id`, `name`, `type`, `description`, `location`, `insertTime`) VALUES
-(6, 'favorite pool', 'pool', 'event more coherent description ', 'kiambu town', '2024-10-25 15:35:10'),
-(41, 'Magdalen Garden', 'pool', 'out how now althoug worriedly miserably habit drat oh monumental until interestingly tentacle recklessly', 'Clay Korea County', '2025-09-18 18:24:24'),
-(43, 'North Streets', 'pool', 'flawless minor proliferate publicize usually whether wheel for lonely scorn effector when carelessly despite gown despite egg corporatio', 'Essex Timor-Lest', '2025-09-18 18:48:58'),
-(44, 'N Railroad Street', 'coach', 'but for although inside trick ack uh-huh uniform interestingly at', 'County Armagh Indonesia', '2025-09-18 19:20:25'),
-(45, 'Andreane Track', 'coach', 'hence gruesome who home incidentally pfft haunting out till why yahoo ouch blue versus micromanage tag', 'Clay County Taiwan', '2025-09-19 19:17:23'),
-(46, 'S College Street', 'coach', 'moral sorrowful stealthily out afore with pants apud long lively sunny cricket stool regarding vulgarise mmm louse even honorable phew', 'Scott County French Southern Territories', '2025-09-19 19:17:23'),
-(47, 'Post Road', 'coach', 'writhing sizzling blah impure intensely grim opposite viability hovercraft with valuable exalt', 'Clark County Somalia', '2025-09-19 19:17:23'),
-(48, 'Goodwin Falls', 'pool', 'including although throughout promptly hydrolyse shrilly in foolish supposing incidentally provided blight lock beside an reassuringly so rebuild unless step-mother', 'Wiltshire Lebanon', '2025-09-19 19:17:23'),
-(49, 'Justus Haven', 'pool', 'lampoon relieve ick er when than yowza reborn than summer discrete pro since underplay uselessly duh exempt not', 'Devon South Africa', '2025-09-19 19:17:23'),
-(50, 'Willow Road', 'swimmer', 'electrify whether unexpectedly swerve yum agreement but indeed charlatan swill meanwhile whose scented uh-huh gladly among along an celsius gasp', 'Warren County Wallis and Futuna', '2025-09-19 19:17:23'),
-(51, 'Caitlyn Dale', 'pool', 'above of demob boldly so jiggle colorize sympathetically going outside buttery duh late overheard', 'County Antrim Falkland Islands (Malvinas)', '2025-09-19 19:17:23'),
-(52, 'Kings Highway', 'pool', 'provided nor dental upon fashion pro if governance ponder finally friendly questionable tinted', 'Wiltshire Holy See (Vatican City State)', '2025-09-19 19:17:23'),
-(53, 'Cedar Street', 'school', 'efface er searchingly huzzah reassuringly distant provided wearily ack cruelty override patiently supposing earth until hygienic whenever pace', 'Clark County Aruba', '2025-09-19 19:17:23'),
-(54, 'Dooley Lake', 'coach', 'geez finally taut cow quit when slight ah tray pfft nervous knavishly gah topsail onto experienced toward loyally up', 'Warren County Trinidad and Tobago', '2025-09-19 19:17:23'),
-(55, 'N 9th Street', 'pool', 'dim whenever between once ah however scrutinise recount scorpion how', 'Pike County Honduras', '2025-09-19 19:24:54'),
-(56, 'Pine Close', 'pool', 'plain whoa rear mozzarella grimy from circa inspect eyebrow fond abnormally far but bathhouse', 'Strathclyde Rwanda', '2025-09-19 19:24:54'),
-(57, 'Victoria Place', 'coach', 'uh-huh incidentally bug as anguished till ick likewise king truly despite hmph detective never thoughtfully alongside adaptation incidentally webbed eyeglasses', 'Grant County Ecuador', '2025-09-19 19:24:54'),
-(58, 'Manor Way', 'pool', 'cycle boohoo until willow those brush hence trusting likewise fragrant pace awareness midst huzzah lest bonfire', 'Jackson County Singapore', '2025-09-19 19:24:54'),
-(59, 'Matteo Forge', 'team', 'bus wallaby mountain spring formula instead swim clamour mainstream after bookcase ridge massage redesign yet politely a restfully', 'Worcestershire Greenland', '2025-09-19 19:24:54'),
-(60, 'Gloucester Road', 'coach', 'readies unless um underneath necklace glossy mmm around institute hence king dispose sun yowza biodegradable provided successfully meanwhile', 'Carroll County Chad', '2025-09-19 19:24:54'),
-(61, 'Cassin Falls', 'pool', 'motivate why knowledgeably aha quip oh dish countess account loftily yippee sock folklore political underneath brave aha but amid lest', 'Warren County Andorra', '2025-09-19 19:24:54'),
-(62, 'Alvena Hill', 'pool', 'if busy lazy so mmm supposing authentic cutlet fooey whose however yum yippee', 'Greene County Saudi Arabia', '2025-09-19 19:24:54'),
-(63, 'S Broad Street', 'pool', 'absent besmirch rapid righteously gee mobility gifted toward hunt yippee early yahoo verbally neatly horse unnaturally terraform willow swiftly with', 'Logan County Guyana', '2025-09-19 19:24:54'),
-(64, 'S Monroe Street', 'pool', 'object boohoo merrily pants mouser moralise yet in unexpectedly terribly guard blah upliftingly over reluctantly athwart amidst litter', 'Tayside Iran', '2025-09-19 19:24:54'),
-(65, 'Inter Clubs Swimming Championships', 'swimMeet', 'NCSA Inter-Clubs Swimming Championships April 11-13 2025', 'Kiota School, Dennis Pritt Road, Nairobi', '2025-09-22 17:22:59'),
-(66, 'Beech Road', 'swimmer', 'community oof since midwife tut hm posh after planula excluding until', 'Montgomery County Antarctica', '2025-10-24 17:49:55'),
-(67, 'Beaulah Land', 'swimmer', 'tedious fen up scope nor honestly because boo fast irresponsible the curly', 'Washington County Bhutan', '2025-10-24 17:51:21'),
-(68, 'N 7th Street', 'swimmer', 'functional circa friendly yahoo ouch meanwhile er monstrous following nor', 'Tayside Bahrain', '2025-10-24 18:45:47'),
-(69, 'Peter Mews', 'swimmer', 'as via weighty contrail times rapidly sticky lashes the scale coaxingly friendly step-mother boohoo folklore foodstuffs at courageously near oof', 'Logan County American Samoa', '2025-10-24 18:48:15'),
-(70, 'Cassin Burgs', 'swimmer', 'but within readjust scrape coin faint even self-assured recount uselessly rubbery modulo enormously boss ouch', 'Leicestershire Aland Islands', '2025-10-24 18:48:48'),
-(71, 'Alisa Streets', 'swimmer', 'frantically inspect cutover arraign king growing hm via conceal community blushing psst fooey upbeat nectarine reboot stupendous dearly lady', 'Grant County Denmark', '2025-10-24 18:55:41'),
-(72, 'West Street', 'school', 'hmph barring wherever wholly neatly versus now hornet separately rekindle essence between bootleg which sleepily', 'Avon Cameroon', '2025-10-24 18:58:39'),
-(73, 'Turner Locks', 'school', 'in bravely whose hm beautifully utilized aha upon why within mooch fidget horn unbearably', 'Tayside Cuba', '2025-10-24 19:03:28'),
-(74, 'Wintheiser Shores', 'school', 'worth redesign retool but lack numb than enormously stable pfft yowza plus', 'Dorset Bosnia and Herzegovina', '2025-10-24 19:03:46'),
-(75, 'Georgette Freeway', 'school', 'since above hm scrape inject dash pfft yahoo spark sure-footed super signature jaggedly um monstrous usefully realistic any', 'Berkshire Honduras', '2025-10-24 19:04:04'),
-(76, 'Becker Ways', 'school', 'coaxingly resort blah insist meanwhile but innovate worth mmm fiddle writ joshingly boo yahoo helpfully however', 'Greene County Chad', '2025-10-24 19:04:04'),
-(77, 'First Street', 'school', 'scarily ouch miserably profuse verbally fragrant fearless as outside gum confute aboard geez duh oval immediately', 'Perry County Falkland Islands (Malvinas)', '2025-10-24 19:04:04'),
-(78, 'O\'Connell Tunnel', 'school', 'indeed meh oh degenerate grass and engender shampoo loyally gosh excited freely outlying across collaborate jovially however distant', 'Cleveland Gambia', '2025-10-24 19:04:04'),
-(79, 'Kozey Valleys', 'school', 'an yum modulo softly before but beautifully what within underplay forecast shiny regularly story alert hence once', 'Gwent Vanuatu', '2025-10-24 19:04:04'),
-(80, 'Karianne Glen', 'school', 'out against proofread accountability light throughout oh terrible information reporter bah curry weatherize disposer what oxidise on bah yowza', 'Lancashire Togo', '2025-10-24 19:04:47'),
-(81, 'Abbott Lights', 'lifeguard', 'lava gosh institute pile amidst for whenever soap sequester while brr whether cinema deeply live ah warming quixotic flood', 'Polk County Bouvet Island', '2025-10-24 19:34:05'),
-(82, 'The Coppice', 'lifeguard', 'joyously even place shout when mortally gladly digit fooey roughly or mid near dusk thoroughly via', 'Powys Lebanon', '2025-10-24 19:37:32'),
-(83, 'Meadow Lane', 'swimEvent', 'per psst eggplant paltry partridge meanwhile over live hoot deliberately spirit pro remorseful forenenst', 'Marshall County Bonaire, Sint Eustatius and Saba', '2025-10-24 19:40:52'),
-(84, 'The Laurels', 'swimEvent', 'though bah small modulo solemnly than until second inasmuch yet', 'Isle of Wight Haiti', '2025-10-24 20:00:45'),
-(85, 'Miller Oval', 'swimEvent', 'towards however before gee ham finding urban minus bakeware punctually kissingly lest', 'Carroll County Bolivia', '2025-10-24 20:03:48'),
-(86, 'Imogene Loop', 'swimEvent', 'pro uncover vanish elegant likewise atop unwritten which because shyly mid', 'Polk County Bouvet Island', '2025-10-24 20:07:21'),
-(87, 'Well Lane', 'swimEvent', 'remark out custom shakily grandpa prohibition nor yahoo um bowler ouch nor hm sleepily as', 'South Glamorgan Costa Rica', '2025-10-24 20:08:10'),
-(88, 'Ezra Rapid', 'swimEvent', 'optimal incidentally for fine repossess developing someplace too abaft excluding blah crumble gosh hmph bemuse', 'Herefordshire Lebanon', '2025-10-24 20:09:24'),
-(89, 'Kelton Garden', 'swimEvent', 'without plus drug pro reasoning innocently yahoo that snow premium far since fooey cruelly retool humiliating fooey', 'West Yorkshire South Sudan', '2025-10-24 20:09:24'),
-(90, 'Connelly Ford', 'swimEvent', 'ferociously ethyl turret chairperson ah digestive querulous ha inasmuch creator boohoo phooey yet overfeed wasteful furthermore lanky', 'Polk County Slovakia', '2025-10-24 20:09:24'),
-(91, 'Predovic Common', 'swimEvent', 'yet ew forage nice aha innocently excepting via that where worse ouch before vivaciously provided pro fooey likely treble', 'Tayside Gabon', '2025-10-24 20:09:24'),
-(92, 'S Broadway Street', 'swimEvent', 'qua tooth genuine meanwhile fairly train mmm design what sometimes stabilise underplay rout', 'Somerset Pakistan', '2025-10-24 20:09:24'),
-(93, 'Adrian Ranch', 'swimEvent', 'huzzah hamburger CD delightfully kissingly strictly deduce oh nearly ashamed fair tensely cavernous huzzah spew abaft mmm treble angelic fortunately', 'Powys Saint Vincent and the Grenadines', '2025-10-24 20:10:25'),
-(94, 'Roob Run', 'swimEvent', 'pfft hoarse inasmuch than flickering athwart meh igloo descent pfft meaningfully', 'Franklin County Cambodia', '2025-10-24 20:10:51'),
-(95, 'Walsh Springs', 'swimEvent', 'toward swiftly pasta shameless upliftingly without phooey gadzooks fen compromise next entomb intensely unbalance', 'Calhoun County Singapore', '2025-10-24 20:10:51'),
-(96, 'Cedar Close', 'swimEvent', 'gah worldly uh-huh table physically whoever oddly excluding revere limp endow ramp versus where bah meh inasmuch outdo even unearth', 'Devon Christmas Island', '2025-10-24 20:10:51'),
-(97, 'Bruen Brook', 'swimEvent', 'angelic censor fussy gruesome sup pretend quiet voluntarily sunbeam gosh er till frivolous', 'Adams County Aruba', '2025-10-24 20:10:51'),
-(98, 'Jaycee Corners', 'swimEvent', 'except hm opposite ugh consequently croon hello stale pip even', 'Gwynedd County Yemen', '2025-10-24 20:10:51'),
-(99, 'Hawthorn Avenue', 'swimEvent', 'finally fall familiar through eyebrow beneath revitalise junior circa pro meh boohoo profitable digit instead aside', 'Polk County Papua New Guinea', '2025-10-24 20:11:40'),
-(100, 'Block Cape', 'swimEvent', 'smoothly tame openly old incidentally speedily unless colon huzzah yum', 'Cheshire Serbia', '2025-10-24 20:13:14'),
-(101, 'Albin Meadows', 'lifeguard', 'broadside pecan ah celebrate goose guilty graft oh mmm beautifully lieu except bob right thoughtfully ouch', 'Washington County New Zealand', '2025-10-24 20:19:43'),
-(102, 'W Washington Avenue', 'lifeguard', 'noteworthy since plump solder briefly readily geez ownership degrease antelope of mountain valiantly meanwhile woot below frenetically majestic who', 'County Tyrone Cocos (Keeling) Islands', '2025-10-24 20:20:23'),
-(103, 'Reva Corner', 'pool', 'beside minus ew consequently igloo drat acclaimed or monthly as obnoxiously', 'Marshall County Cocos (Keeling) Islands', '2025-10-24 20:22:44'),
-(104, 'Phyllis Ville', 'pool', 'pish ride quicker excited what certainly homeschool yahoo commonly goose failing profane but joshingly', 'Norfolk Malaysia', '2025-10-24 20:23:13'),
-(105, 'Little Drive', 'school', 'violently phew char failing until loyally inside amongst yahoo clonk sad ack continually grade', 'East Sussex Slovakia', '2025-10-24 20:43:19'),
-(106, 'Schimmel Extensions', 'team', 'while when adumbrate healthily prejudge mid railway service snoopy respectful dwell blink minty before', 'Pike County Latvia', '2025-10-24 20:43:47'),
-(107, 'N Jefferson Street', 'swimMeet', 'loyally sticky academics in last joyously unnaturally direct into emphasise dependable failing cinema for', 'Tayside Panama', '2025-10-24 20:43:56'),
-(108, 'Kaylin Corner', 'coach', 'gratefully incidentally brr given embossing um lovingly collaboration hmph via responsible properly madly unto charter exactly', 'Leicestershire Serbia', '2025-10-24 21:10:22'),
-(109, 'Auer Crossing', 'team', 'lounge aw athwart aware aha internationalize or notwithstanding deafening enfold zowie awful accompany until since capsize crossly bony consequently hmph', 'Cheshire Turkmenistan', '2025-10-24 21:10:45'),
-(110, 'Woodlands', 'pool', 'greedily political wilt underneath true whoever where unearth poorly vice confusion times vista yippee gosh wherever bide joyful too unhappy', 'Lawrence County Maldives', '2025-10-24 21:11:24'),
-(111, 'N Washington Street', 'school', 'scare acidic hmph omelet supposing although shred if that unused', 'Shropshire Brunei Darussalam', '2025-10-24 21:11:34'),
-(112, 'Old State Road', 'swimmer', 'baptise mid bitterly decryption pluck fictionalize content geez impact edible mid clamour zowie minty see wear', 'Henry County Botswana', '2025-10-24 21:12:27'),
-(113, 'Alaina Curve', 'parent', 'upliftingly notwithstanding gee dependent daily closed eyeliner reopen yawningly grumpy limp indeed since last allocation viability', 'Shropshire Panama', '2025-10-24 21:15:02'),
-(114, 'Chestnut Street', 'parent', 'uniform which developing not task fooey yearn steel asset hence graft nor inasmuch uh-huh worth finally phooey cook', 'Marshall County Chad', '2025-10-24 21:15:31'),
-(115, 'Herminia Burgs', 'swimEvent', 'back furthermore unless thoroughly judgementally gosh but peter watery out covenant aha dapper grubby rejigger ambitious psst consequently quickly', 'Adams County South Africa', '2025-10-24 21:15:58'),
-(116, 'Funk Pine', 'swimEvent', 'beneath produce annex spectate neck psst celebrate puny into whereas dwell', 'Buckinghamshire Somalia', '2025-10-24 21:16:13'),
-(117, 'Vanessa Prairie', 'lifeguard', 'repentant nervously commonly almost leading towards uh-huh next nor elevation screw almost throughout where yahoo thrifty', 'Norfolk Cape Verde', '2025-10-24 21:16:29'),
-(118, 'Dietrich Islands', 'coach', 'closed well-documented for dally remand embarrassment considering coliseum incidentally toward why through unimpressively joshingly opposite and gnaw neatly morbidity rosemary', 'South Glamorgan Reunion', '2025-10-24 21:16:48'),
-(119, 'Yasmine Estates', 'swimMeet', 'closely oh video whoa plus however pish floodlight drug pricey flustered edible zowie bidet throughout anesthetize privilege gosh', 'Herefordshire France', '2025-10-24 21:17:07'),
-(120, 'Effertz Falls', 'team', 'finer via through round ravage co-producer and aboard meager rigidly bogus careless ah following without', 'Merseyside South Sudan', '2025-10-24 21:17:30'),
-(121, 'Witting Walk', 'swimMeet', 'pfft sweet twine joshingly useless cornet now less coarse live chairperson epic bruised punctual amongst meh spanish', 'Adams County Grenada', '2025-10-24 21:21:32');
+INSERT INTO `entity` (`id`, `name`, `type`, `description`, `location`, `insertTime`, `userId`) VALUES
+(6, 'favorite pool', 'pool', 'event more coherent description ', 'Shop 4, Brian Apartments, Moi Drive, Nairobi, Kenya', '2024-10-25 15:35:10', 0),
+(41, 'Magdalen Garden', 'pool', 'out how now althoug worriedly miserably habit drat oh monumental until interestingly tentacle recklessly', 'Clay Korea County', '2025-09-18 18:24:24', 0),
+(43, 'North Streets', 'pool', 'flawless minor proliferate publicize usually whether wheel for lonely scorn effector when carelessly despite gown despite egg corporatio', 'Essex Timor-Lest', '2025-09-18 18:48:58', 0),
+(44, 'N Railroad Street', 'coach', 'but for although inside trick ack uh-huh uniform interestingly at', 'County Armagh Indonesia', '2025-09-18 19:20:25', 0),
+(45, 'Andreane Track', 'coach', 'hence gruesome who home incidentally pfft haunting out till why yahoo ouch blue versus micromanage tag', 'Clay County Taiwan', '2025-09-19 19:17:23', 0),
+(46, 'S College Street', 'coach', 'moral sorrowful stealthily out afore with pants apud long lively sunny cricket stool regarding vulgarise mmm louse even honorable phew', 'Scott County French Southern Territories', '2025-09-19 19:17:23', 0),
+(47, 'Post Road', 'coach', 'writhing sizzling blah impure intensely grim opposite viability hovercraft with valuable exalt', 'Clark County Somalia', '2025-09-19 19:17:23', 0),
+(48, 'Goodwin Falls', 'pool', 'including although throughout promptly hydrolyse shrilly in foolish supposing incidentally provided blight lock beside an reassuringly so rebuild unless step-mother', 'Wiltshire Lebanon', '2025-09-19 19:17:23', 0),
+(49, 'Justus Haven', 'pool', 'lampoon relieve ick er when than yowza reborn than summer discrete pro since underplay uselessly duh exempt not', 'Devon South Africa', '2025-09-19 19:17:23', 0),
+(50, 'Willow Road', 'swimmer', 'electrify whether unexpectedly swerve yum agreement but indeed charlatan swill meanwhile whose scented uh-huh gladly among along an celsius gasp', 'Warren County Wallis and Futuna', '2025-09-19 19:17:23', 0),
+(51, 'Caitlyn Dale', 'pool', 'above of demob boldly so jiggle colorize sympathetically going outside buttery duh late overheard', 'County Antrim Falkland Islands (Malvinas)', '2025-09-19 19:17:23', 0),
+(52, 'Kings Highway', 'pool', 'provided nor dental upon fashion pro if governance ponder finally friendly questionable tinted', 'Wiltshire Holy See (Vatican City State)', '2025-09-19 19:17:23', 0),
+(53, 'Cedar Street', 'school', 'efface er searchingly huzzah reassuringly distant provided wearily ack cruelty override patiently supposing earth until hygienic whenever pace', 'Clark County Aruba', '2025-09-19 19:17:23', 0),
+(54, 'Dooley Lake', 'coach', 'geez finally taut cow quit when slight ah tray pfft nervous knavishly gah topsail onto experienced toward loyally up', 'Warren County Trinidad and Tobago', '2025-09-19 19:17:23', 0),
+(55, 'N 9th Street', 'pool', 'dim whenever between once ah however scrutinise recount scorpion how', 'Pike County Honduras', '2025-09-19 19:24:54', 0),
+(56, 'Pine Close', 'pool', 'plain whoa rear mozzarella grimy from circa inspect eyebrow fond abnormally far but bathhouse', 'Strathclyde Rwanda', '2025-09-19 19:24:54', 0),
+(57, 'Victoria Place', 'coach', 'uh-huh incidentally bug as anguished till ick likewise king truly despite hmph detective never thoughtfully alongside adaptation incidentally webbed eyeglasses', 'Grant County Ecuador', '2025-09-19 19:24:54', 0),
+(58, 'Manor Way', 'pool', 'cycle boohoo until willow those brush hence trusting likewise fragrant pace awareness midst huzzah lest bonfire', 'Jackson County Singapore', '2025-09-19 19:24:54', 0),
+(59, 'Matteo Forge', 'team', 'bus wallaby mountain spring formula instead swim clamour mainstream after bookcase ridge massage redesign yet politely a restfully', 'Worcestershire Greenland', '2025-09-19 19:24:54', 0),
+(60, 'Gloucester Road', 'coach', 'readies unless um underneath necklace glossy mmm around institute hence king dispose sun yowza biodegradable provided successfully meanwhile', 'Carroll County Chad', '2025-09-19 19:24:54', 0),
+(61, 'Cassin Falls', 'pool', 'motivate why knowledgeably aha quip oh dish countess account loftily yippee sock folklore political underneath brave aha but amid lest', 'Warren County Andorra', '2025-09-19 19:24:54', 0),
+(62, 'Alvena Hill', 'pool', 'if busy lazy so mmm supposing authentic cutlet fooey whose however yum yippee', 'Greene County Saudi Arabia', '2025-09-19 19:24:54', 0),
+(63, 'S Broad Street', 'pool', 'absent besmirch rapid righteously gee mobility gifted toward hunt yippee early yahoo verbally neatly horse unnaturally terraform willow swiftly with', 'Logan County Guyana', '2025-09-19 19:24:54', 0),
+(64, 'S Monroe Street', 'pool', 'object boohoo merrily pants mouser moralise yet in unexpectedly terribly guard blah upliftingly over reluctantly athwart amidst litter', 'Tayside Iran', '2025-09-19 19:24:54', 0),
+(65, 'Inter Clubs Swimming Championships', 'swimMeet', 'NCSA Inter-Clubs Swimming Championships April 11-13 2025', 'Kiota School, Dennis Pritt Road, Nairobi', '2025-09-22 17:22:59', 0),
+(66, 'Beech Road', 'swimmer', 'community oof since midwife tut hm posh after planula excluding until', 'Montgomery County Antarctica', '2025-10-24 17:49:55', 0),
+(67, 'Beaulah Land', 'swimmer', 'tedious fen up scope nor honestly because boo fast irresponsible the curly', 'Washington County Bhutan', '2025-10-24 17:51:21', 0),
+(68, 'N 7th Street', 'swimmer', 'functional circa friendly yahoo ouch meanwhile er monstrous following nor', 'Tayside Bahrain', '2025-10-24 18:45:47', 0),
+(69, 'Peter Mews', 'swimmer', 'as via weighty contrail times rapidly sticky lashes the scale coaxingly friendly step-mother boohoo folklore foodstuffs at courageously near oof', 'Logan County American Samoa', '2025-10-24 18:48:15', 0),
+(70, 'Cassin Burgs', 'swimmer', 'but within readjust scrape coin faint even self-assured recount uselessly rubbery modulo enormously boss ouch', 'Leicestershire Aland Islands', '2025-10-24 18:48:48', 0),
+(71, 'Alisa Streets', 'swimmer', 'frantically inspect cutover arraign king growing hm via conceal community blushing psst fooey upbeat nectarine reboot stupendous dearly lady', 'Grant County Denmark', '2025-10-24 18:55:41', 0),
+(72, 'West Street', 'school', 'hmph barring wherever wholly neatly versus now hornet separately rekindle essence between bootleg which sleepily', 'Avon Cameroon', '2025-10-24 18:58:39', 0),
+(73, 'Turner Locks', 'school', 'in bravely whose hm beautifully utilized aha upon why within mooch fidget horn unbearably', 'Tayside Cuba', '2025-10-24 19:03:28', 0),
+(74, 'Wintheiser Shores', 'school', 'worth redesign retool but lack numb than enormously stable pfft yowza plus', 'Dorset Bosnia and Herzegovina', '2025-10-24 19:03:46', 0),
+(75, 'Georgette Freeway', 'school', 'since above hm scrape inject dash pfft yahoo spark sure-footed super signature jaggedly um monstrous usefully realistic any', 'Berkshire Honduras', '2025-10-24 19:04:04', 0),
+(76, 'Becker Ways', 'school', 'coaxingly resort blah insist meanwhile but innovate worth mmm fiddle writ joshingly boo yahoo helpfully however', 'Greene County Chad', '2025-10-24 19:04:04', 0),
+(77, 'First Street', 'school', 'scarily ouch miserably profuse verbally fragrant fearless as outside gum confute aboard geez duh oval immediately', 'Perry County Falkland Islands (Malvinas)', '2025-10-24 19:04:04', 0),
+(78, 'O\'Connell Tunnel', 'school', 'indeed meh oh degenerate grass and engender shampoo loyally gosh excited freely outlying across collaborate jovially however distant', 'Cleveland Gambia', '2025-10-24 19:04:04', 0),
+(79, 'Kozey Valleys', 'school', 'an yum modulo softly before but beautifully what within underplay forecast shiny regularly story alert hence once', 'Gwent Vanuatu', '2025-10-24 19:04:04', 0),
+(80, 'Karianne Glen', 'school', 'out against proofread accountability light throughout oh terrible information reporter bah curry weatherize disposer what oxidise on bah yowza', 'Lancashire Togo', '2025-10-24 19:04:47', 0),
+(81, 'Abbott Lights', 'lifeguard', 'lava gosh institute pile amidst for whenever soap sequester while brr whether cinema deeply live ah warming quixotic flood', 'Polk County Bouvet Island', '2025-10-24 19:34:05', 0),
+(82, 'The Coppice', 'lifeguard', 'joyously even place shout when mortally gladly digit fooey roughly or mid near dusk thoroughly via', 'Powys Lebanon', '2025-10-24 19:37:32', 0),
+(83, 'Meadow Lane', 'swimEvent', 'per psst eggplant paltry partridge meanwhile over live hoot deliberately spirit pro remorseful forenenst', 'Marshall County Bonaire, Sint Eustatius and Saba', '2025-10-24 19:40:52', 0),
+(84, 'The Laurels', 'swimEvent', 'though bah small modulo solemnly than until second inasmuch yet', 'Isle of Wight Haiti', '2025-10-24 20:00:45', 0),
+(85, 'Miller Oval', 'swimEvent', 'towards however before gee ham finding urban minus bakeware punctually kissingly lest', 'Carroll County Bolivia', '2025-10-24 20:03:48', 0),
+(86, 'Imogene Loop', 'swimEvent', 'pro uncover vanish elegant likewise atop unwritten which because shyly mid', 'Polk County Bouvet Island', '2025-10-24 20:07:21', 0),
+(87, 'Well Lane', 'swimEvent', 'remark out custom shakily grandpa prohibition nor yahoo um bowler ouch nor hm sleepily as', 'South Glamorgan Costa Rica', '2025-10-24 20:08:10', 0),
+(88, 'Ezra Rapid', 'swimEvent', 'optimal incidentally for fine repossess developing someplace too abaft excluding blah crumble gosh hmph bemuse', 'Herefordshire Lebanon', '2025-10-24 20:09:24', 0),
+(89, 'Kelton Garden', 'swimEvent', 'without plus drug pro reasoning innocently yahoo that snow premium far since fooey cruelly retool humiliating fooey', 'West Yorkshire South Sudan', '2025-10-24 20:09:24', 0),
+(90, 'Connelly Ford', 'swimEvent', 'ferociously ethyl turret chairperson ah digestive querulous ha inasmuch creator boohoo phooey yet overfeed wasteful furthermore lanky', 'Polk County Slovakia', '2025-10-24 20:09:24', 0),
+(91, 'Predovic Common', 'swimEvent', 'yet ew forage nice aha innocently excepting via that where worse ouch before vivaciously provided pro fooey likely treble', 'Tayside Gabon', '2025-10-24 20:09:24', 0),
+(92, 'S Broadway Street', 'swimEvent', 'qua tooth genuine meanwhile fairly train mmm design what sometimes stabilise underplay rout', 'Somerset Pakistan', '2025-10-24 20:09:24', 0),
+(93, 'Adrian Ranch', 'swimEvent', 'huzzah hamburger CD delightfully kissingly strictly deduce oh nearly ashamed fair tensely cavernous huzzah spew abaft mmm treble angelic fortunately', 'Powys Saint Vincent and the Grenadines', '2025-10-24 20:10:25', 0),
+(94, 'Roob Run', 'swimEvent', 'pfft hoarse inasmuch than flickering athwart meh igloo descent pfft meaningfully', 'Franklin County Cambodia', '2025-10-24 20:10:51', 0),
+(95, 'Walsh Springs', 'swimEvent', 'toward swiftly pasta shameless upliftingly without phooey gadzooks fen compromise next entomb intensely unbalance', 'Calhoun County Singapore', '2025-10-24 20:10:51', 0),
+(96, 'Cedar Close', 'swimEvent', 'gah worldly uh-huh table physically whoever oddly excluding revere limp endow ramp versus where bah meh inasmuch outdo even unearth', 'Devon Christmas Island', '2025-10-24 20:10:51', 0),
+(97, 'Bruen Brook', 'swimEvent', 'angelic censor fussy gruesome sup pretend quiet voluntarily sunbeam gosh er till frivolous', 'Adams County Aruba', '2025-10-24 20:10:51', 0),
+(98, 'Jaycee Corners', 'swimEvent', 'except hm opposite ugh consequently croon hello stale pip even', 'Gwynedd County Yemen', '2025-10-24 20:10:51', 0),
+(99, 'Hawthorn Avenue', 'swimEvent', 'finally fall familiar through eyebrow beneath revitalise junior circa pro meh boohoo profitable digit instead aside', 'Polk County Papua New Guinea', '2025-10-24 20:11:40', 0),
+(100, 'Block Cape', 'swimEvent', 'smoothly tame openly old incidentally speedily unless colon huzzah yum', 'Cheshire Serbia', '2025-10-24 20:13:14', 0),
+(101, 'Albin Meadows', 'lifeguard', 'broadside pecan ah celebrate goose guilty graft oh mmm beautifully lieu except bob right thoughtfully ouch', 'Washington County New Zealand', '2025-10-24 20:19:43', 0),
+(102, 'W Washington Avenue', 'lifeguard', 'noteworthy since plump solder briefly readily geez ownership degrease antelope of mountain valiantly meanwhile woot below frenetically majestic who', 'County Tyrone Cocos (Keeling) Islands', '2025-10-24 20:20:23', 0),
+(103, 'Reva Corner', 'pool', 'beside minus ew consequently igloo drat acclaimed or monthly as obnoxiously', 'Marshall County Cocos (Keeling) Islands', '2025-10-24 20:22:44', 0),
+(104, 'Phyllis Ville', 'pool', 'pish ride quicker excited what certainly homeschool yahoo commonly goose failing profane but joshingly', 'Norfolk Malaysia', '2025-10-24 20:23:13', 0),
+(105, 'Little Drive', 'school', 'violently phew char failing until loyally inside amongst yahoo clonk sad ack continually grade', 'East Sussex Slovakia', '2025-10-24 20:43:19', 0),
+(106, 'Schimmel Extensions', 'team', 'while when adumbrate healthily prejudge mid railway service snoopy respectful dwell blink minty before', 'Pike County Latvia', '2025-10-24 20:43:47', 0),
+(107, 'N Jefferson Street', 'swimMeet', 'loyally sticky academics in last joyously unnaturally direct into emphasise dependable failing cinema for', 'Tayside Panama', '2025-10-24 20:43:56', 0),
+(108, 'Kaylin Corner', 'coach', 'gratefully incidentally brr given embossing um lovingly collaboration hmph via responsible properly madly unto charter exactly', 'Leicestershire Serbia', '2025-10-24 21:10:22', 0),
+(109, 'Auer Crossing', 'team', 'lounge aw athwart aware aha internationalize or notwithstanding deafening enfold zowie awful accompany until since capsize crossly bony consequently hmph', 'Cheshire Turkmenistan', '2025-10-24 21:10:45', 0),
+(110, 'Woodlands', 'pool', 'greedily political wilt underneath true whoever where unearth poorly vice confusion times vista yippee gosh wherever bide joyful too unhappy', 'Lawrence County Maldives', '2025-10-24 21:11:24', 0),
+(111, 'N Washington Street', 'school', 'scare acidic hmph omelet supposing although shred if that unused', 'Shropshire Brunei Darussalam', '2025-10-24 21:11:34', 0),
+(112, 'Old State Road', 'swimmer', 'baptise mid bitterly decryption pluck fictionalize content geez impact edible mid clamour zowie minty see wear', 'Henry County Botswana', '2025-10-24 21:12:27', 0),
+(113, 'Alaina Curve', 'parent', 'upliftingly notwithstanding gee dependent daily closed eyeliner reopen yawningly grumpy limp indeed since last allocation viability', 'Shropshire Panama', '2025-10-24 21:15:02', 0),
+(114, 'Chestnut Street', 'parent', 'uniform which developing not task fooey yearn steel asset hence graft nor inasmuch uh-huh worth finally phooey cook', 'Marshall County Chad', '2025-10-24 21:15:31', 0),
+(115, 'Herminia Burgs', 'swimEvent', 'back furthermore unless thoroughly judgementally gosh but peter watery out covenant aha dapper grubby rejigger ambitious psst consequently quickly', 'Adams County South Africa', '2025-10-24 21:15:58', 0),
+(116, 'Funk Pine', 'swimEvent', 'beneath produce annex spectate neck psst celebrate puny into whereas dwell', 'Buckinghamshire Somalia', '2025-10-24 21:16:13', 0),
+(117, 'Vanessa Prairie', 'lifeguard', 'repentant nervously commonly almost leading towards uh-huh next nor elevation screw almost throughout where yahoo thrifty', 'Norfolk Cape Verde', '2025-10-24 21:16:29', 0),
+(118, 'Dietrich Islands', 'coach', 'closed well-documented for dally remand embarrassment considering coliseum incidentally toward why through unimpressively joshingly opposite and gnaw neatly morbidity rosemary', 'South Glamorgan Reunion', '2025-10-24 21:16:48', 0),
+(119, 'Yasmine Estates', 'swimMeet', 'closely oh video whoa plus however pish floodlight drug pricey flustered edible zowie bidet throughout anesthetize privilege gosh', 'Herefordshire France', '2025-10-24 21:17:07', 0),
+(120, 'Effertz Falls', 'team', 'finer via through round ravage co-producer and aboard meager rigidly bogus careless ah following without', 'Merseyside South Sudan', '2025-10-24 21:17:30', 0),
+(121, 'Witting Walk', 'swimMeet', 'pfft sweet twine joshingly useless cornet now less coarse live chairperson epic bruised punctual amongst meh spanish', 'Adams County Grenada', '2025-10-24 21:21:32', 0);
 
 -- --------------------------------------------------------
 
@@ -817,11 +818,11 @@ CREATE TABLE `pool_metadata` (
 --
 
 INSERT INTO `pool_metadata` (`id`, `entityId`, `poolDimensions_length`, `poolDimensions_width`, `operatingHours_opening`, `crowdiness`, `openToPublic`, `entryFeeIn_ksh`, `entryFeeIn_usd`, `isIndoor`, `cleanliness`, `changingRoomCleanliness`, `hasOnDutyLifeguard`, `location_lat`, `location_lng`, `openToChildren`, `hasLaneRopes`, `isHeated`, `operatingHours_closing`, `hostInstitutionType`, `poolShape`) VALUES
-(1, 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '19:00:59', 'hotel', 'rectangle'),
-(2, 6, -870263, 837437, '01:32:20', 3, 0, -432005, 918964, 1, 1, 5, 1, -1.25489104578669, 36.87588352399299, 0, 1, 1, '01:08:50', 'gym', 'square'),
+(2, 6, 9, 199, '01:33:20', 4, 1, 2, 9996, 1, 5, 5, 1, -1.25489104578669, 36.87588352399299, 1, 1, 1, '01:10:52', 'gym', 'square'),
 (3, 103, 41901, 385669, '23:12:49', 1, 1, 215193, 186253, 0, 4, 4, 0, -1.22384322957105, 36.81805509325541, 0, 0, 1, '04:49:14', 'school', 'rectangle'),
 (4, 104, 827367, 81400, '03:55:17', 5, 1, 984579, 914248, 0, 4, 4, 1, -1.11661684837771, 36.797572091112045, 1, 1, 1, '03:44:42', 'school', 'curvy'),
-(5, 110, 653677, 49994, '07:02:43', 3, 1, 788668, 386717, 0, 3, 4, 0, -1.28767622488849, 36.71729918908408, 1, 1, 1, '01:56:52', 'school', 'square');
+(5, 110, 653677, 49994, '07:02:43', 3, 1, 788668, 386717, 0, 3, 4, 0, -1.28767622488849, 36.71729918908408, 1, 1, 1, '01:56:52', 'school', 'square'),
+(6, 41, NULL, 6, '17:12:35', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '17:30:48', 'school', 'square');
 
 -- --------------------------------------------------------
 
@@ -970,7 +971,8 @@ CREATE TABLE `swm_meet_metadata` (
 INSERT INTO `swm_meet_metadata` (`id`, `entityId`, `course`, `time`, `location_lat`, `location_lng`, `startEndDates_startDate`, `startEndDates_endDate`) VALUES
 (1, 107, 'short', '07:26:12', -1.24825922172442, 36.70133951956484, '2026-04-27', '2026-10-23'),
 (2, 119, 'long', '10:12:47', -1.26467241559693, 36.82894175302987, '2026-10-11', '2025-09-20'),
-(3, 121, 'short', '21:27:57', -1.26011013776285, 36.77109689515262, '2025-07-01', '2026-04-12');
+(3, 121, 'short', '21:27:57', -1.26011013776285, 36.77109689515262, '2025-07-01', '2026-04-12'),
+(4, 65, NULL, '18:30:57', 38.90359569038469, -77.08090578967045, '2025-10-01', '2025-10-08');
 
 -- --------------------------------------------------------
 
@@ -1167,7 +1169,7 @@ ALTER TABLE `unprocessed_swim_results`
 -- AUTO_INCREMENT for table `coach_metadata`
 --
 ALTER TABLE `coach_metadata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `entity`
@@ -1203,7 +1205,7 @@ ALTER TABLE `parent_metadata`
 -- AUTO_INCREMENT for table `pool_metadata`
 --
 ALTER TABLE `pool_metadata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `relations`
@@ -1233,7 +1235,7 @@ ALTER TABLE `swm_event_metadata`
 -- AUTO_INCREMENT for table `swm_meet_metadata`
 --
 ALTER TABLE `swm_meet_metadata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `swm_result_metadata`

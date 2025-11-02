@@ -3,9 +3,11 @@ import type { EntityType } from "@/server/types";
 import type { EntityManager } from ".";
 import {
 	CoachManager,
+	CommentManager,
 	LifeguardManager,
 	ParentManager,
 	PoolManager,
+	RatingManager,
 	SchoolManager,
 	SwimEventManager,
 	SwimMeetManager,
@@ -27,6 +29,8 @@ const managerClasses: Record<EntityType, new () => EntityManager> = {
 	swimmer: SwimmerManager,
 	swimEvent: SwimEventManager,
 	user: UserManager,
+	comment: CommentManager,
+	rating: RatingManager,
 };
 
 const entityManagers: Record<string, EntityManager> = {};

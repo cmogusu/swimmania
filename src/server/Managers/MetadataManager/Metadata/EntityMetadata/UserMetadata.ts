@@ -1,10 +1,20 @@
 import type { RawMetadata } from "@/server/types";
-import { OptionsPropertyType } from "../MetadataPropertyType";
+import {
+	EmailPropertyType,
+	OptionsPropertyType,
+} from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	email: (rawMetadata?: RawMetadata) =>
+		new EmailPropertyType({
+			name: "email",
+			title: "Email address",
+			sortIndex: 0,
+			...rawMetadata,
+		}),
 	country: (rawMetadata?: RawMetadata) =>
 		new OptionsPropertyType({
 			name: "country",

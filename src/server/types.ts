@@ -9,11 +9,16 @@ export type EntityType =
 	| "swimMeet"
 	| "swimEvent"
 	| "swimResult"
-	| "user";
+	| "user"
+	| "rating"
+	| "comment";
 
-export type PublicEntityType = Omit<EntityType, "user">;
+export type PrivateEntityType = Extract<
+	EntityType,
+	"user" | "rating" | "comment"
+>;
 
-export type PrivateEntityType = Extract<EntityType, "user">;
+export type PublicEntityType = Omit<EntityType, PrivateEntityType>;
 
 export type RelationshipType =
 	| "isAlso"
@@ -30,7 +35,11 @@ export type RelationshipType =
 	| "participatedIn"
 	| "participatedIn_inverse"
 	| "parentOf"
-	| "parentOf_inverse";
+	| "parentOf_inverse"
+	| "comment"
+	| "comment_inverse"
+	| "rating"
+	| "rating_inverse";
 
 export type SchemaType =
 	| "parent"
@@ -42,7 +51,9 @@ export type SchemaType =
 	| "latitude"
 	| "longitude"
 	| "time"
-	| "date";
+	| "date"
+	| "dateTime"
+	| "email";
 
 export type RawMetadata = {
 	id?: number;

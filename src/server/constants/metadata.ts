@@ -28,7 +28,9 @@ export const EntitiesMetadataList: Record<EntityType, string[]> = {
 	swimEvent: ["eventNumber", "swimStroke", "swimDistance"],
 	swimResult: ["rank", "time"],
 	parent: ["parentOf", "swimmer"],
-	user: [],
+	user: ["email"],
+	comment: ["time"],
+	rating: ["time"],
 };
 
 export const EntityMetadataDbTables: Record<EntityType, string> = {
@@ -43,6 +45,8 @@ export const EntityMetadataDbTables: Record<EntityType, string> = {
 	swimResult: "swm_result_metadata",
 	swimEvent: "swm_event_metadata",
 	user: "user_metadata",
+	comment: "comment_metadata",
+	rating: "rating_metadata",
 };
 
 export const MetadataDbDefaultColumnNames = ["id", "entityId"];

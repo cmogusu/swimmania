@@ -5,9 +5,11 @@ import type {
 	RawMetadata,
 } from "@/server/types";
 import { CoachMetadata } from "./CoachMetadata";
+import { CommentMetadata } from "./CommentMetadata";
 import { LifeguardMetadata } from "./LifeguardMetadata";
 import { ParentMetadata } from "./ParentMetadata";
 import { PoolMetadata } from "./PoolMetadata";
+import { RatingMetadata } from "./RatingMetadata";
 import { SchoolMetadata } from "./SchoolMetadata";
 import { SwimEventMetadata } from "./SwimEventMetadata";
 import { SwimMeetMetadata } from "./SwimMeetMetadata";
@@ -36,6 +38,8 @@ const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
 	lifeguard: LifeguardMetadata,
 	parent: ParentMetadata,
 	user: UserMetadata,
+	comment: CommentMetadata,
+	rating: RatingMetadata,
 };
 
 export const entityMetadataFactory = {

@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { EditBooleanType } from "./EditBooleanType";
+import { EditDateTimeType } from "./EditDateTimeType";
 import { EditDateType } from "./EditDateType";
+import { EditEmailType } from "./EditEmailType";
 import { EditLatitudeType } from "./EditLatitudeType";
 import { EditLongitudeType } from "./EditLongitudeType";
 import { EditNumberType } from "./EditNumberType";
@@ -22,4 +24,6 @@ export const childComponents: Record<string, ComponentType> = {
 	longitude: EditLongitudeType,
 	time: EditTimeType,
 	date: EditDateType,
+	dateTime: EditDateTimeType,
+	email: EditEmailType,
 };
