@@ -12,9 +12,10 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new EmailPropertyType({
 			name: "email",
 			title: "Email address",
-			sortIndex: 0,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
+
 	country: (rawMetadata?: RawMetadata) =>
 		new OptionsPropertyType({
 			name: "country",
@@ -37,7 +38,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "USA",
 				},
 			],
-			sortIndex: 2,
+			sortIndex: 12,
 			...rawMetadata,
 		}),
 };

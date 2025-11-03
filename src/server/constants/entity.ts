@@ -1,4 +1,104 @@
-import type { EntityType } from "../types";
+import type {
+	EntityType,
+	MenuEntityType,
+	PrivateEntityType,
+	PublicEntityType,
+} from "../types";
+
+export const MAX_TEXT_LENGTH = 3000;
+export const POSTS_PER_PAGE = 5;
+
+export const EntityTypes: EntityType[] = [
+	"parent",
+	"swimmer",
+	"school",
+	"pool",
+	"team",
+	"coach",
+	"lifeguard",
+	"swimMeet",
+	"swimEvent",
+	"swimResult",
+	"user",
+	"comment",
+	"rating",
+];
+
+export const ManuEntityTypes: MenuEntityType[] = [
+	"school",
+	"pool",
+	"team",
+	"coach",
+	"lifeguard",
+	"swimMeet",
+];
+
+export const PrivateEntityTypes: PrivateEntityType[] = [
+	"parent",
+	"user",
+	"rating",
+	"comment",
+];
+
+export const PublicEntityTypes: PublicEntityType[] = [
+	"swimmer",
+	"school",
+	"pool",
+	"team",
+	"coach",
+	"lifeguard",
+	"swimMeet",
+	"swimEvent",
+	"swimResult",
+];
+
+export const EntityTypeObj: Record<EntityType, string> = {
+	parent: "parent",
+	swimmer: "swimmer",
+	school: "school",
+	pool: "pool",
+	team: "team",
+	coach: "coach",
+	lifeguard: "lifeguard",
+	swimMeet: "swimMeet",
+	swimEvent: "swimEvent",
+	swimResult: "swimResult",
+	user: "user",
+	comment: "comment",
+	rating: "rating",
+};
+
+export const SingleEntityType: Record<EntityType, string> = {
+	parent: "Parent",
+	swimmer: "Swimmer",
+	school: "School",
+	pool: "Pool",
+	team: "Team",
+	coach: "Coach",
+	lifeguard: "Lifeguard",
+	swimMeet: "Swimming Meet",
+	swimEvent: "Swimming Event",
+	swimResult: "Swimming Result",
+	user: "User",
+	comment: "Comment",
+	rating: "Rating",
+};
+
+export const EntityTypePlurals: Record<EntityType, string> = {
+	parent: "Parents",
+	swimmer: "Swimmers",
+	school: "Schools",
+	pool: "Pools",
+	team: "Teams",
+	coach: "Coaches",
+	lifeguard: "Lifeguards",
+	swimMeet: "Swimming Meets",
+	swimEvent: "Swimming Events",
+	swimResult: "Swimming Results",
+	user: "Users",
+	comment: "Comments",
+	rating: "Ratings",
+};
 
 export const EditEntityNameText: Record<EntityType, string> = {
 	parent: "What is your name?",
@@ -12,6 +112,8 @@ export const EditEntityNameText: Record<EntityType, string> = {
 	swimResult: "What is your name?",
 	swimEvent: "What is your name?",
 	user: "What is your name?",
+	rating: "What do you think",
+	comment: "What do you think",
 };
 
 export const EditEntityDescriptionText: Record<EntityType, string> = {
@@ -26,18 +128,6 @@ export const EditEntityDescriptionText: Record<EntityType, string> = {
 	swimResult: "Tell us about yourself.",
 	swimEvent: "Tell us about yourself.",
 	user: "Tell us about yourself.",
-};
-
-export const EditEntityLocationText: Record<EntityType, string> = {
-	parent: "Where can you be found",
-	swimmer: "Where can you be found",
-	school: "Where can you be found",
-	pool: "Where can you be found",
-	team: "Where can you be found",
-	coach: "Where can you be found",
-	swimMeet: "Where can you be found",
-	lifeguard: "Where can you be found",
-	swimResult: "Where can you be found",
-	swimEvent: "Where can you be found",
-	user: "Where can you be found",
+	rating: "Your views",
+	comment: "Any comments?",
 };

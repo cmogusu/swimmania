@@ -7,7 +7,7 @@ import type { EntityProps } from "../types";
 type Props = PropsWithChildren & EntityProps;
 
 export default function Pool({ entity, children }: Props) {
-	const { id, name, description, location, type, defaultImage } = entity;
+	const { id, name, description, type, defaultImage } = entity;
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
@@ -21,7 +21,6 @@ export default function Pool({ entity, children }: Props) {
 						{name} - {id}
 					</h2>
 				</a>
-				<p className="text-xs">{location}</p>
 				<p>{description}</p>
 				<div className="card-actions justify-end">
 					<SelectEntityButton entityId={id} />

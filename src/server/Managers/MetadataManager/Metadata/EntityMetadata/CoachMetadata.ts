@@ -13,11 +13,38 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	location: () =>
+		new ParentPropertyType({
+			name: "location",
+			title: "Location",
+			childInitializers: {
+				lat: (rawMetadata?: RawMetadata) =>
+					new LatitudePropertyType({
+						name: "lat",
+						title: "Latitude",
+						...rawMetadata,
+					}),
+				lng: (rawMetadata?: RawMetadata) =>
+					new LongitudePropertyType({
+						name: "lng",
+						title: "Longitude",
+						...rawMetadata,
+					}),
+				name: (rawMetadata?: RawMetadata) =>
+					new TextPropertyType({
+						name: "name",
+						title: "Name",
+						...rawMetadata,
+					}),
+			},
+			sortIndex: 8,
+		}),
+
 	performance: (rawMetadata?: RawMetadata) =>
 		new RatingsPropertyType({
 			name: "performance",
 			title: "How did the coach perform",
-			sortIndex: 0,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 
@@ -25,7 +52,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new RatingsPropertyType({
 			name: "friendliness",
 			title: "How friendly",
-			sortIndex: 2,
+			sortIndex: 12,
 			...rawMetadata,
 		}),
 
@@ -33,7 +60,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new NumberPropertyType({
 			name: "experience",
 			title: "Years of experience",
-			sortIndex: 4,
+			sortIndex: 14,
 			min: 0,
 			max: 70,
 			...rawMetadata,
@@ -63,7 +90,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 6,
+			sortIndex: 16,
 		}),
 
 	workingHours: () =>
@@ -86,34 +113,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 8,
-		}),
-
-	location: () =>
-		new ParentPropertyType({
-			name: "location",
-			title: "Location",
-			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
-					new LatitudePropertyType({
-						name: "lat",
-						title: "Latitude",
-						...rawMetadata,
-					}),
-				lng: (rawMetadata?: RawMetadata) =>
-					new LongitudePropertyType({
-						name: "lng",
-						title: "Longitude",
-						...rawMetadata,
-					}),
-				name: (rawMetadata?: RawMetadata) =>
-					new TextPropertyType({
-						name: "name",
-						title: "Name",
-						...rawMetadata,
-					}),
-			},
-			sortIndex: 10,
+			sortIndex: 18,
 		}),
 };
 

@@ -4,7 +4,7 @@ import {
 	metadataManagerFactory,
 	relatedEntityManagerFactory,
 } from "@/server/Managers";
-import { POSTS_PER_PAGE } from "../constants/global";
+import { POSTS_PER_PAGE } from "../constants/entity";
 import { Log } from "../services";
 import type {
 	EntitiesData,

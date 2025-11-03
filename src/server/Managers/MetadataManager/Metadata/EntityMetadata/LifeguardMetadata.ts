@@ -10,38 +10,6 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	firstName: (rawMetadata?: RawMetadata) =>
-		new TextPropertyType({
-			name: "firstName",
-			title: "First name",
-			sortIndex: 0,
-			...rawMetadata,
-		}),
-
-	surname: (rawMetadata?: RawMetadata) =>
-		new TextPropertyType({
-			name: "surname",
-			title: "Surname",
-			sortIndex: 2,
-			...rawMetadata,
-		}),
-
-	thirdName: (rawMetadata?: RawMetadata) =>
-		new TextPropertyType({
-			name: "thirdName",
-			title: "Third name or Initial",
-			sortIndex: 4,
-			...rawMetadata,
-		}),
-
-	dob: (rawMetadata?: RawMetadata) =>
-		new TextPropertyType({
-			name: "dob",
-			title: "Date of birth",
-			sortIndex: 6,
-			...rawMetadata,
-		}),
-
 	location: () =>
 		new ParentPropertyType({
 			name: "location",
@@ -67,6 +35,38 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					}),
 			},
 			sortIndex: 8,
+		}),
+
+	firstName: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "firstName",
+			title: "First name",
+			sortIndex: 10,
+			...rawMetadata,
+		}),
+
+	surname: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "surname",
+			title: "Surname",
+			sortIndex: 12,
+			...rawMetadata,
+		}),
+
+	thirdName: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "thirdName",
+			title: "Third name or Initial",
+			sortIndex: 14,
+			...rawMetadata,
+		}),
+
+	dob: (rawMetadata?: RawMetadata) =>
+		new TextPropertyType({
+			name: "dob",
+			title: "Date of birth",
+			sortIndex: 16,
+			...rawMetadata,
 		}),
 };
 

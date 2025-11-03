@@ -11,11 +11,38 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	location: () =>
+		new ParentPropertyType({
+			name: "location",
+			title: "Location of base",
+			childInitializers: {
+				lat: (rawMetadata?: RawMetadata) =>
+					new LatitudePropertyType({
+						name: "lat",
+						title: "Latitude",
+						...rawMetadata,
+					}),
+				lng: (rawMetadata?: RawMetadata) =>
+					new LongitudePropertyType({
+						name: "lng",
+						title: "Longitude",
+						...rawMetadata,
+					}),
+				name: (rawMetadata?: RawMetadata) =>
+					new TextPropertyType({
+						name: "name",
+						title: "Name",
+						...rawMetadata,
+					}),
+			},
+			sortIndex: 8,
+		}),
+
 	openToPublic: (rawMetadata?: RawMetadata) =>
 		new NumberPropertyType({
 			name: "openToPublic",
 			title: "Open to public",
-			sortIndex: 0,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 
@@ -43,34 +70,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 2,
-		}),
-
-	location: () =>
-		new ParentPropertyType({
-			name: "location",
-			title: "Location of base",
-			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
-					new LatitudePropertyType({
-						name: "lat",
-						title: "Latitude",
-						...rawMetadata,
-					}),
-				lng: (rawMetadata?: RawMetadata) =>
-					new LongitudePropertyType({
-						name: "lng",
-						title: "Longitude",
-						...rawMetadata,
-					}),
-				name: (rawMetadata?: RawMetadata) =>
-					new TextPropertyType({
-						name: "name",
-						title: "Name",
-						...rawMetadata,
-					}),
-			},
-			sortIndex: 4,
+			sortIndex: 12,
 		}),
 };
 

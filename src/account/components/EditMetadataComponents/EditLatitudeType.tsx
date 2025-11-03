@@ -1,4 +1,4 @@
-import { EditSingleLocationMap } from "@/components/MapLibre";
+import { EditSingleLocationMap } from "@/components/GoogleMap";
 import type { LatLng } from "@/types";
 import type { EditProps } from "./types";
 
@@ -6,19 +6,22 @@ export const EditLatitudeType = async ({
 	entityType,
 	entityId,
 	parentTitle,
-	childrenMetadata,
+	parentMetadata,
 }: EditProps) => {
-	if (!childrenMetadata?.length) {
+	if (!parentMetadata) {
 		return null;
 	}
 
-	const latMetadata = childrenMetadata.find((m) => m.type === "latitude");
-	const lngMetadata = childrenMetadata.find((m) => m.type === "longitude");
+	const metadataId = parentMetadata.id;
+	const latMetadata = parentMetadata.getChild("lat");
+	const lngMetadata = parentMetadata.getChild("lng");
+	const nameMetadata = parentMetadata.getChild("name");
 
-	if (!latMetadata?.name || !lngMetadata?.name) {
-		throw Error("missing lat or lang");
+	if (!latMetadata || !lngMetadata || !nameMetadata) {
+		throw Error("missing lat, lng or name");
 	}
 
+	const locationName = nameMetadata.value as string;
 	const location: LatLng = {
 		lat: latMetadata?.value as number,
 		lng: lngMetadata?.value as number,
@@ -28,9 +31,10 @@ export const EditLatitudeType = async ({
 		<div className="mb-4">
 			<h3>{parentTitle}</h3>
 			<EditSingleLocationMap
-				metadataId={latMetadata.id}
+				metadataId={metadataId}
 				entityId={entityId}
 				entityType={entityType}
+				locationName={locationName}
 				location={location}
 			/>
 		</div>

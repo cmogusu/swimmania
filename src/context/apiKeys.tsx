@@ -14,6 +14,7 @@ export const initialKeys = {
 	maptiler: "",
 	tomtom: "",
 	azure: "",
+	google: "",
 	areKeysSet: false,
 };
 

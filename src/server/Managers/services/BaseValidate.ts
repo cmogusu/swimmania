@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { EntityTypesKeys, MAX_TEXT_LENGTH } from "@/server/constants";
+import { EntityTypes, MAX_TEXT_LENGTH } from "@/server/constants";
 import type { EntityType } from "@/server/types";
 
 export class BaseValidate {
@@ -15,7 +15,7 @@ export class BaseValidate {
 		.min(2, "Too short")
 		.max(MAX_TEXT_LENGTH, "Too long");
 
-	entityTypeValidator = z.enum(EntityTypesKeys);
+	entityTypeValidator = z.enum(EntityTypes);
 	genderValidator = z.enum(["male", "female"]);
 	ageValidator = z.coerce
 		.number("Number expected")

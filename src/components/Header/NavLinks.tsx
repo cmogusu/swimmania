@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { EntityTypesValues } from "@/server/constants";
+import { ManuEntityTypes } from "@/server/constants";
+import { getPlural } from "@/server/utils";
 import { Nav } from "./Nav";
 
 export const NavLinks = () => (
 	<Nav>
-		{EntityTypesValues.map((v) => (
-			<li key={v}>
-				<Link href={`/${v}`}>{v}</Link>
+		{ManuEntityTypes.map((entityType) => (
+			<li key={entityType}>
+				<Link href={`/${entityType}`}>{getPlural(entityType)}</Link>
 			</li>
 		))}
 	</Nav>

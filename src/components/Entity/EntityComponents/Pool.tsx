@@ -8,14 +8,7 @@ import type { EntityProps } from "./types";
 const show = false;
 
 export default function Pool({ entity, entityType }: EntityProps) {
-	const {
-		id: entityId,
-		name,
-		description,
-		location,
-		defaultImage,
-		images,
-	} = entity;
+	const { id: entityId, name, description, defaultImage, images } = entity;
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
@@ -32,7 +25,6 @@ export default function Pool({ entity, entityType }: EntityProps) {
 						src={image.src}
 					/>
 				</div>
-				{location && <div className="text-5xl">{location}</div>}
 
 				<p className="text-2xl">{description}</p>
 			</section>

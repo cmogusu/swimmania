@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { EntityTypesValues } from "@/server/constants";
+import { ManuEntityTypes } from "@/server/constants";
+import { getPlural } from "@/server/utils";
 
 type Props = {
 	children: ReactNode;
@@ -12,10 +13,10 @@ type Props = {
 export const Nav = (_: Props) => {
 	const pathname = usePathname();
 
-	return EntityTypesValues.map((v) => (
+	return ManuEntityTypes.map((v) => (
 		<li key={v}>
 			<Link className={pathname === v ? "active" : ""} href={`/${v}`}>
-				{v}
+				{getPlural(v)}
 			</Link>
 		</li>
 	));

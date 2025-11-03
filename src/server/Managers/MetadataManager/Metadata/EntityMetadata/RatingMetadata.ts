@@ -1,5 +1,8 @@
 import type { RawMetadata } from "@/server/types";
-import { DateTimePropertyType } from "../MetadataPropertyType";
+import {
+	DateTimePropertyType,
+	RatingsPropertyType,
+} from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
@@ -9,7 +12,15 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new DateTimePropertyType({
 			name: "time",
 			title: "Time",
-			sortIndex: 2,
+			sortIndex: 10,
+			...rawMetadata,
+		}),
+
+	rating: (rawMetadata?: RawMetadata) =>
+		new RatingsPropertyType({
+			name: "rating",
+			title: "Rating",
+			sortIndex: 12,
 			...rawMetadata,
 		}),
 };

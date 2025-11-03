@@ -21,6 +21,7 @@ export const EditParentType = ({
 			entityType={entityType}
 			entityId={entityId}
 			metadataType={firstChild}
+			parentMetadata={metadataType as IParentMetadataPropertyType}
 			childrenMetadata={children}
 			parentTitle={title}
 		/>

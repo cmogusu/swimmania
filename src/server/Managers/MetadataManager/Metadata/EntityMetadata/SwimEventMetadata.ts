@@ -13,7 +13,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new NumberPropertyType({
 			name: "eventNumber",
 			title: "Event number",
-			sortIndex: 0,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 
@@ -51,7 +51,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Medley relay",
 				},
 			],
-			sortIndex: 2,
+			sortIndex: 12,
 			...rawMetadata,
 		}),
 
@@ -101,7 +101,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "4 x 100",
 				},
 			],
-			sortIndex: 4,
+			sortIndex: 14,
 			...rawMetadata,
 		}),
 
@@ -119,7 +119,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Yard",
 				},
 			],
-			sortIndex: 6,
+			sortIndex: 16,
 			...rawMetadata,
 		}),
 
@@ -137,7 +137,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Women",
 				},
 			],
-			sortIndex: 8,
+			sortIndex: 18,
 			...rawMetadata,
 		}),
 
@@ -145,7 +145,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new TextPropertyType({
 			name: "ageGroup",
 			title: "AgeGroup",
-			sortIndex: 10,
+			sortIndex: 20,
 			...rawMetadata,
 		}),
 };

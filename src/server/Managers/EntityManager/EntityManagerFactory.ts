@@ -1,4 +1,4 @@
-import { EntityTypes } from "@/server/constants";
+import { EntityTypeObj } from "@/server/constants";
 import type { EntityType } from "@/server/types";
 import type { EntityManager } from ".";
 import {
@@ -41,8 +41,7 @@ export const entityManagerFactory = {
 			throw Error("Entity type not set");
 		}
 
-		if (!(entityType in EntityTypes)) {
-			console.log(entityType, EntityTypes);
+		if (!(entityType in EntityTypeObj)) {
 			throw Error("Invalid entity type");
 		}
 

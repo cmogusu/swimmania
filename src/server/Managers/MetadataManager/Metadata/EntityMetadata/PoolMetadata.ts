@@ -15,6 +15,33 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
+	location: () =>
+		new ParentPropertyType({
+			name: "location",
+			title: "Location",
+			childInitializers: {
+				lat: (rawMetadata?: RawMetadata) =>
+					new LatitudePropertyType({
+						name: "lat",
+						title: "Latitude",
+						...rawMetadata,
+					}),
+				lng: (rawMetadata?: RawMetadata) =>
+					new LongitudePropertyType({
+						name: "lng",
+						title: "Longitude",
+						...rawMetadata,
+					}),
+				name: (rawMetadata?: RawMetadata) =>
+					new TextPropertyType({
+						name: "name",
+						title: "Name",
+						...rawMetadata,
+					}),
+			},
+			sortIndex: 8,
+		}),
+
 	hostInstitutionType: (rawMetadata?: RawMetadata) =>
 		new OptionsPropertyType({
 			name: "hostInstitutionType",
@@ -33,7 +60,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Gym",
 				},
 			],
-			sortIndex: 0,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 
@@ -59,7 +86,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 					value: "Curvy",
 				},
 			],
-			sortIndex: 2,
+			sortIndex: 12,
 			...rawMetadata,
 		}),
 
@@ -87,7 +114,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 4,
+			sortIndex: 14,
 		}),
 
 	operatingHours: () =>
@@ -108,14 +135,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 6,
+			sortIndex: 16,
 		}),
 
 	crowdiness: (rawMetadata?: RawMetadata) =>
 		new RatingsPropertyType({
 			name: "crowdiness",
 			title: "How crowded",
-			sortIndex: 8,
+			sortIndex: 18,
 			...rawMetadata,
 		}),
 
@@ -123,7 +150,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "openToPublic",
 			title: "Open to public",
-			sortIndex: 10,
+			sortIndex: 20,
 			...rawMetadata,
 		}),
 
@@ -131,7 +158,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "openToChildren",
 			title: "Open to children",
-			sortIndex: 12,
+			sortIndex: 22,
 			...rawMetadata,
 		}),
 
@@ -139,7 +166,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "hasLaneRopes",
 			title: "Lane ropes",
-			sortIndex: 14,
+			sortIndex: 24,
 			...rawMetadata,
 		}),
 
@@ -147,7 +174,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "isHeated",
 			title: "Heated",
-			sortIndex: 16,
+			sortIndex: 26,
 			...rawMetadata,
 		}),
 
@@ -175,14 +202,14 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 18,
+			sortIndex: 28,
 		}),
 
 	isIndoor: (rawMetadata?: RawMetadata) =>
 		new BooleanPropertyType({
 			name: "isIndoor",
 			title: "Indoor pool",
-			sortIndex: 20,
+			sortIndex: 30,
 			...rawMetadata,
 		}),
 
@@ -190,7 +217,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new RatingsPropertyType({
 			name: "cleanliness",
 			title: "Cleanliness",
-			sortIndex: 22,
+			sortIndex: 32,
 			...rawMetadata,
 		}),
 
@@ -198,7 +225,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new RatingsPropertyType({
 			name: "changingRoomCleanliness",
 			title: "Cleanliness of changing room",
-			sortIndex: 24,
+			sortIndex: 34,
 			...rawMetadata,
 		}),
 
@@ -206,35 +233,8 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new BooleanPropertyType({
 			name: "hasOnDutyLifeguard",
 			title: "Lifeguards",
-			sortIndex: 26,
+			sortIndex: 36,
 			...rawMetadata,
-		}),
-
-	location: () =>
-		new ParentPropertyType({
-			name: "location",
-			title: "Location",
-			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
-					new LatitudePropertyType({
-						name: "lat",
-						title: "Latitude",
-						...rawMetadata,
-					}),
-				lng: (rawMetadata?: RawMetadata) =>
-					new LongitudePropertyType({
-						name: "lng",
-						title: "Longitude",
-						...rawMetadata,
-					}),
-				name: (rawMetadata?: RawMetadata) =>
-					new TextPropertyType({
-						name: "name",
-						title: "Name",
-						...rawMetadata,
-					}),
-			},
-			sortIndex: 28,
 		}),
 };
 

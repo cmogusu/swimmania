@@ -15,7 +15,12 @@ export type EntityType =
 
 export type PrivateEntityType = Extract<
 	EntityType,
-	"user" | "rating" | "comment"
+	"parent" | "user" | "rating" | "comment"
+>;
+
+export type MenuEntityType = Extract<
+	EntityType,
+	"school" | "pool" | "team" | "coach" | "lifeguard" | "swimMeet"
 >;
 
 export type PublicEntityType = Omit<EntityType, PrivateEntityType>;

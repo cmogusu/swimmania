@@ -9,7 +9,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 		new DateTimePropertyType({
 			name: "time",
 			title: "Time",
-			sortIndex: 2,
+			sortIndex: 10,
 			...rawMetadata,
 		}),
 };

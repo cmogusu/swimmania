@@ -34,7 +34,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 4,
+			sortIndex: 10,
 		}),
 };
 

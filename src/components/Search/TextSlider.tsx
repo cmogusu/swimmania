@@ -1,8 +1,10 @@
 "use client";
 
-import { EntityTypesValues } from "@/server/constants";
+import { ManuEntityTypes } from "@/server/constants";
 import "./style.css";
 import { useEffect, useState } from "react";
+import type { EntityType } from "@/server/types";
+import { getPlural } from "@/server/utils";
 
 export const TextSlider = () => {
 	const [scrollIndex, setScrollIndex] = useState<number>(0);
@@ -10,7 +12,7 @@ export const TextSlider = () => {
 	useEffect(() => {
 		const intervalId = setInterval(() => {
 			setScrollIndex((prevIndex) => {
-				if (prevIndex + 1 < EntityTypesValues.length) {
+				if (prevIndex + 1 < ManuEntityTypes.length) {
 					console.log(prevIndex);
 					return prevIndex + 1;
 				} else {
@@ -32,10 +34,10 @@ export const TextSlider = () => {
 	return (
 		<div className="flex flex-col border text-slider-container overflow-hidden relative">
 			<ul className="relative transition-top" style={{ top }}>
-				{EntityTypesValues.map((v) => (
-					<li key={`${v}`}>
-						<a className="line-height-30" href={`/${v}`}>
-							{v}
+				{ManuEntityTypes.map((entityType: EntityType) => (
+					<li key={`${entityType}`}>
+						<a className="line-height-30" href={`/${entityType}`}>
+							{getPlural(entityType)}
 						</a>
 					</li>
 				))}

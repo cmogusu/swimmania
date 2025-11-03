@@ -13,53 +13,6 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	startEndDates: () =>
-		new ParentPropertyType({
-			name: "startEndDates",
-			title: "Event date",
-			childInitializers: {
-				startDate: (rawMetadata?: RawMetadata) =>
-					new DatePropertyType({
-						name: "startDate",
-						title: "Start date",
-						...rawMetadata,
-					}),
-				endDate: (rawMetadata?: RawMetadata) =>
-					new DatePropertyType({
-						name: "endDate",
-						title: "End date",
-						...rawMetadata,
-					}),
-			},
-			sortIndex: 0,
-		}),
-
-	course: (rawMetadata?: RawMetadata) =>
-		new OptionsPropertyType({
-			name: "course",
-			title: "Course",
-			options: [
-				{
-					key: "short",
-					value: "Short course",
-				},
-				{
-					key: "long",
-					value: "Long course",
-				},
-			],
-			sortIndex: 0,
-			...rawMetadata,
-		}),
-
-	time: (rawMetadata?: RawMetadata) =>
-		new TimePropertyType({
-			name: "time",
-			title: "Start time",
-			sortIndex: 2,
-			...rawMetadata,
-		}),
-
 	location: () =>
 		new ParentPropertyType({
 			name: "location",
@@ -84,7 +37,54 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 						...rawMetadata,
 					}),
 			},
-			sortIndex: 4,
+			sortIndex: 8,
+		}),
+
+	startEndDates: () =>
+		new ParentPropertyType({
+			name: "startEndDates",
+			title: "Event date",
+			childInitializers: {
+				startDate: (rawMetadata?: RawMetadata) =>
+					new DatePropertyType({
+						name: "startDate",
+						title: "Start date",
+						...rawMetadata,
+					}),
+				endDate: (rawMetadata?: RawMetadata) =>
+					new DatePropertyType({
+						name: "endDate",
+						title: "End date",
+						...rawMetadata,
+					}),
+			},
+			sortIndex: 10,
+		}),
+
+	course: (rawMetadata?: RawMetadata) =>
+		new OptionsPropertyType({
+			name: "course",
+			title: "Course",
+			options: [
+				{
+					key: "short",
+					value: "Short course",
+				},
+				{
+					key: "long",
+					value: "Long course",
+				},
+			],
+			sortIndex: 12,
+			...rawMetadata,
+		}),
+
+	time: (rawMetadata?: RawMetadata) =>
+		new TimePropertyType({
+			name: "time",
+			title: "Start time",
+			sortIndex: 14,
+			...rawMetadata,
 		}),
 };
 

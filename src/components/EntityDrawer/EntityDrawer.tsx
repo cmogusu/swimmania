@@ -1,10 +1,18 @@
 "use client";
 
-import { useEntityDrawerContext, useSelectedEntityContext } from "@/context";
+import Image from "next/image";
+import { DefaultSiteImage } from "@/constants";
+import {
+	EntityContextProvider,
+	useEntityDrawerContext,
+	useSelectedEntityContext,
+} from "@/context";
 
 export const EntityDrawer = () => {
-	const { entity } = useSelectedEntityContext();
 	const { toggleDrawer } = useEntityDrawerContext();
+	const { entity } = useSelectedEntityContext();
+	const { name, description, defaultImage } = entity || {};
+	const image = defaultImage || DefaultSiteImage;
 
 	if (!entity) {
 		return null;
@@ -12,9 +20,24 @@ export const EntityDrawer = () => {
 
 	return (
 		<div className="">
-			<h1>{entity.name}</h1>
-			<p className="text-xs">{entity.location}</p>
-			<p>{entity.description} horse</p>
+			<EntityContextProvider entityId={entity.id} entityType={entity.type}>
+				<section className="mb-4">
+					<h1>{name}</h1>
+					<hr className="w-50 mb-4" />
+					<div className="mb-4">
+						<Image
+							alt={image.alt}
+							className="size-10 rounded-box"
+							width={1000}
+							height={667}
+							src={image.src}
+						/>
+					</div>
+
+					<p className="text-2xl">{description}</p>
+				</section>
+			</EntityContextProvider>
+
 			<button
 				type="button"
 				onClick={toggleDrawer}

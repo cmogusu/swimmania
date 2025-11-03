@@ -16,9 +16,7 @@ export const LocationInput = ({ entityId, entityType, title }: Props) => {
 		entityType,
 		entityId,
 	);
-	const { location, locationName, metadataId } =
-		useGetLocation(locationMetadata);
-
+	const { location, locationName, metadataId } = getLocation(locationMetadata);
 	if (!entityId || !isFetchComplete) {
 		return null;
 	}
@@ -56,7 +54,7 @@ const useGetMetadata = (entityType: EntityType, entityId: number) => {
 	return { isFetchComplete, locationMetadata };
 };
 
-const useGetLocation = (locationMetadata: RawMetadata[] | undefined) => {
+const getLocation = (locationMetadata: RawMetadata[] | undefined) => {
 	if (!locationMetadata) {
 		return {};
 	}

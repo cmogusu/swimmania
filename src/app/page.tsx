@@ -6,7 +6,8 @@ import {
 	SelectedEntityContextProvider,
 	VisibleEntityIdsContextProvider,
 } from "@/context";
-import { HomePage, PageLayout } from "@/pageComponents";
+import { PageLayout } from "@/pageComponents";
+import { EntitiesPage } from "@/pageComponents/EntitiesPage";
 import { api } from "@/server/api";
 import { getApiKeys } from "@/server/serverFunctions";
 
@@ -34,7 +35,7 @@ export default async function Home({ searchParams }: Props) {
 						<ApiContextProvider getApiKeys={getApiKeys}>
 							<EntityDrawerContainer>
 								<PageLayout>
-									<HomePage
+									<EntitiesPage
 										entitiesData={entitiesData}
 										entityType={entityType}
 									/>

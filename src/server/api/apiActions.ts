@@ -23,6 +23,20 @@ export async function getMetadata(
 	return await api.getMetadataList(entityType, entityId, names);
 }
 
+export async function getRelatedEntities(
+	entityType: EntityType,
+	entityId: number,
+	relatedEntityType: EntityType,
+	relationshipType: RelationshipType,
+) {
+	return api.getRelatedEntities(
+		entityType,
+		entityId,
+		relatedEntityType,
+		relationshipType,
+	);
+}
+
 export async function deleteEntity(formData: FormData) {
 	const entityId = formData.get("entityId");
 	const entityType = formData.get("entityType");

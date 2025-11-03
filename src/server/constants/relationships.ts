@@ -4,7 +4,7 @@ import type {
 	RelationshipType,
 	RelationshipTypeDescription,
 } from "../types";
-import { EntityTypePlurals } from "./global";
+import { EntityTypePlurals } from "./entity";
 
 export const EntityRelationships: Record<
 	EntityType,
