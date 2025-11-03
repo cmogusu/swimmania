@@ -106,28 +106,22 @@ export class Query extends BaseQuery {
 		entityType: EntityType,
 		entityId: number,
 		name: string,
-		userId: number,
 		description?: string,
 	) {
-		this.throwIfNotSet({ entityId, entityType, name, userId });
+		this.throwIfNotSet({ entityId, entityType, name });
 
 		return this.exec(
-			`UPDATE \`entity\` SET name=?, userId=?, description=? WHERE id=? and type=?;`,
-			[name, userId, description || null, entityId, entityType],
+			`UPDATE \`entity\` SET name=?, description=? WHERE id=? and type=?;`,
+			[name, description || null, entityId, entityType],
 		);
 	}
 
-	insert(
-		entityType: string,
-		name: string,
-		userId: number,
-		description?: string,
-	) {
-		this.throwIfNotSet({ entityType, name, userId });
+	insert(entityType: string, name: string, description?: string) {
+		this.throwIfNotSet({ entityType, name });
 
 		return this.exec(
-			`INSERT INTO \`entity\` (name, type, userId, description) VALUES (?, ?, ?, ?);`,
-			[name, entityType, userId, description || null],
+			`INSERT INTO \`entity\` (name, type, description) VALUES (?, ?, ?, ?);`,
+			[name, entityType, description || null],
 		);
 	}
 }

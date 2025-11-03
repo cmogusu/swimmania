@@ -38,4 +38,8 @@ export class BaseDatabase {
 
 		return (resultWithId as ResultWithId[]).map(({ id }) => id);
 	}
+
+	canDeleteEntity(entityId: number, userId: number | undefined): boolean {
+		return this.canDeleteEntity(entityId, userId);
+	}
 }

@@ -1,7 +1,6 @@
 import type { EntityType, IPaginated } from "@/server/types";
 import { ImageManager } from "../../ImageManager";
 import { MetadataManager } from "../../MetadataManager";
-import { BaseManager } from "../../services/BaseManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
 import {
@@ -27,7 +26,7 @@ import type {
 } from "../types";
 import { Database } from "./Database";
 
-export class EntityManager extends BaseManager {
+export class EntityManager {
 	entityType: EntityType;
 	db: Database;
 
@@ -35,7 +34,6 @@ export class EntityManager extends BaseManager {
 	metadataManager: MetadataManager;
 
 	constructor(entityType: EntityType) {
-		super();
 		this.entityType = entityType;
 		this.db = new Database();
 		this.imageManager = new ImageManager();

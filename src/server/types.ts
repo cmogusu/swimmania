@@ -23,7 +23,18 @@ export type MenuEntityType = Extract<
 	"school" | "pool" | "team" | "coach" | "lifeguard" | "swimMeet"
 >;
 
-export type PublicEntityType = Omit<EntityType, PrivateEntityType>;
+export type PublicEntityType = Extract<
+	EntityType,
+	| "swimmer"
+	| "school"
+	| "pool"
+	| "team"
+	| "coach"
+	| "lifeguard"
+	| "swimMeet"
+	| "swimEvent"
+	| "swimResult"
+>;
 
 export type RelationshipType =
 	| "isAlso"
@@ -44,7 +55,9 @@ export type RelationshipType =
 	| "comment"
 	| "comment_inverse"
 	| "rating"
-	| "rating_inverse";
+	| "rating_inverse"
+	| "owns"
+	| "owns_inverse";
 
 export type SchemaType =
 	| "parent"

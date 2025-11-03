@@ -40,6 +40,13 @@ export const PrivateEntityTypes: PrivateEntityType[] = [
 	"comment",
 ];
 
+export const PrivateEntityTypesObj: Record<PrivateEntityType, boolean> = {
+	parent: true,
+	user: true,
+	rating: true,
+	comment: true,
+};
+
 export const PublicEntityTypes: PublicEntityType[] = [
 	"swimmer",
 	"school",
@@ -51,6 +58,18 @@ export const PublicEntityTypes: PublicEntityType[] = [
 	"swimEvent",
 	"swimResult",
 ];
+
+export const PublicEntityTypesObj: Record<PublicEntityType, boolean> = {
+	swimmer: true,
+	school: true,
+	pool: true,
+	team: true,
+	coach: true,
+	lifeguard: true,
+	swimMeet: true,
+	swimEvent: true,
+	swimResult: true,
+};
 
 export const EntityTypeObj: Record<EntityType, string> = {
 	parent: "parent",

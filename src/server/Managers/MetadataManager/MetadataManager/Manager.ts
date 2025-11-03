@@ -1,5 +1,4 @@
 import type { DbTableColumn, EntityType, RawMetadata } from "@/server/types";
-import { BaseManager } from "../../services/BaseManager";
 import {
 	DeleteInputData,
 	FilterInputData,
@@ -22,11 +21,10 @@ import type {
 import { Database } from "./Database";
 import { arrayToObject, getExtraColumnNames, getMissingColumns } from "./utils";
 
-export class MetadataManager extends BaseManager {
+export class MetadataManager {
 	db: Database;
 
 	constructor() {
-		super();
 		this.db = new Database();
 	}
 

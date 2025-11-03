@@ -16,6 +16,11 @@ export type RawRelatedEntityInputData = BaseRelatedData & {
 	relationshipType?: RelationshipType;
 };
 
+export type RawHasRelationshipData = BaseRelatedData & {
+	relatedEntityId: number;
+	relationshipType: RelationshipType;
+};
+
 export type RawGetRelatedInputData = BaseRelatedData &
 	PaginationOptions & {
 		relationshipType: RelationshipType;

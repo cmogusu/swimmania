@@ -50,6 +50,19 @@ export class Database extends BaseDatabase {
 		return this.extractResultIds(entityIds);
 	}
 
+	async hasExisting(relationData: InsertInputData): Promise<boolean> {
+		const metadata = relationData.getSanitized();
+		const [itemId] = await this.query.hasExisting(
+			metadata.entityType,
+			metadata.entityId,
+			metadata.relatedEntityType,
+			metadata.relatedEntityId,
+			this.removeInverseRelationship(metadata.relationshipType),
+		);
+
+		return Boolean(itemId);
+	}
+
 	async insert(relationData: InsertInputData) {
 		const metadata = relationData.getSanitized();
 		const [insertData] = await this.query.insert(

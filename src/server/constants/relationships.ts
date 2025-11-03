@@ -18,6 +18,7 @@ export const EntityRelationships: Record<
 		["canBeFoundAt_inverse", "swimMeet"],
 		["canBeFoundAt", "school"],
 		["rating", "rating"],
+		["owns_inverse", "user"],
 	],
 	coach: [
 		["worksAt", "school"],
@@ -25,41 +26,74 @@ export const EntityRelationships: Record<
 		["isAlso", "swimmer"],
 		["isAlso", "lifeguard"],
 		["rating", "rating"],
+		["rating", "rating"],
+		["owns_inverse", "user"],
 	],
 	swimmer: [
 		["trainsAt", "school"],
 		["trainsAt", "pool"],
 		["parentOf_inverse", "parent"],
 		["comment", "comment"],
+		["owns_inverse", "user"],
 	],
 	school: [
 		["contains", "pool"],
 		["trainsAt_inverse", "swimmer"],
 		["rating", "rating"],
+		["owns_inverse", "user"],
 	],
 	team: [
 		["trainsAt", "pool"],
 		["rating", "rating"],
+		["owns_inverse", "user"],
 	],
 	lifeguard: [
 		["worksAt", "pool"],
 		["rating", "rating"],
+		["owns_inverse", "user"],
 	],
 	swimMeet: [
 		["canBeFoundAt", "pool"],
 		["contains", "swimEvent"],
 		["rating", "rating"],
+		["owns_inverse", "user"],
 	],
 	swimEvent: [
 		["contains", "swimResult"],
 		["contains_inverse", "swimMeet"],
 		["comment", "comment"],
+		["owns_inverse", "user"],
 	],
-	swimResult: [["contains_inverse", "swimEvent"]],
-	parent: [["parentOf", "swimmer"]],
-	user: [],
-	comment: [["contains_inverse", "school"]],
-	rating: [["contains_inverse", "school"]],
+	swimResult: [
+		["contains_inverse", "swimEvent"],
+		["owns_inverse", "user"],
+	],
+	parent: [
+		["parentOf", "swimmer"],
+		["owns_inverse", "user"],
+	],
+	comment: [
+		["contains_inverse", "school"],
+		["owns_inverse", "user"],
+	],
+	rating: [
+		["contains_inverse", "school"],
+		["owns_inverse", "user"],
+	],
+	user: [
+		["owns", "pool"],
+		["owns", "coach"],
+		["owns", "swimmer"],
+		["owns", "school"],
+		["owns", "team"],
+		["owns", "lifeguard"],
+		["owns", "swimMeet"],
+		["owns", "swimEvent"],
+		["owns", "swimResult"],
+		["owns", "parent"],
+		["owns", "comment"],
+		["owns", "rating"],
+	],
 };
 
 export const RelationshipDescriptions: Record<
@@ -159,5 +193,13 @@ export const RelationshipDescriptions: Record<
 		getTitle: (relatedEntityType: EntityType) =>
 			`Ratings of these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "Rating belonging to entity type",
+	},
+	owns: {
+		getTitle: () => `Owns`,
+		description: "",
+	},
+	owns_inverse: {
+		getTitle: () => `Owned_by`,
+		description: "",
 	},
 };

@@ -152,7 +152,6 @@ export class Api {
 			return await entityManager.update({
 				entityId,
 				name,
-				userId,
 				description,
 			});
 		} catch (error: unknown) {
@@ -171,7 +170,6 @@ export class Api {
 			const entityManager = entityManagerFactory.getInstance(entityType);
 			return await entityManager.insert({
 				name,
-				userId,
 				description,
 			});
 		} catch (error: unknown) {

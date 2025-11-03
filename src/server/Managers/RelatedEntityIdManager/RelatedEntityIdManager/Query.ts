@@ -73,6 +73,30 @@ export class Query extends BaseQuery {
 		);
 	}
 
+	hasExisting(
+		entityType: string,
+		entityId: number,
+		relatedEntityType: string,
+		relatedEntityId: number,
+		relationshipType: RelationshipType,
+	) {
+		this.throwIfNotSet({
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			relationshipType,
+		});
+
+		const { entityId1, entityId2, activeColumn, relatedColumn, relationship } =
+			this.getColumns(entityType, entityId, relatedEntityType, relatedEntityId);
+
+		return this.exec(
+			`SELECT id FROM \`relations\` WHERE ${activeColumn}=? AND ${relatedColumn}=? AND relationship=? AND relationshipType=? `,
+			[entityId1, entityId2, relationship, relationshipType],
+		);
+	}
+
 	insert(
 		entityType: string,
 		entityId: number,

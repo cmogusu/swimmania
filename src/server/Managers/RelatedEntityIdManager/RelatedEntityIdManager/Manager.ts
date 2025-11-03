@@ -1,10 +1,16 @@
-import { DeleteInputData, GetInputData, InsertInputData } from "../InputData";
+import {
+	DeleteInputData,
+	GetInputData,
+	HasRelationshipInputData,
+	InsertInputData,
+} from "../InputData";
 import { DeleteAllInputData } from "../InputData/DeleteAllInputData";
 import type {
 	RawDeleteAllRelatedInputData,
 	RawDeleteByIdRelatedInputData,
 	RawGetNonRelatedInputData,
 	RawGetRelatedInputData,
+	RawHasRelationshipData,
 	RawInsertRelatedInputData,
 } from "../types";
 import { Database } from "./Database";
@@ -38,6 +44,13 @@ export class RelatedEntityIdManager {
 		return isRelated
 			? await this.db.getRelated(inputData)
 			: await this.db.getNonRelated(inputData);
+	}
+
+	hasRelationship(rawHasRelationshipData: RawHasRelationshipData) {
+		const inputData = new HasRelationshipInputData(rawHasRelationshipData);
+		inputData.validateData();
+
+		return this.db.hasExisting(inputData);
 	}
 
 	async insert(rawRelatedEntityData: RawInsertRelatedInputData) {

@@ -1,4 +1,3 @@
-import { BaseManager } from "../../services/BaseManager";
 import { Image } from "../Image";
 import { ImageInputData } from "../ImageInputData";
 import type {
@@ -11,11 +10,10 @@ import type {
 } from "../types";
 import { Database } from "./Database";
 
-export class ImageManager extends BaseManager {
+export class ImageManager {
 	db: Database;
 
 	constructor() {
-		super();
 		this.db = new Database();
 	}
 

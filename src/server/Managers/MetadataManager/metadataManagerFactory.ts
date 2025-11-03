@@ -1,13 +1,13 @@
 import { MetadataManager } from "./MetadataManager";
 
 export const metadataManagerFactory = {
-	_metadataManager: undefined as MetadataManager | undefined,
+	_manager: undefined as MetadataManager | undefined,
 
 	getInstance() {
-		if (!this._metadataManager) {
-			this._metadataManager = new MetadataManager();
+		if (!this._manager) {
+			this._manager = new MetadataManager();
 		}
 
-		return this._metadataManager;
+		return this._manager;
 	},
 };

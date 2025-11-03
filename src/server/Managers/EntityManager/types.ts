@@ -11,7 +11,6 @@ export type RawEntity = {
 	name: string;
 	type: EntityType;
 	description?: string;
-	userId: number;
 };
 
 export type EntityLoadRelatedDataOptions = {
@@ -42,12 +41,10 @@ export type RawGetByNameEntityInputs = EntityLoadRelatedDataOptions & {
 
 export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 	entityId: number;
-	userId: number;
 };
 
 export type RawInsertEntityInputs = {
 	name: string;
-	userId: number;
 	description?: string;
 	images?: RawImageInputs[];
 };
@@ -59,7 +56,6 @@ export type RawDeleteEntityInputs = {
 export type RawEntityInputs = {
 	id?: number;
 	name: string;
-	userId: number;
 	description?: string;
 	images?: RawImageInputs[];
 };
