@@ -1,4 +1,6 @@
+import { auth } from "auth";
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 import { EntityDrawerContainer } from "@/components/EntityDrawer";
 import {
 	EntitiesContextProvider,
@@ -25,6 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Home({ params, searchParams }: Props) {
+	const session = await auth();
+	console.log(session);
 	const { entityType } = await params;
 	const { page = 1 } = await searchParams;
 	const entitiesData = await api.getEntities(entityType, Number(page));
@@ -34,24 +38,26 @@ export default async function Home({ params, searchParams }: Props) {
 	}
 
 	return (
-		<EntitiesContextProvider
-			entitiesData={entitiesData}
-			entityType={entityType}
-		>
-			<SelectedEntityContextProvider>
-				<VisibleEntityIdsContextProvider>
-					<EntityDrawerContextProvider>
-						<EntityDrawerContainer>
-							<PageLayout>
-								<EntitiesPage
-									entitiesData={entitiesData}
-									entityType={entityType}
-								/>
-							</PageLayout>
-						</EntityDrawerContainer>
-					</EntityDrawerContextProvider>
-				</VisibleEntityIdsContextProvider>
-			</SelectedEntityContextProvider>
-		</EntitiesContextProvider>
+		<SessionProvider session={session}>
+			<EntitiesContextProvider
+				entitiesData={entitiesData}
+				entityType={entityType}
+			>
+				<SelectedEntityContextProvider>
+					<VisibleEntityIdsContextProvider>
+						<EntityDrawerContextProvider>
+							<EntityDrawerContainer>
+								<PageLayout>
+									<EntitiesPage
+										entitiesData={entitiesData}
+										entityType={entityType}
+									/>
+								</PageLayout>
+							</EntityDrawerContainer>
+						</EntityDrawerContextProvider>
+					</VisibleEntityIdsContextProvider>
+				</SelectedEntityContextProvider>
+			</EntitiesContextProvider>
+		</SessionProvider>
 	);
 }

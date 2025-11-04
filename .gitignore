@@ -42,3 +42,7 @@ next-env.d.ts
 
 # private files - not safe for internet
 *.git_skip.*
+
+/prisma/src/generated/prisma
+
+/prisma/src/generated/prisma

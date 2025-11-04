@@ -1,5 +1,6 @@
 "use server";
 
+import { auth, signOut } from "auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { seedEntityFactory } from "../seed";
@@ -8,7 +9,19 @@ import { isUndefined } from "../utils";
 import { api } from "./api";
 
 export async function getLoggedInUserId() {
+	const session = await auth();
+	const userId = session?.user?.id;
+	console.log({ userId });
 	return 122;
+}
+
+export async function getLoggedInUser() {
+	const session = await auth();
+	return session?.user;
+}
+
+export async function handleSignOut() {
+	await signOut;
 }
 
 export async function getEntities(entityType: EntityType, pageNumber: number) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import {
 	type ChangeEvent,
 	type PropsWithChildren,
@@ -36,6 +37,8 @@ export const ClientEntityForm = (props: Props) => {
 	const [, formAction] = useActionState(updateEntityAction, undefined);
 	const [entity, setEntity] = useState<EntityData>(props.entity);
 	const [errors, setErrors] = useState<ValidationErrors>({});
+	const { data: session } = useSession();
+	console.log({ user: session?.user });
 
 	const validator = useMemo(() => new Validate(), []);
 	const handleUpdate = useCallback(

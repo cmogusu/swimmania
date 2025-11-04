@@ -11,34 +11,64 @@ import {
 	writeFile,
 } from "node:fs/promises";
 import path from "node:path";
+import { auth, signIn, signOut } from "auth";
 import * as z from "zod";
+import { Header } from "@/account/components/Header";
 import { UPLOADS_FOLDER } from "@/server/constants/paths";
 
 export default async function Page() {
+	const session = await auth();
+	console.log("hello", session);
+
 	return (
-		<div className="p-6">
-			<form action={handleUpload}>
-				<div>
-					<input
-						className="input input-md input-primary"
-						type="file"
-						accept="image/*"
-						name="image"
-					/>
-				</div>
-				<div>
-					<input
-						type="datetime-local"
-						name="dateTime"
-						className="input input-md input-primary"
-					/>
-				</div>
-				<button className="btn btn-sm" type="submit">
-					Upload Image
-				</button>
-			</form>
+		<div>
+			<Header entityType="pool" />
+			<div className="p-6">
+				<form action={handleSignIn} className="mb-5">
+					<button className="btn btn-sm" type="submit">
+						Sign In
+					</button>
+				</form>
+
+				<form action={handleSignOut} className="mb-5">
+					<button className="btn btn-sm" type="submit">
+						Sign out
+					</button>
+				</form>
+
+				<form action={handleUpload}>
+					<div>
+						<input
+							className="input input-md input-primary"
+							type="file"
+							accept="image/*"
+							name="image"
+						/>
+					</div>
+					<div>
+						<input
+							type="datetime-local"
+							name="dateTime"
+							className="input input-md input-primary"
+						/>
+					</div>
+					<button className="btn btn-sm" type="submit">
+						Upload Image
+					</button>
+				</form>
+			</div>
 		</div>
 	);
+}
+
+async function handleSignIn(_formData: FormData) {
+	"use server";
+	await signIn();
+}
+
+async function handleSignOut(_formData: FormData) {
+	"use server";
+	await signOut();
 }
 
 async function handleUpload(formData: FormData) {
