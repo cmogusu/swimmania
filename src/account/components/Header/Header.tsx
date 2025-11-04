@@ -22,8 +22,8 @@ export const Header = async ({ entityType }: Props) => {
 
 	return (
 		<div className="bg-base-100 shadow-sm">
-			<div className="md:container mx-auto navbar">
-				<div className="navbar navbar-start">
+			<div className="md:container mx-auto">
+				<div className="navbar navbar-start w-full">
 					<div className="flex-1">
 						<a href="/account/">
 							<Image
@@ -36,12 +36,12 @@ export const Header = async ({ entityType }: Props) => {
 					</div>
 
 					<div className="navbar-center sm:flex">
-						<ul className="menu menu-horizontal px-1">
+						<div className="menu menu-horizontal px-1">
 							<EntitiesNavBar entityType={entityType} baseUrl="/account/" />
-						</ul>
+						</div>
 					</div>
 
-					<div className="flex-none">
+					<div className="flex-1 flex justify-end">
 						<div className="dropdown dropdown-end">
 							<div
 								tabIndex="0"

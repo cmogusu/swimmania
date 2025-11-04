@@ -11,15 +11,11 @@ import {
 	writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import { auth, signIn, signOut } from "auth";
 import * as z from "zod";
 import { Header } from "@/account/components/Header";
 import { UPLOADS_FOLDER } from "@/server/constants/paths";
 
 export default async function Page() {
-	const session = await auth();
-	console.log("hello", session);
-
 	return (
 		<div>
 			<Header entityType="pool" />
@@ -59,16 +55,6 @@ export default async function Page() {
 			</div>
 		</div>
 	);
-}
-
-async function handleSignIn(_formData: FormData) {
-	"use server";
-	await signIn();
-}
-
-async function handleSignOut(_formData: FormData) {
-	"use server";
-	await signOut();
 }
 
 async function handleUpload(formData: FormData) {

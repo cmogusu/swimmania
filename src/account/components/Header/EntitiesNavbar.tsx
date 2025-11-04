@@ -14,12 +14,11 @@ export const EntitiesNavBar = ({
 	<nav>
 		<ul className="w-full menu menu-horizontal">
 			{ManuEntityTypes.map((entityType: EntityType) => (
-				<li key={entityType}>
-					{entityType === activeEntityType ? (
-						<span className="active">{getPlural(entityType)}</span>
-					) : (
-						<a href={`${baseUrl}/${entityType}`}>{getPlural(entityType)}</a>
-					)}
+				<li
+					className={entityType === activeEntityType ? "menu-active" : ""}
+					key={entityType}
+				>
+					<a href={`${baseUrl}/${entityType}`}>{getPlural(entityType)}</a>
 				</li>
 			))}
 		</ul>

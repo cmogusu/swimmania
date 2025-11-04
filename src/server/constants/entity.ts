@@ -25,10 +25,10 @@ export const EntityTypes: EntityType[] = [
 ];
 
 export const ManuEntityTypes: MenuEntityType[] = [
-	"school",
 	"pool",
-	"team",
 	"coach",
+	"team",
+	"school",
 	"lifeguard",
 	"swimMeet",
 ];
