@@ -34,12 +34,6 @@ export class GetByIdsInputData
 	}
 
 	validateData() {
-		this.validate.ids(this.entityIds);
-	}
-
-	getSanitized() {
-		return {
-			entityIds: this.entityIds,
-		};
+		this.entityIds = this.validate.ids(this.entityIds);
 	}
 }

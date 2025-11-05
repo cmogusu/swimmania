@@ -1,7 +1,6 @@
 import type { EntityType } from "../../../types";
 import { BaseInputData } from "../../services/BaseInputData";
 import type { RawGetAllMetadataInputs } from "../types";
-import { type Sanitize, SanitizeInstance } from "./Sanitize";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class GetAllInputData extends BaseInputData {
@@ -9,7 +8,6 @@ export class GetAllInputData extends BaseInputData {
 	entityType: EntityType;
 
 	validate: Validate;
-	sanitize: Sanitize;
 
 	constructor({
 		entityType,
@@ -26,20 +24,10 @@ export class GetAllInputData extends BaseInputData {
 		this.pageNumber = pageNumber;
 
 		this.validate = ValidateInstance;
-		this.sanitize = SanitizeInstance;
 	}
 
 	validateData() {
-		this.validate.entityType(this.entityType);
-		this.validate.id(this.entityId);
-	}
-
-	getSanitized() {
-		return {
-			entityType: this.entityType,
-			entityId: this.sanitize.id(this.entityId),
-			offset: this.offset,
-			pageSize: this.pageSize,
-		};
+		this.entityType = this.validate.entityType(this.entityType);
+		this.entityId = this.validate.id(this.entityId);
 	}
 }

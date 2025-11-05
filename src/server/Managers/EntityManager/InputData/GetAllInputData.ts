@@ -27,11 +27,4 @@ export class GetAllInputData extends BaseInputData implements ILoadableEntity {
 	}
 
 	validateData() {}
-
-	getSanitized() {
-		return {
-			offset: this.offset,
-			pageSize: this.pageSize,
-		};
-	}
 }

@@ -5,7 +5,6 @@ import type {
 	DeleteInputData,
 	FilterInputData,
 	GetAllInputData,
-	GetByIdInputData,
 	GetListInputData,
 	InsertInputData,
 	UpdateInputData,
@@ -32,14 +31,14 @@ export class Database extends BaseDatabase {
 	}
 
 	async getAll(metadataData: GetAllInputData): Promise<RawMetadata[]> {
-		const { entityId, entityType } = metadataData.getSanitized();
+		const { entityId, entityType } = metadataData;
 		const [rawMetadataArr] = await this.query.getAll(entityType, entityId);
 		const results = (rawMetadataArr as Record<string, unknown>[])[0];
 		return metadataResultToArray(results);
 	}
 
 	async getList(metadataData: GetListInputData): Promise<RawMetadata[]> {
-		const { entityId, entityType, names } = metadataData.getSanitized();
+		const { entityId, entityType, names } = metadataData;
 		const [rawMetadataArr] = await this.query.getList(
 			entityType,
 			entityId,
@@ -50,21 +49,14 @@ export class Database extends BaseDatabase {
 		return metadataResultToArray(results);
 	}
 
-	async getByMetadataId(metadataData: GetByIdInputData): Promise<RawMetadata> {
-		const { id, entityId } = metadataData.getSanitized();
-		const [rawMetadataArr] = await this.query.getById(entityId, id);
-		const rawMetadata = (rawMetadataArr as RawMetadata[])?.[0];
-		return rawMetadata;
-	}
-
 	async filterBy(metadataData: FilterInputData): Promise<number[]> {
-		const { entityType, filters } = metadataData.getSanitized();
+		const { entityType, filters } = metadataData;
 		const [results] = await this.query.filterBy(entityType, filters);
 		return this.extractResultIds(results);
 	}
 
 	async update(metadataData: UpdateInputData) {
-		const { id, entityType, rawMetadataArr } = metadataData.getSanitized();
+		const { id, entityType, rawMetadataArr } = metadataData;
 		const [updateData] = await this.query.update(
 			id,
 			entityType,
@@ -75,8 +67,7 @@ export class Database extends BaseDatabase {
 	}
 
 	async insert(metadataData: InsertInputData) {
-		const { entityId, entityType, rawMetadataArr } =
-			metadataData.getSanitized();
+		const { entityId, entityType, rawMetadataArr } = metadataData;
 
 		const [insertData] = await this.query.insert(
 			entityId,
@@ -87,7 +78,7 @@ export class Database extends BaseDatabase {
 	}
 
 	async deleteById(metadataData: DeleteInputData) {
-		const { id, entityId, entityType } = metadataData.getSanitized();
+		const { id, entityId, entityType } = metadataData;
 		const [deleteData] = await this.query.deleteById(entityType, id, entityId);
 
 		return deleteData;

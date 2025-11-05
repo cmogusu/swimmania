@@ -2,8 +2,7 @@ import type { RawDeleteAllRelatedInputData } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class DeleteAllInputData {
-	readonly entityId: number;
-
+	entityId: number;
 	validate: Validate;
 
 	constructor({ entityId }: RawDeleteAllRelatedInputData) {
@@ -12,7 +11,7 @@ export class DeleteAllInputData {
 	}
 
 	validateData() {
-		this.validate.id(this.entityId);
+		this.entityId = this.validate.id(this.entityId);
 	}
 
 	getSanitized() {

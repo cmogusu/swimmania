@@ -1,3 +1,4 @@
+import { JSDOM } from "jsdom";
 import z from "zod";
 import { BaseValidate } from "../../services/BaseValidate";
 
@@ -5,6 +6,7 @@ export class Validate extends BaseValidate {
 	filterValidator = z.array(
 		z.object({
 			name: this.nameValidator,
+			comparator: this.stringValidator,
 		}),
 	);
 
@@ -13,4 +15,4 @@ export class Validate extends BaseValidate {
 	}
 }
 
-export const ValidateInstance = new Validate();
+export const ValidateInstance = new Validate(new JSDOM().window);

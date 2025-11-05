@@ -1,3 +1,4 @@
+import { JSDOM } from "jsdom";
 import z from "zod";
 import { BaseValidate } from "@/server/Managers/services/BaseValidate";
 
@@ -19,44 +20,38 @@ export class Validate extends BaseValidate {
 	]);
 
 	eventNumber(event: number | string) {
-		this.eventNumberValidator.parse(event);
+		return this.eventNumberValidator.parse(event);
 	}
 
 	team(t: string) {
-		this.teamValidator.parse(t);
+		return this.teamValidator.parse(t);
 	}
 
 	distance(d: string) {
-		this.distanceValidator.parse(d);
+		return this.distanceValidator.parse(d);
 	}
 
 	distanceUnit(u: string) {
-		this.distanceUnitValidator.parse(u);
+		return this.distanceUnitValidator.parse(u);
 	}
 
 	stroke(s: string) {
-		this.strokeValidator.parse(s);
+		return this.strokeValidator.parse(s);
 	}
 
 	thirdName(name?: string) {
 		if (name) {
-			this.name(name);
+			return this.name(name);
 		}
 	}
 
 	rank(rank: number) {
-		this.rankValidator.parse(rank);
-	}
-
-	age(age?: number) {
-		if (age) {
-			super.age(age);
-		}
+		return this.rankValidator.parse(rank);
 	}
 
 	ageGroup(ageGroup: string) {
-		this.ageGroupValidator.parse(ageGroup);
+		return this.ageGroupValidator.parse(ageGroup);
 	}
 }
 
-export const ValidateInstance = new Validate();
+export const ValidateInstance = new Validate(new JSDOM().window);

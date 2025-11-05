@@ -23,75 +23,107 @@ export class Database extends BaseDatabase {
 	}
 
 	async getRelated(relationData: GetInputData): Promise<number[]> {
-		const metadata = relationData.getSanitized();
+		const {
+			entityType,
+			entityId,
+			relatedEntityType,
+			relationshipType,
+			pageSize,
+			offset,
+		} = relationData;
 		const [entityIds] = await this.query.getRelated(
-			metadata.entityType,
-			metadata.entityId,
-			metadata.relatedEntityType,
-			this.removeInverseRelationship(metadata.relationshipType),
-			metadata.pageSize,
-			metadata.offset,
+			entityType,
+			entityId,
+			relatedEntityType,
+			this.removeInverseRelationship(relationshipType),
+			pageSize,
+			offset,
 		);
 
 		return this.extractResultIds(entityIds);
 	}
 
 	async getNonRelated(relationData: GetInputData): Promise<number[]> {
-		const metadata = relationData.getSanitized();
+		const {
+			entityType,
+			entityId,
+			relatedEntityType,
+			relationshipType,
+			pageSize,
+			offset,
+		} = relationData;
 		const [entityIds] = await this.query.getNonRelated(
-			metadata.entityType,
-			metadata.entityId,
-			metadata.relatedEntityType,
-			this.removeInverseRelationship(metadata.relationshipType),
-			metadata.pageSize,
-			metadata.offset,
+			entityType,
+			entityId,
+			relatedEntityType,
+			this.removeInverseRelationship(relationshipType),
+			pageSize,
+			offset,
 		);
 
 		return this.extractResultIds(entityIds);
 	}
 
 	async hasExisting(relationData: InsertInputData): Promise<boolean> {
-		const metadata = relationData.getSanitized();
+		const {
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			relationshipType,
+		} = relationData;
 		const [itemId] = await this.query.hasExisting(
-			metadata.entityType,
-			metadata.entityId,
-			metadata.relatedEntityType,
-			metadata.relatedEntityId,
-			this.removeInverseRelationship(metadata.relationshipType),
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			this.removeInverseRelationship(relationshipType),
 		);
 
 		return Boolean(itemId);
 	}
 
 	async insert(relationData: InsertInputData) {
-		const metadata = relationData.getSanitized();
+		const {
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			relationshipType,
+		} = relationData;
 		const [insertData] = await this.query.insert(
-			metadata.entityType,
-			metadata.entityId,
-			metadata.relatedEntityType,
-			metadata.relatedEntityId,
-			this.removeInverseRelationship(metadata.relationshipType),
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			this.removeInverseRelationship(relationshipType),
 		);
 
 		return insertData;
 	}
 
 	async deleteById(relationData: DeleteInputData) {
-		const metadata = relationData.getSanitized();
+		const {
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			relationshipType,
+		} = relationData;
 		const [deleteData] = await this.query.deleteById(
-			metadata.entityType,
-			metadata.entityId,
-			metadata.relatedEntityType,
-			metadata.relatedEntityId,
-			this.removeInverseRelationship(metadata.relationshipType),
+			entityType,
+			entityId,
+			relatedEntityType,
+			relatedEntityId,
+			this.removeInverseRelationship(relationshipType),
 		);
 
 		return deleteData;
 	}
 
 	async deleteAll(relationData: DeleteAllInputData) {
-		const metadata = relationData.getSanitized();
-		const [deleteData] = await this.query.deleteAll(metadata.entityId);
+		const { entityId } = relationData;
+		const [deleteData] = await this.query.deleteAll(entityId);
 
 		return deleteData;
 	}

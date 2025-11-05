@@ -12,8 +12,7 @@ export class FilterInputData extends BaseInputData {
 	entityType: EntityType;
 	filters: MetadataFilter[];
 	entityMetadata: IEntityMetadata;
-
-	readonly validate: Validate;
+	validate: Validate;
 
 	constructor({
 		entityType,
@@ -33,21 +32,11 @@ export class FilterInputData extends BaseInputData {
 
 		this.pageSize = pageSize;
 		this.pageNumber = pageNumber;
-
 		this.validate = ValidateInstance;
 	}
 
 	validateData() {
 		this.validate.filters(this.filters);
 		this.filters = this.entityMetadata.validateFilters(this.filters);
-	}
-
-	getSanitized() {
-		return {
-			entityType: this.entityType,
-			filters: this.filters,
-			offset: this.offset,
-			pageSize: this.pageSize,
-		};
 	}
 }

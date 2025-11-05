@@ -11,12 +11,6 @@ export class DeleteInputData {
 	}
 
 	validateData() {
-		this.validate.id(this.entityId);
-	}
-
-	getSanitized() {
-		return {
-			entityId: this.entityId,
-		};
+		this.entityId = this.validate.id(this.entityId);
 	}
 }

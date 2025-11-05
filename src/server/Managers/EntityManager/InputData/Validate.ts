@@ -1,3 +1,4 @@
+import { JSDOM } from "jsdom";
 import z from "zod";
 import { BaseValidate } from "@/server/Managers/services/BaseValidate";
 import type { MetadataFilter } from "@/server/types";
@@ -24,4 +25,4 @@ export class Validate extends BaseValidate {
 	}
 }
 
-export const ValidateInstance = new Validate();
+export const ValidateInstance = new Validate(new JSDOM().window);

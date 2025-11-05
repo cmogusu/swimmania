@@ -26,10 +26,4 @@ export class GetByIdInputData implements ILoadableEntity {
 	validateData() {
 		this.entityId = this.validate.id(this.entityId);
 	}
-
-	getSanitized() {
-		return {
-			entityId: this.entityId,
-		};
-	}
 }

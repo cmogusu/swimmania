@@ -11,18 +11,17 @@ import {
 	writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import * as z from "zod";
-import { EditImages } from "@/account/components/EditEntity/EditImages";
+import DOMPurify from "dompurify";
+import { JSDOM } from "jsdom";
 import { UPLOADS_FOLDER } from "@/server/constants/paths";
 
 export default async function Page() {
-	return (
-		<div>
-			<div className="p-6">
-				<EditImages entityType="pool" entityId={6} />
-			</div>
-		</div>
-	);
+	// console.log(cleaned);
+	const { window } = new JSDOM();
+	const domPurify = DOMPurify(window);
+	const cleaned = domPurify.sanitize("<p>hello world</p>");
+	console.log(cleaned);
+	return <div className="p-6">hello</div>;
 }
 
 export async function x() {

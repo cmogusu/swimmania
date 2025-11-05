@@ -4,11 +4,10 @@ import type { RawGetRelatedInputData } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class GetInputData extends BaseInputData {
-	readonly entityType: EntityType;
-	readonly entityId: number;
-	readonly relatedEntityType: EntityType;
-	readonly relationshipType: RelationshipType;
-
+	entityType: EntityType;
+	entityId: number;
+	relatedEntityType: EntityType;
+	relationshipType: RelationshipType;
 	validate: Validate;
 
 	constructor({
@@ -27,31 +26,17 @@ export class GetInputData extends BaseInputData {
 		this.relationshipType = relationshipType;
 		this.pageSize = pageSize;
 		this.pageNumber = pageNumber;
-
 		this.validate = ValidateInstance;
 	}
 
 	validateData() {
-		this.validate.entityType(this.entityType);
-		this.validate.id(this.entityId);
-		this.validate.entityType(this.relatedEntityType);
+		this.entityType = this.validate.entityType(this.entityType);
+		this.entityId = this.validate.id(this.entityId);
+		this.entityType = this.validate.entityType(this.relatedEntityType);
 		this.validate.relationshipType(
 			this.entityType,
 			this.relatedEntityType,
 			this.relationshipType,
 		);
-	}
-
-	getSanitized() {
-		// No need to sanitize data since it is not stored in db
-
-		return {
-			entityType: this.entityType,
-			entityId: this.entityId,
-			relatedEntityType: this.relatedEntityType,
-			relationshipType: this.relationshipType,
-			offset: this.offset,
-			pageSize: this.pageSize,
-		};
 	}
 }

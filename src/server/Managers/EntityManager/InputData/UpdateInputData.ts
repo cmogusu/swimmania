@@ -11,13 +11,6 @@ export class UpdateInputData extends InsertInputData {
 
 	validateData() {
 		super.validateData();
-		this.validate.id(this.entityId);
-	}
-
-	getSanitized() {
-		return {
-			entityId: this.entityId,
-			...super.getSanitized(),
-		};
+		this.entityId = this.validate.id(this.entityId);
 	}
 }

@@ -27,7 +27,7 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetAllInputData,
 	): Promise<RawEntity[]> {
-		const { pageSize, offset } = inputData.getSanitized();
+		const { pageSize, offset } = inputData;
 		const [rawEntities] = await this.query.getByType(
 			entityType,
 			pageSize,
@@ -40,7 +40,7 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetByIdsInputData,
 	): Promise<RawEntity[]> {
-		const { entityIds } = inputData.getSanitized();
+		const { entityIds } = inputData;
 		const [rawEntities] = await this.query.getByIds(entityType, entityIds);
 		return rawEntities as RawEntity[];
 	}
@@ -49,7 +49,7 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetByIdInputData,
 	): Promise<RawEntity> {
-		const { entityId } = inputData.getSanitized();
+		const { entityId } = inputData;
 		const [rawEntities] = await this.query.getById(entityType, entityId);
 		const rawEntity = (rawEntities as RawEntity[])?.[0];
 		if (!rawEntity) {
@@ -63,7 +63,7 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetByNameInputData,
 	): Promise<RawEntity> {
-		const { name } = inputData.getSanitized();
+		const { name } = inputData;
 		const [rawEntities] = await this.query.getByName(entityType, name);
 		const rawEntity = (rawEntities as RawEntity[])?.[0];
 		if (!rawEntity) {
@@ -74,30 +74,26 @@ export class Database extends BaseDatabase {
 	}
 
 	async update(entityType: EntityType, inputData: UpdateInputData) {
-		const cleanEntity = inputData.getSanitized();
+		const { entityId, name, description } = inputData;
 		const [updateData] = await this.query.update(
 			entityType,
-			cleanEntity.entityId,
-			cleanEntity.name,
-			cleanEntity.description,
+			entityId,
+			name,
+			description,
 		);
 
 		return updateData;
 	}
 
 	async insert(entityType: EntityType, inputData: InsertInputData) {
-		const cleanEntity = inputData.getSanitized();
-		const [insertData] = await this.query.insert(
-			entityType,
-			cleanEntity.name,
-			cleanEntity.description,
-		);
+		const { name, description } = inputData;
+		const [insertData] = await this.query.insert(entityType, name, description);
 
 		return insertData;
 	}
 
 	async deleteById(entityType: EntityType, inputData: DeleteInputData) {
-		const { entityId } = inputData.getSanitized();
+		const { entityId } = inputData;
 		const [deleteData] = await this.query.deleteById(entityType, entityId);
 		return deleteData;
 	}

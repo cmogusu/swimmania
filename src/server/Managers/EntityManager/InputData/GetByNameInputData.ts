@@ -24,12 +24,6 @@ export class GetByNameInputData implements ILoadableEntity {
 	}
 
 	validateData() {
-		this.validate.name(this.name);
-	}
-
-	getSanitized() {
-		return {
-			name: this.name,
-		};
+		this.name = this.validate.name(this.name);
 	}
 }
