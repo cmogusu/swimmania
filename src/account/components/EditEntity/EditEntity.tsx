@@ -16,7 +16,6 @@ const show = false;
 export const EditEntity = async ({ entityType, entityId }: Props) => {
 	const loggedInUserId = await getLoggedInUserId();
 	const entity = await api.getEntity(entityType, entityId);
-	const { images } = entity || {};
 
 	if (!loggedInUserId) {
 		return redirect("/login");
@@ -49,7 +48,7 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 				/>
 			</section>
 
-			{show && <EditImages entityId={entityId} images={images} />}
+			{show && <EditImages entityId={entityId} entityType={entityType} />}
 
 			<EditMetadata entityType={entityType} entityId={entityId} />
 

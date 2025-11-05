@@ -85,29 +85,58 @@ export async function updateEntity(formData: FormData) {
 	}
 }
 
-export async function updateImage(formData: FormData) {
+export async function getImages(entityId: number) {
+	return api.getImages(entityId);
+}
+
+export async function setDefaultImage(formData: FormData) {
 	const data = extractFormData(formData, [
 		"entityType",
 		"entityId",
 		"id",
-		"alt",
-		"filepath",
 		"isDefault",
 	]);
 
 	const entityType = data.entityType as EntityType;
 	const entityId = Number(data.entityId);
 	const id = Number(data.id);
-	const alt = data.alt as string;
-	const filepath = data.filepath as string;
 	const isDefault = Boolean(data.isDefault);
 
-	if (id > -1) {
-		await api.updateImage(entityId, id, alt, filepath, isDefault);
-	} else {
-		await api.insertImage(entityId, alt, filepath, isDefault);
-	}
+	await api.setDefaultImage(entityId, id, isDefault);
+	reloadEditPage(entityType, `${entityId}`);
+}
 
+export async function updateImage(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityType",
+		"entityId",
+		"id",
+		"alt",
+	]);
+
+	const entityType = data.entityType as EntityType;
+	const entityId = Number(data.entityId);
+	const id = Number(data.id);
+	const alt = data.alt as string;
+
+	await api.updateImage(entityId, id, alt);
+	reloadEditPage(entityType, `${entityId}`);
+}
+
+export async function addImage(formData: FormData) {
+	const data = extractFormData(formData, [
+		"entityType",
+		"entityId",
+		"alt",
+		"image",
+	]);
+
+	const entityType = data.entityType as EntityType;
+	const entityId = Number(data.entityId);
+	const alt = data.alt as string;
+	const imageFile = data.image as unknown as File;
+
+	await api.insertImage(entityId, alt, imageFile);
 	reloadEditPage(entityType, `${entityId}`);
 }
 

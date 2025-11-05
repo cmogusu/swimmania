@@ -4,6 +4,7 @@ import {
 	metadataManagerFactory,
 	relatedEntityManagerFactory,
 } from "@/server/Managers";
+import { createFile } from "@/utilities/file";
 import { POSTS_PER_PAGE } from "../constants/entity";
 import { Log } from "../services";
 import type {
@@ -178,21 +179,37 @@ export class Api {
 		}
 	}
 
-	async updateImage(
-		entityId: number,
-		id: number,
-		alt: string,
-		filepath: string,
-		isDefault: boolean,
-	) {
+	async getImages(entityId: number) {
+		try {
+			const imageManager = imageManagerFactory.getInstance();
+			return await imageManager.getAll({
+				entityId,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to get images", error as Error);
+		}
+	}
+
+	async setDefault(entityId: number, id: number, isDefault: boolean) {
+		try {
+			const imageManager = imageManagerFactory.getInstance();
+			return await imageManager.setDefault({
+				id,
+				entityId,
+				isDefault,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to set default image", error as Error);
+		}
+	}
+
+	async updateImage(entityId: number, id: number, alt: string) {
 		try {
 			const imageManager = imageManagerFactory.getInstance();
 			return await imageManager.update({
-				id,
 				entityId,
+				id,
 				alt,
-				filepath,
-				isDefault,
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to update image";
@@ -200,23 +217,31 @@ export class Api {
 		}
 	}
 
-	async insertImage(
-		entityId: number,
-		alt: string,
-		filepath: string,
-		isDefault: boolean,
-	) {
+	async insertImage(entityId: number, alt: string, imageFile: File) {
 		try {
 			const imageManager = imageManagerFactory.getInstance();
+			const filepath = await createFile(imageFile);
 			return await imageManager.insert({
 				entityId,
 				alt,
 				filepath,
-				isDefault,
 			});
 		} catch (error: unknown) {
 			const errorMessage = "Unable to create image";
 			this.log.error(errorMessage, error as Error);
+		}
+	}
+
+	async setDefaultImage(entityId: number, id: number, isDefault: boolean) {
+		try {
+			const imageManager = imageManagerFactory.getInstance();
+			return await imageManager.setDefault({
+				id,
+				entityId,
+				isDefault,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to set default image", error as Error);
 		}
 	}
 

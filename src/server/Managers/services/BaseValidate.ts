@@ -1,6 +1,7 @@
 import * as z from "zod";
 import { EntityTypes, MAX_TEXT_LENGTH } from "@/server/constants";
 import type { EntityType } from "@/server/types";
+// import DOMPurify from "dompurify";
 
 export class BaseValidate {
 	idValidator = z.coerce
@@ -103,4 +104,10 @@ export class BaseValidate {
 				.join(", ");
 		}
 	}
+
+	sanitizeString = (v: string) => {
+		// TODO: Fix sanitize function
+		// return DOMPurify.sanitize(v);
+		return v;
+	};
 }

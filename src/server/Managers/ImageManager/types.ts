@@ -18,44 +18,33 @@ export type ImageDatabaseRawOutputData = {
 export type ImageDatabaseOutputData = Required<ImageDatabaseRawOutputData>;
 
 // Inputs
-export type ImageGetAllRawInputs = {
+export type RawGetAllImageInputs = {
 	entityId: number;
 };
 
-export type ImageDefaultRawInputs = ImageGetAllRawInputs;
-
-export type ImageGetByIdRawInputs = {
-	id: number;
+export type RawGetDefaultImageInputs = {
 	entityId: number;
 };
 
-export type ImageUpdateRawInputs = {
+export type RawSetDefaultImageInputs = {
 	id: number;
+	entityId: number;
+	isDefault: boolean;
+};
+
+export type RawUpdateImageInputs = {
+	id: number;
+	entityId: number;
+	alt: string;
+};
+
+export type RawInsertImageInputs = {
 	entityId: number;
 	alt: string;
 	filepath: string;
-	isDefault: boolean;
-	file?: ImageFileDataItem;
 };
 
-export type ImagePostRawInputs = {
-	entityId: number;
-	alt: string;
-	filepath?: string;
-	isDefault: boolean;
-	file?: ImageFileDataItem;
-};
-
-export type ImageDeleteRawInputs = {
+export type RawDeleteImageInputs = {
 	id: number;
 	entityId: number;
-};
-
-export type RawImageInputs = {
-	id?: number;
-	entityId: number;
-	alt?: string;
-	filepath?: string;
-	isDefault?: boolean;
-	file?: ImageFileDataItem;
 };

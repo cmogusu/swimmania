@@ -3,7 +3,6 @@ import type {
 	MetadataFilter,
 	PaginationOptions,
 } from "@/server/types";
-import type { RawImageInputs } from "../ImageManager";
 
 // Outputs
 export type RawEntity = {
@@ -46,7 +45,6 @@ export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 export type RawInsertEntityInputs = {
 	name: string;
 	description?: string;
-	images?: RawImageInputs[];
 };
 
 export type RawDeleteEntityInputs = {
@@ -57,7 +55,6 @@ export type RawEntityInputs = {
 	id?: number;
 	name: string;
 	description?: string;
-	images?: RawImageInputs[];
 };
 
 export interface ILoadableEntity {

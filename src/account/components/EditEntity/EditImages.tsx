@@ -1,17 +1,24 @@
 import Image from "next/image";
-import { updateImage } from "@/server/api/apiActions";
-import type { ImageData } from "@/server/types";
-import { AddImage } from "./AddImage";
-import { ImageForm } from "./ImageForm";
+import { getImages } from "@/server/api/apiActions";
+import type { EntityType, ImageData } from "@/server/types";
+import { AddImageForm } from "./AddImageForm";
+import { EditImageForm } from "./EditImageForm";
 
 type EditImagesProps = {
 	entityId: number;
-	images: ImageData[] | undefined;
+	entityType: EntityType;
 };
 
-export const EditImages = ({ entityId, images }: EditImagesProps) => {
+export const EditImages = async ({ entityId, entityType }: EditImagesProps) => {
+	const images = await getImages(entityId);
 	const defaultImage = (images || []).find((i) => i.isDefault);
-	const nonDefaultImage = (images || []).filter((i) => !i.isDefault);
+	const nonDefaultImages = (images || []).filter((i) => !i.isDefault);
+	const newImage = createEmptyImage();
+	// console.log(images, nonDefaultImages)
+
+	if (!images) {
+		return "No images found";
+	}
 
 	return (
 		<section className="mb-4">
@@ -30,14 +37,14 @@ export const EditImages = ({ entityId, images }: EditImagesProps) => {
 				</div>
 			)}
 
-			{!!nonDefaultImage?.length && (
+			{!!nonDefaultImages?.length && (
 				<div className="mb-4">
-					<h4>Update</h4>
-					{nonDefaultImage.map((image) => (
+					<h4>Update existing image</h4>
+					{nonDefaultImages.map((image) => (
 						<div key={image.id} className="mb-2 ml-2">
 							<div className="border rounded-box mb-4 p-4">
-								<ImageForm
-									action={updateImage}
+								<EditImageForm
+									entityType={entityType}
 									entityId={entityId}
 									image={image}
 								/>
@@ -47,7 +54,23 @@ export const EditImages = ({ entityId, images }: EditImagesProps) => {
 				</div>
 			)}
 
-			<AddImage entityId={entityId} />
+			<div className="mb-4">
+				<h4>Upoad new image</h4>
+				<div className="border rounded-box mb-4 p-4">
+					<AddImageForm
+						entityType={entityType}
+						entityId={entityId}
+						image={newImage}
+					/>
+				</div>
+			</div>
 		</section>
 	);
 };
+
+const createEmptyImage = (): ImageData => ({
+	id: -1,
+	alt: "",
+	src: "",
+	isDefault: true,
+});

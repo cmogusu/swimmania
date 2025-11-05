@@ -12,62 +12,17 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import * as z from "zod";
-import { Header } from "@/account/components/Header";
+import { EditImages } from "@/account/components/EditEntity/EditImages";
 import { UPLOADS_FOLDER } from "@/server/constants/paths";
 
 export default async function Page() {
 	return (
 		<div>
-			<Header entityType="pool" />
 			<div className="p-6">
-				<form action={handleSignIn} className="mb-5">
-					<button className="btn btn-sm" type="submit">
-						Sign In
-					</button>
-				</form>
-
-				<form action={handleSignOut} className="mb-5">
-					<button className="btn btn-sm" type="submit">
-						Sign out
-					</button>
-				</form>
-
-				<form action={handleUpload}>
-					<div>
-						<input
-							className="input input-md input-primary"
-							type="file"
-							accept="image/*"
-							name="image"
-						/>
-					</div>
-					<div>
-						<input
-							type="datetime-local"
-							name="dateTime"
-							className="input input-md input-primary"
-						/>
-					</div>
-					<button className="btn btn-sm" type="submit">
-						Upload Image
-					</button>
-				</form>
+				<EditImages entityType="pool" entityId={6} />
 			</div>
 		</div>
 	);
-}
-
-async function handleUpload(formData: FormData) {
-	"use server";
-
-	const dateTime = formData.get("dateTime") as string;
-	console.log(dateTime);
-
-	try {
-		z.iso.datetime({ local: true }).parse(dateTime);
-	} catch (e) {
-		console.log(e);
-	}
 }
 
 export async function x() {

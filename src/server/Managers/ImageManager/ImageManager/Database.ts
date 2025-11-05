@@ -1,6 +1,12 @@
-/** biome-ignore-all lint/style/noNonNullAssertion: TODO: Find better solution to avoid non null assertions */
 import { BaseDatabase } from "../../services/BaseDatabase";
-import type { ImageInputData } from "../ImageInputData";
+import type {
+	DeleteInputData,
+	GetAllInputData,
+	GetDefaultInputData,
+	InsertInputData,
+	SetDefaultInputData,
+	UpdateInputData,
+} from "../InputData";
 import type { ImageDatabaseRawOutputData } from "../types";
 import { Query } from "./Query";
 
@@ -13,57 +19,47 @@ export class Database extends BaseDatabase {
 	}
 
 	async getAll(
-		imageData: ImageInputData,
+		imageData: GetAllInputData,
 	): Promise<ImageDatabaseRawOutputData[]> {
-		const image = imageData.toJSON();
-		const [rawImages] = await this.query.getAll(image.entityId);
+		const { entityId } = imageData;
+		const [rawImages] = await this.query.getAll(entityId);
 		return rawImages as ImageDatabaseRawOutputData[];
 	}
 
 	async getDefault(
-		imageData: ImageInputData,
+		imageData: GetDefaultInputData,
 	): Promise<ImageDatabaseRawOutputData> {
-		const image = imageData.toJSON();
-		const [rawImages] = await this.query.getDefault(image.entityId);
+		const { entityId } = imageData;
+		const [rawImages] = await this.query.getDefault(entityId);
 		return (rawImages as ImageDatabaseRawOutputData[])?.[0];
 	}
 
-	async getByImageId(
-		imageData: ImageInputData,
-	): Promise<ImageDatabaseRawOutputData[]> {
-		const image = imageData.toJSON();
-		const [rawImages] = await this.query.getById(image.entityId, image.id!);
-		return (rawImages as ImageDatabaseRawOutputData[])?.[0];
-	}
-
-	async update(imageData: ImageInputData) {
-		const image = imageData.toJSON();
-		const [updateData] = await this.query.update(
-			image.id!,
-			image.entityId,
-			image.alt!,
-			image.filepath!,
-			image.isDefault!,
-		);
+	async setDefault(imageData: SetDefaultInputData) {
+		const { id, entityId, isDefault } = imageData;
+		const [updateData] = isDefault
+			? await this.query.setDefault(entityId, id)
+			: await this.query.removeDefault(entityId, id);
 
 		return updateData;
 	}
 
-	async insert(imageData: ImageInputData) {
-		const image = imageData.toJSON();
-		const [insertData] = await this.query.insert(
-			image.entityId,
-			image.alt!,
-			image.filepath!,
-			image.isDefault!,
-		);
+	async update(imageData: UpdateInputData) {
+		const { id, entityId, alt } = imageData;
+		const [updateData] = await this.query.update(id, entityId, alt);
+
+		return updateData;
+	}
+
+	async insert(imageData: InsertInputData) {
+		const { entityId, alt, filepath } = imageData;
+		const [insertData] = await this.query.insert(entityId, alt, filepath);
 
 		return insertData;
 	}
 
-	async deleteById(imageData: ImageInputData) {
-		const image = imageData.toJSON();
-		const [deleteData] = await this.query.deleteById(image.id!, image.entityId);
+	async deleteById(imageData: DeleteInputData) {
+		const { id, entityId } = imageData;
+		const [deleteData] = await this.query.deleteById(id, entityId);
 
 		return deleteData;
 	}
