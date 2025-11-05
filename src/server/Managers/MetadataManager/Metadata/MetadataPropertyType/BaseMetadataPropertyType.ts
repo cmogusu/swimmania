@@ -6,7 +6,7 @@ import type {
 	RawMetadata,
 	SchemaType,
 } from "@/server/types";
-import { isSet, isUndefined } from "@/server/utils";
+import { isUndefined } from "@/server/utils";
 import type { MetadataTypeInputs } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
@@ -61,12 +61,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 			name: this.name,
 			type: this.dbColumnType,
 		};
-	}
-
-	set(target: unknown, source?: unknown) {
-		if (isSet(source)) {
-			target = source;
-		}
 	}
 
 	get value(): MetadataValue {

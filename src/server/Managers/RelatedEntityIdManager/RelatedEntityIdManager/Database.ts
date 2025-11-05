@@ -6,6 +6,7 @@ import type {
 	DeleteAllInputData,
 	DeleteInputData,
 	GetInputData,
+	HasRelationshipInputData,
 	InsertInputData,
 } from "../InputData";
 import { Query } from "./Query";
@@ -23,107 +24,73 @@ export class Database extends BaseDatabase {
 	}
 
 	async getRelated(relationData: GetInputData): Promise<number[]> {
-		const {
-			entityType,
-			entityId,
-			relatedEntityType,
-			relationshipType,
-			pageSize,
-			offset,
-		} = relationData;
 		const [entityIds] = await this.query.getRelated(
-			entityType,
-			entityId,
-			relatedEntityType,
-			this.removeInverseRelationship(relationshipType),
-			pageSize,
-			offset,
+			relationData.entityType,
+			relationData.entityId,
+			relationData.relatedEntityType,
+			this.removeInverseRelationship(relationData.relationshipType),
+			relationData.pageSize,
+			relationData.offset,
 		);
 
 		return this.extractResultIds(entityIds);
 	}
 
 	async getNonRelated(relationData: GetInputData): Promise<number[]> {
-		const {
-			entityType,
-			entityId,
-			relatedEntityType,
-			relationshipType,
-			pageSize,
-			offset,
-		} = relationData;
 		const [entityIds] = await this.query.getNonRelated(
-			entityType,
-			entityId,
-			relatedEntityType,
-			this.removeInverseRelationship(relationshipType),
-			pageSize,
-			offset,
+			relationData.entityType,
+			relationData.entityId,
+			relationData.relatedEntityType,
+			this.removeInverseRelationship(relationData.relationshipType),
+			relationData.pageSize,
+			relationData.offset,
 		);
 
 		return this.extractResultIds(entityIds);
 	}
 
-	async hasExisting(relationData: InsertInputData): Promise<boolean> {
-		const {
-			entityType,
-			entityId,
-			relatedEntityType,
-			relatedEntityId,
-			relationshipType,
-		} = relationData;
+	async hasExisting(relationData: HasRelationshipInputData): Promise<boolean> {
 		const [itemId] = await this.query.hasExisting(
-			entityType,
-			entityId,
-			relatedEntityType,
-			relatedEntityId,
-			this.removeInverseRelationship(relationshipType),
+			relationData.entityType,
+			relationData.entityId,
+			relationData.relatedEntityType,
+			relationData.relatedEntityId,
+			this.removeInverseRelationship(relationData.relationshipType),
 		);
 
 		return Boolean(itemId);
 	}
 
 	async insert(relationData: InsertInputData) {
-		const {
-			entityType,
-			entityId,
-			relatedEntityType,
-			relatedEntityId,
-			relationshipType,
-		} = relationData;
 		const [insertData] = await this.query.insert(
-			entityType,
-			entityId,
-			relatedEntityType,
-			relatedEntityId,
-			this.removeInverseRelationship(relationshipType),
+			relationData.entityType,
+			relationData.entityId,
+			relationData.relatedEntityType,
+			relationData.relatedEntityId,
+			this.removeInverseRelationship(relationData.relationshipType),
 		);
 
 		return insertData;
 	}
 
 	async deleteById(relationData: DeleteInputData) {
-		const {
-			entityType,
-			entityId,
-			relatedEntityType,
-			relatedEntityId,
-			relationshipType,
-		} = relationData;
 		const [deleteData] = await this.query.deleteById(
-			entityType,
-			entityId,
-			relatedEntityType,
-			relatedEntityId,
-			this.removeInverseRelationship(relationshipType),
+			relationData.entityType,
+			relationData.entityId,
+			relationData.relatedEntityType,
+			relationData.relatedEntityId,
+			this.removeInverseRelationship(relationData.relationshipType),
 		);
 
 		return deleteData;
 	}
 
 	async deleteAll(relationData: DeleteAllInputData) {
-		const { entityId } = relationData;
-		const [deleteData] = await this.query.deleteAll(entityId);
+		const [deleteData] = await this.query.deleteAll(
+			relationData.entityType,
+			relationData.entityId,
+			relationData.relatedEntityType,
+		);
 
 		return deleteData;
 	}

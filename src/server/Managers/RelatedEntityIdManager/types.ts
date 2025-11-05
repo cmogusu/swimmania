@@ -7,17 +7,17 @@ import type {
 // Input
 export type BaseRelatedData = {
 	entityType: EntityType;
-	entityId: number;
+	entityId: number | string;
 	relatedEntityType: EntityType;
 };
 
 export type RawRelatedEntityInputData = BaseRelatedData & {
-	relatedEntityId?: number;
+	relatedEntityId?: number | string;
 	relationshipType?: RelationshipType;
 };
 
 export type RawHasRelationshipData = BaseRelatedData & {
-	relatedEntityId: number;
+	relatedEntityId: number | string;
 	relationshipType: RelationshipType;
 };
 
@@ -27,21 +27,23 @@ export type RawGetRelatedInputData = BaseRelatedData &
 	};
 
 export type RawInsertRelatedInputData = BaseRelatedData & {
-	relatedEntityId: number;
+	relatedEntityId: number | string;
 	relationshipType: RelationshipType;
 };
 
 export type RawDeleteByIdRelatedInputData = BaseRelatedData & {
-	relatedEntityId: number;
+	relatedEntityId: number | string;
 	relationshipType: RelationshipType;
 };
 
 export type RawDeleteRelatedInputData = RawGetRelatedInputData & {
-	relatedEntityId: number;
+	relatedEntityId: number | string;
 };
 
 export type RawDeleteAllRelatedInputData = {
-	entityId: number;
+	entityType: EntityType;
+	entityId: number | string;
+	relatedEntityType: EntityType;
 };
 
 export type RawGetNonRelatedInputData = RawGetRelatedInputData;

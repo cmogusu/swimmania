@@ -7,7 +7,7 @@ import type {
 	MetadataFilter,
 	RawMetadata,
 } from "@/server/types";
-import { isSet, isUndefined } from "@/server/utils";
+import { isSet } from "@/server/utils";
 import type { MetadataPropertyInitializer } from "../types";
 import { getMetadataProperties } from "./utils";
 
@@ -50,14 +50,6 @@ export class BaseEntityMetadata implements IEntityMetadata {
 				? (property as IParentMetadataPropertyType).getDbTableColumns()
 				: property.getDbTableColumn(),
 		);
-	}
-
-	setValue(rawMetadata: RawMetadata) {
-		const { id, name, value } = rawMetadata;
-		const property = this.getProperty(name);
-
-		if (!isUndefined(id)) property.id = id;
-		if (!isUndefined(value)) property.value = value;
 	}
 
 	getProperty(name: string): IMetadataPropertyType {

@@ -1,10 +1,11 @@
+import { RELATIONSHIP_DB_TABLES } from "@/server/constants";
 import type { RelationshipType } from "@/server/types";
 import { BaseQuery } from "../../services";
 
 export class Query extends BaseQuery {
 	getRelated(
 		entityType: string,
-		entityId: number,
+		entityId: number | string,
 		relatedEntityType: string,
 		relationshipType: RelationshipType,
 		limit: number,
@@ -25,15 +26,16 @@ export class Query extends BaseQuery {
 			relatedEntityType,
 		);
 
+		const dbTable = this.getDbTable(entityType, relatedEntityType);
 		return this.exec(
-			`SELECT DISTINCT ${relatedColumn} AS id FROM \`relations\` WHERE ${activeColumn}=? AND relationship=? AND relationshipType=? LIMIT ? OFFSET ?;`,
+			`SELECT DISTINCT ${relatedColumn} AS id FROM \`${dbTable}\` WHERE ${activeColumn}=? AND relationship=? AND relationshipType=? LIMIT ? OFFSET ?;`,
 			[entityId, relationship, relationshipType, limit, offset],
 		);
 	}
 
 	async getNonRelated(
 		entityType: string,
-		entityId: number,
+		entityId: number | string,
 		relatedEntityType: string,
 		relationshipType: RelationshipType,
 		limit: number,
@@ -75,9 +77,9 @@ export class Query extends BaseQuery {
 
 	hasExisting(
 		entityType: string,
-		entityId: number,
+		entityId: number | string,
 		relatedEntityType: string,
-		relatedEntityId: number,
+		relatedEntityId: number | string,
 		relationshipType: RelationshipType,
 	) {
 		this.throwIfNotSet({
@@ -91,17 +93,18 @@ export class Query extends BaseQuery {
 		const { entityId1, entityId2, activeColumn, relatedColumn, relationship } =
 			this.getColumns(entityType, entityId, relatedEntityType, relatedEntityId);
 
+		const dbTable = this.getDbTable(entityType, relatedEntityType);
 		return this.exec(
-			`SELECT id FROM \`relations\` WHERE ${activeColumn}=? AND ${relatedColumn}=? AND relationship=? AND relationshipType=? `,
+			`SELECT id FROM \`${dbTable}\` WHERE ${activeColumn}=? AND ${relatedColumn}=? AND relationship=? AND relationshipType=? `,
 			[entityId1, entityId2, relationship, relationshipType],
 		);
 	}
 
 	insert(
 		entityType: string,
-		entityId: number,
+		entityId: number | string,
 		relatedEntityType: string,
-		relatedEntityId: number,
+		relatedEntityId: number | string,
 		relationshipType: RelationshipType,
 	) {
 		this.throwIfNotSet({
@@ -112,6 +115,7 @@ export class Query extends BaseQuery {
 			relationshipType,
 		});
 
+		const dbTable = this.getDbTable(entityType, relatedEntityType);
 		const { entityId1, entityId2, relationship } = this.getColumns(
 			entityType,
 			entityId,
@@ -120,16 +124,16 @@ export class Query extends BaseQuery {
 		);
 
 		return this.exec(
-			`INSERT INTO \`relations\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, ?, ?);`,
+			`INSERT INTO \`${dbTable}\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, ?, ?);`,
 			[entityId1, entityId2, relationship, relationshipType],
 		);
 	}
 
 	deleteById(
 		entityType: string,
-		entityId: number,
+		entityId: number | string,
 		relatedEntityType: string,
-		relatedEntityId: number,
+		relatedEntityId: number | string,
 		relationshipType: RelationshipType,
 	) {
 		this.throwIfNotSet({
@@ -147,28 +151,34 @@ export class Query extends BaseQuery {
 			relatedEntityId,
 		);
 
+		const dbTable = this.getDbTable(entityType, relatedEntityType);
 		return this.exec(
-			`DELETE FROM \`relations\` WHERE entityId1=? AND entityId2=? AND relationship=? AND relationshipType=?;`,
+			`DELETE FROM \`${dbTable}\` WHERE entityId1=? AND entityId2=? AND relationship=? AND relationshipType=?;`,
 			[entityId1, entityId2, relationship, relationshipType],
 		);
 	}
 
-	deleteAll(entityId: number) {
+	deleteAll(
+		entityType: string,
+		entityId: number | string,
+		relatedEntityType: string,
+	) {
 		this.throwIfNotSet({
 			entityId,
 		});
 
+		const dbTable = this.getDbTable(entityType, relatedEntityType);
 		return this.exec(
-			`DELETE FROM \`relations\` WHERE entityId1=? OR entityId2=?;`,
+			`DELETE FROM \`${dbTable}\` WHERE entityId1=? OR entityId2=?;`,
 			[entityId, entityId],
 		);
 	}
 
 	getColumns(
 		entityType: string,
-		entityId: number,
+		entityId: number | string,
 		relatedEntityType: string,
-		relatedEntityId?: number,
+		relatedEntityId?: number | string,
 	) {
 		const sortedEntityTypes = [entityType, relatedEntityType].sort();
 		const entityTypeIndex = sortedEntityTypes.indexOf(entityType);
@@ -185,5 +195,17 @@ export class Query extends BaseQuery {
 
 	getLimitQuery(limit?: number, offset?: number) {
 		return limit && offset ? `LIMIT ${limit} OFFSET ${offset}` : "";
+	}
+
+	getDbTable(entityType: string, relatedEntityType: string): string {
+		if (entityType in RELATIONSHIP_DB_TABLES) {
+			return RELATIONSHIP_DB_TABLES[entityType];
+		}
+
+		if (relatedEntityType in RELATIONSHIP_DB_TABLES) {
+			return RELATIONSHIP_DB_TABLES[relatedEntityType];
+		}
+
+		return "relations";
 	}
 }

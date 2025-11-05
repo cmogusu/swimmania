@@ -1,47 +1,45 @@
+import { auth } from "auth";
+import type { User } from "next-auth";
 import { PrivateEntityTypesObj } from "@/server/constants";
 import type { EntityType, RelationshipType } from "@/server/types";
 import { isUndefined } from "@/server/utils";
-import { type EntityManager, entityManagerFactory } from "../EntityManager";
-import {
-	type MetadataManager,
-	metadataManagerFactory,
-} from "../MetadataManager";
 import { RelatedEntityIdManager } from "../RelatedEntityIdManager";
 
-const ADMIN_IDS = [122];
+const ADMIN_IDS = ["adminId"];
 
 export class UserManager extends RelatedEntityIdManager {
+	entityType: EntityType;
 	userEntityType: EntityType = "user";
 	userRelationshipType: RelationshipType = "owns_inverse";
 
-	userEntityManager: EntityManager;
-	userMetadataManager: MetadataManager;
-
-	constructor() {
+	constructor(entityType: EntityType) {
 		super();
-
-		this.userMetadataManager = metadataManagerFactory.getInstance();
-		this.userEntityManager = entityManagerFactory.getInstance(
-			this.userEntityType,
-		);
+		this.entityType = entityType;
 	}
 
-	canViewEntities(entityType: EntityType, userId: number) {
-		const isPrivateEntityType = entityType in PrivateEntityTypesObj;
+	async getUser(): Promise<User | undefined> {
+		const session = await auth();
+		return session?.user;
+	}
+
+	async canViewEntities() {
+		const isPrivateEntityType = this.entityType in PrivateEntityTypesObj;
 		if (!isPrivateEntityType) {
 			return true;
 		}
 
-		if (this.isAdmin(userId)) {
+		const isAdmin = await this.isAdmin();
+		if (isAdmin) {
 			return true;
 		}
 
 		return false;
 	}
 
-	canViewEntity(entityType: EntityType) {
-		if (entityType === this.userEntityType) {
-			return false;
+	canViewEntity(_entityId: number) {
+		const isPrivateEntityType = this.entityType in PrivateEntityTypesObj;
+		if (!isPrivateEntityType) {
+			return true;
 		}
 
 		return true;
@@ -55,84 +53,51 @@ export class UserManager extends RelatedEntityIdManager {
 		return true;
 	}
 
-	isAdmin(userId: number) {
-		return ADMIN_IDS.includes(userId);
+	async canEditEntity(entityId: number): Promise<boolean> {
+		return this.hasAccess(entityId);
 	}
 
-	createUser(name: string) {
-		return this.userEntityManager.insert({
-			name,
-		});
+	canDeleteEntity(entityId: number): Promise<boolean> {
+		return this.hasAccess(entityId);
 	}
 
-	async getUser(userId: number) {
-		const userPromise = this.userEntityManager.getById({
-			entityId: userId,
-		});
-
-		const metadataPromise = this.userMetadataManager.getAll({
-			entityId: userId,
-			entityType: this.userEntityType,
-		});
-
-		const [user, metadata] = await Promise.all([userPromise, metadataPromise]);
-		user.metadata = metadata;
-		return user;
+	async isAdmin() {
+		const user = await this.getUser();
+		return user?.id ? ADMIN_IDS.includes(user.id) : false;
 	}
 
-	canEditEntity(
-		entityType: EntityType,
-		entityId: number,
-		userId: number | undefined,
-	): Promise<boolean> {
-		return this.hasAccess(entityType, entityId, userId);
-	}
+	async hasAccess(entityId: number): Promise<boolean> {
+		const user = await this.getUser();
 
-	canDeleteEntity(
-		entityType: EntityType,
-		entityId: number,
-		userId: number | undefined,
-	): Promise<boolean> {
-		return this.hasAccess(entityType, entityId, userId);
-	}
-
-	async hasAccess(
-		entityType: EntityType,
-		entityId: number,
-		userId: number | undefined,
-	): Promise<boolean> {
-		if (isUndefined(userId)) {
+		if (isUndefined(user?.id)) {
 			return Promise.resolve(false);
 		}
 
 		return this.hasRelationship({
-			entityType,
+			entityType: this.entityType,
 			entityId,
 			relatedEntityType: this.userEntityType,
-			relatedEntityId: userId,
+			relatedEntityId: user.id,
 			relationshipType: this.userRelationshipType,
 		});
 	}
 
-	async grantAccess(
-		entityType: EntityType,
-		entityId: number,
-		userId: number | undefined,
-	): Promise<boolean> {
-		if (isUndefined(userId)) {
+	async grantAccess(entityId: number): Promise<boolean> {
+		const user = await this.getUser();
+		if (isUndefined(user?.id)) {
 			return Promise.resolve(false);
 		}
 
-		const hasAccess = await this.hasAccess(entityType, entityId, userId);
+		const hasAccess = await this.hasAccess(entityId);
 		if (hasAccess) {
 			return Promise.resolve(true);
 		}
 
 		const insertId = await this.insert({
-			entityType,
+			entityType: this.entityType,
 			entityId,
 			relatedEntityType: this.userEntityType,
-			relatedEntityId: userId,
+			relatedEntityId: user?.id,
 			relationshipType: this.userRelationshipType,
 		});
 

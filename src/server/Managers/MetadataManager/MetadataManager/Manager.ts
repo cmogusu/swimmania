@@ -3,7 +3,6 @@ import {
 	DeleteInputData,
 	FilterInputData,
 	GetAllInputData,
-	GetByIdInputData,
 	GetListInputData,
 	InsertInputData,
 	UpdateInputData,
@@ -13,7 +12,6 @@ import type {
 	RawDeleteMetadataInputs,
 	RawFilterByMetadataInputs,
 	RawGetAllMetadataInputs,
-	RawGetByIdMetadataInputs,
 	RawGetListMetadataInputs,
 	RawInsertMetadataInputs,
 	RawUpdateMetadataInputs,
@@ -42,14 +40,6 @@ export class MetadataManager {
 
 		const rawMetadataArr: RawMetadata[] = await this.db.getList(metadataInputs);
 		return rawMetadataArr;
-	}
-
-	async getById(rawInputs: RawGetByIdMetadataInputs): Promise<RawMetadata> {
-		const metadataInputs = new GetByIdInputData(rawInputs);
-		metadataInputs.validateData();
-
-		const rawMetadata = await this.db.getByMetadataId(metadataInputs);
-		return rawMetadata;
 	}
 
 	async update(rawInputs: RawUpdateMetadataInputs) {

@@ -1,6 +1,7 @@
 import type { EntityType, IPaginated } from "@/server/types";
 import { ImageManager } from "../../ImageManager";
 import { MetadataManager } from "../../MetadataManager";
+import { UserManager } from "../../UserManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
 import {
@@ -32,12 +33,14 @@ export class EntityManager {
 
 	imageManager: ImageManager;
 	metadataManager: MetadataManager;
+	userManager: UserManager;
 
 	constructor(entityType: EntityType) {
 		this.entityType = entityType;
 		this.db = new Database();
 		this.imageManager = new ImageManager();
 		this.metadataManager = new MetadataManager();
+		this.userManager = new UserManager(entityType);
 	}
 
 	async getAll(rawInputs: RawGetAllEntityInputs): Promise<Entities> {
@@ -47,6 +50,11 @@ export class EntityManager {
 
 		const inputData = new GetAllInputData(rawInputs);
 		inputData.validateData();
+
+		const canView = await this.userManager.canViewEntities();
+		if (!canView) {
+			throw Error("Access denied");
+		}
 
 		const rawEntities = await this.db.getAll(this.entityType, inputData);
 		const entities = await this.createEntities(rawEntities, inputData);
@@ -69,6 +77,11 @@ export class EntityManager {
 		const inputData = new GetByIdInputData(rawInputs);
 		inputData.validateData();
 
+		const canView = await this.userManager.canViewEntity(inputData.entityId);
+		if (!canView) {
+			throw Error("Access denied");
+		}
+
 		const rawEntity = await this.db.getById(this.entityType, inputData);
 		const entity = new Entity(rawEntity);
 		entity.loadRelatedData(inputData, this.imageManager);
@@ -90,6 +103,12 @@ export class EntityManager {
 	async update(rawInputs: RawUpdateEntityInputs) {
 		const inputData = new UpdateInputData(rawInputs);
 		inputData.validateData();
+
+		const canView = await this.userManager.canEditEntity(inputData.entityId);
+		if (!canView) {
+			throw Error("Access denied");
+		}
+
 		const updateData = await this.db.update(this.entityType, inputData);
 
 		// @ts-ignore

@@ -72,8 +72,16 @@ export class RelatedEntityManager {
 		});
 	}
 
-	async deleteAllRelated(entityId: number) {
-		return this.relatedEntityIdManager.deleteAll({ entityId });
+	async deleteAllRelated(
+		entityId: number,
+		entityType: EntityType,
+		relatedEntityType: EntityType,
+	) {
+		return this.relatedEntityIdManager.deleteAll({
+			entityType,
+			entityId,
+			relatedEntityType,
+		});
 	}
 
 	async getRelated(

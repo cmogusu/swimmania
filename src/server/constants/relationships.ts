@@ -203,3 +203,9 @@ export const RelationshipDescriptions: Record<
 		description: "",
 	},
 };
+
+export const RELATIONSHIP_DB_TABLES: Record<string, string> = {
+	user: "relationships_user",
+	swimEvent: "relationships_swimResult",
+	swimResult: "relationships_swimEvent",
+};

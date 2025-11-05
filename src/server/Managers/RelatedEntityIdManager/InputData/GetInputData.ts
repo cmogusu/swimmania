@@ -5,7 +5,7 @@ import { type Validate, ValidateInstance } from "./Validate";
 
 export class GetInputData extends BaseInputData {
 	entityType: EntityType;
-	entityId: number;
+	entityId: number | string;
 	relatedEntityType: EntityType;
 	relationshipType: RelationshipType;
 	validate: Validate;
