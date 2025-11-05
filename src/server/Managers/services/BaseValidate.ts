@@ -1,10 +1,11 @@
-import DOMPurify, { type WindowLike } from "dompurify";
+// import DOMPurify, { type WindowLike } from "dompurify";
+// import { JSDOM } from "jsdom";
 import * as z from "zod";
 import { EntityTypes, MAX_TEXT_LENGTH } from "@/server/constants";
 import type { EntityType } from "@/server/types";
 
 export class BaseValidate {
-	domPurify: typeof DOMPurify;
+	// domPurify = DOMPurify(window);
 
 	idValidator = z.coerce
 		.number("Number expected")
@@ -36,10 +37,6 @@ export class BaseValidate {
 	numberValidator = z.coerce.number("Invalid number");
 	stringValidator = z.coerce.string("Invalid string");
 
-	constructor(window: WindowLike) {
-		this.domPurify = DOMPurify(window);
-	}
-
 	id(id?: number | string) {
 		return this.idValidator.parse(id);
 	}
@@ -50,7 +47,8 @@ export class BaseValidate {
 
 	name(name?: string) {
 		const validName = this.nameValidator.parse(name);
-		return this.domPurify.sanitize(validName);
+		// return this.domPurify.sanitize(validName);
+		return validName;
 	}
 
 	email(email?: string) {
@@ -67,12 +65,14 @@ export class BaseValidate {
 
 	string(str?: unknown): string {
 		const validString = this.stringValidator.parse(str);
-		return this.domPurify.sanitize(validString);
+		// return this.domPurify.sanitize(validString);
+		return validString;
 	}
 
 	description(description?: string) {
 		const validDescription = this.descriptionValidator.parse(description);
-		return this.domPurify.sanitize(validDescription);
+		// return this.domPurify.sanitize(validDescription);
+		return validDescription;
 	}
 
 	entityType(entityType?: string) {

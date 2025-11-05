@@ -11,17 +11,21 @@ import {
 	writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import DOMPurify from "dompurify";
-import { JSDOM } from "jsdom";
+import { Play } from "@/components/Play";
 import { UPLOADS_FOLDER } from "@/server/constants/paths";
+// import DOMPurify from "dompurify";
+// import { JSDOM } from "jsdom";
 
 export default async function Page() {
 	// console.log(cleaned);
-	const { window } = new JSDOM();
-	const domPurify = DOMPurify(window);
-	const cleaned = domPurify.sanitize("<p>hello world</p>");
-	console.log(cleaned);
-	return <div className="p-6">hello</div>;
+	// const { window } = new JSDOM();
+	// const domPurify = DOMPurify(window);
+
+	return (
+		<div className="p-6">
+			<Play />
+		</div>
+	);
 }
 
 export async function x() {

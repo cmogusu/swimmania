@@ -40,7 +40,7 @@ export const ClientEntityForm = (props: Props) => {
 	const { data: session } = useSession();
 	console.log({ user: session?.user });
 
-	const validator = useMemo(() => new Validate(window), []);
+	const validator = useMemo(() => new Validate(), []);
 	const handleUpdate = useCallback(
 		(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 			const { name, value } = event.target;

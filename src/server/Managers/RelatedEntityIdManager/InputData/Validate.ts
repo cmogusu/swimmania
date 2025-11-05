@@ -1,4 +1,3 @@
-import { JSDOM } from "jsdom";
 import { EntityRelationships } from "@/server/constants";
 import type {
 	EntityType,
@@ -33,4 +32,4 @@ export class Validate extends BaseValidate {
 	}
 }
 
-export const ValidateInstance = new Validate(new JSDOM().window);
+export const ValidateInstance = new Validate();
