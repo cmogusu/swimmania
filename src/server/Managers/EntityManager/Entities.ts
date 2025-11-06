@@ -1,55 +1,32 @@
 import type { IPaginated, RelationshipType } from "@/server/types";
-import type { ImageManager } from "../ImageManager";
 import { Entity } from "./Entity";
-import type { ILoadableEntity, RawEntity } from "./types";
+import type { RawEntity } from "./types";
 
 export class Entities {
-	entities: Entity[];
-	loadRelatedDataAndPaginationOptions: ILoadableEntity & IPaginated;
-	imageManager: ImageManager;
+	entities: Entity[] = [];
+	hasMore: boolean = false;
+	pageSize: number = 0;
+	nextPage: number = 1;
 
 	isRelatedEntities: boolean = false;
 	relationshipType?: RelationshipType;
 
 	constructor(
 		rawEntities: RawEntity[] | undefined,
-		loadRelatedDataAndPaginationOptions: ILoadableEntity & IPaginated,
-		imageManager: ImageManager,
+		paginationData: IPaginated,
 	) {
-		this.loadRelatedDataAndPaginationOptions =
-			loadRelatedDataAndPaginationOptions;
-		this.imageManager = imageManager;
-		this.entities = (rawEntities || []).map((e) => new Entity(e));
-	}
+		const { pageSize, pageNumber } = paginationData;
+		this.nextPage = pageNumber + 1;
+		this.pageSize = pageNumber;
 
-	async loadRelatedData() {
-		const promises = this.entities.map((entity: Entity) =>
-			entity.loadRelatedData(
-				this.loadRelatedDataAndPaginationOptions,
-				this.imageManager,
-			),
-		);
-
-		await Promise.all(promises);
+		if (rawEntities?.length) {
+			this.hasMore = rawEntities.length > pageSize;
+			this.entities = rawEntities.map((e) => new Entity(e));
+		}
 	}
 
 	setRelationshipType(relationshipType: RelationshipType) {
 		this.isRelatedEntities = true;
 		this.relationshipType = relationshipType;
-	}
-
-	toJSON() {
-		const { pageSize, pageNumber } = this.loadRelatedDataAndPaginationOptions;
-		const hasMore = this.entities.length > pageSize;
-		const entities = this.entities.slice(0, pageSize).map((e) => e.toJSON());
-
-		return {
-			hasMore,
-			entities,
-			nextPage: pageNumber + 1,
-			...(this.isRelatedEntities
-				? { relationshipType: this.relationshipType }
-				: {}),
-		};
 	}
 }

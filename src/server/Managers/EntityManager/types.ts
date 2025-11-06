@@ -13,7 +13,7 @@ export type RawEntity = {
 };
 
 export type EntityLoadRelatedDataOptions = {
-	loadImages?: boolean;
+	loadUserCanEdit?: boolean;
 	loadDefaultImage?: boolean;
 };
 
@@ -58,6 +58,6 @@ export type RawEntityInputs = {
 };
 
 export interface ILoadableEntity {
-	loadImages: boolean;
 	loadDefaultImage: boolean;
+	loadUserCanEdit: boolean;
 }

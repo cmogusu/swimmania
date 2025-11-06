@@ -107,7 +107,7 @@ export type MetadataData = {
 
 export type EntityData = {
 	id: number;
-	type: EntityType;
+	entityType: EntityType;
 	name: string;
 	description: string | undefined;
 	defaultImage: ImageData | undefined;

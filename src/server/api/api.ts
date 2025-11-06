@@ -30,13 +30,11 @@ export class Api {
 	): Promise<EntityData | undefined> {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
-			const entity = await entityManager.getById({
+			return await entityManager.getById({
 				entityId,
-				loadImages: true,
 				loadDefaultImage: true,
+				loadUserCanEdit: false,
 			});
-
-			return entity.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}
@@ -48,14 +46,12 @@ export class Api {
 	): Promise<EntitiesData | undefined> {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
-			const entities = await entityManager.getAll({
-				loadImages: false,
+			return await entityManager.getAll({
+				loadUserCanEdit: false,
 				loadDefaultImage: true,
 				pageSize: this.pageSize,
 				pageNumber: page,
 			});
-
-			return entities.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}
@@ -70,7 +66,7 @@ export class Api {
 	): Promise<EntitiesData | undefined> {
 		try {
 			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
-			const entities = await relatedEntityManager.getRelated(
+			return await relatedEntityManager.getRelated(
 				entityType,
 				entityId,
 				{
@@ -79,8 +75,6 @@ export class Api {
 				},
 				pageNumber,
 			);
-
-			return entities.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}

@@ -65,9 +65,17 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return this.exec(`Delete FROM \`image\` WHERE id = ? AND entityId = ? `, [
+		return this.exec(`Delete FROM \`image\` WHERE id=? AND entityId=? `, [
 			imageId,
 			entityId,
 		]);
+	}
+
+	deleteAll(entityId: number) {
+		this.throwIfNotSet({
+			entityId,
+		});
+
+		return this.exec(`Delete FROM \`image\` WHERE entityId=?`, [entityId]);
 	}
 }

@@ -75,12 +75,11 @@ export class RelatedEntityManager {
 	async deleteAllRelated(
 		entityId: number,
 		entityType: EntityType,
-		relatedEntityType: EntityType,
+		_relatedEntityType: EntityType,
 	) {
 		return this.relatedEntityIdManager.deleteAll({
 			entityType,
 			entityId,
-			relatedEntityType,
 		});
 	}
 

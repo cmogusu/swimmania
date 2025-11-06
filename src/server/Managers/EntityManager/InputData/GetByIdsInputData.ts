@@ -10,7 +10,7 @@ export class GetByIdsInputData
 	entityIds: number[];
 
 	loadDefaultImage: boolean;
-	loadImages: boolean;
+	loadUserCanEdit: boolean;
 
 	validate: Validate;
 
@@ -19,7 +19,7 @@ export class GetByIdsInputData
 		pageSize,
 		pageNumber,
 		loadDefaultImage,
-		loadImages,
+		loadUserCanEdit,
 	}: RawGetByIdsEntityInputs) {
 		super();
 
@@ -27,7 +27,7 @@ export class GetByIdsInputData
 		this.pageSize = pageSize;
 		this.pageNumber = pageNumber;
 
-		this.loadImages = sanitizeBoolean(loadImages, false);
+		this.loadUserCanEdit = sanitizeBoolean(loadUserCanEdit, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, true);
 
 		this.validate = ValidateInstance;

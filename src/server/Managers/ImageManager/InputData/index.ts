@@ -1,4 +1,5 @@
-export * from "./DeleteInputData";
+export * from "./DeleteAllInputData";
+export * from "./DeleteByIdInputData";
 export * from "./GetAllInputData";
 export * from "./GetDefaultInputData";
 export * from "./InsertInputData";

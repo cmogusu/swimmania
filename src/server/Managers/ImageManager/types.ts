@@ -44,7 +44,11 @@ export type RawInsertImageInputs = {
 	filepath: string;
 };
 
-export type RawDeleteImageInputs = {
+export type RawDeleteAllImageInputs = {
+	entityId: number;
+};
+
+export type RawDeleteByIdImageInputs = {
 	id: number;
 	entityId: number;
 };

@@ -1,6 +1,7 @@
 import { Image } from "../Image";
 import {
-	DeleteInputData,
+	DeleteAllInputData,
+	DeleteByIdInputData,
 	GetAllInputData,
 	GetDefaultInputData,
 	InsertInputData,
@@ -8,7 +9,8 @@ import {
 	UpdateInputData,
 } from "../InputData";
 import type {
-	RawDeleteImageInputs,
+	RawDeleteAllImageInputs,
+	RawDeleteByIdImageInputs,
 	RawGetAllImageInputs,
 	RawGetDefaultImageInputs,
 	RawInsertImageInputs,
@@ -80,10 +82,24 @@ export class ImageManager {
 		return { id: insertData.insertId };
 	}
 
-	async deleteById(rawImageData: RawDeleteImageInputs) {
-		const imageData = new DeleteInputData(rawImageData);
+	async deleteById(rawImageData: RawDeleteByIdImageInputs) {
+		const imageData = new DeleteByIdInputData(rawImageData);
 		imageData.validateData();
 		const deleteData = await this.db.deleteById(imageData);
+
+		// @ts-ignore
+		if (!deleteData?.affectedRows) {
+			throw Error("Unable to delete image");
+		}
+
+		// @ts-ignore
+		return { id: entityId };
+	}
+
+	async deleteAll(rawImageData: RawDeleteAllImageInputs) {
+		const imageData = new DeleteAllInputData(rawImageData);
+		imageData.validateData();
+		const deleteData = await this.db.deleteAll(imageData);
 
 		// @ts-ignore
 		if (!deleteData?.affectedRows) {

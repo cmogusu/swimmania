@@ -1,12 +1,13 @@
 import type { EntityType, IEntityMetadata, RawMetadata } from "@/server/types";
 import { entityMetadataFactory } from "..";
+import { formatColumnNameForDb } from "../Manager/utils";
 import type { RawGetListMetadataInputs } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class GetListInputData {
 	entityId: number;
 	entityType: EntityType;
-	names: string[];
+	_names: string[];
 	entityMetadata: IEntityMetadata;
 	validate: Validate;
 
@@ -14,7 +15,7 @@ export class GetListInputData {
 		const { names, entityType, entityId } = rawInputs;
 		this.entityId = entityId;
 		this.entityType = entityType;
-		this.names = names;
+		this._names = names;
 		this.entityMetadata = this.getEntityMetadataInstance(entityType, names);
 		this.validate = ValidateInstance;
 	}
@@ -23,6 +24,10 @@ export class GetListInputData {
 		// Important validation happens during creation of metadataProperty
 		this.entityId = this.validate.id(this.entityId);
 		this.entityType = this.validate.entityType(this.entityType);
+	}
+
+	get names() {
+		return this._names.map(formatColumnNameForDb);
 	}
 
 	getEntityMetadataInstance(entityType: EntityType, names: string[]) {

@@ -6,18 +6,18 @@ export class GetByNameInputData implements ILoadableEntity {
 	name: string;
 
 	loadDefaultImage: boolean;
-	loadImages: boolean;
+	loadUserCanEdit: boolean;
 
 	validate: Validate;
 
 	constructor({
 		name,
 		loadDefaultImage,
-		loadImages,
+		loadUserCanEdit,
 	}: RawGetByNameEntityInputs) {
 		this.name = name;
 
-		this.loadImages = sanitizeBoolean(loadImages, false);
+		this.loadUserCanEdit = sanitizeBoolean(loadUserCanEdit, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, false);
 
 		this.validate = ValidateInstance;

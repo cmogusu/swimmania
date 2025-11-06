@@ -27,16 +27,24 @@ export type RawUpdateMetadataInputs = RawInsertMetadataInputs & {
 	id: number;
 };
 
+export type RawInsertEmptyMetadataInputs = {
+	entityType: EntityType;
+	entityId: number;
+};
+
 export type RawInsertMetadataInputs = {
 	entityType: EntityType;
 	entityId: number;
 	rawMetadataArr: RawMetadata[];
 };
 
-export type RawDeleteMetadataInputs = {
-	id: number;
+export type RawDeleteAllMetadataInputs = {
 	entityId: number;
 	entityType: EntityType;
+};
+
+export type RawDeleteByIdMetadataInputs = RawDeleteAllMetadataInputs & {
+	id: number;
 };
 
 export type RawFilterByMetadataInputs = PaginationOptions & {

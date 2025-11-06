@@ -158,16 +158,14 @@ export class Query extends BaseQuery {
 		);
 	}
 
-	deleteAll(
-		entityType: string,
-		entityId: number | string,
-		relatedEntityType: string,
-	) {
+	deleteAll(entityType: string, entityId: number | string) {
 		this.throwIfNotSet({
 			entityId,
+			entityType,
 		});
 
-		const dbTable = this.getDbTable(entityType, relatedEntityType);
+		// TODO: Delete from all tables
+		const dbTable = this.getDbTable(entityType, entityType);
 		return this.exec(
 			`DELETE FROM \`${dbTable}\` WHERE entityId1=? OR entityId2=?;`,
 			[entityId, entityId],

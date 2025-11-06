@@ -68,6 +68,18 @@ export class Query extends BaseQuery {
 		]);
 	}
 
+	insertEmpty(entityId: number, entityType: EntityType) {
+		this.throwIfNotSet({
+			entityId,
+			entityType,
+		});
+
+		const tableName = EntityMetadataDbTables[entityType];
+		return this.exec(`INSERT INTO \`${tableName}\` (entityId) VALUES (?);`, [
+			entityId,
+		]);
+	}
+
 	insert(
 		entityId: number,
 		entityType: EntityType,
@@ -102,6 +114,18 @@ export class Query extends BaseQuery {
 			`Delete FROM \`${tableName}\` Where id=? and entityId=? `,
 			[metadataId, entityId],
 		);
+	}
+
+	deleteAll(entityType: EntityType, entityId: number) {
+		this.throwIfNotSet({
+			entityType,
+			entityId,
+		});
+
+		const tableName = EntityMetadataDbTables[entityType];
+		return this.exec(`Delete FROM \`${tableName}\` Where entityId=? `, [
+			entityId,
+		]);
 	}
 
 	doesMetadataTableExist(entityType: EntityType) {

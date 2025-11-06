@@ -89,7 +89,6 @@ export class Database extends BaseDatabase {
 		const [deleteData] = await this.query.deleteAll(
 			relationData.entityType,
 			relationData.entityId,
-			relationData.relatedEntityType,
 		);
 
 		return deleteData;

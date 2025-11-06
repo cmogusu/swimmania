@@ -1,6 +1,7 @@
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
-	DeleteInputData,
+	DeleteAllInputData,
+	DeleteByIdInputData,
 	GetAllInputData,
 	GetDefaultInputData,
 	InsertInputData,
@@ -21,16 +22,14 @@ export class Database extends BaseDatabase {
 	async getAll(
 		imageData: GetAllInputData,
 	): Promise<ImageDatabaseRawOutputData[]> {
-		const { entityId } = imageData;
-		const [rawImages] = await this.query.getAll(entityId);
+		const [rawImages] = await this.query.getAll(imageData.entityId);
 		return rawImages as ImageDatabaseRawOutputData[];
 	}
 
 	async getDefault(
 		imageData: GetDefaultInputData,
 	): Promise<ImageDatabaseRawOutputData> {
-		const { entityId } = imageData;
-		const [rawImages] = await this.query.getDefault(entityId);
+		const [rawImages] = await this.query.getDefault(imageData.entityId);
 		return (rawImages as ImageDatabaseRawOutputData[])?.[0];
 	}
 
@@ -44,22 +43,36 @@ export class Database extends BaseDatabase {
 	}
 
 	async update(imageData: UpdateInputData) {
-		const { id, entityId, alt } = imageData;
-		const [updateData] = await this.query.update(id, entityId, alt);
+		const [updateData] = await this.query.update(
+			imageData.id,
+			imageData.entityId,
+			imageData.alt,
+		);
 
 		return updateData;
 	}
 
 	async insert(imageData: InsertInputData) {
-		const { entityId, alt, filepath } = imageData;
-		const [insertData] = await this.query.insert(entityId, alt, filepath);
+		const [insertData] = await this.query.insert(
+			imageData.entityId,
+			imageData.alt,
+			imageData.filepath,
+		);
 
 		return insertData;
 	}
 
-	async deleteById(imageData: DeleteInputData) {
-		const { id, entityId } = imageData;
-		const [deleteData] = await this.query.deleteById(id, entityId);
+	async deleteById(imageData: DeleteByIdInputData) {
+		const [deleteData] = await this.query.deleteById(
+			imageData.id,
+			imageData.entityId,
+		);
+
+		return deleteData;
+	}
+
+	async deleteAll(imageData: DeleteAllInputData) {
+		const [deleteData] = await this.query.deleteAll(imageData.entityId);
 
 		return deleteData;
 	}

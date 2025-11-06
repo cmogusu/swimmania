@@ -43,7 +43,6 @@ export type RawDeleteRelatedInputData = RawGetRelatedInputData & {
 export type RawDeleteAllRelatedInputData = {
 	entityType: EntityType;
 	entityId: number | string;
-	relatedEntityType: EntityType;
 };
 
 export type RawGetNonRelatedInputData = RawGetRelatedInputData;

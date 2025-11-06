@@ -82,19 +82,18 @@ export class Database extends BaseDatabase {
 			description,
 		);
 
-		return updateData;
+		return updateData as { affectedRows: number };
 	}
 
 	async insert(entityType: EntityType, inputData: InsertInputData) {
 		const { name, description } = inputData;
 		const [insertData] = await this.query.insert(entityType, name, description);
-
-		return insertData;
+		return insertData as { insertId: number };
 	}
 
 	async deleteById(entityType: EntityType, inputData: DeleteInputData) {
 		const { entityId } = inputData;
 		const [deleteData] = await this.query.deleteById(entityType, entityId);
-		return deleteData;
+		return deleteData as { affectedRows: number };
 	}
 }

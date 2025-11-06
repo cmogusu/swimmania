@@ -7,7 +7,7 @@ import { type Validate, ValidateInstance } from "./Validate";
 export class InsertInputData {
 	entityId: number;
 	entityType: EntityType;
-	rawMetadataArr: RawMetadata[];
+	_rawMetadataArr: RawMetadata[];
 	entityMetadata: IEntityMetadata;
 
 	readonly validate: Validate;
@@ -16,7 +16,7 @@ export class InsertInputData {
 		const { entityType, entityId, rawMetadataArr } = rawInputs;
 		this.entityId = entityId;
 		this.entityType = entityType;
-		this.rawMetadataArr = rawMetadataArr;
+		this._rawMetadataArr = rawMetadataArr;
 		this.entityMetadata = entityMetadataFactory.getInstance(
 			entityType,
 			rawMetadataArr,
@@ -31,16 +31,10 @@ export class InsertInputData {
 		this.entityId = this.validate.id(this.entityId);
 	}
 
-	getSanitized() {
-		const formatedMetadata = this.entityMetadata.dbValue.map((v) => ({
+	get rawMetadataArr(): RawMetadata[] {
+		return this.entityMetadata.dbValue.map((v) => ({
 			...v,
 			name: formatColumnNameForDb(v.name),
 		}));
-
-		return {
-			entityId: this.entityId,
-			entityType: this.entityType,
-			rawMetadataArr: formatedMetadata,
-		};
 	}
 }

@@ -6,19 +6,19 @@ export class GetByIdInputData implements ILoadableEntity {
 	entityId: number;
 
 	loadDefaultImage: boolean;
-	loadImages: boolean;
+	loadUserCanEdit: boolean;
 
 	validate: Validate;
 
 	constructor({
 		entityId,
 		loadDefaultImage,
-		loadImages,
+		loadUserCanEdit,
 	}: RawGetByIdEntityInputs) {
 		this.entityId = entityId;
 
-		this.loadImages = sanitizeBoolean(loadImages, false);
 		this.loadDefaultImage = sanitizeBoolean(loadDefaultImage, true);
+		this.loadUserCanEdit = sanitizeBoolean(loadUserCanEdit, false);
 
 		this.validate = ValidateInstance;
 	}

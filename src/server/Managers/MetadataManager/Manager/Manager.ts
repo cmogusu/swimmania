@@ -1,18 +1,22 @@
 import type { DbTableColumn, EntityType, RawMetadata } from "@/server/types";
 import {
-	DeleteInputData,
+	DeleteAllInputData,
+	DeleteByIdInputData,
 	FilterInputData,
 	GetAllInputData,
 	GetListInputData,
+	InsertEmptyInputData,
 	InsertInputData,
 	UpdateInputData,
 } from "../InputData";
 import { entityMetadataFactory } from "../Metadata/EntityMetadata";
 import type {
-	RawDeleteMetadataInputs,
+	RawDeleteAllMetadataInputs,
+	RawDeleteByIdMetadataInputs,
 	RawFilterByMetadataInputs,
 	RawGetAllMetadataInputs,
 	RawGetListMetadataInputs,
+	RawInsertEmptyMetadataInputs,
 	RawInsertMetadataInputs,
 	RawUpdateMetadataInputs,
 } from "../types";
@@ -45,9 +49,8 @@ export class MetadataManager {
 	async update(rawInputs: RawUpdateMetadataInputs) {
 		const metadataInputs = new UpdateInputData(rawInputs);
 		metadataInputs.validateData();
-		const updateData = await this.db.update(metadataInputs);
 
-		// @ts-ignore
+		const updateData = await this.db.update(metadataInputs);
 		if (!updateData?.affectedRows) {
 			throw Error("Unable to update metadata");
 		}
@@ -55,32 +58,52 @@ export class MetadataManager {
 		return { id: metadataInputs.id };
 	}
 
-	async insert(rawInputs: RawInsertMetadataInputs) {
-		const metadataInputs = new InsertInputData(rawInputs);
+	async insertEmpty(rawInputs: RawInsertEmptyMetadataInputs) {
+		const metadataInputs = new InsertEmptyInputData(rawInputs);
 		metadataInputs.validateData();
-		const insertData = await this.db.insert(metadataInputs);
 
-		// @ts-ignore
+		const insertData = await this.db.insertEmpty(metadataInputs);
 		if (!insertData?.insertId) {
 			throw Error("Unable to create metadata");
 		}
 
-		// @ts-ignore
 		return { id: insertData.insertId };
 	}
 
-	async deleteById(rawInputs: RawDeleteMetadataInputs) {
-		const metadataInputs = new DeleteInputData(rawInputs);
+	async insert(rawInputs: RawInsertMetadataInputs) {
+		const metadataInputs = new InsertInputData(rawInputs);
 		metadataInputs.validateData();
-		const deleteData = await this.db.deleteById(metadataInputs);
 
-		// @ts-ignore
-		if (!deleteData?.affectedRows) {
-			throw Error("Unable to delete metadata");
+		const insertData = await this.db.insert(metadataInputs);
+		if (!insertData?.insertId) {
+			throw Error("Unable to create metadata");
 		}
 
-		// @ts-ignore
-		return { id: entityId };
+		return { id: insertData.insertId };
+	}
+
+	async deleteById(rawInputs: RawDeleteByIdMetadataInputs) {
+		const metadataInputs = new DeleteByIdInputData(rawInputs);
+		metadataInputs.validateData();
+
+		const deleteData = await this.db.deleteById(metadataInputs);
+		if (!deleteData?.affectedRows) {
+			throw Error("Unable to delete metadata by id");
+		}
+
+		return { id: rawInputs.entityId };
+	}
+
+	async deleteAll(rawInputs: RawDeleteAllMetadataInputs) {
+		const metadataInputs = new DeleteAllInputData(rawInputs);
+		metadataInputs.validateData();
+
+		const deleteData = await this.db.deleteAll(metadataInputs);
+		if (!deleteData?.affectedRows) {
+			throw Error("Unable to delete all metadata");
+		}
+
+		return { id: rawInputs.entityId };
 	}
 
 	filterBy(rawInputs: RawFilterByMetadataInputs): Promise<number[]> {

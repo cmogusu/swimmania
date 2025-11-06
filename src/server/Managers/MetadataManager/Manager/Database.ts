@@ -2,10 +2,12 @@ import { MetadataDbDefaultColumnNames } from "@/server/constants";
 import type { DbTableColumn, EntityType, RawMetadata } from "@/server/types";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
-	DeleteInputData,
+	DeleteAllInputData,
+	DeleteByIdInputData,
 	FilterInputData,
 	GetAllInputData,
 	GetListInputData,
+	InsertEmptyInputData,
 	InsertInputData,
 	UpdateInputData,
 } from "../InputData";
@@ -31,18 +33,20 @@ export class Database extends BaseDatabase {
 	}
 
 	async getAll(metadataData: GetAllInputData): Promise<RawMetadata[]> {
-		const { entityId, entityType } = metadataData;
-		const [rawMetadataArr] = await this.query.getAll(entityType, entityId);
+		const [rawMetadataArr] = await this.query.getAll(
+			metadataData.entityType,
+			metadataData.entityId,
+		);
+
 		const results = (rawMetadataArr as Record<string, unknown>[])[0];
 		return metadataResultToArray(results);
 	}
 
 	async getList(metadataData: GetListInputData): Promise<RawMetadata[]> {
-		const { entityId, entityType, names } = metadataData;
 		const [rawMetadataArr] = await this.query.getList(
-			entityType,
-			entityId,
-			names.map(formatColumnNameForDb),
+			metadataData.entityType,
+			metadataData.entityId,
+			metadataData.names,
 		);
 
 		const results = (rawMetadataArr as Record<string, unknown>[])[0];
@@ -50,38 +54,60 @@ export class Database extends BaseDatabase {
 	}
 
 	async filterBy(metadataData: FilterInputData): Promise<number[]> {
-		const { entityType, filters } = metadataData;
-		const [results] = await this.query.filterBy(entityType, filters);
+		const [results] = await this.query.filterBy(
+			metadataData.entityType,
+			metadataData.filters,
+		);
+
 		return this.extractResultIds(results);
 	}
 
 	async update(metadataData: UpdateInputData) {
-		const { id, entityType, rawMetadataArr } = metadataData;
 		const [updateData] = await this.query.update(
-			id,
-			entityType,
-			rawMetadataArr,
+			metadataData.id,
+			metadataData.entityType,
+			metadataData.rawMetadataArr,
 		);
 
-		return updateData;
+		return updateData as { affectedRows: number };
+	}
+
+	async insertEmpty(metadataData: InsertEmptyInputData) {
+		const [insertData] = await this.query.insertEmpty(
+			metadataData.entityId,
+			metadataData.entityType,
+		);
+
+		return insertData as { insertId: number };
 	}
 
 	async insert(metadataData: InsertInputData) {
-		const { entityId, entityType, rawMetadataArr } = metadataData;
-
 		const [insertData] = await this.query.insert(
-			entityId,
-			entityType,
-			rawMetadataArr,
+			metadataData.entityId,
+			metadataData.entityType,
+			metadataData.rawMetadataArr,
 		);
-		return insertData;
+
+		return insertData as { insertId: number };
 	}
 
-	async deleteById(metadataData: DeleteInputData) {
-		const { id, entityId, entityType } = metadataData;
-		const [deleteData] = await this.query.deleteById(entityType, id, entityId);
+	async deleteById(metadataData: DeleteByIdInputData) {
+		const [deleteData] = await this.query.deleteById(
+			metadataData.entityType,
+			metadataData.id,
+			metadataData.entityId,
+		);
 
-		return deleteData;
+		return deleteData as { affectedRows: number };
+	}
+
+	async deleteAll(metadataData: DeleteAllInputData) {
+		const [deleteData] = await this.query.deleteAll(
+			metadataData.entityType,
+			metadataData.entityId,
+		);
+
+		return deleteData as { affectedRows: number };
 	}
 
 	async doesMetadataTableExist(entityType: EntityType): Promise<boolean> {
