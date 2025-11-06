@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import {
 	type ChangeEvent,
 	type PropsWithChildren,
@@ -25,7 +25,6 @@ type Props = PropsWithChildren & {
 	entityType: EntityType;
 	entityId: number;
 	entity: EntityData;
-	userId: number;
 };
 
 type ValidationErrors = Record<string, string>;
@@ -37,8 +36,6 @@ export const ClientEntityForm = (props: Props) => {
 	const [, formAction] = useActionState(updateEntityAction, undefined);
 	const [entity, setEntity] = useState<EntityData>(props.entity);
 	const [errors, setErrors] = useState<ValidationErrors>({});
-	const { data: session } = useSession();
-	console.log({ user: session?.user });
 
 	const validator = useMemo(() => new Validate(), []);
 	const handleUpdate = useCallback(
@@ -60,11 +57,7 @@ export const ClientEntityForm = (props: Props) => {
 
 	return (
 		<form action={formAction}>
-			<HiddenInputs
-				entityType={props.entityType}
-				entityId={props.entityId}
-				userId={props.userId}
-			/>
+			<HiddenInputs entityType={props.entityType} entityId={props.entityId} />
 
 			<TextInput
 				name="name"

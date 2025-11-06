@@ -14,21 +14,16 @@ type Props = {
 	entityType: EntityType;
 	entityId: number;
 	entity: EntityData;
-	userId: number;
 };
 
 export const EntityForm = (props: Props) => {
-	const { entityType, entityId, entity, userId } = props;
+	const { entityType, entityId, entity } = props;
 	const { name, description } = entity;
 
 	return (
 		<ClientEntityForm {...props}>
 			<form action={updateEntity}>
-				<HiddenInputs
-					entityType={entityType}
-					entityId={entityId}
-					userId={userId}
-				/>
+				<HiddenInputs entityType={entityType} entityId={entityId} />
 
 				<TextInput
 					name="name"

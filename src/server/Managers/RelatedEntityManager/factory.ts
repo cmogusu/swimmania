@@ -1,4 +1,4 @@
-import { RelatedEntityManager } from "./RelatedEntityManager";
+import { RelatedEntityManager } from "./Manager";
 
 export const relatedEntityManagerFactory = {
 	manager: undefined as RelatedEntityManager | undefined,

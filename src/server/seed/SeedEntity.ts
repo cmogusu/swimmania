@@ -63,7 +63,6 @@ export class SeedEntity {
 		return {
 			name: faker.location.street(),
 			description: faker.word.words({ count: { min: 10, max: 20 } }),
-			userId: 3,
 		};
 	}
 }

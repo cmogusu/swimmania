@@ -80,7 +80,6 @@ export class SwimResultData {
 		const { id: entityId } = await entityManager.insert({
 			name,
 			description: "",
-			userId: 3,
 		});
 
 		this.entityId = entityId;
@@ -91,7 +90,6 @@ export class SwimResultData {
 		return {
 			name: this.swimmerName,
 			description: this.swimmerName,
-			userId: 3,
 		};
 	}
 

@@ -1,4 +1,4 @@
+export * from "./factory";
+export * from "./Manager";
 export * from "./Metadata";
-export * from "./MetadataManager";
-export * from "./metadataManagerFactory";
 export * from "./types";

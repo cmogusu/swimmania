@@ -1,6 +1,6 @@
 import type { EntityType, IEntityMetadata, RawMetadata } from "@/server/types";
 import { entityMetadataFactory } from "..";
-import { formatColumnNameForDb } from "../MetadataManager/utils";
+import { formatColumnNameForDb } from "../Manager/utils";
 import type { RawInsertMetadataInputs } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 

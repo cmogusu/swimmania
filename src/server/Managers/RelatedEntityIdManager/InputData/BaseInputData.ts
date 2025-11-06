@@ -29,7 +29,7 @@ export class BaseInputData {
 		this.entityType = this.validate.entityType(this.entityType);
 		this.entityId = this.validate.id(this.entityId);
 		this.relatedEntityType = this.validate.entityType(this.relatedEntityType);
-		this.relatedEntityId = this.validate.id(this.relatedEntityId);
+		this.relatedEntityId = this.validate.stringId(this.relatedEntityId);
 		this.validate.relationshipType(
 			this.entityType,
 			this.relatedEntityType,

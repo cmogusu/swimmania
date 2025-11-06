@@ -120,7 +120,7 @@ export class Query extends BaseQuery {
 		this.throwIfNotSet({ entityType, name });
 
 		return this.exec(
-			`INSERT INTO \`entity\` (name, type, description) VALUES (?, ?, ?, ?);`,
+			`INSERT INTO \`entity\` (name, type, description) VALUES (?, ?, ?);`,
 			[name, entityType, description || null],
 		);
 	}

@@ -10,9 +10,7 @@ import { api } from "./api";
 
 export async function getLoggedInUserId() {
 	const session = await auth();
-	const userId = session?.user?.id;
-	console.log({ userId });
-	return 122;
+	return session?.user?.id;
 }
 
 export async function getLoggedInUser() {
@@ -64,22 +62,20 @@ export async function updateEntity(formData: FormData) {
 		"entityId",
 		"name",
 		"description",
-		"userId",
 	]);
 
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
 	const name = data.name as string;
-	const userId = Number(data.userId);
 	const description = data.description as string;
 
 	if (entityId > -1) {
-		await api.updateEntity(entityType, entityId, name, userId, description);
+		await api.updateEntity(entityType, entityId, name, description);
 		reloadEditPage(entityType, `${entityId}`);
 		return;
 	}
 
-	const response = await api.addEntity(entityType, name, userId, description);
+	const response = await api.addEntity(entityType, name, description);
 	if (response?.id) {
 		redirect(`/account/${entityType}/edit/${response?.id}/`);
 	}

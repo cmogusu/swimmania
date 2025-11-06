@@ -1,2 +1,2 @@
-export * from "./RelatedEntityManager";
-export * from "./relatedEntityManagerFactory";
+export * from "./factory";
+export * from "./Manager";

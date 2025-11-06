@@ -50,7 +50,7 @@ export class Database extends BaseDatabase {
 	}
 
 	async hasExisting(relationData: HasRelationshipInputData): Promise<boolean> {
-		const [itemId] = await this.query.hasExisting(
+		const [results] = await this.query.hasExisting(
 			relationData.entityType,
 			relationData.entityId,
 			relationData.relatedEntityType,
@@ -58,7 +58,7 @@ export class Database extends BaseDatabase {
 			this.removeInverseRelationship(relationData.relationshipType),
 		);
 
-		return Boolean(itemId);
+		return Boolean((results as { id: number }[]).length);
 	}
 
 	async insert(relationData: InsertInputData) {

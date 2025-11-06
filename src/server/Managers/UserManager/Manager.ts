@@ -36,17 +36,22 @@ export class UserManager extends RelatedEntityIdManager {
 		return false;
 	}
 
-	canViewEntity(_entityId: number) {
+	canViewEntity(entityId: number): Promise<boolean> {
 		const isPrivateEntityType = this.entityType in PrivateEntityTypesObj;
-		if (!isPrivateEntityType) {
-			return true;
+		if (isPrivateEntityType) {
+			return Promise.resolve(false);
 		}
 
-		return true;
+		return this.hasAccess(entityId);
 	}
 
-	canCreateEntity(entityType: EntityType): boolean {
-		if (entityType === this.userEntityType) {
+	async canCreateEntity(): Promise<boolean> {
+		const user = await this.getUser();
+		if (!user) {
+			return false;
+		}
+
+		if (this.entityType === this.userEntityType) {
 			return false;
 		}
 
@@ -69,7 +74,7 @@ export class UserManager extends RelatedEntityIdManager {
 	async hasAccess(entityId: number): Promise<boolean> {
 		const user = await this.getUser();
 
-		if (isUndefined(user?.id)) {
+		if (!user?.id) {
 			return Promise.resolve(false);
 		}
 

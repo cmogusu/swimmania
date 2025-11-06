@@ -25,7 +25,7 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 		return "Oops, item not found";
 	}
 
-	if (loggedInUserId !== entity.userId) {
+	if (entity.canEdit) {
 		return (
 			<div>
 				<p>Ooops! No permission to edit file</p>

@@ -41,6 +41,10 @@ export class BaseValidate {
 		return this.idValidator.parse(id);
 	}
 
+	stringId(id?: number | string) {
+		return this.stringValidator.parse(id);
+	}
+
 	ids(ids?: number[]) {
 		return this.idsValidator.parse(ids);
 	}

@@ -1,4 +1,4 @@
-import { MetadataManager } from "./MetadataManager";
+import { MetadataManager } from "./Manager";
 
 export const metadataManagerFactory = {
 	_manager: undefined as MetadataManager | undefined,

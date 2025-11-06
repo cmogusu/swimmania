@@ -1,4 +1,4 @@
-import { UserManager } from "./UserManager";
+import { UserManager } from "./Manager";
 
 export const userManagerFactory = {
 	_manager: undefined as UserManager | undefined,

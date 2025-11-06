@@ -9,10 +9,9 @@ import type { EntityData, EntityType } from "@/server/types";
 type Props = {
 	entityType: EntityType;
 	entity: EntityData;
-	isEditable: boolean;
 };
 
-export const Entity = ({ entityType, entity, isEditable }: Props) => {
+export const Entity = ({ entityType, entity }: Props) => {
 	const { id, name, description, defaultImage } = entity;
 	const image = defaultImage || DefaultSiteImage;
 
@@ -40,7 +39,7 @@ export const Entity = ({ entityType, entity, isEditable }: Props) => {
 			>
 				<IoMdOpen />
 			</a>
-			{isEditable && <EditElements entityId={id} entityType={entityType} />}
+			<EditElements entityId={id} entityType={entityType} />
 		</li>
 	);
 };

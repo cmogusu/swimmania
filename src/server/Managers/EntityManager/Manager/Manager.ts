@@ -78,6 +78,7 @@ export class EntityManager {
 		inputData.validateData();
 
 		const canView = await this.userManager.canViewEntity(inputData.entityId);
+		console.log({ canView });
 		if (!canView) {
 			throw Error("Access denied");
 		}
@@ -106,7 +107,7 @@ export class EntityManager {
 
 		const canView = await this.userManager.canEditEntity(inputData.entityId);
 		if (!canView) {
-			throw Error("Access denied");
+			throw Error("Access denied. Not allowed to edit entity");
 		}
 
 		const updateData = await this.db.update(this.entityType, inputData);
@@ -122,20 +123,32 @@ export class EntityManager {
 	async insert(rawInputs: RawInsertEntityInputs) {
 		const inputData = new InsertInputData(rawInputs);
 		inputData.validateData();
-		const insertData = await this.db.insert(this.entityType, inputData);
 
+		const canEdit = await this.userManager.canCreateEntity();
+		if (!canEdit) {
+			throw Error("Access denied. Not allowed to create entity");
+		}
+
+		const insertData = await this.db.insert(this.entityType, inputData);
 		// @ts-ignore
-		if (!insertData?.affectedRows) {
+		const { insertId } = insertData || {};
+		if (!insertId) {
 			throw Error("Unable to create entity");
 		}
 
-		// @ts-ignore
-		return { id: insertData.insertId };
+		await this.userManager.grantAccess(insertId);
+		return { id: insertId };
 	}
 
 	async deleteById(rawInputs: RawDeleteEntityInputs) {
 		const inputData = new DeleteInputData(rawInputs);
 		inputData.validateData();
+
+		const canEdit = await this.userManager.canDeleteEntity(inputData.entityId);
+		if (!canEdit) {
+			throw Error("Access denied. Not allowed to delete entity");
+		}
+
 		const deleteData = await this.db.deleteById(this.entityType, inputData);
 
 		// @ts-ignore

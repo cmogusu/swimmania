@@ -1,2 +1,2 @@
-export * from "./UserManager";
-export * from "./userManagerFactory";
+export * from "./factory";
+export * from "./Manager";

@@ -44,7 +44,6 @@ export class SwimEventData {
 		const { id: entityId } = await swimEventManager.insert({
 			name,
 			description: "",
-			userId: 3,
 		});
 
 		this.entityId = entityId;

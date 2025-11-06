@@ -90,12 +90,12 @@ export class Query extends BaseQuery {
 			relationshipType,
 		});
 
+		const dbTable = this.getDbTable(entityType, relatedEntityType);
 		const { entityId1, entityId2, activeColumn, relatedColumn, relationship } =
 			this.getColumns(entityType, entityId, relatedEntityType, relatedEntityId);
 
-		const dbTable = this.getDbTable(entityType, relatedEntityType);
 		return this.exec(
-			`SELECT id FROM \`${dbTable}\` WHERE ${activeColumn}=? AND ${relatedColumn}=? AND relationship=? AND relationshipType=? `,
+			`SELECT id FROM \`${dbTable}\` WHERE ${activeColumn}=? AND ${relatedColumn}=? AND relationship=? AND relationshipType=?;`,
 			[entityId1, entityId2, relationship, relationshipType],
 		);
 	}

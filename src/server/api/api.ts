@@ -145,7 +145,6 @@ export class Api {
 		entityType: EntityType,
 		entityId: number,
 		name: string,
-		userId: number,
 		description?: string,
 	) {
 		try {
@@ -161,12 +160,7 @@ export class Api {
 		}
 	}
 
-	async addEntity(
-		entityType: EntityType,
-		name: string,
-		userId: number,
-		description: string,
-	) {
+	async addEntity(entityType: EntityType, name: string, description: string) {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
 			return await entityManager.insert({
