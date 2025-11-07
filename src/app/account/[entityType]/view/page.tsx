@@ -5,10 +5,12 @@ import type { EntityType } from "@/server/types";
 
 type Props = {
 	params: Promise<{ entityType: EntityType }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function EntitiesPage({ params }: Props) {
+export default async function EntitiesPage({ params, searchParams }: Props) {
 	const { entityType } = await params;
+	const { page = 1 } = await searchParams;
 	const breadcrumbs = [
 		{
 			link: "/",
@@ -25,7 +27,7 @@ export default async function EntitiesPage({ params }: Props) {
 
 	return (
 		<Page breadcrumbs={breadcrumbs}>
-			<Entities entityType={entityType} />
+			<Entities entityType={entityType} pageNumber={page as number} />
 		</Page>
 	);
 }

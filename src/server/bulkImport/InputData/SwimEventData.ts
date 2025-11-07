@@ -38,7 +38,7 @@ export class SwimEventData {
 		});
 
 		if (entity) {
-			return entity.id;
+			return entity.entityId;
 		}
 
 		const { id: entityId } = await swimEventManager.insert({

@@ -98,7 +98,7 @@ export async function setDefaultImage(formData: FormData) {
 	const id = Number(data.id);
 	const isDefault = Boolean(data.isDefault);
 
-	await api.setDefaultImage(entityId, id, isDefault);
+	await api.setDefaultImage(entityType, entityId, id, isDefault);
 	reloadEditPage(entityType, `${entityId}`);
 }
 
@@ -115,7 +115,7 @@ export async function updateImage(formData: FormData) {
 	const id = Number(data.id);
 	const alt = data.alt as string;
 
-	await api.updateImage(entityId, id, alt);
+	await api.updateImage(entityType, entityId, id, alt);
 	reloadEditPage(entityType, `${entityId}`);
 }
 
@@ -132,7 +132,18 @@ export async function addImage(formData: FormData) {
 	const alt = data.alt as string;
 	const imageFile = data.image as unknown as File;
 
-	await api.insertImage(entityId, alt, imageFile);
+	await api.insertImage(entityType, entityId, alt, imageFile);
+	reloadEditPage(entityType, `${entityId}`);
+}
+
+export async function deleteImage(formData: FormData) {
+	const data = extractFormData(formData, ["entityType", "entityId", "id"]);
+
+	const entityType = data.entityType as EntityType;
+	const entityId = Number(data.entityId);
+	const id = Number(data.id);
+
+	await api.deleteImageById(entityType, entityId, id);
 	reloadEditPage(entityType, `${entityId}`);
 }
 

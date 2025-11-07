@@ -14,7 +14,6 @@ export const EditImages = async ({ entityId, entityType }: EditImagesProps) => {
 	const defaultImage = (images || []).find((i) => i.isDefault);
 	const nonDefaultImages = (images || []).filter((i) => !i.isDefault);
 	const newImage = createEmptyImage();
-	// console.log(images, nonDefaultImages)
 
 	if (!images) {
 		return "No images found";
@@ -38,30 +37,35 @@ export const EditImages = async ({ entityId, entityType }: EditImagesProps) => {
 			)}
 
 			{!!nonDefaultImages?.length && (
-				<div className="mb-4">
-					<h4>Update existing image</h4>
-					{nonDefaultImages.map((image) => (
-						<div key={image.id} className="mb-2 ml-2">
-							<div className="border rounded-box mb-4 p-4">
+				<div className="mb-4 bg-gray-100 p-4 pt-8 border rounded-b-sm">
+					<h4 className="mb-3">Update existing image</h4>
+					<div className="grid grid-cols-3 gap-4">
+						{nonDefaultImages.map((image) => (
+							<div
+								key={image.id}
+								className="border rounded-box mb-4 p-4 bg-white"
+							>
 								<EditImageForm
 									entityType={entityType}
 									entityId={entityId}
 									image={image}
 								/>
 							</div>
-						</div>
-					))}
+						))}
+					</div>
 				</div>
 			)}
 
 			<div className="mb-4">
-				<h4>Upoad new image</h4>
-				<div className="border rounded-box mb-4 p-4">
-					<AddImageForm
-						entityType={entityType}
-						entityId={entityId}
-						image={newImage}
-					/>
+				<div className="mb-4 bg-gray-100 p-4 pt-8 border rounded-b-sm">
+					<h4 className="mb-3">Upoad new image</h4>
+					<div className="border rounded-box mb-4 p-4 bg-white">
+						<AddImageForm
+							entityType={entityType}
+							entityId={entityId}
+							image={newImage}
+						/>
+					</div>
 				</div>
 			</div>
 		</section>

@@ -19,7 +19,7 @@ export const Entities = ({ entityType, entitiesData }: Props) => {
 		<div>
 			{/* <ClientEntities entityType={entityType}> */}
 			{entities.map((entity) => (
-				<Entity key={entity.id} entity={entity} entityType={entityType} />
+				<Entity key={entity.entityId} entity={entity} entityType={entityType} />
 			))}
 			{/* </ClientEntities> */}
 

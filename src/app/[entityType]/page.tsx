@@ -28,7 +28,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Home({ params, searchParams }: Props) {
 	const session = await auth();
-	console.log(session);
 	const { entityType } = await params;
 	const { page = 1 } = await searchParams;
 	const entitiesData = await api.getEntities(entityType, Number(page));

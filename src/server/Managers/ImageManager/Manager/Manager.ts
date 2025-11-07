@@ -1,3 +1,5 @@
+import { type FileManager, fileManagerFactory } from "../../FileManager";
+import { type UserManager, userManagerFactory } from "../../UserManager";
 import { Image } from "../Image";
 import {
 	DeleteAllInputData,
@@ -21,9 +23,13 @@ import { Database } from "./Database";
 
 export class ImageManager {
 	db: Database;
+	fileManager: FileManager;
+	userManager: UserManager;
 
 	constructor() {
 		this.db = new Database();
+		this.fileManager = fileManagerFactory.getInstance();
+		this.userManager = userManagerFactory.getInstance();
 	}
 
 	async getAll(rawImageData: RawGetAllImageInputs): Promise<Image[]> {
@@ -45,9 +51,13 @@ export class ImageManager {
 	async setDefault(rawImageData: RawSetDefaultImageInputs) {
 		const imageData = new SetDefaultInputData(rawImageData);
 		imageData.validateData();
-		const updateData = await this.db.setDefault(imageData);
 
-		// @ts-ignore
+		await this.userManager.assertCanEditEntity(
+			imageData.entityType,
+			imageData.entityId,
+		);
+
+		const updateData = await this.db.setDefault(imageData);
 		if (!updateData?.affectedRows) {
 			throw Error("Unable to update image");
 		}
@@ -58,9 +68,13 @@ export class ImageManager {
 	async update(rawImageData: RawUpdateImageInputs) {
 		const imageData = new UpdateInputData(rawImageData);
 		imageData.validateData();
-		const updateData = await this.db.update(imageData);
 
-		// @ts-ignore
+		await this.userManager.assertCanEditEntity(
+			imageData.entityType,
+			imageData.entityId,
+		);
+
+		const updateData = await this.db.update(imageData);
 		if (!updateData?.affectedRows) {
 			throw Error("Unable to update image");
 		}
@@ -71,42 +85,50 @@ export class ImageManager {
 	async insert(rawImageData: RawInsertImageInputs) {
 		const imageData = new InsertInputData(rawImageData);
 		imageData.validateData();
-		const insertData = await this.db.insert(imageData);
 
-		// @ts-ignore
+		await this.userManager.assertCanCreateEntity(imageData.entityType);
+
+		const insertData = await this.db.insert(imageData);
 		if (!insertData?.insertId) {
 			throw Error("Unable to create image");
 		}
 
-		// @ts-ignore
 		return { id: insertData.insertId };
 	}
 
 	async deleteById(rawImageData: RawDeleteByIdImageInputs) {
 		const imageData = new DeleteByIdInputData(rawImageData);
 		imageData.validateData();
-		const deleteData = await this.db.deleteById(imageData);
 
-		// @ts-ignore
+		await this.userManager.assertCanDeleteEntity(
+			imageData.entityType,
+			imageData.entityId,
+		);
+
+		const rawImage = await this.db.getById(imageData);
+		const deleteData = await this.db.deleteById(imageData);
 		if (!deleteData?.affectedRows) {
 			throw Error("Unable to delete image");
 		}
 
-		// @ts-ignore
-		return { id: entityId };
+		await this.fileManager.deleteImage({ filePath: rawImage.filepath });
+		return { id: imageData.entityId };
 	}
 
 	async deleteAll(rawImageData: RawDeleteAllImageInputs) {
 		const imageData = new DeleteAllInputData(rawImageData);
 		imageData.validateData();
-		const deleteData = await this.db.deleteAll(imageData);
 
-		// @ts-ignore
+		await this.userManager.assertCanDeleteEntity(
+			imageData.entityType,
+			imageData.entityId,
+		);
+
+		const deleteData = await this.db.deleteAll(imageData);
 		if (!deleteData?.affectedRows) {
 			throw Error("Unable to delete image");
 		}
 
-		// @ts-ignore
-		return { id: entityId };
+		return { id: imageData.entityId };
 	}
 }

@@ -15,7 +15,7 @@ const show = false;
 
 export const EditEntity = async ({ entityType, entityId }: Props) => {
 	const loggedInUserId = await getLoggedInUserId();
-	const entity = await api.getEntity(entityType, entityId);
+	const entity = await api.getEntity(entityType, entityId, true);
 
 	if (!loggedInUserId) {
 		return redirect("/login");
@@ -25,7 +25,7 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 		return "Oops, item not found";
 	}
 
-	if (entity.canEdit) {
+	if (!entity.userCanEdit) {
 		return (
 			<div>
 				<p>Ooops! No permission to edit file</p>
@@ -44,7 +44,6 @@ export const EditEntity = async ({ entityType, entityId }: Props) => {
 					entityType={entityType}
 					entityId={entityId}
 					entity={entity}
-					userId={loggedInUserId}
 				/>
 			</section>
 

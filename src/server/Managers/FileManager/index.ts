@@ -1,3 +1,2 @@
 export * from "./factory";
 export * from "./Manager";
-export * from "./types";

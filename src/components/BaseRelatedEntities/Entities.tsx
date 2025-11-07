@@ -16,7 +16,7 @@ export const Entities = ({ entityType, entities, relationshipType }: Props) => {
 			<h2>{getTitle(entityType)}</h2>
 			<div className="grid grid-cols-5 gap-2">
 				{entities.map((entity) => (
-					<EntityCard key={entity.id} entity={entity} />
+					<EntityCard key={entity.entityId} entity={entity} />
 				))}
 			</div>
 		</section>

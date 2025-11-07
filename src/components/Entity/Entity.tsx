@@ -31,7 +31,7 @@ export const Entity = async (props: EntityProps) => {
 	const EntityComponent = entityComponents[entityType];
 
 	return (
-		<EntityContextProvider entityId={entity.id} entityType={entityType}>
+		<EntityContextProvider entityId={entity.entityId} entityType={entityType}>
 			<EntityComponent entity={entity} entityType={entityType} />
 		</EntityContextProvider>
 	);

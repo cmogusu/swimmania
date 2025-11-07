@@ -15,7 +15,9 @@ export class BaseInputData implements IPaginated {
 
 	set pageSize(pageSize: number | undefined) {
 		if (isSet(pageSize) && isNumber(pageSize)) {
-			this._pageSize = clamp(pageSize, MIN_PAGE_SIZE, MAX_PAGE_SIZE);
+			const _pageSize = Number(pageSize);
+			this._pageSize = clamp(_pageSize, MIN_PAGE_SIZE, MAX_PAGE_SIZE);
+			return;
 		}
 
 		this._pageSize = DEFAULT_PAGE_SIZE;
@@ -27,7 +29,9 @@ export class BaseInputData implements IPaginated {
 
 	set pageNumber(pageNumber: number | undefined) {
 		if (isSet(pageNumber) && isNumber(pageNumber)) {
-			this._pageNumber = clamp(pageNumber, MIN_PAGE_NUMBER, MAX_PAGE_NUMBER);
+			const _pageNumber = Number(pageNumber);
+			this._pageNumber = clamp(_pageNumber, MIN_PAGE_NUMBER, MAX_PAGE_NUMBER);
+			return;
 		}
 
 		this._pageNumber = DEFAULT_PAGE_NUMBER;

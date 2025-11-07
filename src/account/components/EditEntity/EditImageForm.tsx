@@ -1,5 +1,9 @@
 import Image from "next/image";
-import { setDefaultImage, updateImage } from "@/server/api/apiActions";
+import {
+	deleteImage,
+	setDefaultImage,
+	updateImage,
+} from "@/server/api/apiActions";
 import type { EntityType, ImageData } from "@/server/types";
 
 type EditImageProps = {
@@ -18,9 +22,11 @@ export const EditImageForm = ({
 	return (
 		<div>
 			<form action={updateImage}>
-				<input type="hidden" name="entityType" value={entityType} />
-				<input type="hidden" name="entityId" value={entityId} />
-				<input type="hidden" name="id" value={id} />
+				<HiddenInputs
+					entityType={entityType}
+					entityId={entityId}
+					imageid={id}
+				/>
 
 				<Image
 					alt={alt}
@@ -44,9 +50,11 @@ export const EditImageForm = ({
 				</button>
 			</form>
 			<form action={setDefaultImage}>
-				<input type="hidden" name="entityType" value={entityType} />
-				<input type="hidden" name="entityId" value={entityId} />
-				<input type="hidden" name="id" value={id} />
+				<HiddenInputs
+					entityType={entityType}
+					entityId={entityId}
+					imageid={id}
+				/>
 				<fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4 mb-3">
 					<legend className="fieldset-legend">Set default</legend>
 					<label className="label">
@@ -62,6 +70,31 @@ export const EditImageForm = ({
 					Update
 				</button>
 			</form>
+
+			<form action={deleteImage}>
+				<HiddenInputs
+					entityType={entityType}
+					entityId={entityId}
+					imageid={id}
+				/>
+				<button className="btn btn-sm" type="submit">
+					delete
+				</button>
+			</form>
 		</div>
 	);
 };
+
+type HiddenInputsProps = {
+	entityType: EntityType;
+	entityId: number;
+	imageid: number;
+};
+
+const HiddenInputs = ({ entityType, entityId, imageid }: HiddenInputsProps) => (
+	<>
+		<input type="hidden" name="entityType" value={entityType} />
+		<input type="hidden" name="entityId" value={entityId} />
+		<input type="hidden" name="id" value={imageid} />
+	</>
+);

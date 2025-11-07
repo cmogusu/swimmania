@@ -74,7 +74,7 @@ export class SwimResultData {
 		});
 
 		if (entity) {
-			return entity.id;
+			return entity.entityId;
 		}
 
 		const { id: entityId } = await entityManager.insert({

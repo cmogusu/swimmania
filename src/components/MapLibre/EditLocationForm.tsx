@@ -25,8 +25,6 @@ export const EditLocationForm = ({
 }: Props) => {
 	const buttonText = metadataId === -1 ? "Insert" : "Update";
 
-	console.log(locationName);
-
 	return (
 		<form action={updateLocationMetadata}>
 			<input type="hidden" name="entityType" defaultValue={entityType} />

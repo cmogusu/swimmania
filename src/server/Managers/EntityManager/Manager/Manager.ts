@@ -1,8 +1,14 @@
 import type { EntityType } from "@/server/types";
-import { ImageManager } from "../../ImageManager";
-import { MetadataManager } from "../../MetadataManager";
-import { RelatedEntityIdManager } from "../../RelatedEntityIdManager";
-import { UserManager } from "../../UserManager";
+import { type ImageManager, imageManagerFactory } from "../../ImageManager";
+import {
+	type MetadataManager,
+	metadataManagerFactory,
+} from "../../MetadataManager";
+import {
+	type RelatedEntityIdManager,
+	relatedEntityIdManagerFactory,
+} from "../../RelatedEntityIdManager";
+import { type UserManager, userManagerFactory } from "../../UserManager";
 import { Entities } from "../Entities";
 import { Entity } from "../Entity";
 import {
@@ -40,10 +46,10 @@ export class EntityManager {
 	constructor(entityType: EntityType) {
 		this.entityType = entityType;
 		this.db = new Database();
-		this.imageManager = new ImageManager();
-		this.metadataManager = new MetadataManager();
-		this.userManager = new UserManager(entityType);
-		this.relatedEntityIdManager = new RelatedEntityIdManager();
+		this.imageManager = imageManagerFactory.getInstance();
+		this.metadataManager = metadataManagerFactory.getInstance();
+		this.userManager = userManagerFactory.getInstance();
+		this.relatedEntityIdManager = relatedEntityIdManagerFactory.getInstance();
 	}
 
 	async getAll(rawInputs: RawGetAllEntityInputs): Promise<Entities> {
@@ -54,10 +60,7 @@ export class EntityManager {
 		const inputData = new GetAllInputData(rawInputs);
 		inputData.validateData();
 
-		const canView = await this.userManager.canViewEntities();
-		if (!canView) {
-			throw Error("Access denied");
-		}
+		await this.userManager.assertCanViewEntities(this.entityType);
 
 		const rawEntities = await this.db.getAll(this.entityType, inputData);
 		const entities = new Entities(rawEntities, inputData);
@@ -80,10 +83,10 @@ export class EntityManager {
 		const inputData = new GetByIdInputData(rawInputs);
 		inputData.validateData();
 
-		const canView = await this.userManager.canViewEntity(inputData.entityId);
-		if (!canView) {
-			throw Error("Access denied");
-		}
+		await this.userManager.assertCanViewEntity(
+			this.entityType,
+			inputData.entityId,
+		);
 
 		const rawEntity = await this.db.getById(this.entityType, inputData);
 		const entity = new Entity(rawEntity);
@@ -103,10 +106,10 @@ export class EntityManager {
 		const inputData = new UpdateInputData(rawInputs);
 		inputData.validateData();
 
-		const canView = await this.userManager.canEditEntity(inputData.entityId);
-		if (!canView) {
-			throw Error("Access denied. Not allowed to edit entity");
-		}
+		await this.userManager.assertCanEditEntity(
+			this.entityType,
+			inputData.entityId,
+		);
 
 		const updateData = await this.db.update(this.entityType, inputData);
 		if (!updateData?.affectedRows) {
@@ -120,10 +123,7 @@ export class EntityManager {
 		const inputData = new InsertInputData(rawInputs);
 		inputData.validateData();
 
-		const canEdit = await this.userManager.canCreateEntity();
-		if (!canEdit) {
-			throw Error("Access denied. Not allowed to create entity");
-		}
+		await this.userManager.assertCanCreateEntity(this.entityType);
 
 		const insertData = await this.db.insert(this.entityType, inputData);
 		const { insertId } = insertData || {};
@@ -131,7 +131,7 @@ export class EntityManager {
 			throw Error("Unable to create entity");
 		}
 
-		await this.userManager.grantAccess(insertId);
+		await this.userManager.grantAccess(this.entityType, insertId);
 		await this.metadataManager.insertEmpty({
 			entityId: insertId,
 			entityType: this.entityType,
@@ -144,10 +144,10 @@ export class EntityManager {
 		const inputData = new DeleteInputData(rawInputs);
 		inputData.validateData();
 
-		const canEdit = await this.userManager.canDeleteEntity(inputData.entityId);
-		if (!canEdit) {
-			throw Error("Access denied. Not allowed to delete entity");
-		}
+		await this.userManager.assertCanDeleteEntity(
+			this.entityType,
+			inputData.entityId,
+		);
 
 		const deleteData = await this.db.deleteById(this.entityType, inputData);
 		if (!deleteData.affectedRows) {
@@ -162,6 +162,7 @@ export class EntityManager {
 		});
 
 		const deleteImage = this.imageManager.deleteAll({
+			entityType,
 			entityId,
 		});
 
@@ -195,12 +196,15 @@ export class EntityManager {
 	async loadRelatedEntityData(entity: Entity, inputData: ILoadableEntity) {
 		if (inputData.loadDefaultImage) {
 			entity.defaultImage = await this.imageManager.getDefault({
-				entityId: entity.id,
+				entityId: entity.entityId,
 			});
 		}
 
 		if (inputData.loadUserCanEdit) {
-			entity.userCanEdit = await this.userManager.canEditEntity(entity.id);
+			entity.userCanEdit = await this.userManager.canEditEntity(
+				this.entityType,
+				entity.entityId,
+			);
 		}
 
 		return entity;

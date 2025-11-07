@@ -106,19 +106,24 @@ export type MetadataData = {
 };
 
 export type EntityData = {
-	id: number;
+	entityId: number;
 	entityType: EntityType;
 	name: string;
 	description: string | undefined;
 	defaultImage: ImageData | undefined;
 	images: ImageData[] | undefined;
-	relationshipType?: string;
+	metadata: RawMetadata[] | undefined;
+	relationshipType: string | undefined;
+	userCanEdit: boolean | undefined;
 };
 
 export type EntitiesData = {
 	nextPage: number;
 	entities: EntityData[];
 	hasMore: boolean;
+	pageSize: number;
+	isRelatedEntities: boolean;
+	relationshipType: RelationshipType | undefined;
 };
 
 export type RelationshipTypeDescription = {

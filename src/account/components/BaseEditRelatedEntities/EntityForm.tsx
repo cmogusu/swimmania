@@ -21,7 +21,7 @@ export const EntityForm = ({
 		<input type="hidden" name="entityType" value={entityType} />
 		<input type="hidden" name="entityId" value={entityId} />
 		<input type="hidden" name="relatedEntityType" value={entity.type} />
-		<input type="hidden" name="relatedEntityId" value={entity.id} />
+		<input type="hidden" name="relatedEntityId" value={entity.entityId} />
 		<input type="hidden" name="relationshipType" value={relationshipType} />
 		<button type="submit" className="btn btn-sm">
 			{buttonText}

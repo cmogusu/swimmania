@@ -45,7 +45,7 @@ export const BaseEditRelatedEntities = async ({
 				>
 					{nonRelatedEntities.map((entity) => (
 						<NonRelatedEntity
-							key={entity.id}
+							key={entity.entityId}
 							entity={entity}
 							entityId={entityId}
 							entityType={entityType}
@@ -56,7 +56,7 @@ export const BaseEditRelatedEntities = async ({
 				<Entities title={`Linked ${EntityTypePlurals[relatedEntityType]}`}>
 					{relatedEntities?.map((entity) => (
 						<RelatedEntity
-							key={entity.id}
+							key={entity.entityId}
 							entity={entity}
 							entityId={entityId}
 							entityType={entityType}

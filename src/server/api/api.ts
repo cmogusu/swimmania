@@ -27,14 +27,18 @@ export class Api {
 	async getEntity(
 		entityType: EntityType,
 		entityId: number,
+		loadUserCanEdit: boolean = false,
+		loadDefaultImage: boolean = true,
 	): Promise<EntityData | undefined> {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
-			return await entityManager.getById({
+			const entity = await entityManager.getById({
 				entityId,
-				loadDefaultImage: true,
-				loadUserCanEdit: false,
+				loadDefaultImage,
+				loadUserCanEdit,
 			});
+
+			return entity.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}
@@ -42,16 +46,20 @@ export class Api {
 
 	async getEntities(
 		entityType: EntityType,
-		page: number = 1,
+		pageNumber: number = 1,
+		loadUserCanEdit: boolean = false,
+		loadDefaultImage: boolean = true,
 	): Promise<EntitiesData | undefined> {
 		try {
 			const entityManager = entityManagerFactory.getInstance(entityType);
-			return await entityManager.getAll({
-				loadUserCanEdit: false,
-				loadDefaultImage: true,
+			const entities = await entityManager.getAll({
+				loadUserCanEdit,
+				loadDefaultImage,
+				pageNumber,
 				pageSize: this.pageSize,
-				pageNumber: page,
 			});
+
+			return entities.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}
@@ -66,7 +74,7 @@ export class Api {
 	): Promise<EntitiesData | undefined> {
 		try {
 			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
-			return await relatedEntityManager.getRelated(
+			const entities = await relatedEntityManager.getRelated(
 				entityType,
 				entityId,
 				{
@@ -75,6 +83,8 @@ export class Api {
 				},
 				pageNumber,
 			);
+
+			return entities.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}
@@ -130,8 +140,7 @@ export class Api {
 			const insertData = await entityManager.deleteById({ entityId });
 			return insertData;
 		} catch (error: unknown) {
-			const errorMessage = "Unable to delete entity";
-			this.log.error(errorMessage, error as Error);
+			this.log.error("Unable to delete entity", error as Error);
 		}
 	}
 
@@ -149,8 +158,7 @@ export class Api {
 				description,
 			});
 		} catch (error: unknown) {
-			const errorMessage = "Unable to update entity";
-			this.log.error(errorMessage, error as Error);
+			this.log.error("Unable to update entity", error as Error);
 		}
 	}
 
@@ -162,8 +170,7 @@ export class Api {
 				description,
 			});
 		} catch (error: unknown) {
-			const errorMessage = "Unable to add entity";
-			this.log.error(errorMessage, error as Error);
+			this.log.error("Unable to add entity", error as Error);
 		}
 	}
 
@@ -178,10 +185,55 @@ export class Api {
 		}
 	}
 
-	async setDefault(entityId: number, id: number, isDefault: boolean) {
+	async updateImage(
+		entityType: EntityType,
+		entityId: number,
+		id: number,
+		alt: string,
+	) {
+		try {
+			const imageManager = imageManagerFactory.getInstance();
+			return await imageManager.update({
+				entityType,
+				entityId,
+				id,
+				alt,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to update image", error as Error);
+		}
+	}
+
+	async insertImage(
+		entityType: EntityType,
+		entityId: number,
+		alt: string,
+		imageFile: File,
+	) {
+		try {
+			const imageManager = imageManagerFactory.getInstance();
+			const filepath = await createFile(imageFile);
+			return await imageManager.insert({
+				entityType,
+				entityId,
+				alt,
+				filepath,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to create image", error as Error);
+		}
+	}
+
+	async setDefaultImage(
+		entityType: EntityType,
+		entityId: number,
+		id: number,
+		isDefault: boolean,
+	) {
 		try {
 			const imageManager = imageManagerFactory.getInstance();
 			return await imageManager.setDefault({
+				entityType,
 				id,
 				entityId,
 				isDefault,
@@ -191,42 +243,13 @@ export class Api {
 		}
 	}
 
-	async updateImage(entityId: number, id: number, alt: string) {
+	async deleteImageById(entityType: EntityType, entityId: number, id: number) {
 		try {
 			const imageManager = imageManagerFactory.getInstance();
-			return await imageManager.update({
-				entityId,
-				id,
-				alt,
-			});
-		} catch (error: unknown) {
-			const errorMessage = "Unable to update image";
-			this.log.error(errorMessage, error as Error);
-		}
-	}
-
-	async insertImage(entityId: number, alt: string, imageFile: File) {
-		try {
-			const imageManager = imageManagerFactory.getInstance();
-			const filepath = await createFile(imageFile);
-			return await imageManager.insert({
-				entityId,
-				alt,
-				filepath,
-			});
-		} catch (error: unknown) {
-			const errorMessage = "Unable to create image";
-			this.log.error(errorMessage, error as Error);
-		}
-	}
-
-	async setDefaultImage(entityId: number, id: number, isDefault: boolean) {
-		try {
-			const imageManager = imageManagerFactory.getInstance();
-			return await imageManager.setDefault({
+			return await imageManager.deleteById({
+				entityType,
 				id,
 				entityId,
-				isDefault,
 			});
 		} catch (error: unknown) {
 			this.log.error("Unable to set default image", error as Error);
@@ -246,8 +269,7 @@ export class Api {
 				names,
 			});
 		} catch (error: unknown) {
-			const errorMessage = "Unable to update metadata";
-			this.log.error(errorMessage, error as Error);
+			this.log.error("Unable to update metadata", error as Error);
 		}
 	}
 
@@ -262,7 +284,6 @@ export class Api {
 				entityType,
 			});
 		} catch (error: unknown) {
-			console.log(error);
 			this.log.error("Unable to get metadata", error as Error);
 		}
 	}
@@ -282,8 +303,7 @@ export class Api {
 				rawMetadataArr,
 			});
 		} catch (error: unknown) {
-			const errorMessage = "Unable to update metadata";
-			this.log.error(errorMessage, error as Error);
+			this.log.error("Unable to update metadata", error as Error);
 		}
 	}
 
@@ -300,9 +320,7 @@ export class Api {
 				rawMetadataArr,
 			});
 		} catch (error: unknown) {
-			console.log(error);
-			const errorMessage = "Unable to insert metadata";
-			this.log.error(errorMessage, error as Error);
+			this.log.error("Unable to insert metadata", error as Error);
 		}
 	}
 }

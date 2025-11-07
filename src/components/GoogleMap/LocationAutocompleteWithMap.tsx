@@ -34,7 +34,7 @@ export default function LocationAutocompleteWithMap({
 		(place: google.maps.places.PlaceResult) => {
 			const { geometry, formatted_address: locationName } = place;
 			const { viewport, location } = geometry || {};
-			if (location) setLocation(location.toJSON());
+			if (location?.toJSON) setLocation(location?.toJSON());
 			if (viewport) setViewport(viewport);
 			if (locationName) setLocationName(locationName);
 		},

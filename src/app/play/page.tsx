@@ -13,12 +13,12 @@
 // import path from "node:path";
 // import { UPLOADS_FOLDER } from "@/server/constants/paths";
 
-import { AddEntity } from "@/account/components/AddEntity";
+import { EditImages } from "@/account/components/EditEntity";
 
 export default async function Page() {
 	return (
 		<div className="p-6">
-			<AddEntity entityType="pool" />
+			<EditImages entityId={6} entityType="pool" />
 		</div>
 	);
 }

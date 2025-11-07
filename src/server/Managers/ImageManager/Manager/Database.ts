@@ -3,6 +3,7 @@ import type {
 	DeleteAllInputData,
 	DeleteByIdInputData,
 	GetAllInputData,
+	GetByIdInputData,
 	GetDefaultInputData,
 	InsertInputData,
 	SetDefaultInputData,
@@ -26,6 +27,15 @@ export class Database extends BaseDatabase {
 		return rawImages as ImageDatabaseRawOutputData[];
 	}
 
+	async getById(inputData: GetByIdInputData | DeleteByIdInputData) {
+		const [rawImages] = await this.query.getById(
+			inputData.entityId,
+			inputData.id,
+		);
+
+		return (rawImages as ImageDatabaseRawOutputData[])?.[0];
+	}
+
 	async getDefault(
 		imageData: GetDefaultInputData,
 	): Promise<ImageDatabaseRawOutputData> {
@@ -39,7 +49,7 @@ export class Database extends BaseDatabase {
 			? await this.query.setDefault(entityId, id)
 			: await this.query.removeDefault(entityId, id);
 
-		return updateData;
+		return updateData as { affectedRows: number };
 	}
 
 	async update(imageData: UpdateInputData) {
@@ -49,7 +59,7 @@ export class Database extends BaseDatabase {
 			imageData.alt,
 		);
 
-		return updateData;
+		return updateData as { affectedRows: number };
 	}
 
 	async insert(imageData: InsertInputData) {
@@ -59,7 +69,7 @@ export class Database extends BaseDatabase {
 			imageData.filepath,
 		);
 
-		return insertData;
+		return insertData as { insertId: number };
 	}
 
 	async deleteById(imageData: DeleteByIdInputData) {
@@ -68,12 +78,12 @@ export class Database extends BaseDatabase {
 			imageData.entityId,
 		);
 
-		return deleteData;
+		return deleteData as { affectedRows: number };
 	}
 
 	async deleteAll(imageData: DeleteAllInputData) {
 		const [deleteData] = await this.query.deleteAll(imageData.entityId);
 
-		return deleteData;
+		return deleteData as { affectedRows: number };
 	}
 }

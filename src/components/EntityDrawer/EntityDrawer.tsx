@@ -20,7 +20,10 @@ export const EntityDrawer = () => {
 
 	return (
 		<div className="">
-			<EntityContextProvider entityId={entity.id} entityType={entity.type}>
+			<EntityContextProvider
+				entityId={entity.entityId}
+				entityType={entity.type}
+			>
 				<section className="mb-4">
 					<h1>{name}</h1>
 					<hr className="w-50 mb-4" />

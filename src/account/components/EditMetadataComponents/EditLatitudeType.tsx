@@ -27,6 +27,11 @@ export const EditLatitudeType = async ({
 		lng: lngMetadata?.value as number,
 	};
 
+	// TODO: Fix bug on location component. Seems to be caused when there is no internet
+	if (location) {
+		return null;
+	}
+
 	return (
 		<div className="mb-4">
 			<h3>{parentTitle}</h3>

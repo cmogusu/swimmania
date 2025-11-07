@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const Entity = ({ entityType, entity }: Props) => {
-	const { id, name, description, defaultImage } = entity;
+	const { entityId, name, description, defaultImage, userCanEdit } = entity;
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
@@ -34,12 +34,14 @@ export const Entity = ({ entityType, entity }: Props) => {
 			</div>
 
 			<a
-				href={`/account/${entityType}/view/${id}`}
+				href={`/account/${entityType}/view/${entityId}`}
 				className="btn btn-square btn-ghost"
 			>
 				<IoMdOpen />
 			</a>
-			<EditElements entityId={id} entityType={entityType} />
+			{userCanEdit && (
+				<EditElements entityId={entityId} entityType={entityType} />
+			)}
 		</li>
 	);
 };

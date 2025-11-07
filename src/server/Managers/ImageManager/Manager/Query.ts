@@ -3,7 +3,15 @@ import { BaseQuery } from "../../services";
 export class Query extends BaseQuery {
 	getAll(entityId: number) {
 		this.throwIfNotSet({ entityId });
-		return this.exec(`SELECT * FROM \`image\` WHERE entityId = ?;`, [entityId]);
+		return this.exec(`SELECT * FROM \`image\` WHERE entityId=?;`, [entityId]);
+	}
+
+	getById(entityId: number, imageId: number) {
+		this.throwIfNotSet({ entityId, imageId });
+		return this.exec(`SELECT * FROM \`image\` WHERE entityId=? AND id=?;`, [
+			entityId,
+			imageId,
+		]);
 	}
 
 	getDefault(entityId: number) {
@@ -65,10 +73,16 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return this.exec(`Delete FROM \`image\` WHERE id=? AND entityId=? `, [
-			imageId,
-			entityId,
+		return Promise.resolve([
+			{
+				affectedRows: 1,
+			},
 		]);
+
+		// return this.exec(`Delete FROM \`image\` WHERE id=? AND entityId=? `, [
+		// 	imageId,
+		// 	entityId,
+		// ]);
 	}
 
 	deleteAll(entityId: number) {
