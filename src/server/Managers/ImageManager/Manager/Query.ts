@@ -73,16 +73,10 @@ export class Query extends BaseQuery {
 			entityId,
 		});
 
-		return Promise.resolve([
-			{
-				affectedRows: 1,
-			},
+		return this.exec(`Delete FROM \`image\` WHERE id=? AND entityId=? `, [
+			imageId,
+			entityId,
 		]);
-
-		// return this.exec(`Delete FROM \`image\` WHERE id=? AND entityId=? `, [
-		// 	imageId,
-		// 	entityId,
-		// ]);
 	}
 
 	deleteAll(entityId: number) {

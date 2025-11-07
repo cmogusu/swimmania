@@ -1,7 +1,7 @@
 import path from "node:path";
 import {
 	IMAGE_FOLDER,
-} from "../constants/file";
+} from "../constants/paths";
 
 export const imagePathToSrc = (imgPath) => {
 	// Correct function

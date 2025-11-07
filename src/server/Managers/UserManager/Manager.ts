@@ -4,6 +4,8 @@ import { PrivateEntityTypesObj } from "@/server/constants";
 import type { EntityType, RelationshipType } from "@/server/types";
 import { isUndefined } from "@/server/utils";
 import { RelatedEntityIdManager } from "../RelatedEntityIdManager";
+import { GrantAccessInputData } from "./InputData";
+import type { RawGrantAccessInputs } from "./type";
 
 const ADMIN_IDS = ["adminId"];
 
@@ -34,13 +36,13 @@ export class UserManager extends RelatedEntityIdManager {
 		this.throwError();
 	}
 
-	assertCanViewEntity(entityType: EntityType, entityId: number) {
+	async assertCanViewEntity(entityType: EntityType, entityId: number) {
 		const isPrivateEntityType = entityType in PrivateEntityTypesObj;
 		if (isPrivateEntityType) {
 			return this.throwError();
 		}
 
-		this.assertHasAccess(entityType, entityId);
+		await this.assertHasAccess(entityType, entityId);
 	}
 
 	async assertCanCreateEntity(entityType: EntityType) {
@@ -57,19 +59,19 @@ export class UserManager extends RelatedEntityIdManager {
 
 	async assertCanEditEntity(entityType: EntityType, entityId: number) {
 		const errorMessage = "Access denied. Not allowed to edit entity";
-		this.assertHasAccess(entityType, entityId, errorMessage);
+		await this.assertHasAccess(entityType, entityId, errorMessage);
 	}
 
 	async canEditEntity(
 		entityType: EntityType,
 		entityId: number,
 	): Promise<boolean> {
-		return this.hasAccess(entityType, entityId);
+		return await this.hasAccess(entityType, entityId);
 	}
 
 	async assertCanDeleteEntity(entityType: EntityType, entityId: number) {
 		const errorMessage = "Access denied. Not allowed to delete entity";
-		this.assertHasAccess(entityType, entityId, errorMessage);
+		await this.assertHasAccess(entityType, entityId, errorMessage);
 	}
 
 	async assertHasAccess(
@@ -95,13 +97,20 @@ export class UserManager extends RelatedEntityIdManager {
 			return Promise.resolve(false);
 		}
 
-		return this.hasRelationship({
+		return await this.hasRelationship({
 			entityType: entityType,
 			entityId,
 			relatedEntityType: this.userEntityType,
 			relatedEntityId: user.id,
 			relationshipType: this.userRelationshipType,
 		});
+	}
+
+	async grantEntityAccess(rawInputs: RawGrantAccessInputs) {
+		const inputData = new GrantAccessInputData(rawInputs);
+		inputData.validateData();
+
+		return await this.grantAccess(inputData.entityType, inputData.entityId);
 	}
 
 	async grantAccess(

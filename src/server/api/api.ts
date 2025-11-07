@@ -6,6 +6,7 @@ import {
 } from "@/server/Managers";
 import { createFile } from "@/utilities/file";
 import { POSTS_PER_PAGE } from "../constants/entity";
+import { userManagerFactory } from "../Managers/UserManager";
 import { Log } from "../services";
 import type {
 	EntitiesData,
@@ -318,6 +319,18 @@ export class Api {
 				entityType,
 				entityId,
 				rawMetadataArr,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to insert metadata", error as Error);
+		}
+	}
+
+	async grantAccess(entityType: EntityType, entityId: number) {
+		try {
+			const userManager = userManagerFactory.getInstance();
+			return await userManager.grantEntityAccess({
+				entityType,
+				entityId,
 			});
 		} catch (error: unknown) {
 			this.log.error("Unable to insert metadata", error as Error);

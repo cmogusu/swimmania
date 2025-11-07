@@ -3,7 +3,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { IoMdOpen } from "react-icons/io";
 import { DefaultSiteImage } from "@/constants";
-import { deleteEntity } from "@/server/api/apiActions";
+import { deleteEntity, grantAccess } from "@/server/api/apiActions";
 import type { EntityData, EntityType } from "@/server/types";
 
 type Props = {
@@ -41,6 +41,15 @@ export const Entity = ({ entityType, entity }: Props) => {
 			</a>
 			{userCanEdit && (
 				<EditElements entityId={entityId} entityType={entityType} />
+			)}
+
+			{/* // TODO: Remove later on */}
+			{!userCanEdit && (
+				<form action={grantAccess}>
+					<input type="hidden" name="entityId" value={entityId} />
+					<input type="hidden" name="entityType" value={entityType} />
+					<input type="submit" className="btn btn-sm" value="Grant access" />
+				</form>
 			)}
 		</li>
 	);

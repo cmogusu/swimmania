@@ -19,7 +19,8 @@ export class FileActions {
 		return this.getRelativePath(filePath);
 	}
 
-	delete(_inputData: DeleteFileInputData): Promise<string> {
+	delete(inputData: DeleteFileInputData): Promise<string> {
+		console.log(`deleted ${inputData.filePath}`);
 		return Promise.resolve("path");
 	}
 	getRelativePath(filePath: string) {
