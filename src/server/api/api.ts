@@ -6,6 +6,7 @@ import {
 } from "@/server/Managers";
 import { createFile } from "@/utilities/file";
 import { POSTS_PER_PAGE } from "../constants/entity";
+import { importManagerFactory } from "../Managers/ImportManager";
 import { userManagerFactory } from "../Managers/UserManager";
 import { Log } from "../services";
 import type {
@@ -322,6 +323,17 @@ export class Api {
 			});
 		} catch (error: unknown) {
 			this.log.error("Unable to insert metadata", error as Error);
+		}
+	}
+
+	async importEntities(entityType: EntityType, file: File) {
+		try {
+			const importManager = importManagerFactory.getInstance(entityType);
+			return await importManager.import({
+				file,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to import entities", error as Error);
 		}
 	}
 

@@ -1,5 +1,9 @@
 import { ALLOWED_IMAGE_TYPES, ALLOWED_PDF_TYPES } from "@/server/constants";
-import { IMAGE_FOLDER, PDF_FOLDER } from "@/server/constants/paths";
+import {
+	IMAGE_FOLDER,
+	PDF_FOLDER,
+	PUBLIC_FOLDER,
+} from "@/server/constants/paths";
 import { DeleteFileInputData, UploadFileInputData } from "../InputData";
 import type {
 	RawDeleteFileInputs,
@@ -18,7 +22,7 @@ export class FileManager {
 		this.fileActions = new FileActions();
 	}
 
-	uploadImage({ file }: RawUploadImageInputs) {
+	uploadImage({ file }: RawUploadImageInputs): Promise<string> {
 		return this.uploadFile({
 			file,
 			uploadDirectory: IMAGE_FOLDER,
@@ -26,7 +30,7 @@ export class FileManager {
 		});
 	}
 
-	uploadPDF({ file }: RawUploadPdfInputs) {
+	uploadPDF({ file }: RawUploadPdfInputs): Promise<string> {
 		return this.uploadFile({
 			file,
 			uploadDirectory: PDF_FOLDER,
@@ -34,11 +38,10 @@ export class FileManager {
 		});
 	}
 
-	async uploadFile(rawInputs: RawUploadFileInputs) {
+	async uploadFile(rawInputs: RawUploadFileInputs): Promise<string> {
 		const inputData = new UploadFileInputData(rawInputs);
 		await inputData.validateData();
-
-		await this.fileActions.upload(inputData);
+		return await this.fileActions.upload(inputData);
 	}
 
 	deleteImage({ filePath }: RawDeleteImageInputs) {
@@ -53,6 +56,10 @@ export class FileManager {
 			filePath,
 			uploadDirectory: PDF_FOLDER,
 		});
+	}
+
+	getRelativePath(filePath: string) {
+		return filePath.replace(PUBLIC_FOLDER, "");
 	}
 
 	async deleteFile(rawInputs: RawDeleteFileInputs) {

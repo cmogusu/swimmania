@@ -13,6 +13,11 @@ export type EntityType =
 	| "rating"
 	| "comment";
 
+export type ImportableEntityTypes = Extract<
+	EntityType,
+	"swimEvent" | "swimMeet" | "swimResult"
+>;
+
 export type PrivateEntityType = Extract<
 	EntityType,
 	"parent" | "user" | "rating" | "comment"

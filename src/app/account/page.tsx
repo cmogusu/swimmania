@@ -6,7 +6,7 @@ export default async function Home() {
 
 	return (
 		<Page>
-			<Entities entityType={entityType} />
+			<Entities entityType={entityType} pageNumber={1} />
 		</Page>
 	);
 }

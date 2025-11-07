@@ -252,6 +252,12 @@ export async function removeRelatedEntity(formData: FormData) {
 	reloadEditPage(data.entityType, data.entityId);
 }
 
+export async function importEntities(formData: FormData) {
+	const file = formData.get("file") as File;
+	const entityType = formData.get("entityType") as EntityType;
+	await api.importEntities(entityType, file);
+}
+
 export async function grantAccess(formData: FormData) {
 	const data = extractFormData(formData, ["entityType", "entityId"]);
 	await api.grantAccess(data.entityType as EntityType, Number(data.entityId));
