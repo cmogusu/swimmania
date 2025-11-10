@@ -1,5 +1,9 @@
 import type { EntityType } from "@/server/types";
-import { type Entities, entityManagerFactory } from "../../EntityManager";
+import {
+	type Entities,
+	type EntityManager,
+	entityManagerFactory,
+} from "../../EntityManager";
 import { RelatedEntityIdManager } from "../../RelatedEntityIdManager";
 import type {
 	RawDeleteRelatedEntityInputs,
@@ -9,9 +13,11 @@ import type {
 } from "../types";
 
 export class RelatedEntityManager {
+	entityManager: EntityManager;
 	relatedEntityIdManager: RelatedEntityIdManager;
 
 	constructor() {
+		this.entityManager = entityManagerFactory.getInstance();
 		this.relatedEntityIdManager = new RelatedEntityIdManager();
 	}
 
@@ -100,29 +106,24 @@ export class RelatedEntityManager {
 			pageSize,
 		});
 
-		const otherEntityManager =
-			entityManagerFactory.getInstance(relatedEntityType);
-
-		const entities = await otherEntityManager.getByIds({ entityIds });
+		const entities = await this.entityManager.getByIds({
+			entityType: relatedEntityType,
+			entityIds,
+		});
 		entities.setRelationshipType(relationshipType);
 		return entities;
 	}
 
 	async getEntityId(rawRelatedEntity: RawInsertNewRelatedEntityInputs) {
-		const { type: relatedEntityType } = rawRelatedEntity;
-
 		let relatedEntityId: number | undefined;
-		const relatedEntityManager =
-			entityManagerFactory.getInstance(relatedEntityType);
-
 		if (!relatedEntityId) {
 			const relatedEntity =
-				await relatedEntityManager.findExisting(rawRelatedEntity);
-			relatedEntityId = relatedEntity?.id;
+				await this.entityManager.findExisting(rawRelatedEntity);
+			relatedEntityId = relatedEntity?.entityId;
 		}
 
 		if (!relatedEntityId) {
-			const { id } = await relatedEntityManager.insert(rawRelatedEntity);
+			const { id } = await this.entityManager.insert(rawRelatedEntity);
 			relatedEntityId = id;
 		}
 

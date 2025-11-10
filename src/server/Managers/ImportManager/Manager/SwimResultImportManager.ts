@@ -18,9 +18,7 @@ import type { EventData, MeetData, ResultData } from "./types";
 export class SwimResultImportManager extends BaseImportManager {
 	dataFolder: string;
 	entityType: EntityType = "swimResult";
-	swimResultManager: EntityManager;
-	swimEventManager: EntityManager;
-	swimMeetManager: EntityManager;
+	entityManager: EntityManager;
 	metadataManager: MetadataManager;
 	relatedEntityIdManager: RelatedEntityIdManager;
 	db: Database;
@@ -29,9 +27,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		super();
 
 		this.dataFolder = path.join(PDF_FOLDER, this.entityType);
-		this.swimResultManager = entityManagerFactory.getInstance("swimResult");
-		this.swimEventManager = entityManagerFactory.getInstance("swimEvent");
-		this.swimMeetManager = entityManagerFactory.getInstance("swimMeet");
+		this.entityManager = entityManagerFactory.getInstance();
 		this.metadataManager = metadataManagerFactory.getInstance();
 		this.relatedEntityIdManager = relatedEntityIdManagerFactory.getInstance();
 
@@ -68,7 +64,8 @@ export class SwimResultImportManager extends BaseImportManager {
 			return existingMeetId;
 		}
 
-		const { id: meetId } = await this.swimMeetManager.insert({
+		const { id: meetId } = await this.entityManager.insert({
+			entityType,
 			name: meet.name,
 			description: meet.subtitle,
 		});
@@ -101,7 +98,8 @@ export class SwimResultImportManager extends BaseImportManager {
 			return existingEventId;
 		}
 
-		const { id: eventId } = await this.swimEventManager.insert({
+		const { id: eventId } = await this.entityManager.insert({
+			entityType,
 			name: `Event ${event_number}`,
 			description: `${distance} ${gender} ${age_group}`,
 		});
@@ -150,7 +148,8 @@ export class SwimResultImportManager extends BaseImportManager {
 			return existingResultId;
 		}
 
-		const { id: resultId } = await this.swimResultManager.insert({
+		const { id: resultId } = await this.entityManager.insert({
+			entityType,
 			name: entityName,
 			description: `${rank} ${name} ${age}`,
 		});
@@ -193,7 +192,8 @@ export class SwimResultImportManager extends BaseImportManager {
 		let swimmerId = this.db.getByName(entityType, entityName);
 
 		if (!swimmerId) {
-			const results = await this.swimResultManager.insert({
+			const results = await this.entityManager.insert({
+				entityType,
 				name: entityName,
 				description: `swimmer ${entityName}`,
 			});
@@ -227,7 +227,8 @@ export class SwimResultImportManager extends BaseImportManager {
 		let teamId = this.db.getByName(entityType, entityName);
 
 		if (!teamId) {
-			const results = await this.swimResultManager.insert({
+			const results = await this.entityManager.insert({
+				entityType,
 				name: entityName,
 				description: `swimmer ${entityName}`,
 			});

@@ -33,8 +33,9 @@ export class Api {
 		loadDefaultImage: boolean = true,
 	): Promise<EntityData | undefined> {
 		try {
-			const entityManager = entityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance();
 			const entity = await entityManager.getById({
+				entityType,
 				entityId,
 				loadDefaultImage,
 				loadUserCanEdit,
@@ -53,8 +54,9 @@ export class Api {
 		loadDefaultImage: boolean = true,
 	): Promise<EntitiesData | undefined> {
 		try {
-			const entityManager = entityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance();
 			const entities = await entityManager.getAll({
+				entityType,
 				loadUserCanEdit,
 				loadDefaultImage,
 				pageNumber,
@@ -138,8 +140,11 @@ export class Api {
 
 	async deleteEntity(entityType: EntityType, entityId: number) {
 		try {
-			const entityManager = entityManagerFactory.getInstance(entityType);
-			const insertData = await entityManager.deleteById({ entityId });
+			const entityManager = entityManagerFactory.getInstance();
+			const insertData = await entityManager.deleteById({
+				entityType,
+				entityId,
+			});
 			return insertData;
 		} catch (error: unknown) {
 			this.log.error("Unable to delete entity", error as Error);
@@ -153,8 +158,9 @@ export class Api {
 		description?: string,
 	) {
 		try {
-			const entityManager = entityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance();
 			return await entityManager.update({
+				entityType,
 				entityId,
 				name,
 				description,
@@ -166,8 +172,9 @@ export class Api {
 
 	async addEntity(entityType: EntityType, name: string, description: string) {
 		try {
-			const entityManager = entityManagerFactory.getInstance(entityType);
+			const entityManager = entityManagerFactory.getInstance();
 			return await entityManager.insert({
+				entityType,
 				name,
 				description,
 			});

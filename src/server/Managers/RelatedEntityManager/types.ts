@@ -5,7 +5,10 @@ import type {
 } from "../EntityManager";
 
 // Inputs
-export type RawGetRelatedEntityInputs = RawGetAllEntityInputs & {
+export type RawGetRelatedEntityInputs = Pick<
+	RawGetAllEntityInputs,
+	"filters"
+> & {
 	type: EntityType;
 	relationshipType: RelationshipType;
 };

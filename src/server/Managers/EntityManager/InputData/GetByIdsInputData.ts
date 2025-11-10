@@ -1,3 +1,4 @@
+import type { EntityType } from "@/server/types";
 import { BaseInputData } from "../../services";
 import type { ILoadableEntity, RawGetByIdsEntityInputs } from "../types";
 import { sanitizeBoolean } from "./utils";
@@ -8,6 +9,7 @@ export class GetByIdsInputData
 	implements ILoadableEntity
 {
 	entityIds: number[];
+	entityType: EntityType;
 
 	loadDefaultImage: boolean;
 	loadUserCanEdit: boolean;
@@ -16,6 +18,7 @@ export class GetByIdsInputData
 
 	constructor({
 		entityIds,
+		entityType,
 		pageSize,
 		pageNumber,
 		loadDefaultImage,
@@ -24,6 +27,7 @@ export class GetByIdsInputData
 		super();
 
 		this.entityIds = entityIds;
+		this.entityType = entityType;
 		this.pageSize = pageSize;
 		this.pageNumber = pageNumber;
 
@@ -35,5 +39,6 @@ export class GetByIdsInputData
 
 	validateData() {
 		this.entityIds = this.validate.ids(this.entityIds);
+		this.entityType = this.validate.entityType(this.entityType);
 	}
 }

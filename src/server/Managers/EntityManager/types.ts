@@ -20,6 +20,7 @@ export type EntityLoadRelatedDataOptions = {
 // Inputs
 export type RawGetAllEntityInputs = EntityLoadRelatedDataOptions &
 	PaginationOptions & {
+		entityType: EntityType;
 		filters?: MetadataFilter[];
 	};
 
@@ -27,14 +28,17 @@ export type RawFilterByEntityInputs = RawGetAllEntityInputs;
 
 export type RawGetByIdsEntityInputs = EntityLoadRelatedDataOptions &
 	PaginationOptions & {
+		entityType: EntityType;
 		entityIds: number[];
 	};
 
 export type RawGetByIdEntityInputs = EntityLoadRelatedDataOptions & {
+	entityType: EntityType;
 	entityId: number;
 };
 
 export type RawGetByNameEntityInputs = EntityLoadRelatedDataOptions & {
+	entityType: EntityType;
 	name: string;
 };
 
@@ -43,11 +47,13 @@ export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 };
 
 export type RawInsertEntityInputs = {
+	entityType: EntityType;
 	name: string;
 	description?: string;
 };
 
 export type RawDeleteEntityInputs = {
+	entityType: EntityType;
 	entityId: number;
 };
 

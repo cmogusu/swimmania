@@ -12,13 +12,15 @@ import { SeedMetadata } from "./SeedMetadata";
 
 export class SeedEntity {
 	log: Log;
+	entityType: EntityType;
 	entityManager: EntityManager;
 	seedMetadata: SeedMetadata;
 	seedImage: SeedImage;
 
 	constructor(entityType: EntityType) {
 		this.log = new Log();
-		this.entityManager = entityManagerFactory.getInstance(entityType);
+		this.entityType = entityType;
+		this.entityManager = entityManagerFactory.getInstance();
 		this.seedImage = new SeedImage();
 		this.seedMetadata = new SeedMetadata(entityType);
 	}
@@ -61,6 +63,7 @@ export class SeedEntity {
 
 	getSeedData(): RawInsertEntityInputs {
 		return {
+			entityType: this.entityType,
 			name: faker.location.street(),
 			description: faker.word.words({ count: { min: 10, max: 20 } }),
 		};

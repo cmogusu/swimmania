@@ -1,4 +1,3 @@
-import type { EntityType } from "@/server/types";
 import { type ImageManager, imageManagerFactory } from "../../ImageManager";
 import {
 	type MetadataManager,
@@ -35,7 +34,6 @@ import type {
 import { Database } from "./Database";
 
 export class EntityManager {
-	entityType: EntityType;
 	db: Database;
 
 	imageManager: ImageManager;
@@ -43,8 +41,7 @@ export class EntityManager {
 	userManager: UserManager;
 	relatedEntityIdManager: RelatedEntityIdManager;
 
-	constructor(entityType: EntityType) {
-		this.entityType = entityType;
+	constructor() {
 		this.db = new Database();
 		this.imageManager = imageManagerFactory.getInstance();
 		this.metadataManager = metadataManagerFactory.getInstance();
@@ -60,9 +57,9 @@ export class EntityManager {
 		const inputData = new GetAllInputData(rawInputs);
 		inputData.validateData();
 
-		await this.userManager.assertCanViewEntities(this.entityType);
+		await this.userManager.assertCanViewEntities(rawInputs.entityType);
 
-		const rawEntities = await this.db.getAll(this.entityType, inputData);
+		const rawEntities = await this.db.getAll(rawInputs.entityType, inputData);
 		const entities = new Entities(rawEntities, inputData);
 		return await this.loadRelatedEntitiesData(entities, inputData);
 	}
@@ -72,7 +69,7 @@ export class EntityManager {
 		inputData.validateData();
 
 		const rawEntities: RawEntity[] = rawInputs.entityIds.length
-			? await this.db.getByIds(this.entityType, inputData)
+			? await this.db.getByIds(rawInputs.entityType, inputData)
 			: [];
 
 		const entities = new Entities(rawEntities, inputData);
@@ -84,11 +81,11 @@ export class EntityManager {
 		inputData.validateData();
 
 		await this.userManager.assertCanViewEntity(
-			this.entityType,
+			rawInputs.entityType,
 			inputData.entityId,
 		);
 
-		const rawEntity = await this.db.getById(this.entityType, inputData);
+		const rawEntity = await this.db.getById(rawInputs.entityType, inputData);
 		const entity = new Entity(rawEntity);
 		return await this.loadRelatedEntityData(entity, inputData);
 	}
@@ -97,7 +94,7 @@ export class EntityManager {
 		const inputData = new GetByNameInputData(rawInputs);
 		inputData.validateData();
 
-		const rawEntity = await this.db.getByName(this.entityType, inputData);
+		const rawEntity = await this.db.getByName(rawInputs.entityType, inputData);
 		const entity = new Entity(rawEntity);
 		return await this.loadRelatedEntityData(entity, inputData);
 	}
@@ -107,11 +104,11 @@ export class EntityManager {
 		inputData.validateData();
 
 		await this.userManager.assertCanEditEntity(
-			this.entityType,
+			rawInputs.entityType,
 			inputData.entityId,
 		);
 
-		const updateData = await this.db.update(this.entityType, inputData);
+		const updateData = await this.db.update(rawInputs.entityType, inputData);
 		if (!updateData?.affectedRows) {
 			throw Error("Unable to update entity");
 		}
@@ -123,15 +120,15 @@ export class EntityManager {
 		const inputData = new InsertInputData(rawInputs);
 		inputData.validateData();
 
-		await this.userManager.assertCanCreateEntity(this.entityType);
+		await this.userManager.assertCanCreateEntity(rawInputs.entityType);
 
-		const insertData = await this.db.insert(this.entityType, inputData);
+		const insertData = await this.db.insert(rawInputs.entityType, inputData);
 		const { insertId } = insertData || {};
 		if (!insertId) {
 			throw Error("Unable to create entity");
 		}
 
-		await this.userManager.grantAccess(this.entityType, insertId);
+		await this.userManager.grantAccess(rawInputs.entityType, insertId);
 		return { id: insertId };
 	}
 
@@ -140,17 +137,19 @@ export class EntityManager {
 		inputData.validateData();
 
 		await this.userManager.assertCanDeleteEntity(
-			this.entityType,
+			rawInputs.entityType,
 			inputData.entityId,
 		);
 
-		const deleteData = await this.db.deleteById(this.entityType, inputData);
+		const deleteData = await this.db.deleteById(
+			rawInputs.entityType,
+			inputData,
+		);
 		if (!deleteData.affectedRows) {
 			throw Error("Unable to delete entity");
 		}
 
-		const { entityType } = this;
-		const { entityId } = rawInputs;
+		const { entityId, entityType } = rawInputs;
 		const deleteMetadata = this.metadataManager.deleteAll({
 			entityType,
 			entityId,
@@ -177,13 +176,12 @@ export class EntityManager {
 
 	async filterBy(rawInputs: RawFilterByEntityInputs) {
 		const entityIds = await this.metadataManager.filterBy({
-			entityType: this.entityType,
+			entityType: rawInputs.entityType,
 			filters: rawInputs.filters || [],
 		});
 
 		return this.getByIds({
 			entityIds,
-			entityType: this.entityType,
 			...rawInputs,
 		} as unknown as RawGetByIdsEntityInputs);
 	}
@@ -197,7 +195,7 @@ export class EntityManager {
 
 		if (inputData.loadUserCanEdit) {
 			entity.userCanEdit = await this.userManager.canEditEntity(
-				this.entityType,
+				entity.entityType,
 				entity.entityId,
 			);
 		}
