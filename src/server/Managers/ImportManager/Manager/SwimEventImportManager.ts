@@ -1,5 +1,5 @@
-import { ImportManager } from "./Manager";
+import { BaseImportManager } from "./BaseImportManager";
 
-export class SwimEventImportManager extends ImportManager {
+export class SwimEventImportManager extends BaseImportManager {
 	doSth() {}
 }

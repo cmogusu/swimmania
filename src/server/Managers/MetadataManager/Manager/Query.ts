@@ -96,6 +96,8 @@ export class Query extends BaseQuery {
 		const joinedNames = names.join(", ");
 		const placeholders = Array(names.length).fill("?").join(",");
 
+		// TODO: Replace with upsert
+		// INSERT INTO table_name (column1, column2, column3) VALUES (value1, value2, value3) ON DUPLICATE KEY UPDATE column2 = new_value2, column3 = new_value3;
 		return this.exec(
 			`INSERT INTO \`${tableName}\` (entityId, ${joinedNames}) VALUES (?, ${placeholders});`,
 			[entityId, ...values],

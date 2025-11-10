@@ -132,11 +132,6 @@ export class EntityManager {
 		}
 
 		await this.userManager.grantAccess(this.entityType, insertId);
-		await this.metadataManager.insertEmpty({
-			entityId: insertId,
-			entityType: this.entityType,
-		});
-
 		return { id: insertId };
 	}
 

@@ -1,10 +1,10 @@
 import type { EntityType, ImportableEntityTypes } from "@/server/types";
 import {
-	type ImportManager,
 	SwimEventImportManager,
 	SwimMeetImportManager,
 	SwimResultImportManager,
 } from ".";
+import type { ImportManager } from "./Manager/types";
 
 const importManagers: Record<string, ImportManager> = {};
 

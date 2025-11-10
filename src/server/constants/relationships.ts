@@ -35,6 +35,7 @@ export const EntityRelationships: Record<
 		["parentOf_inverse", "parent"],
 		["comment", "comment"],
 		["owns_inverse", "user"],
+		["participatedIn", "swimEvent"],
 	],
 	school: [
 		["contains", "pool"],
@@ -45,7 +46,8 @@ export const EntityRelationships: Record<
 	team: [
 		["trainsAt", "pool"],
 		["rating", "rating"],
-		["owns_inverse", "user"],
+		["contains", "swimmer"],
+		["participatedIn", "swimResult"],
 	],
 	lifeguard: [
 		["worksAt", "pool"],
