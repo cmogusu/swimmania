@@ -1,13 +1,13 @@
 import type { EntityType } from "@/server/types";
-import type { RawDeleteAllMetadataInputs } from "../types";
+import type { RawDeleteMetadataInputs } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
-export class DeleteAllInputData {
+export class DeleteInputData {
 	entityId: number;
 	entityType: EntityType;
 	validate: Validate;
 
-	constructor({ entityId, entityType }: RawDeleteAllMetadataInputs) {
+	constructor({ entityId, entityType }: RawDeleteMetadataInputs) {
 		this.entityId = entityId;
 		this.entityType = entityType;
 		this.validate = ValidateInstance;

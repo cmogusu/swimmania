@@ -9,7 +9,6 @@ import { EditLocationForm } from "../MapLibre/EditLocationForm";
 import type { LocationAutocompleteWithMapProps } from "./LocationAutocompleteWithMap";
 
 type Props = {
-	metadataId: number | undefined;
 	entityId: number;
 	entityType: EntityType;
 	location: LatLng | undefined;
@@ -21,7 +20,6 @@ const LocationAutocompleteWithMap: ComponentType<LocationAutocompleteWithMapProp
 	dynamic(() => import("./LocationAutocompleteWithMap"));
 
 export const EditSingleLocationMap = ({
-	metadataId,
 	entityId,
 	entityType,
 	...props
@@ -44,7 +42,6 @@ export const EditSingleLocationMap = ({
 				/>
 			</FixedMapContainer>
 			<EditLocationForm
-				metadataId={metadataId}
 				entityId={entityId}
 				entityType={entityType}
 				latValue={location?.lat}

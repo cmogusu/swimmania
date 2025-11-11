@@ -34,19 +34,19 @@ export const EntitiesMetadataList: Record<EntityType, string[]> = {
 };
 
 export const EntityMetadataDbTables: Record<EntityType, string> = {
-	parent: "parent_metadata",
-	swimmer: "swmmer_metadata",
-	school: "school_metadata",
-	pool: "pool_metadata",
-	team: "team_metadata",
-	coach: "coach_metadata",
-	swimMeet: "swm_meet_metadata",
-	lifeguard: "lifeguard_metadata",
-	swimResult: "swm_result_metadata",
-	swimEvent: "swm_event_metadata",
-	user: "user_metadata",
-	comment: "comment_metadata",
-	rating: "rating_metadata",
+	parent: "metadata_parent",
+	swimmer: "metadata_swmmer",
+	school: "metadata_school",
+	pool: "metadata_pool",
+	team: "metadata_team",
+	coach: "metadata_coach",
+	swimMeet: "metadata_swm_meet",
+	lifeguard: "metadata_lifeguard",
+	swimResult: "metadata_swm_result",
+	swimEvent: "metadata_swm_event",
+	user: "metadata_user",
+	comment: "metadata_comment",
+	rating: "metadata_rating",
 };
 
 export const MetadataDbDefaultColumnNames = ["id", "entityId"];

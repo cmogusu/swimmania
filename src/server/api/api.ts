@@ -299,7 +299,6 @@ export class Api {
 
 	async updateMetadata(
 		entityType: EntityType,
-		id: number,
 		entityId: number,
 		rawMetadataArr: RawMetadata[],
 	) {
@@ -307,7 +306,6 @@ export class Api {
 			const metadataManager = metadataManagerFactory.getInstance();
 			return await metadataManager.update({
 				entityType,
-				id,
 				entityId,
 				rawMetadataArr,
 			});
@@ -316,14 +314,14 @@ export class Api {
 		}
 	}
 
-	async insertMetadata(
+	async upsertMetadata(
 		entityType: EntityType,
 		entityId: number,
 		rawMetadataArr: RawMetadata[],
 	) {
 		try {
 			const metadataManager = metadataManagerFactory.getInstance();
-			return await metadataManager.insert({
+			return await metadataManager.upsert({
 				entityType,
 				entityId,
 				rawMetadataArr,
@@ -336,9 +334,7 @@ export class Api {
 	async importEntities(entityType: EntityType, file: File) {
 		try {
 			const importManager = importManagerFactory.getInstance(entityType);
-			return await importManager.import({
-				file,
-			});
+			return await importManager.importFile({ file });
 		} catch (error: unknown) {
 			this.log.error("Unable to import entities", error as Error);
 		}

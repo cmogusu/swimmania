@@ -105,7 +105,6 @@ export type ImageData = {
 };
 
 export type MetadataData = {
-	id: number;
 	name: string;
 	value: MetadataValue;
 };
@@ -149,7 +148,6 @@ export type DbTableColumn = {
 };
 
 export interface IMetadataPropertyType {
-	id: number;
 	type: SchemaType;
 	title: string;
 	name: string;

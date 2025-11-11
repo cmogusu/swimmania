@@ -28,7 +28,7 @@ export class Entity {
 			name: this.name,
 			entityType: this.entityType,
 			description: this.description,
-			defaultImage: this.defaultImage,
+			defaultImage: this.defaultImage?.toJSON(),
 			images: this.images,
 			metadata: this.metadata,
 			userCanEdit: this.userCanEdit,

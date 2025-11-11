@@ -151,13 +151,11 @@ export async function updateLocationMetadata(formData: FormData) {
 	const data = extractFormData(formData, [
 		"entityType",
 		"entityId",
-		"id",
 		"lat",
 		"lng",
 		"locationName",
 	]);
 
-	const id = Number(data.id);
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
 	const metadataArr = [
@@ -175,25 +173,19 @@ export async function updateLocationMetadata(formData: FormData) {
 		},
 	];
 
-	if (id > -1) {
-		await api.updateMetadata(entityType, id, entityId, metadataArr);
-	} else {
-		await api.insertMetadata(entityType, entityId, metadataArr);
-	}
-
+	// TODO: Return to updateMetadata after testing all metadata updates
+	await api.upsertMetadata(entityType, entityId, metadataArr);
 	reloadEditPage(data.entityType, data.entityId);
 }
 
 export async function updateMetadata(formData: FormData) {
 	const data = extractFormData(formData, [
 		"entityType",
-		"id",
 		"entityId",
 		"name",
 		"value",
 	]);
 
-	const id = Number(data.id);
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
 	const metadataArr = [
@@ -203,12 +195,8 @@ export async function updateMetadata(formData: FormData) {
 		},
 	];
 
-	if (id > -1) {
-		await api.updateMetadata(entityType, id, entityId, metadataArr);
-	} else {
-		await api.insertMetadata(entityType, entityId, metadataArr);
-	}
-
+	await api.updateMetadata(entityType, entityId, metadataArr);
+	// TODO: Fix reload after edit
 	reloadEditPage(data.entityType, data.entityId);
 }
 

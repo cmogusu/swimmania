@@ -20,6 +20,15 @@ export type ResultData = {
 	time: string;
 };
 
+export type RawFileImportInputs = {
+	file: File;
+};
+
+export type RawFileNameImportInputs = {
+	fileName: string;
+};
+
 export interface ImportManager {
-	importJson: (fileName: string) => Promise<void>;
+	importFile: (rawInputs: RawFileImportInputs) => Promise<void>;
+	importJson: (rawInputs: RawFileNameImportInputs) => Promise<void>;
 }

@@ -12,7 +12,6 @@ export const EditLatitudeType = async ({
 		return null;
 	}
 
-	const metadataId = parentMetadata.id;
 	const latMetadata = parentMetadata.getChild("lat");
 	const lngMetadata = parentMetadata.getChild("lng");
 	const nameMetadata = parentMetadata.getChild("name");
@@ -36,7 +35,6 @@ export const EditLatitudeType = async ({
 		<div className="mb-4">
 			<h3>{parentTitle}</h3>
 			<EditSingleLocationMap
-				metadataId={metadataId}
 				entityId={entityId}
 				entityType={entityType}
 				locationName={locationName}

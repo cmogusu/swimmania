@@ -13,7 +13,12 @@ import {
 } from "../../RelatedEntityIdManager";
 import { BaseImportManager } from "./BaseImportManager";
 import { Database } from "./Database";
-import type { EventData, MeetData, ResultData } from "./types";
+import type {
+	EventData,
+	MeetData,
+	RawFileNameImportInputs,
+	ResultData,
+} from "./types";
 
 export class SwimResultImportManager extends BaseImportManager {
 	dataFolder: string;
@@ -35,7 +40,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		this.db = new Database(dbPath);
 	}
 
-	async importJson(fileName: string) {
+	async importJson({ fileName }: RawFileNameImportInputs) {
 		const filePath = path.join(this.dataFolder, fileName);
 		await access(filePath, constants.R_OK);
 		const fileData = await readFile(filePath, "utf8");
@@ -71,7 +76,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		});
 
 		this.db.insert(entityType, meetId, entityName);
-		await this.metadataManager.insert({
+		await this.metadataManager.upsert({
 			entityType,
 			entityId: meetId,
 			rawMetadataArr: [
@@ -105,7 +110,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		});
 
 		this.db.insert(entityType, eventId, entityName);
-		await this.metadataManager.insert({
+		await this.metadataManager.upsert({
 			entityType: "swimEvent",
 			entityId: eventId,
 			rawMetadataArr: [
@@ -155,7 +160,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		});
 
 		this.db.insert(entityType, resultId, entityName);
-		await this.metadataManager.insert({
+		await this.metadataManager.upsert({
 			entityType: "swimResult",
 			entityId: resultId,
 			rawMetadataArr: [

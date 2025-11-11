@@ -129,6 +129,11 @@ export class EntityManager {
 		}
 
 		await this.userManager.grantAccess(rawInputs.entityType, insertId);
+		await this.metadataManager.insertEmpty({
+			entityId: insertId,
+			entityType: rawInputs.entityType,
+		});
+
 		return { id: insertId };
 	}
 
@@ -150,7 +155,7 @@ export class EntityManager {
 		}
 
 		const { entityId, entityType } = rawInputs;
-		const deleteMetadata = this.metadataManager.deleteAll({
+		const deleteMetadata = this.metadataManager.delete({
 			entityType,
 			entityId,
 		});

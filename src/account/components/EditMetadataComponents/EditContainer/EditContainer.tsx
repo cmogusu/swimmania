@@ -5,7 +5,6 @@ import { updateMetadata } from "@/server/api/apiActions";
 import type { EntityType } from "@/server/types";
 
 type Props = {
-	id: number;
 	name: string;
 	entityType: EntityType;
 	entityId: number;
@@ -13,18 +12,16 @@ type Props = {
 };
 
 export const EditContainer = ({
-	id,
 	name,
 	entityType,
 	entityId,
 	children,
 }: Props) => {
-	const buttonText = id === -1 ? "Insert" : "Update";
+	const buttonText = "Update";
 
 	return (
 		<Form action={updateMetadata} className="mb-4">
 			<input type="hidden" name="entityType" defaultValue={entityType} />
-			<input type="hidden" name="id" defaultValue={id} />
 			<input type="hidden" name="entityId" defaultValue={entityId} />
 			<input type="hidden" name="name" defaultValue={name} />
 

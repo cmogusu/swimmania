@@ -2,8 +2,7 @@ import { MetadataDbDefaultColumnNames } from "@/server/constants";
 import type { DbTableColumn, EntityType, RawMetadata } from "@/server/types";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
-	DeleteAllInputData,
-	DeleteByIdInputData,
+	DeleteInputData,
 	FilterInputData,
 	GetAllInputData,
 	GetListInputData,
@@ -64,7 +63,7 @@ export class Database extends BaseDatabase {
 
 	async update(metadataData: UpdateInputData) {
 		const [updateData] = await this.query.update(
-			metadataData.id,
+			metadataData.entityId,
 			metadataData.entityType,
 			metadataData.rawMetadataArr,
 		);
@@ -81,8 +80,8 @@ export class Database extends BaseDatabase {
 		return insertData as { insertId: number };
 	}
 
-	async insert(metadataData: InsertInputData) {
-		const [insertData] = await this.query.insert(
+	async upsert(metadataData: InsertInputData) {
+		const [insertData] = await this.query.upsert(
 			metadataData.entityId,
 			metadataData.entityType,
 			metadataData.rawMetadataArr,
@@ -91,18 +90,8 @@ export class Database extends BaseDatabase {
 		return insertData as { insertId: number };
 	}
 
-	async deleteById(metadataData: DeleteByIdInputData) {
-		const [deleteData] = await this.query.deleteById(
-			metadataData.entityType,
-			metadataData.id,
-			metadataData.entityId,
-		);
-
-		return deleteData as { affectedRows: number };
-	}
-
-	async deleteAll(metadataData: DeleteAllInputData) {
-		const [deleteData] = await this.query.deleteAll(
+	async delete(metadataData: DeleteInputData) {
+		const [deleteData] = await this.query.delete(
 			metadataData.entityType,
 			metadataData.entityId,
 		);

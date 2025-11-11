@@ -26,7 +26,7 @@ export class Query extends BaseQuery {
 		const tableName = EntityMetadataDbTables[entityType];
 
 		return this.exec(
-			`SELECT id, entityId, ${joinedNames} FROM \`${tableName}\` Where entityId=?;`,
+			`SELECT entityId, ${joinedNames} FROM \`${tableName}\` Where entityId=?;`,
 			[entityId],
 		);
 	}
@@ -48,24 +48,24 @@ export class Query extends BaseQuery {
 	}
 
 	update(
-		metadataId: number,
+		entityId: number,
 		entityType: EntityType,
 		rawMetadataArr: RawMetadata[],
 	) {
 		this.throwIfNotSet({
-			metadataId,
+			entityId,
 			entityType,
 			rawMetadataArrLength: rawMetadataArr?.length,
 		});
 
+		const tableName = EntityMetadataDbTables[entityType];
 		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
 		const joinedNames = names.map((n) => `${n}=?`).join(", ");
-		const tableName = EntityMetadataDbTables[entityType];
 
-		return this.exec(`UPDATE \`${tableName}\` SET ${joinedNames} WHERE id=?;`, [
-			...values,
-			metadataId,
-		]);
+		return this.exec(
+			`UPDATE \`${tableName}\` SET ${joinedNames} WHERE entityId=?;`,
+			[...values, entityId],
+		);
 	}
 
 	insertEmpty(entityId: number, entityType: EntityType) {
@@ -80,7 +80,7 @@ export class Query extends BaseQuery {
 		]);
 	}
 
-	insert(
+	upsert(
 		entityId: number,
 		entityType: EntityType,
 		rawMetadataArr: RawMetadata[],
@@ -93,32 +93,17 @@ export class Query extends BaseQuery {
 
 		const tableName = EntityMetadataDbTables[entityType];
 		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
-		const joinedNames = names.join(", ");
-		const placeholders = Array(names.length).fill("?").join(",");
+		const insertColumns = names.join(", ");
+		const insertPlaceholders = Array(names.length).fill("?").join(",");
+		const updateColumns = names.map((n) => `${n}=?`).join(", ");
 
-		// TODO: Replace with upsert
-		// INSERT INTO table_name (column1, column2, column3) VALUES (value1, value2, value3) ON DUPLICATE KEY UPDATE column2 = new_value2, column3 = new_value3;
 		return this.exec(
-			`INSERT INTO \`${tableName}\` (entityId, ${joinedNames}) VALUES (?, ${placeholders});`,
-			[entityId, ...values],
+			`INSERT INTO \`${tableName}\` (entityId, ${insertColumns}) VALUES (?, ${insertPlaceholders}) ON DUPLICATE KEY UPDATE ${updateColumns};`,
+			[entityId, ...values, ...values],
 		);
 	}
 
-	deleteById(entityType: EntityType, entityId: number, metadataId: number) {
-		this.throwIfNotSet({
-			entityType,
-			metadataId,
-			entityId,
-		});
-
-		const tableName = EntityMetadataDbTables[entityType];
-		return this.exec(
-			`Delete FROM \`${tableName}\` Where id=? and entityId=? `,
-			[metadataId, entityId],
-		);
-	}
-
-	deleteAll(entityType: EntityType, entityId: number) {
+	delete(entityType: EntityType, entityId: number) {
 		this.throwIfNotSet({
 			entityType,
 			entityId,
@@ -147,8 +132,7 @@ export class Query extends BaseQuery {
 		return this.exec(
 			`
 			CREATE TABLE ${tableName} (
-				\`id\` INT(11) PRIMARY KEY AUTO_INCREMENT,
-				\`entityId\` int(11) NOT NULL,
+				\`entityId\` INT(11) PRIMARY KEY AUTO_INCREMENT,
 				${columns
 					.map(
 						({ name, type }: DbTableColumn) =>

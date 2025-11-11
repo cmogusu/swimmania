@@ -15,7 +15,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	validate: Validate;
 
 	type: SchemaType = "text";
-	id: number = -1;
 	name: string;
 	_value!: MetadataValue;
 
@@ -31,7 +30,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	sortIndex: number = 100;
 
 	constructor({
-		id,
 		name,
 		title,
 		editTitle,
@@ -42,7 +40,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	}: MetadataTypeInputs) {
 		this.validate = ValidateInstance;
 
-		if (!isUndefined(id)) this.id = id;
 		if (!isUndefined(title)) this.title = title;
 		if (!isUndefined(editTitle)) this.editTitle = editTitle;
 		if (!isUndefined(prefix)) this.prefix = prefix;
@@ -73,9 +70,9 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	}
 
 	get dbValue(): MetadataData[] {
-		const { id, name, value } = this;
+		const { name, value } = this;
 		if (!isUndefined(value)) {
-			return [{ id, name, value }];
+			return [{ name, value }];
 		}
 
 		return [];

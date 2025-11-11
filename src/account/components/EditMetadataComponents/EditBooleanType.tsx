@@ -10,7 +10,6 @@ export const EditBooleanType = ({
 
 	return (
 		<EditContainer
-			id={metadataType.id}
 			name={metadataType.name}
 			entityType={entityType}
 			entityId={entityId}

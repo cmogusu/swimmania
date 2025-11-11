@@ -1,7 +1,6 @@
 import type { DbTableColumn, EntityType, RawMetadata } from "@/server/types";
 import {
-	DeleteAllInputData,
-	DeleteByIdInputData,
+	DeleteInputData,
 	FilterInputData,
 	GetAllInputData,
 	GetListInputData,
@@ -11,8 +10,7 @@ import {
 } from "../InputData";
 import { entityMetadataFactory } from "../Metadata/EntityMetadata";
 import type {
-	RawDeleteAllMetadataInputs,
-	RawDeleteByIdMetadataInputs,
+	RawDeleteMetadataInputs,
 	RawFilterByMetadataInputs,
 	RawGetAllMetadataInputs,
 	RawGetListMetadataInputs,
@@ -55,7 +53,7 @@ export class MetadataManager {
 			throw Error("Unable to update metadata");
 		}
 
-		return { id: metadataInputs.id };
+		return { id: metadataInputs.entityId };
 	}
 
 	async insertEmpty(rawInputs: RawInsertEmptyMetadataInputs) {
@@ -71,11 +69,11 @@ export class MetadataManager {
 	}
 
 	// TODO: Replace with upsert
-	async insert(rawInputs: RawInsertMetadataInputs) {
+	async upsert(rawInputs: RawInsertMetadataInputs) {
 		const metadataInputs = new InsertInputData(rawInputs);
 		metadataInputs.validateData();
 
-		const insertData = await this.db.insert(metadataInputs);
+		const insertData = await this.db.upsert(metadataInputs);
 		if (!insertData?.insertId) {
 			throw Error("Unable to create metadata");
 		}
@@ -83,25 +81,13 @@ export class MetadataManager {
 		return { id: insertData.insertId };
 	}
 
-	async deleteById(rawInputs: RawDeleteByIdMetadataInputs) {
-		const metadataInputs = new DeleteByIdInputData(rawInputs);
+	async delete(rawInputs: RawDeleteMetadataInputs) {
+		const metadataInputs = new DeleteInputData(rawInputs);
 		metadataInputs.validateData();
 
-		const deleteData = await this.db.deleteById(metadataInputs);
+		const deleteData = await this.db.delete(metadataInputs);
 		if (!deleteData?.affectedRows) {
-			throw Error("Unable to delete metadata by id");
-		}
-
-		return { id: rawInputs.entityId };
-	}
-
-	async deleteAll(rawInputs: RawDeleteAllMetadataInputs) {
-		const metadataInputs = new DeleteAllInputData(rawInputs);
-		metadataInputs.validateData();
-
-		const deleteData = await this.db.deleteAll(metadataInputs);
-		if (!deleteData?.affectedRows) {
-			throw Error("Unable to delete all metadata");
+			throw Error("Unable to delete metadata");
 		}
 
 		return { id: rawInputs.entityId };
