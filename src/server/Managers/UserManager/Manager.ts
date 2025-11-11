@@ -4,8 +4,8 @@ import { PrivateEntityTypesObj } from "@/server/constants";
 import type { EntityType, RelationshipType } from "@/server/types";
 import { isUndefined } from "@/server/utils";
 import { RelatedEntityIdManager } from "../RelatedEntityIdManager";
-import { GrantAccessInputData } from "./InputData";
-import type { RawGrantAccessInputs } from "./type";
+import { GrantAccessInputData, RevokeAccessInputData } from "./InputData";
+import type { RawGrantAccessInputs, RawRevokeAccessInputs } from "./type";
 
 const ADMIN_IDS = ["adminId"];
 
@@ -113,7 +113,14 @@ export class UserManager extends RelatedEntityIdManager {
 		return await this.grantAccess(inputData.entityType, inputData.entityId);
 	}
 
-	async grantAccess(
+	async revokeEntityAccess(rawInputs: RawRevokeAccessInputs) {
+		const inputData = new RevokeAccessInputData(rawInputs);
+		inputData.validateData();
+
+		return await this.revokeAccess(inputData.entityType, inputData.entityId);
+	}
+
+	private async grantAccess(
 		entityType: EntityType,
 		entityId: number,
 	): Promise<boolean> {
@@ -127,7 +134,7 @@ export class UserManager extends RelatedEntityIdManager {
 			return Promise.resolve(true);
 		}
 
-		const insertId = await this.insert({
+		await this.upsert({
 			entityType,
 			entityId,
 			relatedEntityType: this.userEntityType,
@@ -135,6 +142,26 @@ export class UserManager extends RelatedEntityIdManager {
 			relationshipType: this.userRelationshipType,
 		});
 
-		return Boolean(insertId);
+		return true;
+	}
+
+	private async revokeAccess(
+		entityType: EntityType,
+		entityId: number,
+	): Promise<boolean> {
+		const user = await this.getUser();
+		if (isUndefined(user?.id)) {
+			return Promise.resolve(false);
+		}
+
+		const { id } = await this.deleteById({
+			entityType,
+			entityId,
+			relatedEntityType: this.userEntityType,
+			relatedEntityId: user?.id,
+			relationshipType: this.userRelationshipType,
+		});
+
+		return Boolean(id);
 	}
 }

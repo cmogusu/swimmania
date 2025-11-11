@@ -32,7 +32,7 @@ export class GetInputData extends BaseInputData {
 	validateData() {
 		this.entityType = this.validate.entityType(this.entityType);
 		this.entityId = this.validate.id(this.entityId);
-		this.entityType = this.validate.entityType(this.relatedEntityType);
+		this.relatedEntityType = this.validate.entityType(this.relatedEntityType);
 		this.validate.relationshipType(
 			this.entityType,
 			this.relatedEntityType,

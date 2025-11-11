@@ -123,7 +123,7 @@ export class Query extends BaseQuery {
 			relatedEntityId,
 		);
 
-		return this.exec(
+		this.exec(
 			`INSERT INTO \`${dbTable}\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE entityId1=?, entityId2=?, relationship=?, relationshipType=?;`,
 			[
 				entityId1,

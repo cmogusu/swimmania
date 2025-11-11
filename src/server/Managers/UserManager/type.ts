@@ -4,3 +4,5 @@ export type RawGrantAccessInputs = {
 	entityType: EntityType;
 	entityId: number;
 };
+
+export type RawRevokeAccessInputs = RawGrantAccessInputs;

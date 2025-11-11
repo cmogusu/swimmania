@@ -62,15 +62,13 @@ export class Database extends BaseDatabase {
 	}
 
 	async upsert(relationData: InsertInputData) {
-		const [insertData] = await this.query.upsert(
+		await this.query.upsert(
 			relationData.entityType,
 			relationData.entityId,
 			relationData.relatedEntityType,
 			relationData.relatedEntityId,
 			this.removeInverseRelationship(relationData.relationshipType),
 		);
-
-		return insertData;
 	}
 
 	async deleteById(relationData: DeleteInputData) {
@@ -82,7 +80,7 @@ export class Database extends BaseDatabase {
 			this.removeInverseRelationship(relationData.relationshipType),
 		);
 
-		return deleteData;
+		return deleteData as { affectedRows: number };
 	}
 
 	async deleteAll(relationData: DeleteAllInputData) {
@@ -91,6 +89,6 @@ export class Database extends BaseDatabase {
 			relationData.entityId,
 		);
 
-		return deleteData;
+		return deleteData as { affectedRows: number };
 	}
 }

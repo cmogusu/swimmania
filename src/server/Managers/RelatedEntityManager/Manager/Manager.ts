@@ -4,10 +4,12 @@ import {
 	type EntityManager,
 	entityManagerFactory,
 } from "../../EntityManager";
-import { RelatedEntityIdManager } from "../../RelatedEntityIdManager";
+import {
+	type RawGetRelatedInputData,
+	RelatedEntityIdManager,
+} from "../../RelatedEntityIdManager";
 import type {
 	RawDeleteRelatedEntityInputs,
-	RawGetRelatedEntityInputs,
 	RawInsertNewRelatedEntityInputs,
 	RawInsertRelatedEntityInputs,
 } from "../types";
@@ -32,7 +34,7 @@ export class RelatedEntityManager {
 			relationshipType,
 		} = rawRelatedEntity;
 
-		return this.relatedEntityIdManager.insert({
+		return this.relatedEntityIdManager.upsert({
 			entityId,
 			entityType,
 			relatedEntityId,
@@ -47,9 +49,8 @@ export class RelatedEntityManager {
 		rawRelatedEntity: RawInsertNewRelatedEntityInputs,
 	) {
 		const { type: relatedEntityType, relationshipType } = rawRelatedEntity;
-
 		const relatedEntityId = await this.getEntityId(rawRelatedEntity);
-		return this.relatedEntityIdManager.insert({
+		return this.relatedEntityIdManager.upsert({
 			entityId,
 			entityType,
 			relatedEntityId,
@@ -90,26 +91,19 @@ export class RelatedEntityManager {
 	}
 
 	async getRelated(
-		entityType: EntityType,
-		entityId: number,
-		relatedEntity: RawGetRelatedEntityInputs,
-		pageNumber?: number,
-		pageSize?: number,
-	): Promise<Entities> {
-		const { type: relatedEntityType, relationshipType } = relatedEntity;
-		const entityIds = await this.relatedEntityIdManager.getRelated({
-			entityId,
-			entityType,
-			relatedEntityType,
-			relationshipType,
-			pageNumber,
-			pageSize,
-		});
+		rawInputs: RawGetRelatedInputData,
+	): Promise<Entities | undefined> {
+		const { relatedEntityType, relationshipType } = rawInputs;
+		const entityIds = await this.relatedEntityIdManager.getRelated(rawInputs);
+		if (!entityIds?.length) {
+			return undefined;
+		}
 
 		const entities = await this.entityManager.getByIds({
 			entityType: relatedEntityType,
 			entityIds,
 		});
+
 		entities.setRelationshipType(relationshipType);
 		return entities;
 	}

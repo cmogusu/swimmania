@@ -46,25 +46,18 @@ export class RelatedEntityIdManager {
 			: await this.db.getNonRelated(inputData);
 	}
 
-	hasRelationship(rawHasRelationshipData: RawHasRelationshipData) {
-		const inputData = new HasRelationshipInputData(rawHasRelationshipData);
+	hasRelationship(rawInputData: RawHasRelationshipData) {
+		const inputData = new HasRelationshipInputData(rawInputData);
 		inputData.validateData();
 
 		return this.db.hasExisting(inputData);
 	}
 
-	async upsert(rawRelatedEntityData: RawInsertRelatedInputData) {
-		const inputData = new InsertInputData(rawRelatedEntityData);
+	async upsert(rawInputData: RawInsertRelatedInputData): Promise<void> {
+		const inputData = new InsertInputData(rawInputData);
 		inputData.validateData();
 
-		const insertData = await this.db.upsert(inputData);
-		// @ts-ignore
-		if (!insertData?.insertId) {
-			throw Error("Unable to create metadata");
-		}
-
-		// @ts-ignore
-		return { id: insertData.insertId };
+		await this.db.upsert(inputData);
 	}
 
 	async insertBulk(rawRelatedEntityDataArr: RawInsertRelatedInputData[]) {
@@ -75,31 +68,27 @@ export class RelatedEntityIdManager {
 		await Promise.all(insertPromise);
 	}
 
-	async deleteById(rawRelatedEntityData: RawDeleteByIdRelatedInputData) {
-		const inputData = new DeleteInputData(rawRelatedEntityData);
+	async deleteById(rawInputData: RawDeleteByIdRelatedInputData) {
+		const inputData = new DeleteInputData(rawInputData);
 		inputData.validateData();
 
 		const deleteData = await this.db.deleteById(inputData);
-		// @ts-ignore
 		if (!deleteData?.affectedRows) {
 			throw Error("Unable to delete metadata");
 		}
 
-		// @ts-ignore
-		return { id: entityId };
+		return { id: rawInputData.entityId };
 	}
 
-	async deleteAll(rawRelatedEntityData: RawDeleteAllRelatedInputData) {
-		const inputData = new DeleteAllInputData(rawRelatedEntityData);
+	async deleteAll(rawInputData: RawDeleteAllRelatedInputData) {
+		const inputData = new DeleteAllInputData(rawInputData);
 		inputData.validateData();
 
 		const deleteData = await this.db.deleteAll(inputData);
-		// @ts-ignore
 		if (!deleteData?.affectedRows) {
 			throw Error("Unable to delete metadata");
 		}
 
-		// @ts-ignore
-		return { id: entityId };
+		return { id: rawInputData.entityId };
 	}
 }

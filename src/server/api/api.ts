@@ -78,17 +78,15 @@ export class Api {
 	): Promise<EntitiesData | undefined> {
 		try {
 			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
-			const entities = await relatedEntityManager.getRelated(
+			const entities = await relatedEntityManager.getRelated({
 				entityType,
 				entityId,
-				{
-					type: relatedEntityType,
-					relationshipType,
-				},
+				relatedEntityType,
+				relationshipType,
 				pageNumber,
-			);
+			});
 
-			return entities.toJSON();
+			return entities?.toJSON();
 		} catch (error: unknown) {
 			this.log.error("Unable to get entries", error as Error);
 		}
@@ -100,7 +98,7 @@ export class Api {
 		relatedEntityType: EntityType,
 		relatedEntityId: number,
 		relationshipType: RelationshipType,
-	): Promise<{ id: number } | undefined> {
+	): Promise<void> {
 		try {
 			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
 			return await relatedEntityManager.insertRelated(entityType, entityId, {
@@ -344,6 +342,18 @@ export class Api {
 		try {
 			const userManager = userManagerFactory.getInstance();
 			return await userManager.grantEntityAccess({
+				entityType,
+				entityId,
+			});
+		} catch (error: unknown) {
+			this.log.error("Unable to insert metadata", error as Error);
+		}
+	}
+
+	async revokeAccess(entityType: EntityType, entityId: number) {
+		try {
+			const userManager = userManagerFactory.getInstance();
+			return await userManager.revokeEntityAccess({
 				entityType,
 				entityId,
 			});

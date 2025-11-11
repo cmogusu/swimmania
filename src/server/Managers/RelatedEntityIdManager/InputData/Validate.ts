@@ -8,11 +8,11 @@ import { BaseValidate } from "../../services/BaseValidate";
 
 export class Validate extends BaseValidate {
 	relationshipType(
-		entitytype: EntityType,
+		entityType: EntityType,
 		relatedEntityType: EntityType,
 		relationshipType: RelationshipType,
 	) {
-		const entityRelationships = EntityRelationships[entitytype];
+		const entityRelationships = EntityRelationships[entityType];
 		if (!entityRelationships) {
 			throw Error("Invalid entity type");
 		}

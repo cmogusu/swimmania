@@ -251,6 +251,12 @@ export async function grantAccess(formData: FormData) {
 	reloadEditPage(data.entityType, data.entityId);
 }
 
+export async function revokeAccess(formData: FormData) {
+	const data = extractFormData(formData, ["entityType", "entityId"]);
+	await api.revokeAccess(data.entityType as EntityType, Number(data.entityId));
+	reloadEditPage(data.entityType, data.entityId);
+}
+
 export async function seedEntityType(formData: FormData) {
 	const { entityType, itemCount } = extractFormData(formData, [
 		"entityType",
