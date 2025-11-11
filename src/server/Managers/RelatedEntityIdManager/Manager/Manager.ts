@@ -53,11 +53,11 @@ export class RelatedEntityIdManager {
 		return this.db.hasExisting(inputData);
 	}
 
-	async insert(rawRelatedEntityData: RawInsertRelatedInputData) {
+	async upsert(rawRelatedEntityData: RawInsertRelatedInputData) {
 		const inputData = new InsertInputData(rawRelatedEntityData);
 		inputData.validateData();
 
-		const insertData = await this.db.insert(inputData);
+		const insertData = await this.db.upsert(inputData);
 		// @ts-ignore
 		if (!insertData?.insertId) {
 			throw Error("Unable to create metadata");
@@ -69,7 +69,7 @@ export class RelatedEntityIdManager {
 
 	async insertBulk(rawRelatedEntityDataArr: RawInsertRelatedInputData[]) {
 		const insertPromise = rawRelatedEntityDataArr.map((data) =>
-			this.insert(data),
+			this.upsert(data),
 		);
 
 		await Promise.all(insertPromise);

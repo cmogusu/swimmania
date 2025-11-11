@@ -19,11 +19,10 @@ export const metadataResultToArray = (
 		return [];
 	}
 
-	const { id, entityId, ...remainingResults } = metadataResults;
+	const { entityId, ...remainingResults } = metadataResults;
 	const arr = [];
 	for (const name in remainingResults) {
 		arr.push({
-			id,
 			entityId,
 			name: formatColumnNameFromDb(name),
 			value: remainingResults[name],

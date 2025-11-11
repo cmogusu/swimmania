@@ -10,20 +10,17 @@ export const EditOptionsType = ({
 	const { title, value, options } =
 		metadataType as IOptionsMetadataPropertyType;
 
-	if (!options?.length) {
-		throw Error("Options not set");
-	}
+	// TODO: Fix bug where select fails to display correct value after update
 
 	return (
 		<EditContainer
-			id={metadataType.id}
 			name={metadataType.name}
 			entityType={entityType}
 			entityId={entityId}
 		>
 			<fieldset className="fieldset">
 				<legend className="fieldset-legend">{title}</legend>
-				<select name="value" defaultValue={value as string} className="select">
+				<select name="value" className="select" defaultValue={value as string}>
 					<option value="">Select</option>
 					{options.map((o) => (
 						<option key={o.key} value={o.key}>

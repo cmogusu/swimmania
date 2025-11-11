@@ -20,7 +20,7 @@ export class Query extends BaseQuery {
 	}
 
 	getList(entityType: EntityType, entityId: number, names: string[]) {
-		this.throwIfNotSet({ entityType, entityId, namesLength: names?.length });
+		this.throwIfNotSet({ entityType, entityId, names });
 
 		const joinedNames = names.join(", ");
 		const tableName = EntityMetadataDbTables[entityType];
@@ -47,27 +47,6 @@ export class Query extends BaseQuery {
 		);
 	}
 
-	update(
-		entityId: number,
-		entityType: EntityType,
-		rawMetadataArr: RawMetadata[],
-	) {
-		this.throwIfNotSet({
-			entityId,
-			entityType,
-			rawMetadataArrLength: rawMetadataArr?.length,
-		});
-
-		const tableName = EntityMetadataDbTables[entityType];
-		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
-		const joinedNames = names.map((n) => `${n}=?`).join(", ");
-
-		return this.exec(
-			`UPDATE \`${tableName}\` SET ${joinedNames} WHERE entityId=?;`,
-			[...values, entityId],
-		);
-	}
-
 	insertEmpty(entityId: number, entityType: EntityType) {
 		this.throwIfNotSet({
 			entityId,
@@ -80,6 +59,27 @@ export class Query extends BaseQuery {
 		]);
 	}
 
+	update(
+		entityId: number,
+		entityType: EntityType,
+		rawMetadataArr: RawMetadata[],
+	) {
+		this.throwIfNotSet({
+			entityId,
+			entityType,
+			rawMetadataArr,
+		});
+
+		const tableName = EntityMetadataDbTables[entityType];
+		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
+		const joinedNames = names.map((n) => `${n}=?`).join(", ");
+
+		return this.exec(
+			`UPDATE \`${tableName}\` SET ${joinedNames} WHERE entityId=?;`,
+			[...values, entityId],
+		);
+	}
+
 	upsert(
 		entityId: number,
 		entityType: EntityType,
@@ -88,7 +88,7 @@ export class Query extends BaseQuery {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
-			rawMetadataArrLength: rawMetadataArr?.length,
+			rawMetadataArr,
 		});
 
 		const tableName = EntityMetadataDbTables[entityType];
@@ -124,7 +124,7 @@ export class Query extends BaseQuery {
 	createMetadataTable(entityType: EntityType, columns: DbTableColumn[]) {
 		this.throwIfNotSet({
 			entityType,
-			columnsLength: columns?.length,
+			columns,
 		});
 
 		// TODO: Remove entityType column and sync tables

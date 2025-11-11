@@ -61,8 +61,8 @@ export class Database extends BaseDatabase {
 		return Boolean((results as { id: number }[]).length);
 	}
 
-	async insert(relationData: InsertInputData) {
-		const [insertData] = await this.query.insert(
+	async upsert(relationData: InsertInputData) {
+		const [insertData] = await this.query.upsert(
 			relationData.entityType,
 			relationData.entityId,
 			relationData.relatedEntityType,

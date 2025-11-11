@@ -1,4 +1,5 @@
 import type mysql from "mysql2/promise";
+import { isArray, isString } from "@/server/utils";
 import { getConnectionPool } from "./DbConnectionPool";
 import { Log } from "./Log";
 
@@ -22,10 +23,24 @@ export class BaseQuery {
 		for (const name in values) {
 			const value = values[name];
 
+			if (isArray(value) && !value.length) {
+				throw Error(`${name} array is empty`);
+			}
+
 			if (value === undefined || value === null) {
 				throw Error(`${name} not set`);
 			}
 		}
+	}
+
+	logQuery(query: string, params: unknown[]) {
+		let i = 0;
+		const stringQuery = query.replaceAll("?", () => {
+			const param = params[i++];
+			return isString(param) ? `'${param}'` : `${param}`;
+		});
+
+		this.log.appLogic(stringQuery);
 	}
 
 	[Symbol.dispose]() {

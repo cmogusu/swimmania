@@ -77,9 +77,7 @@ export class BaseEntityMetadata implements IEntityMetadata {
 	}
 
 	get dbValue(): MetadataData[] {
-		return this.metadata
-			.flatMap((metadata) => metadata.dbValue)
-			.filter(Boolean);
+		return this.metadata.flatMap((metadata) => metadata.dbValue).filter(isSet);
 	}
 
 	validateFilter(filter: MetadataFilter): MetadataFilter {

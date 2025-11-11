@@ -68,7 +68,6 @@ export class MetadataManager {
 		return { id: insertData.insertId };
 	}
 
-	// TODO: Replace with upsert
 	async upsert(rawInputs: RawInsertMetadataInputs) {
 		const metadataInputs = new InsertInputData(rawInputs);
 		metadataInputs.validateData();

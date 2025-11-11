@@ -95,12 +95,12 @@ export class Query extends BaseQuery {
 			this.getColumns(entityType, entityId, relatedEntityType, relatedEntityId);
 
 		return this.exec(
-			`SELECT id FROM \`${dbTable}\` WHERE ${activeColumn}=? AND ${relatedColumn}=? AND relationship=? AND relationshipType=?;`,
+			`SELECT * FROM \`${dbTable}\` WHERE ${activeColumn}=? AND ${relatedColumn}=? AND relationship=? AND relationshipType=?;`,
 			[entityId1, entityId2, relationship, relationshipType],
 		);
 	}
 
-	insert(
+	upsert(
 		entityType: string,
 		entityId: number | string,
 		relatedEntityType: string,
@@ -124,8 +124,17 @@ export class Query extends BaseQuery {
 		);
 
 		return this.exec(
-			`INSERT INTO \`${dbTable}\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, ?, ?);`,
-			[entityId1, entityId2, relationship, relationshipType],
+			`INSERT INTO \`${dbTable}\` (entityId1, entityId2, relationship, relationshipType) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE entityId1=?, entityId2=?, relationship=?, relationshipType=?;`,
+			[
+				entityId1,
+				entityId2,
+				relationship,
+				relationshipType,
+				entityId1,
+				entityId2,
+				relationship,
+				relationshipType,
+			],
 		);
 	}
 

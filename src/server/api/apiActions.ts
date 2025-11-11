@@ -196,7 +196,6 @@ export async function updateMetadata(formData: FormData) {
 	];
 
 	await api.updateMetadata(entityType, entityId, metadataArr);
-	// TODO: Fix reload after edit
 	reloadEditPage(data.entityType, data.entityId);
 }
 

@@ -1,5 +1,4 @@
 /** biome-ignore-all lint/a11y/noLabelWithoutControl: No better solution found */
-import { isUndefined } from "@/server/utils";
 import { EditContainer } from "./EditContainer";
 import type { EditProps } from "./types";
 
@@ -10,13 +9,8 @@ export const EditRatingsType = ({
 }: EditProps) => {
 	const { title, value } = metadataType;
 
-	if (isUndefined(value)) {
-		return null;
-	}
-
 	return (
 		<EditContainer
-			id={metadataType.id}
 			name={metadataType.name}
 			entityType={entityType}
 			entityId={entityId}
@@ -28,21 +22,18 @@ export const EditRatingsType = ({
 					<div className="rating">
 						{Array(5)
 							.fill("")
-							.map((_, i) => {
-								const current = i + 1 === value ? { defaultChecked: true } : {};
-								return (
-									<input
-										// biome-ignore lint/suspicious/noArrayIndexKey: No better solution found now
-										key={i}
-										type="radio"
-										name="value"
-										value={i + 1}
-										className="mask mask-star"
-										aria-label={`${i + 1} star`}
-										{...current}
-									/>
-								);
-							})}
+							.map((_, i) => (
+								<input
+									// biome-ignore lint/suspicious/noArrayIndexKey: Find better solution
+									key={i}
+									type="radio"
+									name="value"
+									value={i + 1}
+									className="mask mask-star"
+									aria-label={`${i + 1} star`}
+									defaultChecked={i + 1 === value}
+								/>
+							))}
 					</div>
 				</label>
 			</div>
