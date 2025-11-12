@@ -29,7 +29,7 @@ export class Entity {
 			entityType: this.entityType,
 			description: this.description,
 			defaultImage: this.defaultImage?.toJSON(),
-			images: this.images,
+			images: this.images?.map((img) => img.toJSON()),
 			metadata: this.metadata,
 			userCanEdit: this.userCanEdit,
 			relationshipType: this.relationshipType,

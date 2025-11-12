@@ -117,7 +117,7 @@ export class Api {
 		relatedEntityType: EntityType,
 		relatedEntityId: number,
 		relationshipType: RelationshipType,
-	): Promise<{ id: number } | undefined> {
+	): Promise<{ id: number | string } | undefined> {
 		try {
 			const relatedEntityManager = relatedEntityManagerFactory.getInstance();
 			const deleteData = await relatedEntityManager.deleteRelated(

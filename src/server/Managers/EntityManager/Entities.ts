@@ -13,7 +13,7 @@ export class Entities {
 	nextPage: number = 1;
 
 	isRelatedEntities: boolean = false;
-	relationshipType?: RelationshipType;
+	_relationshipType?: RelationshipType;
 
 	constructor(
 		rawEntities: RawEntity[] | undefined,
@@ -30,9 +30,13 @@ export class Entities {
 		}
 	}
 
-	setRelationshipType(relationshipType: RelationshipType) {
-		this.isRelatedEntities = true;
-		this.relationshipType = relationshipType;
+	set relationshipType(relationshipType: RelationshipType | undefined) {
+		this.isRelatedEntities = Boolean(relationshipType);
+		this._relationshipType = relationshipType;
+	}
+
+	get relationshipType(): RelationshipType | undefined {
+		return this._relationshipType;
 	}
 
 	toJSON(): EntitiesData {

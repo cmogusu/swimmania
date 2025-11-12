@@ -104,7 +104,7 @@ export class RelatedEntityManager {
 			entityIds,
 		});
 
-		entities.setRelationshipType(relationshipType);
+		entities.relationshipType = relationshipType;
 		return entities;
 	}
 
