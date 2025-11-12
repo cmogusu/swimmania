@@ -40,7 +40,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			sortIndex: 8,
 		}),
 
-	startEndDates: () =>
+	meetDates: () =>
 		new ParentPropertyType({
 			name: "startEndDates",
 			title: "Event date",

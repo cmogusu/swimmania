@@ -48,7 +48,7 @@ export default async function Page() {
 	);
 }
 
-const rawText = `
+export const rawText = `
 Nairobi Swimming Club HY-TEK's MEET MANAGER 8.0 - 16:22 PM 4/13/2025 Page 1
 NCSA Inter-Clubs Swimming Championships April 11-13 2025
 Results
@@ -66,6 +66,14 @@ Name Age Team Seed Time Finals Time
 3  Okumu, Lawrence 13-12 Braeburn Swimming Club NT 21:22.91
 `;
 
+export const meetText = `
+Nairobi Swimming Club HY-TEK's MEET MANAGER 8.0 - 16:22 PM 4/13/2025 Page 1
+NCSA Inter-Clubs Swimming Championships April 11-13 2025
+Results
+Event 101 Girls Open 1500 SC Meter Freestyle
+County: 19:06.98 C 10/21/2022 Victoria A. Okumu BRSC-
+`;
+
 async function doDatabaseWork() {
 	"use server";
 
@@ -74,11 +82,16 @@ async function doDatabaseWork() {
 
 export async function parserWork() {
 	const parser = new DeepSeekParser();
-	parser.on("swimEventData", (data) => {
-		console.log("***", data);
+	parser.on(DeepSeekParser.EVENTS.MEET_DATA, (data) => {
+		console.log("***, meet", data);
 	});
 
-	await parser.fetchSwimEventsAndResults(rawText);
+	parser.on(DeepSeekParser.EVENTS.EVENT_DATA, (data) => {
+		console.log("***, event", data);
+	});
+
+	parser.fetchSwimMeet(meetText);
+	// parser.fetchSwimEvents(rawText);
 }
 
 async function upload() {

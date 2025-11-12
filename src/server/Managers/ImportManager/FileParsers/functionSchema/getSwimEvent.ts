@@ -1,4 +1,4 @@
-export const swimResult = {
+const swimResult = {
 	type: "object",
 	properties: {
 		rank: {
@@ -42,8 +42,8 @@ export const swimResult = {
 	},
 };
 
-export const getSwimResultsWithSchema = {
-	name: "get_swim_results",
+export const getSwimEvent = {
+	name: "get_swim_event",
 	description:
 		"Extract swim events and the related swimmer results from the provided text",
 	strict: true,
@@ -107,5 +107,3 @@ export const getSwimResultsWithSchema = {
 		],
 	},
 };
-
-/// This is a swim event that swimmers competed in and got differing ranks in
