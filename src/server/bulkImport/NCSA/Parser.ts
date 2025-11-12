@@ -1,5 +1,5 @@
-import { SwimEventData, SwimResultData } from "../../InputData";
-import type { ILineParser } from "../../types";
+import { SwimEventData, SwimResultData } from "../InputData";
+import type { ILineParser } from "../types";
 import { SwimEventParser } from "./SwimEventParser";
 import { SwimResultParser } from "./SwimResultParser";
 

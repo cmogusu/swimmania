@@ -1,4 +1,4 @@
-import type { ILineTypeParser, SwimResultRawData } from "../../types";
+import type { ILineTypeParser, SwimResultRawData } from "../types";
 
 export class SwimResultParser implements ILineTypeParser {
 	testRegex: RegExp = /\d [a-z,\s]+/i;

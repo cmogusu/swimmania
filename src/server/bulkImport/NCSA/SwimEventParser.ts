@@ -1,4 +1,4 @@
-import type { ILineTypeParser, SwimEventRawData } from "../../types";
+import type { ILineTypeParser, SwimEventRawData } from "../types";
 
 export class SwimEventParser implements ILineTypeParser {
 	testRegex: RegExp = /Event [0-9]{3}/i;

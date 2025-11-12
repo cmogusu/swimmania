@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { getSwimResultsWithSchema } from "@/server/BulkImport/FileParsers/GPT/schema";
+import { getSwimResultsWithSchema } from "@/server/Managers/ImportManager/FileParsers/schema";
 
 const client = new OpenAI({
 	apiKey: process.env.DEEPSEEK_API_KEY,

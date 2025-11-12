@@ -45,4 +45,6 @@ next-env.d.ts
 
 /prisma/src/generated/prisma
 
-/prisma/src/generated/prisma
+# Don't upload import files
+/public/uploads
+/public/pdf
