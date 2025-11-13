@@ -4,8 +4,9 @@ import { type ChainOutput, chain } from "stream-chain";
 import { parser } from "stream-json";
 import { streamValues } from "stream-json/streamers/StreamValues.js";
 import { Log } from "@/server/services";
+import type { ITextParser } from "../types";
 
-export class OpenAIParser extends EventEmitter {
+export class OpenAIParser extends EventEmitter implements ITextParser {
 	client: OpenAI;
 	log: Log;
 	model: string = "gpt-4.1";
@@ -44,11 +45,11 @@ export class OpenAIParser extends EventEmitter {
 		this.emit("data", value);
 	}
 
-	fetch(_text: string) {
+	parse(_text: string) {
 		throw Error("Not implemented");
 	}
 
-	async _fetch(options: OpenAI.ChatCompletionCreateParamsStreaming) {
+	async fetch(options: OpenAI.ChatCompletionCreateParamsStreaming) {
 		const responseStream = await this.client.chat.completions.create(options);
 
 		for await (const event of responseStream) {

@@ -1,5 +1,7 @@
-import { importManagerFactory } from "@/server/Managers";
-import { SwimEventParser } from "@/server/Managers/ImportManager/FileParsers";
+import {
+	importManagerFactory,
+	SwimResultImportManager,
+} from "@/server/Managers";
 
 export default async function Page() {
 	return (
@@ -21,18 +23,22 @@ async function doDatabaseWork() {
 	parserWork();
 }
 
-export async function parserWork() {
-	const swimEventParser = new SwimEventParser();
-	swimEventParser.fetch(rawText);
-	swimEventParser.on("data", (data) => {
-		console.log("***, meet", data);
-	});
+export const swimMeet = {
+	name: "NCSA Inter-Clubs Swimming Championships",
+	startDate: "2025-04-11",
+	endDate: "2025-04-13",
+	description:
+		"Nairobi Swimming Club HY-TEK's MEET MANAGER 8.0 - 16:22 PM 4/13/2025 Page 1",
+	location: "Nairobi",
+};
 
-	const swimMeetParser = new SwimMeetParser();
-	swimMeetParser.fetch(meetText);
-	swimMeetParser.on("data", (data) => {
-		console.log("***, meet", data);
-	});
+export async function parserWork() {
+	const importer = new SwimResultImportManager();
+	const entityType = "pool";
+	const x = importer.tempDb.getByName(entityType, "cow");
+	const y = importer.tempDb.getById(entityType, 4);
+	const z = importer.tempDb.getAllEntityIds(entityType);
+	console.log(x, y, z);
 }
 
 async function upload() {

@@ -1,5 +1,6 @@
-import { access, constants, readFile } from "fs/promises";
-import path from "path";
+import { access, constants, readFile } from "node:fs/promises";
+import path from "node:path";
+import { DatabaseSync } from "node:sqlite";
 import { PDF_FOLDER } from "@/server/constants/paths";
 import type { EntityType } from "@/server/types";
 import { type EntityManager, entityManagerFactory } from "../../EntityManager";
@@ -11,8 +12,11 @@ import {
 	type RelatedEntityIdManager,
 	relatedEntityIdManagerFactory,
 } from "../../RelatedEntityIdManager";
+import { SwimEventParser, SwimMeetParser } from "../FileParsers";
+import { TempEntityDatabase } from "../TempEntityDatabase";
+import { tempEntityDatabaseFactory } from "../TempEntityDatabase/factory";
+import type { ITempRawEntityDatabase } from "../types";
 import { BaseImportManager } from "./BaseImportManager";
-import { Database } from "./Database";
 import type {
 	EventData,
 	MeetData,
@@ -26,7 +30,10 @@ export class SwimResultImportManager extends BaseImportManager {
 	entityManager: EntityManager;
 	metadataManager: MetadataManager;
 	relatedEntityIdManager: RelatedEntityIdManager;
-	db: Database;
+
+	tempDb: TempEntityDatabase;
+	tempSwimEventDb: ITempRawEntityDatabase;
+	tempSwimMeetDb: ITempRawEntityDatabase;
 
 	constructor() {
 		super();
@@ -37,7 +44,23 @@ export class SwimResultImportManager extends BaseImportManager {
 		this.relatedEntityIdManager = relatedEntityIdManagerFactory.getInstance();
 
 		const dbPath = path.join(PDF_FOLDER, `swimResult/mydb.db`);
-		this.db = new Database(dbPath);
+		const db = new DatabaseSync(dbPath);
+		this.tempDb = new TempEntityDatabase(db);
+		this.tempSwimMeetDb = tempEntityDatabaseFactory.getInstance("swimMeet", db);
+		this.tempSwimEventDb = tempEntityDatabaseFactory.getInstance(
+			"swimEvent",
+			db,
+		);
+	}
+
+	async importText(text: string) {
+		const swimEventParser = new SwimEventParser();
+		swimEventParser.parse(text);
+		swimEventParser.on("data", this.tempSwimEventDb.insertRawData);
+
+		const swimMeetParser = new SwimMeetParser();
+		swimMeetParser.parse(text);
+		swimMeetParser.on("data", this.tempSwimMeetDb.insertRawData);
 	}
 
 	async importJson({ fileName }: RawFileNameImportInputs) {
@@ -64,7 +87,7 @@ export class SwimResultImportManager extends BaseImportManager {
 
 		const entityType = "swimMeet";
 		const entityName = meet.name;
-		const existingMeetId = this.db.getByName(entityType, entityName);
+		const existingMeetId = this.tempDb.getByName(entityType, entityName);
 		if (existingMeetId) {
 			return existingMeetId;
 		}
@@ -75,7 +98,7 @@ export class SwimResultImportManager extends BaseImportManager {
 			description: meet.subtitle,
 		});
 
-		this.db.insert(entityType, meetId, entityName);
+		this.tempDb.insert(entityType, meetId, entityName);
 		await this.metadataManager.upsert({
 			entityType,
 			entityId: meetId,
@@ -98,7 +121,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		const { event_number, gender, age_group, distance, results } = event;
 		const entityType = "swimEvent";
 		const entityName = `Event ${event_number}`;
-		const existingEventId = this.db.getByName(entityType, entityName);
+		const existingEventId = this.tempDb.getByName(entityType, entityName);
 		if (existingEventId) {
 			return existingEventId;
 		}
@@ -109,7 +132,7 @@ export class SwimResultImportManager extends BaseImportManager {
 			description: `${distance} ${gender} ${age_group}`,
 		});
 
-		this.db.insert(entityType, eventId, entityName);
+		this.tempDb.insert(entityType, eventId, entityName);
 		await this.metadataManager.upsert({
 			entityType: "swimEvent",
 			entityId: eventId,
@@ -122,7 +145,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		});
 
 		if (meetId) {
-			await this.relatedEntityIdManager.insert({
+			await this.relatedEntityIdManager.upsert({
 				entityId: meetId,
 				entityType: "swimMeet",
 				relatedEntityId: eventId,
@@ -148,7 +171,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		const { rank, name, age, team } = result;
 		const entityName = `${rank} ${name}`;
 		const entityType = "swimResult";
-		const existingResultId = this.db.getByName(entityType, entityName);
+		const existingResultId = this.tempDb.getByName(entityType, entityName);
 		if (existingResultId) {
 			return existingResultId;
 		}
@@ -159,7 +182,7 @@ export class SwimResultImportManager extends BaseImportManager {
 			description: `${rank} ${name} ${age}`,
 		});
 
-		this.db.insert(entityType, resultId, entityName);
+		this.tempDb.insert(entityType, resultId, entityName);
 		await this.metadataManager.upsert({
 			entityType: "swimResult",
 			entityId: resultId,
@@ -179,7 +202,7 @@ export class SwimResultImportManager extends BaseImportManager {
 			],
 		});
 
-		await this.relatedEntityIdManager.insert({
+		await this.relatedEntityIdManager.upsert({
 			entityId: eventId,
 			entityType: "swimEvent",
 			relatedEntityId: resultId,
@@ -194,7 +217,7 @@ export class SwimResultImportManager extends BaseImportManager {
 	async insertSwimmer(name: string, eventId: number, resultId: number) {
 		const entityName = name;
 		const entityType = "swimmer";
-		let swimmerId = this.db.getByName(entityType, entityName);
+		let swimmerId = this.tempDb.getByName(entityType, entityName);
 
 		if (!swimmerId) {
 			const results = await this.entityManager.insert({
@@ -204,10 +227,10 @@ export class SwimResultImportManager extends BaseImportManager {
 			});
 
 			swimmerId = results.id;
-			this.db.insert(entityType, swimmerId, entityName);
+			this.tempDb.insert(entityType, swimmerId, entityName);
 		}
 
-		await this.relatedEntityIdManager.insert({
+		await this.relatedEntityIdManager.upsert({
 			entityId: swimmerId,
 			entityType: "swimmer",
 			relatedEntityId: eventId,
@@ -215,7 +238,7 @@ export class SwimResultImportManager extends BaseImportManager {
 			relationshipType: "participatedIn",
 		});
 
-		await this.relatedEntityIdManager.insert({
+		await this.relatedEntityIdManager.upsert({
 			entityId: swimmerId,
 			entityType: "swimmer",
 			relatedEntityId: resultId,
@@ -229,7 +252,7 @@ export class SwimResultImportManager extends BaseImportManager {
 	async insertTeam(name: string, swimmerId: number, resultId: number) {
 		const entityName = name;
 		const entityType = "team";
-		let teamId = this.db.getByName(entityType, entityName);
+		let teamId: number = this.tempDb.getByName(entityType, entityName);
 
 		if (!teamId) {
 			const results = await this.entityManager.insert({
@@ -239,10 +262,10 @@ export class SwimResultImportManager extends BaseImportManager {
 			});
 
 			teamId = results.id;
-			this.db.insert(entityType, teamId, entityName);
+			this.tempDb.insert(entityType, teamId, entityName);
 		}
 
-		await this.relatedEntityIdManager.insert({
+		await this.relatedEntityIdManager.upsert({
 			entityId: teamId,
 			entityType: "team",
 			relatedEntityId: swimmerId,
@@ -250,7 +273,7 @@ export class SwimResultImportManager extends BaseImportManager {
 			relationshipType: "contains",
 		});
 
-		await this.relatedEntityIdManager.insert({
+		await this.relatedEntityIdManager.upsert({
 			entityId: teamId,
 			entityType: "team",
 			relatedEntityId: resultId,

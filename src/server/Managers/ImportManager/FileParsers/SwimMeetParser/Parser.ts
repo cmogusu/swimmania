@@ -1,10 +1,10 @@
+import type { RawSwimEvent } from "../../types";
 import { DeepSeekParser } from "../DeepSeekParser";
-import type { RawSwimEvent } from "../types";
 import { functionSchema } from "./functionSchema";
 
 export class SwimMeetParser extends DeepSeekParser {
-	async fetch(text: string) {
-		await this._fetch({
+	async parse(text: string) {
+		await this.fetch({
 			model: this.model,
 			stream: true,
 			messages: [
