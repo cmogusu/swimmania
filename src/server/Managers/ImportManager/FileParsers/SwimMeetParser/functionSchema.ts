@@ -1,4 +1,4 @@
-export const getSwimMeet = {
+export const functionSchema = {
 	name: "get_swim_meet",
 	description: "Extract information on the swim meet from the provided text",
 	strict: true,

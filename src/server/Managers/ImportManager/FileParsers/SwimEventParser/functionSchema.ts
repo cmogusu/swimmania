@@ -42,7 +42,7 @@ const swimResult = {
 	},
 };
 
-export const getSwimEvent = {
+export const functionSchema = {
 	name: "get_swim_event",
 	description:
 		"Extract swim events and the related swimmer results from the provided text",

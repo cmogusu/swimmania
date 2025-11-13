@@ -1,3 +1,11 @@
+export type RawSwimMeet = {
+	name: string;
+	startDate: string;
+	endDate: string;
+	description?: string;
+	location?: string;
+};
+
 export type RawSwimEvent = {
 	eventNumber: number;
 	stroke:
@@ -19,9 +27,9 @@ export type RawSwimResult = {
 	rank: number;
 	surname: string;
 	firstName: string;
-	thirdName: string | undefined;
+	thirdName?: string;
 	age: number;
-	team: string | undefined;
+	team?: string;
 	time: string;
 };
 
