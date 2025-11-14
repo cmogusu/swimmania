@@ -1,6 +1,7 @@
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { EVENT } from "@/server/constants";
+import { Log } from "@/server/services";
 import type { EntityType } from "@/server/types";
 import { InsertEntity } from "../InsertEntity";
 import type { RawSwimEventWithResults, RawSwimMeet } from "../types";
@@ -13,6 +14,7 @@ const TEMP_DB_NAME = "TEMP_SWIM_RESULTS.db";
 export class SwimResultImportManager extends BaseImportManager {
 	insert: InsertEntity;
 	parser: SwimResultsParser;
+	log: Log;
 
 	meetId: number | undefined;
 	isInsertingSwimEvents = false;
@@ -23,6 +25,7 @@ export class SwimResultImportManager extends BaseImportManager {
 
 		const dbPath = path.join(folder, TEMP_DB_NAME);
 		const db = new DatabaseSync(dbPath);
+		this.log = new Log();
 		this.insert = new InsertEntity(db);
 		this.parser = new SwimResultsParser(db);
 		this.registerDataListeners();
@@ -74,13 +77,25 @@ export class SwimResultImportManager extends BaseImportManager {
 
 	async insertMeet(meetData: EntityInsertData<RawSwimMeet>) {
 		const { data, onComplete } = meetData;
-		this.meetId = await this.insert.swimMeet(data);
-		onComplete();
+
+		try {
+			this.meetId = await this.insert.swimMeet(data);
+			onComplete(true);
+		} catch (error: unknown) {
+			this.log.error("Error importing swim meet data", error as Error);
+			onComplete(false);
+		}
 	}
 
 	async insertEvent(eventData: EntityInsertData<RawSwimEventWithResults>) {
 		const { data, onComplete } = eventData;
-		await this.insert.swimEvent(data, this.meetId);
-		onComplete();
+
+		try {
+			await this.insert.swimEvent(data, this.meetId);
+			onComplete(true);
+		} catch (error: unknown) {
+			this.log.error("Error importing swim event data", error as Error);
+			onComplete(false);
+		}
 	}
 }

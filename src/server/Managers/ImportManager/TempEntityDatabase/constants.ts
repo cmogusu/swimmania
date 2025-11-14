@@ -1,0 +1,7 @@
+export const PROCESSING_STATE = {
+	UNPROCESSED: 0,
+	PROCESSING: 1,
+	PROCESSED: 2,
+};
+
+export const MAX_FAILURE_COUNT = 3;

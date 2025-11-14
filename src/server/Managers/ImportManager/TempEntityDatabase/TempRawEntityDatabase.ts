@@ -1,9 +1,8 @@
 import type { DatabaseSync } from "node:sqlite";
 import type { EntityType } from "@/server/types";
 import type { DbOutput, ITempRawEntityDatabase } from "../types";
+import { MAX_FAILURE_COUNT, PROCESSING_STATE } from "./constants";
 import { getColumnsAndValues } from "./utils";
-
-export const DATA_INSERTED_EVENT: string = "DATA_INSERTED";
 
 export class TempRawEntityDatabase<T> implements ITempRawEntityDatabase {
 	db: DatabaseSync;
@@ -43,20 +42,40 @@ export class TempRawEntityDatabase<T> implements ITempRawEntityDatabase {
 		return insertData;
 	}
 
+	// TODO: Delete
+	reset() {
+		const query = `UPDATE ${this.dbTable} SET isProcessed=0, failureCount=0`;
+		const update = this.db.prepare(query);
+		return update.run();
+	}
+
+	// TODO: Delete
+	addColumn() {
+		const query = `ALTER TABLE ${this.dbTable} ADD COLUMN failureCount INTEGER NOT NULL DEFAULT 0;`;
+		this.db.exec(query);
+	}
+
 	getUnprocessed(): DbOutput<T> {
-		const query = `SELECT * FROM ${this.dbTable} where isProcessed=0 ORDER BY id`;
+		const query = `SELECT * FROM ${this.dbTable} where isProcessed=${PROCESSING_STATE.UNPROCESSED} AND failureCount<${MAX_FAILURE_COUNT} ORDER BY id LIMIT 1`;
 		const get = this.db.prepare(query);
-		return get.all() as DbOutput<T>;
+		const response = get.all() as DbOutput<T>[];
+		return response?.[0];
 	}
 
 	setIsProcessing(id: number) {
-		const query = `UPDATE ${this.dbTable} SET isProcessed=1 WHERE id=?`;
+		const query = `UPDATE ${this.dbTable} SET isProcessed=${PROCESSING_STATE.PROCESSING} WHERE id=?`;
 		const update = this.db.prepare(query);
 		return update.run(id);
 	}
 
 	setProcessed(id: number) {
-		const query = `UPDATE ${this.dbTable} SET isProcessed=2 WHERE id=?`;
+		const query = `UPDATE ${this.dbTable} SET isProcessed=${PROCESSING_STATE.PROCESSED} WHERE id=?`;
+		const update = this.db.prepare(query);
+		return update.run(id);
+	}
+
+	setProcessingFailure(id: number) {
+		const query = `UPDATE ${this.dbTable} SET isProcessed=${PROCESSING_STATE.UNPROCESSED}, failureCount=failureCount + 1 WHERE id=?`;
 		const update = this.db.prepare(query);
 		return update.run(id);
 	}

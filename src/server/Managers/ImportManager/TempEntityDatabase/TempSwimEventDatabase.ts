@@ -1,4 +1,5 @@
 import type { RawSwimEvent, RawSwimEventWithResults } from "../types";
+import { PROCESSING_STATE } from "./constants";
 import { TempRawEntityDatabase } from "./TempRawEntityDatabase";
 
 export class TempSwimEventDatabase extends TempRawEntityDatabase<RawSwimEventWithResults> {
@@ -19,7 +20,8 @@ export class TempSwimEventDatabase extends TempRawEntityDatabase<RawSwimEventWit
         age INTEGER DEFAULT NULL,
         ageGroup TEXT NOT NULL,
         time TEXT NOT NULL,
-        isProcessed INTEGER NOT NULL DEFAULT 0
+        isProcessed INTEGER NOT NULL DEFAULT ${PROCESSING_STATE.UNPROCESSED},
+        failureCount INTEGER NOT NULL DEFAULT 0
       ) STRICT
     `);
 	}

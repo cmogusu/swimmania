@@ -62,11 +62,19 @@ export class SwimResultsParser extends EventEmitter {
 
 	getData<T>(
 		tempDb: TempSwimEventDatabase | TempSwimMeetDatabase,
-	): EntityInsertData<T> {
+	): EntityInsertData<T> | undefined {
 		const data = tempDb.getUnprocessed() as unknown as DbOutput<T>;
-		tempDb.setIsProcessing(data.id);
-		const onComplete = () => {
-			tempDb.setProcessed(data.id);
+		if (!data) {
+			return;
+		}
+
+		tempDb.setIsProcessing(data.id); // TODO: Move this into db class
+		const onComplete = (isProcessingSuccessful: boolean) => {
+			if (isProcessingSuccessful) {
+				tempDb.setProcessed(data.id);
+			} else {
+				tempDb.setProcessingFailure(data.id);
+			}
 		};
 
 		return { data, onComplete };

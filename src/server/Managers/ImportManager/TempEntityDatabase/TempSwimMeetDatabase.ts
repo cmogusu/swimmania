@@ -1,4 +1,5 @@
 import type { RawSwimMeet } from "../types";
+import { PROCESSING_STATE } from "./constants";
 import { TempRawEntityDatabase } from "./TempRawEntityDatabase";
 
 export class TempSwimMeetDatabase extends TempRawEntityDatabase<RawSwimMeet> {
@@ -11,7 +12,8 @@ export class TempSwimMeetDatabase extends TempRawEntityDatabase<RawSwimMeet> {
         endDate TEXT NOT NULL,
         description TEXT,
         location TEXT,
-        isProcessed INTEGER NOT NULL DEFAULT 0
+        isProcessed INTEGER NOT NULL DEFAULT ${PROCESSING_STATE.UNPROCESSED},
+        failureCount INTEGER NOT NULL DEFAULT 0
       ) STRICT
     `);
 	}

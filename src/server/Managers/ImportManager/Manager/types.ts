@@ -8,7 +8,7 @@ export type RawFileNameImportInputs = {
 
 export type EntityInsertData<T> = {
 	data: T;
-	onComplete: () => void;
+	onComplete: (isProcessingSuccessful: boolean) => void;
 };
 
 export interface ImportManager {
