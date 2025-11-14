@@ -1,9 +1,11 @@
 import type { DatabaseSync } from "node:sqlite";
 import type { EntityType } from "@/server/types";
-import type { ITempRawEntityDatabase } from "../types";
+import type { DbOutput, ITempRawEntityDatabase } from "../types";
 import { getColumnsAndValues } from "./utils";
 
-export class TempRawEntityDatabase implements ITempRawEntityDatabase {
+export const DATA_INSERTED_EVENT: string = "DATA_INSERTED";
+
+export class TempRawEntityDatabase<T> implements ITempRawEntityDatabase {
 	db: DatabaseSync;
 	dbTable: string;
 
@@ -25,7 +27,7 @@ export class TempRawEntityDatabase implements ITempRawEntityDatabase {
 		throw Error("Not implemented");
 	}
 
-	insertRawData(_data: unknown) {
+	insert(_data: unknown) {
 		throw Error("Not implemented");
 	}
 
@@ -37,26 +39,32 @@ export class TempRawEntityDatabase implements ITempRawEntityDatabase {
 		const { columns, values } = getColumnsAndValues(data);
 		const placeHolders = Array(columns.length).fill("?").join(",");
 		const query = `INSERT INTO ${this.dbTable} (${columns.join(", ")}) VALUES (${placeHolders})`;
-		const insert = this.db.prepare(query);
-		return insert.run(...values);
+		const insertData = this.db.prepare(query).run(...values);
+		return insertData;
 	}
 
-	getUnprocessed() {
+	getUnprocessed(): DbOutput<T> {
 		const query = `SELECT * FROM ${this.dbTable} where isProcessed=0 ORDER BY id`;
 		const get = this.db.prepare(query);
-		return get.all();
+		return get.all() as DbOutput<T>;
 	}
 
-	setProcessed(id: number) {
+	setIsProcessing(id: number) {
 		const query = `UPDATE ${this.dbTable} SET isProcessed=1 WHERE id=?`;
 		const update = this.db.prepare(query);
 		return update.run(id);
 	}
 
-	getAllRawData() {
+	setProcessed(id: number) {
+		const query = `UPDATE ${this.dbTable} SET isProcessed=2 WHERE id=?`;
+		const update = this.db.prepare(query);
+		return update.run(id);
+	}
+
+	getAll(): DbOutput<T>[] {
 		const query = `SELECT * FROM ${this.dbTable} ORDER BY id`;
 		const get = this.db.prepare(query);
-		return get.all();
+		return get.all() as DbOutput<T>[];
 	}
 
 	close() {

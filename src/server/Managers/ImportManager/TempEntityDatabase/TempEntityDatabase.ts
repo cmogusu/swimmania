@@ -56,7 +56,7 @@ export class TempEntityDatabase implements ITempEntityDatabase {
 		return insert.run(entityId, name, name);
 	}
 
-	getAllEntityIds(entityType: EntityType) {
+	getAll(entityType: EntityType) {
 		const table = this.getDbTable(entityType);
 		const query = `SELECT * FROM ${table} ORDER BY entityId`;
 		const get = this.db.prepare(query);

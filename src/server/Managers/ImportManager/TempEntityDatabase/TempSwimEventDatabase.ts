@@ -1,7 +1,7 @@
-import type { RawSwimEvent, RawSwimEventResult } from "../types";
+import type { RawSwimEvent, RawSwimEventWithResults } from "../types";
 import { TempRawEntityDatabase } from "./TempRawEntityDatabase";
 
-export class TempSwimEventDatabase extends TempRawEntityDatabase {
+export class TempSwimEventDatabase extends TempRawEntityDatabase<RawSwimEventWithResults> {
 	createRawEntityDataTable() {
 		this.db.exec(`
       CREATE TABLE IF NOT EXISTS ${this.dbTable} (
@@ -24,14 +24,14 @@ export class TempSwimEventDatabase extends TempRawEntityDatabase {
     `);
 	}
 
-	insertRawData(data: RawSwimEvent) {
+	insert(data: RawSwimEvent) {
 		const { results: swimResults, ...swimEvent } = data;
 		const swimEventResults = swimResults.map((swimResult) => ({
 			...swimEvent,
 			...swimResult,
 		}));
 
-		swimEventResults.forEach((swimEventResult: RawSwimEventResult) => {
+		swimEventResults.forEach((swimEventResult: RawSwimEventWithResults) => {
 			this.insertSingleRowRawData(swimEventResult);
 		});
 	}

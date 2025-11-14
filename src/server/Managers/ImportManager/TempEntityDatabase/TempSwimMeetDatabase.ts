@@ -1,7 +1,7 @@
 import type { RawSwimMeet } from "../types";
 import { TempRawEntityDatabase } from "./TempRawEntityDatabase";
 
-export class TempSwimMeetDatabase extends TempRawEntityDatabase {
+export class TempSwimMeetDatabase extends TempRawEntityDatabase<RawSwimMeet> {
 	createRawEntityDataTable() {
 		this.db.exec(`
       CREATE TABLE IF NOT EXISTS ${this.dbTable} (
@@ -16,7 +16,7 @@ export class TempSwimMeetDatabase extends TempRawEntityDatabase {
     `);
 	}
 
-	insertRawData(data: RawSwimMeet) {
+	insert(data: RawSwimMeet) {
 		this.insertSingleRowRawData(data);
 	}
 }

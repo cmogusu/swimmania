@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { type ChainOutput, chain } from "stream-chain";
 import { parser } from "stream-json";
 import { streamValues } from "stream-json/streamers/StreamValues.js";
+import { EVENT } from "@/server/constants";
 import { Log } from "@/server/services";
 import type { ITextParser } from "../types";
 
@@ -42,7 +43,7 @@ export class OpenAIParser extends EventEmitter implements ITextParser {
 	}
 
 	emitData(value: unknown) {
-		this.emit("data", value);
+		this.emit(EVENT.DATA, value);
 	}
 
 	parse(_text: string) {

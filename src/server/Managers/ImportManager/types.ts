@@ -28,18 +28,27 @@ export type RawSwimEvent = {
 	ageGroup: string;
 	results: RawSwimResult[];
 };
+export type RawSwimEventWithoutResults = Omit<RawSwimEvent, "results">;
 
-export type RawSwimResult = {
-	rank: number;
+export type RawSwimmer = {
 	surname: string;
 	firstName: string;
 	thirdName?: string;
 	age: number;
+};
+
+export type RawSwimResult = RawSwimmer & {
+	rank: number;
 	team?: string;
 	time: string;
 };
 
-export type RawSwimEventResult = Omit<RawSwimEvent, "results"> & RawSwimResult;
+export type RawSwimEventWithResults = RawSwimEventWithoutResults &
+	RawSwimResult;
+
+export type RawSwimTeam = {
+	name: string;
+};
 
 export interface ITextParser {
 	parse: (text: string) => void;
@@ -57,9 +66,11 @@ export interface ITempEntityDatabase {
 }
 
 export interface ITempRawEntityDatabase {
-	getAllRawData(): unknown[];
+	getAll(): unknown[];
 	getUnprocessed(): unknown;
-	insertRawData(_data: unknown): void;
+	insert(_data: unknown): void;
 	setProcessed(id: number): void;
 	deleteTable(): void;
 }
+
+export type DbOutput<T> = T & { id: number };

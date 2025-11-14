@@ -37,7 +37,7 @@ export async function parserWork() {
 	const entityType = "pool";
 	const x = importer.tempDb.getByName(entityType, "cow");
 	const y = importer.tempDb.getById(entityType, 4);
-	const z = importer.tempDb.getAllEntityIds(entityType);
+	const z = importer.tempDb.getAll(entityType);
 	console.log(x, y, z);
 }
 

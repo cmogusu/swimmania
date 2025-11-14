@@ -1,5 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { ITempRawEntityDatabase, TempDatabaseEntityTypes } from "../types";
+import type { TempDatabaseEntityTypes } from "../types";
+import type { TempRawEntityDatabase } from "./TempRawEntityDatabase";
 import { TempSwimEventDatabase } from "./TempSwimEventDatabase";
 import { TempSwimMeetDatabase } from "./TempSwimMeetDatabase";
 
@@ -8,19 +9,19 @@ const tempDatabaseClasses: Record<
 	new (
 		entityType: TempDatabaseEntityTypes,
 		db: DatabaseSync,
-	) => ITempRawEntityDatabase
+	) => TempRawEntityDatabase
 > = {
 	swimEvent: TempSwimEventDatabase,
 	swimMeet: TempSwimMeetDatabase,
 };
 
-const instances: Record<string, ITempRawEntityDatabase> = {};
+const instances: Record<string, TempRawEntityDatabase> = {};
 
 export const tempEntityDatabaseFactory = {
 	getInstance(
 		entityType: TempDatabaseEntityTypes,
 		db: DatabaseSync,
-	): ITempRawEntityDatabase {
+	): TempRawEntityDatabase {
 		if (!entityType) {
 			throw Error("Entity type not set");
 		}

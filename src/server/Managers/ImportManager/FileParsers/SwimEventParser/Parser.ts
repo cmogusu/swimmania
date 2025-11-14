@@ -1,3 +1,4 @@
+import { EVENT } from "@/server/constants";
 import type { RawSwimMeet } from "../../types";
 import { DeepSeekParser } from "../DeepSeekParser";
 import { functionSchema } from "./functionSchema";
@@ -31,6 +32,6 @@ export class SwimEventParser extends DeepSeekParser {
 	}
 
 	emitData(value: unknown) {
-		this.emit("data", value as RawSwimMeet);
+		this.emit(EVENT.DATA, value as RawSwimMeet);
 	}
 }
