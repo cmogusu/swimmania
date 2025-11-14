@@ -19,11 +19,13 @@ import {
 	InsertInputData,
 	UpdateInputData,
 } from "../InputData";
+import { FindInputData } from "../InputData/FindInputData";
 import type {
 	ILoadableEntity,
 	RawDeleteEntityInputs,
 	RawEntity,
 	RawFilterByEntityInputs,
+	RawFindEntityInputs,
 	RawGetAllEntityInputs,
 	RawGetByIdEntityInputs,
 	RawGetByIdsEntityInputs,
@@ -175,8 +177,12 @@ export class EntityManager {
 		return { id: rawInputs.entityId };
 	}
 
-	findExisting(rawInputs: RawGetByNameEntityInputs) {
-		return this.getByName(rawInputs);
+	async find(rawInputs: RawFindEntityInputs) {
+		const inputData = new FindInputData(rawInputs);
+		inputData.validateData();
+
+		const rawEntity = await this.db.find(rawInputs.entityType, inputData);
+		return rawEntity ? new Entity(rawEntity) : undefined;
 	}
 
 	async filterBy(rawInputs: RawFilterByEntityInputs) {

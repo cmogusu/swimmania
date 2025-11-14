@@ -64,6 +64,19 @@ export class Query extends BaseQuery {
 		);
 	}
 
+	find(entityType: string, name: string, description?: string) {
+		this.throwIfNotSet({
+			entityType,
+			name,
+		});
+
+		const descriptioinQuery = description ? "AND description=?" : "";
+		return this.exec(
+			`SELECT * FROM \`entity\` WHERE type=? AND name=? ${descriptioinQuery} LIMIT 1;`,
+			[entityType, name, description],
+		);
+	}
+
 	getByMetadata(
 		entityType: string,
 		filterByMetadata: Record<string, string>[],

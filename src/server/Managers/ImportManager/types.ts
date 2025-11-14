@@ -37,18 +37,18 @@ export type RawSwimmer = {
 	age: number;
 };
 
-export type RawSwimResult = RawSwimmer & {
-	rank: number;
+export type RawSwimTeam = {
 	team?: string;
-	time: string;
 };
+
+export type RawSwimResult = RawSwimmer &
+	RawSwimTeam & {
+		rank: number;
+		time: string;
+	};
 
 export type RawSwimEventWithResults = RawSwimEventWithoutResults &
 	RawSwimResult;
-
-export type RawSwimTeam = {
-	name: string;
-};
 
 export interface ITextParser {
 	parse: (text: string) => void;

@@ -35,7 +35,10 @@ export const EntityRelationships: Record<
 		["parentOf_inverse", "parent"],
 		["comment", "comment"],
 		["owns_inverse", "user"],
+		["competedFor", "team"],
+		["participatedIn", "swimMeet"],
 		["participatedIn", "swimEvent"],
+		["participatedIn", "swimResult"],
 	],
 	school: [
 		["contains", "pool"],
@@ -46,8 +49,11 @@ export const EntityRelationships: Record<
 	team: [
 		["trainsAt", "pool"],
 		["rating", "rating"],
-		["contains", "swimmer"],
+		["competedFor_inverse", "swimmer"],
+		["participatedIn", "swimMeet"],
+		["participatedIn", "swimEvent"],
 		["participatedIn", "swimResult"],
+		["owns_inverse", "user"],
 	],
 	lifeguard: [
 		["worksAt", "pool"],
@@ -195,6 +201,14 @@ export const RelationshipDescriptions: Record<
 		getTitle: (relatedEntityType: EntityType) =>
 			`Ratings of these ${EntityTypePlurals[relatedEntityType]}`,
 		description: "Rating belonging to entity type",
+	},
+	competedFor: {
+		getTitle: () => `Competed for`,
+		description: "",
+	},
+	competedFor_inverse: {
+		getTitle: () => `Competed on behalf of`,
+		description: "",
 	},
 	owns: {
 		getTitle: () => `Owns`,

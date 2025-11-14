@@ -18,21 +18,21 @@ export class InsertSwimResult extends BaseInsertEntity {
 		const { entityType } = this;
 		const { rank, surname, firstName, age } = result;
 		const entityName = `${surname} ${firstName}`;
+		const description = `${rank} ${entityName} ${age}`;
 		const existingResultId = cacheDb.getByName(entityType, entityName);
 		if (existingResultId) {
 			return existingResultId;
 		}
 
-		const { id: resultId } = await this.entityManager.insert({
-			entityType: entityType,
-			name: entityName,
-			description: `${rank} ${name} ${age}`,
-		});
+		const swmResultId = await this.findOrInsertEntity(
+			entityType,
+			entityName,
+			description,
+		);
 
-		cacheDb.insert(entityType, resultId, entityName);
 		await this.metadataManager.upsert({
-			entityType: "swimResult",
-			entityId: resultId,
+			entityType,
+			entityId: swmResultId,
 			rawMetadataArr: [
 				{
 					name: "rank",
@@ -56,11 +56,12 @@ export class InsertSwimResult extends BaseInsertEntity {
 		await this.relatedEntityIdManager.upsert({
 			entityId: eventId,
 			entityType: "swimEvent",
-			relatedEntityId: resultId,
+			relatedEntityId: swmResultId,
 			relatedEntityType: "swimResult",
 			relationshipType: "contains",
 		});
 
-		return resultId;
+		cacheDb.insert(entityType, swmResultId, entityName);
+		return swmResultId;
 	}
 }

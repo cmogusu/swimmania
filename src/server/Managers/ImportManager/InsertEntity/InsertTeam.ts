@@ -9,30 +9,43 @@ export class InsertTeam extends BaseInsertEntity {
 	async insert(
 		cacheDb: TempEntityDatabase,
 		team: RawSwimTeam,
-		swimmerId: number,
+		meetId: number,
+		eventId: number,
 		resultId: number,
+		swimmerId: number,
 	) {
-		const { entityType } = this;
-		const { name: entityName } = team;
-		let teamId: number = cacheDb.getByName(entityType, entityName);
-
-		if (!teamId) {
-			const results = await this.entityManager.insert({
-				entityType,
-				name: entityName,
-				description: `swimmer ${entityName}`,
-			});
-
-			teamId = results.id;
-			cacheDb.insert(entityType, teamId, entityName);
+		if (!team?.team) {
+			return;
 		}
+
+		const { entityType } = this;
+		const { team: entityName } = team;
+		const description = `Team ${entityName}`;
+		const existingEventId = cacheDb.getByName(entityType, entityName);
+		if (existingEventId) {
+			return existingEventId;
+		}
+
+		const teamId = await this.findOrInsertEntity(
+			entityType,
+			entityName,
+			description,
+		);
 
 		await this.relatedEntityIdManager.upsert({
 			entityId: teamId,
 			entityType: "team",
-			relatedEntityId: swimmerId,
-			relatedEntityType: "swimmer",
-			relationshipType: "contains",
+			relatedEntityId: meetId,
+			relatedEntityType: "swimMeet",
+			relationshipType: "participatedIn",
+		});
+
+		await this.relatedEntityIdManager.upsert({
+			entityId: teamId,
+			entityType: "team",
+			relatedEntityId: eventId,
+			relatedEntityType: "swimEvent",
+			relationshipType: "participatedIn",
 		});
 
 		await this.relatedEntityIdManager.upsert({
@@ -42,5 +55,16 @@ export class InsertTeam extends BaseInsertEntity {
 			relatedEntityType: "swimResult",
 			relationshipType: "participatedIn",
 		});
+
+		await this.relatedEntityIdManager.upsert({
+			entityId: teamId,
+			entityType: "team",
+			relatedEntityId: swimmerId,
+			relatedEntityType: "swimmer",
+			relationshipType: "competedFor_inverse",
+		});
+
+		cacheDb.insert(entityType, teamId, entityName);
+		return teamId;
 	}
 }

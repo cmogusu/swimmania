@@ -120,7 +120,7 @@ export class UserManager extends RelatedEntityIdManager {
 		return await this.revokeAccess(inputData.entityType, inputData.entityId);
 	}
 
-	private async grantAccess(
+	async grantAccess(
 		entityType: EntityType,
 		entityId: number,
 	): Promise<boolean> {
@@ -145,7 +145,7 @@ export class UserManager extends RelatedEntityIdManager {
 		return true;
 	}
 
-	private async revokeAccess(
+	async revokeAccess(
 		entityType: EntityType,
 		entityId: number,
 	): Promise<boolean> {

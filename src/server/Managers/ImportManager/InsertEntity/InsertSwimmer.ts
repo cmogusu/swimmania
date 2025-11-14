@@ -9,24 +9,32 @@ export class InsertSwimmer extends BaseInsertEntity {
 	async insert(
 		cacheDb: TempEntityDatabase,
 		swimmer: RawSwimmer,
+		meetId: number,
 		eventId: number,
 		resultId: number,
 	): Promise<number> {
 		const { entityType } = this;
 		const { surname, firstName } = swimmer;
 		const entityName = `${surname} ${firstName}`;
-		let swimmerId = cacheDb.getByName(entityType, entityName);
-
-		if (!swimmerId) {
-			const results = await this.entityManager.insert({
-				entityType,
-				name: entityName,
-				description: `swimmer ${entityName}`,
-			});
-
-			swimmerId = results.id;
-			cacheDb.insert(entityType, swimmerId, entityName);
+		const description = `swimmer ${entityName}`;
+		const existingResultId = cacheDb.getByName(entityType, entityName);
+		if (existingResultId) {
+			return existingResultId;
 		}
+
+		const swimmerId = await this.findOrInsertEntity(
+			entityType,
+			entityName,
+			description,
+		);
+
+		await this.relatedEntityIdManager.upsert({
+			entityId: swimmerId,
+			entityType: "swimmer",
+			relatedEntityId: meetId,
+			relatedEntityType: "swimMeet",
+			relationshipType: "participatedIn",
+		});
 
 		await this.relatedEntityIdManager.upsert({
 			entityId: swimmerId,
@@ -44,6 +52,7 @@ export class InsertSwimmer extends BaseInsertEntity {
 			relationshipType: "participatedIn",
 		});
 
+		cacheDb.insert(entityType, swimmerId, entityName);
 		return swimmerId;
 	}
 }

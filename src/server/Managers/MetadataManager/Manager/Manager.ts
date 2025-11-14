@@ -60,24 +60,16 @@ export class MetadataManager {
 		const metadataInputs = new InsertEmptyInputData(rawInputs);
 		metadataInputs.validateData();
 
-		const insertData = await this.db.insertEmpty(metadataInputs);
-		if (!insertData?.insertId) {
-			throw Error("Unable to create metadata");
-		}
-
-		return { id: insertData.insertId };
+		await this.db.insertEmpty(metadataInputs);
+		return { id: rawInputs.entityId };
 	}
 
 	async upsert(rawInputs: RawInsertMetadataInputs) {
 		const metadataInputs = new InsertInputData(rawInputs);
 		metadataInputs.validateData();
 
-		const insertData = await this.db.upsert(metadataInputs);
-		if (!insertData?.insertId) {
-			throw Error("Unable to create metadata");
-		}
-
-		return { id: insertData.insertId };
+		await this.db.upsert(metadataInputs);
+		return { id: rawInputs.entityId };
 	}
 
 	async delete(rawInputs: RawDeleteMetadataInputs) {

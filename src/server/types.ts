@@ -61,6 +61,8 @@ export type RelationshipType =
 	| "comment_inverse"
 	| "rating"
 	| "rating_inverse"
+	| "competedFor"
+	| "competedFor_inverse"
 	| "owns"
 	| "owns_inverse";
 

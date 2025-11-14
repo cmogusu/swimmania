@@ -2,6 +2,7 @@ import type { EntityType } from "@/server/types";
 import { BaseDatabase } from "../../services/BaseDatabase";
 import type {
 	DeleteInputData,
+	FindInputData,
 	GetAllInputData,
 	GetByIdInputData,
 	GetByIdsInputData,
@@ -27,11 +28,10 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetAllInputData,
 	): Promise<RawEntity[]> {
-		const { pageSize, offset } = inputData;
 		const [rawEntities] = await this.query.getByType(
 			entityType,
-			pageSize,
-			offset,
+			inputData.pageSize,
+			inputData.offset,
 		);
 		return rawEntities as RawEntity[];
 	}
@@ -40,8 +40,10 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetByIdsInputData,
 	): Promise<RawEntity[]> {
-		const { entityIds } = inputData;
-		const [rawEntities] = await this.query.getByIds(entityType, entityIds);
+		const [rawEntities] = await this.query.getByIds(
+			entityType,
+			inputData.entityIds,
+		);
 		return rawEntities as RawEntity[];
 	}
 
@@ -49,8 +51,10 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetByIdInputData,
 	): Promise<RawEntity> {
-		const { entityId } = inputData;
-		const [rawEntities] = await this.query.getById(entityType, entityId);
+		const [rawEntities] = await this.query.getById(
+			entityType,
+			inputData.entityId,
+		);
 		const rawEntity = (rawEntities as RawEntity[])?.[0];
 		if (!rawEntity) {
 			throw Error("Entity not found");
@@ -63,13 +67,28 @@ export class Database extends BaseDatabase {
 		entityType: EntityType,
 		inputData: GetByNameInputData,
 	): Promise<RawEntity> {
-		const { name } = inputData;
-		const [rawEntities] = await this.query.getByName(entityType, name);
+		const [rawEntities] = await this.query.getByName(
+			entityType,
+			inputData.name,
+		);
 		const rawEntity = (rawEntities as RawEntity[])?.[0];
 		if (!rawEntity) {
 			throw Error("Entity not found");
 		}
 
+		return rawEntity;
+	}
+
+	async find(
+		entityType: EntityType,
+		inputData: FindInputData,
+	): Promise<RawEntity> {
+		const [rawEntities] = await this.query.find(
+			entityType,
+			inputData.name,
+			inputData.description,
+		);
+		const rawEntity = (rawEntities as RawEntity[])?.[0];
 		return rawEntity;
 	}
 

@@ -18,18 +18,18 @@ export class InsertSwimEvent extends BaseInsertEntity {
 		const { entityType } = this;
 		const { eventNumber, gender, ageGroup, distance } = event;
 		const entityName = `Event ${eventNumber}`;
+		const description = `${distance} ${gender} ${ageGroup}`;
 		const existingEventId = cacheDb.getByName(entityType, entityName);
 		if (existingEventId) {
 			return existingEventId;
 		}
 
-		const { id: eventId } = await this.entityManager.insert({
+		const eventId = await this.findOrInsertEntity(
 			entityType,
-			name: `Event ${eventNumber}`,
-			description: `${distance} ${gender} ${ageGroup}`,
-		});
+			entityName,
+			description,
+		);
 
-		cacheDb.insert(entityType, eventId, entityName);
 		await this.metadataManager.upsert({
 			entityType: "swimEvent",
 			entityId: eventId,
@@ -51,6 +51,7 @@ export class InsertSwimEvent extends BaseInsertEntity {
 			});
 		}
 
+		cacheDb.insert(entityType, eventId, entityName);
 		return eventId;
 	}
 }

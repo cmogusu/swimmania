@@ -52,6 +52,9 @@ export type RawInsertEntityInputs = {
 	description?: string;
 };
 
+export type RawFindEntityInputs = RawInsertEntityInputs &
+	EntityLoadRelatedDataOptions;
+
 export type RawDeleteEntityInputs = {
 	entityType: EntityType;
 	entityId: number;

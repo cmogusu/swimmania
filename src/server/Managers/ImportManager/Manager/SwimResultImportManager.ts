@@ -89,9 +89,21 @@ export class SwimResultImportManager extends BaseImportManager {
 
 	async insertEvent(eventData: EntityInsertData<RawSwimEventWithResults>) {
 		const { data, onComplete } = eventData;
+		const { meetId } = this;
+		if (!meetId) {
+			throw Error("Meet id not set");
+		}
 
 		try {
-			await this.insert.swimEvent(data, this.meetId);
+			const eventId = await this.insert.swimEvent(data, meetId);
+			const resultId = await this.insert.swimResult(data, eventId);
+			const swimmerId = await this.insert.swimmer(
+				data,
+				meetId,
+				eventId,
+				resultId,
+			);
+			await this.insert.team(data, meetId, eventId, resultId, swimmerId);
 			onComplete(true);
 		} catch (error: unknown) {
 			this.log.error("Error importing swim event data", error as Error);

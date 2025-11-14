@@ -38,15 +38,39 @@ export class InsertEntity {
 		return this.insertSwimMeet.insert(this.cacheDb, meet);
 	}
 
-	swimmer(swimmer: RawSwimmer, eventId: number, resultId: number) {
-		return this.insertSwimmer.insert(this.cacheDb, swimmer, eventId, resultId);
-	}
-
 	swimResult(result: RawSwimResult, eventId: number) {
 		return this.insertSwimResult.insert(this.cacheDb, result, eventId);
 	}
 
-	swimTeam(team: RawSwimTeam, swimmerId: number, resultId: number) {
-		return this.insertTeam.insert(this.cacheDb, team, swimmerId, resultId);
+	swimmer(
+		swimmer: RawSwimmer,
+		meetId: number,
+		eventId: number,
+		resultId: number,
+	) {
+		return this.insertSwimmer.insert(
+			this.cacheDb,
+			swimmer,
+			meetId,
+			eventId,
+			resultId,
+		);
+	}
+
+	team(
+		team: RawSwimTeam,
+		meetId: number,
+		eventId: number,
+		resultId: number,
+		swimmerId: number,
+	) {
+		return this.insertTeam.insert(
+			this.cacheDb,
+			team,
+			meetId,
+			eventId,
+			resultId,
+			swimmerId,
+		);
 	}
 }

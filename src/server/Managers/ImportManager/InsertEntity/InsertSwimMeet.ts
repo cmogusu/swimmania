@@ -21,29 +21,28 @@ export class InsertSwimMeet extends BaseInsertEntity {
 			return existingMeetId;
 		}
 
-		const { id: meetId } = await this.entityManager.insert({
+		const meetId = await this.findOrInsertEntity(
 			entityType,
-			name: meet.name,
-			description: meet.description,
-		});
-
-		cacheDb.insert(entityType, meetId, entityName);
+			meet.name,
+			meet.description,
+		);
 
 		await this.metadataManager.upsert({
 			entityType,
 			entityId: meetId,
 			rawMetadataArr: [
 				{
-					name: "startEndDates.startDate",
+					name: "meetDates.startDate",
 					value: meet.startDate,
 				},
 				{
-					name: "startEndDates.endDate",
+					name: "meetDates.endDate",
 					value: meet.endDate,
 				},
 			],
 		});
 
+		cacheDb.insert(entityType, meetId, entityName);
 		return meetId;
 	}
 }

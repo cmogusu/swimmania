@@ -20,4 +20,28 @@ export class BaseInsertEntity {
 		this.metadataManager = metadataManagerFactory.getInstance();
 		this.relatedEntityIdManager = relatedEntityIdManagerFactory.getInstance();
 	}
+
+	async findOrInsertEntity(
+		entityType: EntityType,
+		name: string,
+		description?: string,
+	) {
+		const existingEntity = await this.entityManager.find({
+			entityType,
+			name,
+			description,
+		});
+
+		if (existingEntity?.entityId) {
+			return existingEntity.entityId;
+		}
+
+		const { id: meetId } = await this.entityManager.insert({
+			entityType,
+			name,
+			description,
+		});
+
+		return meetId;
+	}
 }
