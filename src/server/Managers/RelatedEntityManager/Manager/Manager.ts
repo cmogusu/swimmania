@@ -10,7 +10,6 @@ import {
 } from "../../RelatedEntityIdManager";
 import type {
 	RawDeleteRelatedEntityInputs,
-	RawInsertNewRelatedEntityInputs,
 	RawInsertRelatedEntityInputs,
 } from "../types";
 
@@ -34,22 +33,6 @@ export class RelatedEntityManager {
 			relationshipType,
 		} = rawRelatedEntity;
 
-		return this.relatedEntityIdManager.upsert({
-			entityId,
-			entityType,
-			relatedEntityId,
-			relatedEntityType,
-			relationshipType,
-		});
-	}
-
-	async insertNewRelated(
-		entityType: EntityType,
-		entityId: number,
-		rawRelatedEntity: RawInsertNewRelatedEntityInputs,
-	) {
-		const { type: relatedEntityType, relationshipType } = rawRelatedEntity;
-		const relatedEntityId = await this.getEntityId(rawRelatedEntity);
 		return this.relatedEntityIdManager.upsert({
 			entityId,
 			entityType,
@@ -106,25 +89,5 @@ export class RelatedEntityManager {
 
 		entities.relationshipType = relationshipType;
 		return entities;
-	}
-
-	async getEntityId(rawRelatedEntity: RawInsertNewRelatedEntityInputs) {
-		let relatedEntityId: number | undefined;
-		if (!relatedEntityId) {
-			const relatedEntity =
-				await this.entityManager.findExisting(rawRelatedEntity);
-			relatedEntityId = relatedEntity?.entityId;
-		}
-
-		if (!relatedEntityId) {
-			const { id } = await this.entityManager.insert(rawRelatedEntity);
-			relatedEntityId = id;
-		}
-
-		if (!relatedEntityId) {
-			throw Error("Unable to get related entity");
-		}
-
-		return relatedEntityId;
 	}
 }

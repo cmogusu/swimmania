@@ -1,8 +1,5 @@
 import type { EntityType, RelationshipType } from "@/server/types";
-import type {
-	RawGetAllEntityInputs,
-	RawInsertEntityInputs,
-} from "../EntityManager";
+import type { RawGetAllEntityInputs } from "../EntityManager";
 
 // Inputs
 export type RawGetRelatedEntityInputs = Pick<
@@ -15,11 +12,6 @@ export type RawGetRelatedEntityInputs = Pick<
 
 export type RawInsertRelatedEntityInputs = {
 	id: number;
-	type: EntityType;
-	relationshipType: RelationshipType;
-};
-
-export type RawInsertNewRelatedEntityInputs = RawInsertEntityInputs & {
 	type: EntityType;
 	relationshipType: RelationshipType;
 };

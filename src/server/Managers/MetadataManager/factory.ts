@@ -1,13 +1,5 @@
+import { baseEntityFactory } from "@/server/utils";
 import { MetadataManager } from "./Manager";
 
-export const metadataManagerFactory = {
-	_manager: undefined as MetadataManager | undefined,
-
-	getInstance() {
-		if (!this._manager) {
-			this._manager = new MetadataManager();
-		}
-
-		return this._manager;
-	},
-};
+export const metadataManagerFactory =
+	baseEntityFactory<MetadataManager>(MetadataManager);
