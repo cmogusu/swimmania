@@ -2,22 +2,54 @@ import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { ANONYMOUS_USER_ID } from "@/server/constants";
 import { PDF_FOLDER } from "@/server/constants/paths";
+import { fileManagerFactory } from "@/server/Managers/FileManager";
 import { InsertEntity } from "@/server/Managers/ImportManager/InsertEntity";
+
+const m = fileManagerFactory.getInstance();
 
 export default async function Page() {
 	return (
 		<div className="p-6">
-			<form action={doDatabaseWork}>
-				<input type="submit" className="btn btn-sm" value="Database" />
+			<form action={uploadPdf}>
+				<input
+					className="input input-sm"
+					type="file"
+					name="image"
+					accept="application/pdf"
+				/>
+				<input type="submit" className="btn btn-sm" value="pdf" />
+			</form>
+
+			<form action={uploadImg}>
+				<input
+					className="input input-sm"
+					type="file"
+					name="image"
+					accept="image/*"
+				/>
+				<input type="submit" className="btn btn-sm" value="img" />
 			</form>
 		</div>
 	);
 }
 
-async function doDatabaseWork() {
+async function uploadPdf(formData: FormData) {
 	"use server";
 
-	parserWork();
+	// const file = formData.get("image") as File;
+	// m.delete({ file });
+	m.deleteFile({
+		filePath:
+			"/images/camel_febf88ea4051355e7918b87cf19c9602a9c8223dbe2eb5ca15b7d469823254c7.jpg",
+	});
+}
+
+async function uploadImg(formData: FormData) {
+	"use server";
+
+	const file = formData.get("image") as File;
+	const filepath = await m.uploadImage({ file });
+	console.log(filepath);
 }
 
 export const swimMeet = {

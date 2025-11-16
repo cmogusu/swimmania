@@ -20,6 +20,7 @@ export class UploadFileInputData {
 
 	async validateData() {
 		this.validate.file(this.file, this.allowedFileTypes);
+		this.validate.fileName(this.file.name);
 		await this.validate.directory(this.uploadDirectory);
 	}
 }

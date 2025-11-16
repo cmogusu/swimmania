@@ -2,32 +2,29 @@ import { access, constants } from "node:fs/promises";
 import z from "zod";
 import { BaseValidate } from "@/server/Managers/services/BaseValidate";
 
+const MAX_FILE_NAME_LENGTH = 255 - 64;
+
 export class Validate extends BaseValidate {
-	// TODO: Try out with z.file
-	fileValidator = z.object({
-		name: z.string().min(1).max(100),
-		type: z.string().min(1).max(255),
-		// filename: z.string().min(1),
-		// size: z.optional(z.number()),
-	});
-
-	// TODO: implement this
-	filePathValidator = z.string();
-
-	file(file: File, allowedFileTypes: string[]) {
-		if (!allowedFileTypes.includes(file.type)) {
-			throw Error("Invalid file type");
-		}
-
-		return this.fileValidator.parse(file);
-	}
-
 	async directory(uploadDirectory: string) {
 		await access(uploadDirectory, constants.R_OK);
 	}
 
-	filePath(path: string) {
-		return this.filePathValidator.parse(path);
+	filePath(filePath: string) {
+		return this.string(filePath);
+	}
+
+	file(file: File, allowedFileTypes: string[]) {
+		console.log({ allowedFileTypes });
+		return z
+			.file()
+			.min(1)
+			.max(1024 * 1024)
+			.mime(allowedFileTypes)
+			.parse(file);
+	}
+
+	fileName(fileName: string) {
+		return z.string().min(3).max(MAX_FILE_NAME_LENGTH).parse(fileName);
 	}
 }
 

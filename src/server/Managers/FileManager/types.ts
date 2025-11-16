@@ -22,5 +22,4 @@ export type RawDeletePdfInputs = {
 
 export type RawDeleteFileInputs = {
 	filePath: string;
-	uploadDirectory: string;
 };

@@ -6,32 +6,67 @@ import {
 	mkdir,
 	readdir,
 	rename,
+	rm,
 	stat,
 	writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import { UPLOADS_FOLDER } from "@/server/constants/paths";
+import tmp from "tmp";
+import { PUBLIC_FOLDER, UPLOADS_FOLDER } from "@/server/constants/paths";
 import type { DeleteFileInputData, UploadFileInputData } from "../InputData";
 
 export class FileActions {
+	constructor() {
+		tmp.setGracefulCleanup();
+	}
+
 	async upload({
 		file,
 		uploadDirectory,
 	}: UploadFileInputData): Promise<string> {
 		const arrayBuffer = await file.arrayBuffer();
 		const buffer = new Uint8Array(arrayBuffer);
-		const filePath = path.join(uploadDirectory, file.name);
+		const fileHash = this.getFileHash(buffer);
+		const filePath = this.getFilePath(uploadDirectory, file.name, fileHash);
 		const exists = await this.fileExists(filePath);
 		if (!exists) {
 			await writeFile(filePath, buffer);
 		}
 
-		return filePath;
+		return this.getPathToUploadsFolder(filePath);
 	}
 
-	delete(inputData: DeleteFileInputData): Promise<string> {
-		console.log(`deleted ${inputData.filePath}`);
-		return Promise.resolve("path");
+	getPathToUploadsFolder(filePath: string) {
+		return filePath.replace(PUBLIC_FOLDER, "");
+	}
+
+	getFilePath(uploadDirectory: string, fileName: string, fileHash: string) {
+		const ext = path.extname(fileName);
+		const name = path.basename(fileName, ext);
+		const fullName = `${name}_${fileHash}${ext}`;
+		return path.join(uploadDirectory, fullName);
+	}
+
+	writeTempFile(buffer: Uint8Array) {
+		const { fd, removeCallback } = tmp.fileSync();
+		if (!fd) {
+			throw Error("Unable to create temporary file");
+		}
+
+		const bytesWritten = fs.writeSync(fd, buffer);
+		if (!bytesWritten) {
+			throw Error("Unable to write to temp file");
+		}
+
+		return removeCallback;
+	}
+
+	async delete(inputData: DeleteFileInputData): Promise<void> {
+		const filePath = path.join(PUBLIC_FOLDER, inputData.filePath);
+		const exists = await this.fileExists(filePath);
+		if (exists) {
+			await rm(filePath);
+		}
 	}
 
 	fileExists(filePath: string): Promise<boolean> {
@@ -40,17 +75,10 @@ export class FileActions {
 			.catch(() => false);
 	}
 
-	getFileHash(filePath: string) {
-		return new Promise((resolve) => {
-			const hash = crypto.createHash("sha256");
-			const stream = fs.createReadStream(filePath);
-
-			stream.on("error", (error) => console.log(error));
-			stream.on("data", (chunk) => hash.update(chunk));
-			stream.on("end", () => {
-				resolve(hash.digest("hex"));
-			});
-		});
+	getFileHash(buffer: Uint8Array) {
+		const hash = crypto.createHash("sha256");
+		hash.update(buffer);
+		return hash.digest("hex");
 	}
 
 	async uploadSth() {

@@ -1,3 +1,3 @@
-export * from "./baseFactories";
 export * from "./common";
+export * from "./factory";
 export * from "./general";

@@ -1,13 +1,4 @@
+import { baseEntityFactory } from "@/server/utils";
 import { FileManager } from "./Manager";
 
-export const fileManagerFactory = {
-	manager: undefined as FileManager | undefined,
-
-	getInstance() {
-		if (!this.manager) {
-			this.manager = new FileManager();
-		}
-
-		return this.manager;
-	},
-};
+export const fileManagerFactory = baseEntityFactory<FileManager>(FileManager);

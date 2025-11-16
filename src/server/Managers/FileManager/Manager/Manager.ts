@@ -7,8 +7,6 @@ import {
 import { DeleteFileInputData, UploadFileInputData } from "../InputData";
 import type {
 	RawDeleteFileInputs,
-	RawDeleteImageInputs,
-	RawDeletePdfInputs,
 	RawUploadFileInputs,
 	RawUploadImageInputs,
 	RawUploadPdfInputs,
@@ -42,20 +40,6 @@ export class FileManager {
 		const inputData = new UploadFileInputData(rawInputs);
 		await inputData.validateData();
 		return await this.fileActions.upload(inputData);
-	}
-
-	deleteImage({ filePath }: RawDeleteImageInputs) {
-		this.deleteFile({
-			filePath,
-			uploadDirectory: IMAGE_FOLDER,
-		});
-	}
-
-	deletePDF({ filePath }: RawDeletePdfInputs) {
-		this.deleteFile({
-			filePath,
-			uploadDirectory: PDF_FOLDER,
-		});
 	}
 
 	getRelativePath(filePath: string) {
