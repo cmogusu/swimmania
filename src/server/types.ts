@@ -1,3 +1,7 @@
+export type UserId = {
+	userId: string;
+};
+
 export type EntityType =
 	| "coach"
 	| "lifeguard"

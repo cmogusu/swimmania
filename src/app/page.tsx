@@ -1,4 +1,6 @@
 import { EntityDrawerContainer } from "@/components/EntityDrawer";
+import { PageLayout } from "@/components/Pages";
+import { EntitiesPage } from "@/components/Pages/EntitiesPage";
 import {
 	ApiContextProvider,
 	EntitiesContextProvider,
@@ -6,8 +8,6 @@ import {
 	SelectedEntityContextProvider,
 	VisibleEntityIdsContextProvider,
 } from "@/context";
-import { PageLayout } from "@/pageComponents";
-import { EntitiesPage } from "@/pageComponents/EntitiesPage";
 import { api } from "@/server/api";
 import { getApiKeys } from "@/server/serverFunctions";
 

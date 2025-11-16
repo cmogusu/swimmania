@@ -1,5 +1,6 @@
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
+import { ANONYMOUS_USER_ID } from "@/server/constants";
 import { PDF_FOLDER } from "@/server/constants/paths";
 import { InsertEntity } from "@/server/Managers/ImportManager/InsertEntity";
 
@@ -52,28 +53,14 @@ export async function parserWork() {
 	const eventId = 293;
 	const resultId = 292;
 	const swimmerId = 294;
-	const x = await insert.team(swimEvent, meetId, eventId, resultId, swimmerId);
+	const userId = ANONYMOUS_USER_ID;
+	const x = await insert.team(
+		swimEvent,
+		userId,
+		meetId,
+		eventId,
+		resultId,
+		swimmerId,
+	);
 	console.log(x);
-
-	// parser.parse(text);
-	// parser.on(EVENT.DATA_READY, (entityType) => {
-	// 	console.log("data ready", entityType);
-
-	// 	if (entityType === "swimMeet") {
-	// 		const y = parser.getMeetData();
-	// 		console.log("meet-data", y);
-	// 	} else {
-	// 		const y = parser.getEventData();
-	// 		console.log("event-data", y);
-	// 	}
-	// });
-
-	// const y = parser.tempSwimEventDb.addColumn();
-	// const y = parser.tempSwimEventDb.setProcessingFailure(1);
-	// const x = parser.tempSwimEventDb.getUnprocessed();
-	// y = parser.tempSwimEventDb.reset();
-	// y = parser.getMeetData();
-	// y?.onComplete(false);
-
-	// const { data, onComplete } = x || {}
 }

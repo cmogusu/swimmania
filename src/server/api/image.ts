@@ -1,5 +1,6 @@
 import { imageManagerFactory } from "@/server/Managers";
 import { createFile } from "@/utilities/file";
+import { UserManager } from "../Managers/UserManager";
 import { Log } from "../services";
 import type { EntityType } from "../types";
 
@@ -24,8 +25,10 @@ export async function updateImage(
 ) {
 	try {
 		const imageManager = imageManagerFactory.getInstance();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		return await imageManager.update({
 			entityType,
+			userId,
 			entityId,
 			id,
 			alt,
@@ -43,9 +46,11 @@ export async function insertImage(
 ) {
 	try {
 		const imageManager = imageManagerFactory.getInstance();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		const filepath = await createFile(imageFile);
 		return await imageManager.insert({
 			entityType,
+			userId,
 			entityId,
 			alt,
 			filepath,
@@ -63,8 +68,10 @@ export async function setDefaultImage(
 ) {
 	try {
 		const imageManager = imageManagerFactory.getInstance();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		return await imageManager.setDefault({
 			entityType,
+			userId,
 			id,
 			entityId,
 			isDefault,
@@ -81,8 +88,10 @@ export async function deleteImageById(
 ) {
 	try {
 		const imageManager = imageManagerFactory.getInstance();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		return await imageManager.deleteById({
 			entityType,
+			userId,
 			id,
 			entityId,
 		});

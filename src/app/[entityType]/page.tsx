@@ -2,13 +2,13 @@ import { auth } from "auth";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { EntityDrawerContainer } from "@/components/EntityDrawer";
+import { EntitiesPage, PageLayout } from "@/components/Pages";
 import {
 	EntitiesContextProvider,
 	EntityDrawerContextProvider,
 	SelectedEntityContextProvider,
 	VisibleEntityIdsContextProvider,
 } from "@/context";
-import { EntitiesPage, PageLayout } from "@/pageComponents";
 import { api } from "@/server/api";
 import { EntityTypePlurals } from "@/server/constants";
 import type { EntityType } from "@/server/types";

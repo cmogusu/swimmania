@@ -2,6 +2,7 @@ import type {
 	EntityType,
 	MetadataFilter,
 	PaginationOptions,
+	UserId,
 } from "@/server/types";
 
 // Outputs
@@ -15,10 +16,6 @@ export type RawEntity = {
 export type EntityLoadRelatedDataOptions = {
 	loadUserCanEdit?: boolean;
 	loadDefaultImage?: boolean;
-};
-
-export type UserId = {
-	userId: string;
 };
 
 // Inputs

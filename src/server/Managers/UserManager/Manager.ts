@@ -18,6 +18,15 @@ export class UserManager extends RelatedEntityIdManager {
 		return session?.user?.id;
 	}
 
+	static async getLoggedInUserIdOrThrow(): Promise<string> {
+		const userId = await UserManager.getLoggedInUserId();
+		if (!userId) {
+			throw Error("User not logged in");
+		}
+
+		return userId;
+	}
+
 	userEntityType: EntityType = "user";
 	userRelationshipType: RelationshipType = "owns_inverse";
 

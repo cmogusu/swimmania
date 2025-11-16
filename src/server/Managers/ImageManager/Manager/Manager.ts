@@ -54,6 +54,7 @@ export class ImageManager {
 
 		await this.userManager.assertCanEditEntity(
 			imageData.entityType,
+			imageData.userId,
 			imageData.entityId,
 		);
 
@@ -71,6 +72,7 @@ export class ImageManager {
 
 		await this.userManager.assertCanEditEntity(
 			imageData.entityType,
+			imageData.userId,
 			imageData.entityId,
 		);
 
@@ -86,7 +88,10 @@ export class ImageManager {
 		const imageData = new InsertInputData(rawImageData);
 		imageData.validateData();
 
-		await this.userManager.assertCanCreateEntity(imageData.entityType);
+		await this.userManager.assertCanCreateEntity(
+			imageData.entityType,
+			imageData.userId,
+		);
 
 		const insertData = await this.db.insert(imageData);
 		if (!insertData?.insertId) {
@@ -102,6 +107,7 @@ export class ImageManager {
 
 		await this.userManager.assertCanDeleteEntity(
 			imageData.entityType,
+			imageData.userId,
 			imageData.entityId,
 		);
 
@@ -121,6 +127,7 @@ export class ImageManager {
 
 		await this.userManager.assertCanDeleteEntity(
 			imageData.entityType,
+			imageData.userId,
 			imageData.entityId,
 		);
 

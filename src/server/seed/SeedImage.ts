@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { type ImageManager, imageManagerFactory } from "../Managers";
-import type { ImagePostRawInputs } from "../Managers/ImageManager";
+import type { EntityType } from "../types";
 
 export class SeedImage {
 	imageManager: ImageManager;
@@ -9,19 +9,31 @@ export class SeedImage {
 		this.imageManager = imageManagerFactory.getInstance();
 	}
 
-	async insertItem(entityId: number) {
-		const rawImageData = this.getSeedData(entityId);
-		await this.imageManager.insert(rawImageData);
+	async insertItem(entityType: EntityType, userId: string, entityId: number) {
+		const { alt, filepath } = this.getSeedData();
+		const { id: imageId } = await this.imageManager.insert({
+			entityType,
+			userId,
+			entityId,
+			alt,
+			filepath,
+		});
+
+		await this.imageManager.setDefault({
+			entityType,
+			userId,
+			entityId,
+			id: imageId,
+			isDefault: true,
+		});
 	}
 
-	getSeedData(entityId: number): ImagePostRawInputs {
+	getSeedData() {
 		const imageIndex = Math.floor(Math.random() * 7) + 1;
 
 		return {
-			entityId,
 			alt: faker.word.words({ count: { min: 3, max: 8 } }),
 			filepath: `/images/pool-${imageIndex}.jpg`,
-			isDefault: true,
 		};
 	}
 }

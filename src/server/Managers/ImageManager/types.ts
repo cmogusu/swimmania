@@ -1,4 +1,4 @@
-import type { EntityType } from "@/server/types";
+import type { EntityType, UserId } from "@/server/types";
 
 export type ImageFileDataItem = {
 	originalname: string;
@@ -34,33 +34,33 @@ export type RawGetDefaultImageInputs = {
 	entityId: number;
 };
 
-export type RawSetDefaultImageInputs = {
+export type RawSetDefaultImageInputs = UserId & {
 	entityType: EntityType;
 	id: number;
 	entityId: number;
 	isDefault: boolean;
 };
 
-export type RawUpdateImageInputs = {
+export type RawUpdateImageInputs = UserId & {
 	entityType: EntityType;
 	id: number;
 	entityId: number;
 	alt: string;
 };
 
-export type RawInsertImageInputs = {
+export type RawInsertImageInputs = UserId & {
 	entityType: EntityType;
 	entityId: number;
 	alt: string;
 	filepath: string;
 };
 
-export type RawDeleteAllImageInputs = {
+export type RawDeleteAllImageInputs = UserId & {
 	entityType: EntityType;
 	entityId: number;
 };
 
-export type RawDeleteByIdImageInputs = {
+export type RawDeleteByIdImageInputs = UserId & {
 	entityType: EntityType;
 	id: number;
 	entityId: number;

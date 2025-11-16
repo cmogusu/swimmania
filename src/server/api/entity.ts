@@ -57,7 +57,7 @@ export async function getEntities(
 export async function deleteEntity(entityType: EntityType, entityId: number) {
 	try {
 		const entityManager = entityManagerFactory.getInstance();
-		const userId = await getLoggedInUserIdOrThrow();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		const insertData = await entityManager.deleteById({
 			entityType,
 			userId,
@@ -77,7 +77,7 @@ export async function updateEntity(
 ) {
 	try {
 		const entityManager = entityManagerFactory.getInstance();
-		const userId = await getLoggedInUserIdOrThrow();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		return await entityManager.update({
 			entityType,
 			userId,
@@ -97,7 +97,7 @@ export async function addEntity(
 ) {
 	try {
 		const entityManager = entityManagerFactory.getInstance();
-		const userId = await getLoggedInUserIdOrThrow();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		return await entityManager.insert({
 			entityType,
 			userId,
@@ -108,12 +108,3 @@ export async function addEntity(
 		log.error("Unable to add entity", error as Error);
 	}
 }
-
-const getLoggedInUserIdOrThrow = async () => {
-	const userId = await UserManager.getLoggedInUserId();
-	if (!userId) {
-		throw Error("User not logged in");
-	}
-
-	return userId;
-};

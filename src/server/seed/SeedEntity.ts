@@ -4,6 +4,7 @@ import {
 	entityManagerFactory,
 	type RawInsertEntityInputs,
 } from "../Managers/EntityManager";
+import { UserManager } from "../Managers/UserManager";
 import { Log } from "../services";
 import type { EntityType } from "../types";
 import { isUndefined } from "../utils";
@@ -36,21 +37,23 @@ export class SeedEntity {
 	}
 
 	async insertItem() {
-		const rawEntity = this.getSeedData();
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
+		const rawEntity = await this.getSeedData();
 		const { id: entityId } = await this.entityManager.insert(rawEntity);
 
 		await Promise.all([
-			this.seedImage.insertItem(entityId),
+			this.seedImage.insertItem(this.entityType, userId, entityId),
 			this.seedMetadata.insertItem(entityId),
 		]);
 	}
 
-	insertImage(entityId: number) {
+	async insertImage(entityId: number) {
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		if (isUndefined(entityId)) {
 			throw Error("Entity id not set");
 		}
 
-		return this.seedImage.insertItem(entityId);
+		return this.seedImage.insertItem(this.entityType, userId, entityId);
 	}
 
 	insertMetadata(entityId: number) {
@@ -61,11 +64,13 @@ export class SeedEntity {
 		return this.seedMetadata.insertItem(entityId);
 	}
 
-	getSeedData(): RawInsertEntityInputs {
+	async getSeedData(): Promise<RawInsertEntityInputs> {
+		const userId = await UserManager.getLoggedInUserIdOrThrow();
 		return {
 			entityType: this.entityType,
 			name: faker.location.street(),
 			description: faker.word.words({ count: { min: 10, max: 20 } }),
+			userId,
 		};
 	}
 }
