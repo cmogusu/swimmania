@@ -32,6 +32,7 @@ import type {
 	RawGetByNameEntityInputs,
 	RawInsertEntityInputs,
 	RawUpdateEntityInputs,
+	UserId,
 } from "../types";
 import { Database } from "./Database";
 
@@ -59,7 +60,10 @@ export class EntityManager {
 		const inputData = new GetAllInputData(rawInputs);
 		inputData.validateData();
 
-		await this.userManager.assertCanViewEntities(rawInputs.entityType);
+		await this.userManager.assertCanViewEntities(
+			rawInputs.entityType,
+			rawInputs.userId,
+		);
 
 		const rawEntities = await this.db.getAll(rawInputs.entityType, inputData);
 		const entities = new Entities(rawEntities, inputData);
@@ -84,6 +88,7 @@ export class EntityManager {
 
 		await this.userManager.assertCanViewEntity(
 			rawInputs.entityType,
+			inputData.userId,
 			inputData.entityId,
 		);
 
@@ -107,6 +112,7 @@ export class EntityManager {
 
 		await this.userManager.assertCanEditEntity(
 			rawInputs.entityType,
+			inputData.userId,
 			inputData.entityId,
 		);
 
@@ -122,7 +128,10 @@ export class EntityManager {
 		const inputData = new InsertInputData(rawInputs);
 		inputData.validateData();
 
-		await this.userManager.assertCanCreateEntity(rawInputs.entityType);
+		await this.userManager.assertCanCreateEntity(
+			rawInputs.entityType,
+			inputData.userId,
+		);
 
 		const insertData = await this.db.insert(rawInputs.entityType, inputData);
 		const { insertId } = insertData || {};
@@ -130,7 +139,11 @@ export class EntityManager {
 			throw Error("Unable to create entity");
 		}
 
-		await this.userManager.grantAccess(rawInputs.entityType, insertId);
+		await this.userManager.grantAccess(
+			rawInputs.entityType,
+			inputData.userId,
+			insertId,
+		);
 		await this.metadataManager.insertEmpty({
 			entityId: insertId,
 			entityType: rawInputs.entityType,
@@ -145,6 +158,7 @@ export class EntityManager {
 
 		await this.userManager.assertCanDeleteEntity(
 			rawInputs.entityType,
+			inputData.userId,
 			inputData.entityId,
 		);
 
@@ -197,16 +211,20 @@ export class EntityManager {
 		} as unknown as RawGetByIdsEntityInputs);
 	}
 
-	async loadRelatedEntityData(entity: Entity, inputData: ILoadableEntity) {
+	async loadRelatedEntityData(
+		entity: Entity,
+		inputData: ILoadableEntity & Partial<UserId>,
+	) {
 		if (inputData.loadDefaultImage) {
 			entity.defaultImage = await this.imageManager.getDefault({
 				entityId: entity.entityId,
 			});
 		}
 
-		if (inputData.loadUserCanEdit) {
+		if (inputData.loadUserCanEdit && inputData.userId) {
 			entity.userCanEdit = await this.userManager.canEditEntity(
 				entity.entityType,
+				inputData.userId,
 				entity.entityId,
 			);
 		}
@@ -216,7 +234,7 @@ export class EntityManager {
 
 	async loadRelatedEntitiesData(
 		entitiesObj: Entities,
-		inputData: ILoadableEntity,
+		inputData: ILoadableEntity & Partial<UserId>,
 	) {
 		const promises = entitiesObj.entities.map((entity: Entity) =>
 			this.loadRelatedEntityData(entity, inputData),

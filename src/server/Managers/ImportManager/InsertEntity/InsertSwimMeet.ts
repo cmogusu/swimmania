@@ -9,6 +9,7 @@ export class InsertSwimMeet extends BaseInsertEntity {
 	async insert(
 		cacheDb: TempEntityDatabase,
 		meet: RawSwimMeet,
+		userId: string,
 	): Promise<number> {
 		if (!meet?.name) {
 			throw Error("Swim meet not set");
@@ -23,6 +24,7 @@ export class InsertSwimMeet extends BaseInsertEntity {
 
 		const meetId = await this.findOrInsertEntity(
 			entityType,
+			userId,
 			meet.name,
 			meet.description,
 		);

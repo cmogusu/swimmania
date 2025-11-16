@@ -30,20 +30,25 @@ export class InsertEntity {
 		this.insertTeam = new InsertTeam();
 	}
 
-	swimEvent(event: RawSwimEventWithoutResults, meetId: number | undefined) {
-		return this.insertSwimEvent.insert(this.cacheDb, event, meetId);
+	swimMeet(meet: RawSwimMeet, userId: string) {
+		return this.insertSwimMeet.insert(this.cacheDb, meet, userId);
 	}
 
-	swimMeet(meet: RawSwimMeet) {
-		return this.insertSwimMeet.insert(this.cacheDb, meet);
+	swimEvent(
+		event: RawSwimEventWithoutResults,
+		userId: string,
+		meetId: number | undefined,
+	) {
+		return this.insertSwimEvent.insert(this.cacheDb, event, userId, meetId);
 	}
 
-	swimResult(result: RawSwimResult, eventId: number) {
-		return this.insertSwimResult.insert(this.cacheDb, result, eventId);
+	swimResult(result: RawSwimResult, userId: string, eventId: number) {
+		return this.insertSwimResult.insert(this.cacheDb, result, userId, eventId);
 	}
 
 	swimmer(
 		swimmer: RawSwimmer,
+		userId: string,
 		meetId: number,
 		eventId: number,
 		resultId: number,
@@ -51,6 +56,7 @@ export class InsertEntity {
 		return this.insertSwimmer.insert(
 			this.cacheDb,
 			swimmer,
+			userId,
 			meetId,
 			eventId,
 			resultId,
@@ -59,6 +65,7 @@ export class InsertEntity {
 
 	team(
 		team: RawSwimTeam,
+		userId: string,
 		meetId: number,
 		eventId: number,
 		resultId: number,
@@ -67,6 +74,7 @@ export class InsertEntity {
 		return this.insertTeam.insert(
 			this.cacheDb,
 			team,
+			userId,
 			meetId,
 			eventId,
 			resultId,

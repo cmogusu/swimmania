@@ -1,8 +1,18 @@
 import type { EntityType } from "@/server/types";
 
-export type RawGrantAccessInputs = {
+type BaseAccessInputs = {
 	entityType: EntityType;
 	entityId: number;
 };
 
-export type RawRevokeAccessInputs = RawGrantAccessInputs;
+export type RawGrantLoggedInUserAccessInputs = BaseAccessInputs;
+
+export type RawRevokeLoggedInUserAccessInputs = BaseAccessInputs;
+
+export type RawGrantAccessInputs = BaseAccessInputs & {
+	userId: string;
+};
+
+export type RawRevokeAccessInputs = BaseAccessInputs & {
+	userId: string;
+};

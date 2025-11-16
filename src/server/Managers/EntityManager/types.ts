@@ -17,8 +17,13 @@ export type EntityLoadRelatedDataOptions = {
 	loadDefaultImage?: boolean;
 };
 
+export type UserId = {
+	userId: string;
+};
+
 // Inputs
 export type RawGetAllEntityInputs = EntityLoadRelatedDataOptions &
+	Partial<UserId> &
 	PaginationOptions & {
 		entityType: EntityType;
 		filters?: MetadataFilter[];
@@ -27,35 +32,42 @@ export type RawGetAllEntityInputs = EntityLoadRelatedDataOptions &
 export type RawFilterByEntityInputs = RawGetAllEntityInputs;
 
 export type RawGetByIdsEntityInputs = EntityLoadRelatedDataOptions &
+	Partial<UserId> &
 	PaginationOptions & {
 		entityType: EntityType;
 		entityIds: number[];
 	};
 
-export type RawGetByIdEntityInputs = EntityLoadRelatedDataOptions & {
-	entityType: EntityType;
-	entityId: number;
-};
+export type RawGetByIdEntityInputs = EntityLoadRelatedDataOptions &
+	Partial<UserId> & {
+		entityType: EntityType;
+		entityId: number;
+	};
 
-export type RawGetByNameEntityInputs = EntityLoadRelatedDataOptions & {
+export type RawGetByNameEntityInputs = EntityLoadRelatedDataOptions &
+	Partial<UserId> & {
+		entityType: EntityType;
+		name: string;
+	};
+
+export type RawInsertEntityInputs = UserId & {
 	entityType: EntityType;
 	name: string;
+	description?: string;
 };
 
 export type RawUpdateEntityInputs = RawInsertEntityInputs & {
 	entityId: number;
 };
 
-export type RawInsertEntityInputs = {
-	entityType: EntityType;
-	name: string;
-	description?: string;
-};
+export type RawFindEntityInputs = EntityLoadRelatedDataOptions &
+	Partial<UserId> & {
+		entityType: EntityType;
+		name: string;
+		description?: string;
+	};
 
-export type RawFindEntityInputs = RawInsertEntityInputs &
-	EntityLoadRelatedDataOptions;
-
-export type RawDeleteEntityInputs = {
+export type RawDeleteEntityInputs = UserId & {
 	entityType: EntityType;
 	entityId: number;
 };

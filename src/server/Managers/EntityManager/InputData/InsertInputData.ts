@@ -4,13 +4,20 @@ import type { RawInsertEntityInputs } from "../types";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class InsertInputData {
+	userId: string;
 	entityType: EntityType;
 	name: string;
 	description?: string;
 
 	validate: Validate;
 
-	constructor({ entityType, name, description }: RawInsertEntityInputs) {
+	constructor({
+		userId,
+		entityType,
+		name,
+		description,
+	}: RawInsertEntityInputs) {
+		this.userId = userId;
 		this.name = name;
 		this.entityType = entityType;
 		if (!isUndefined(description)) this.description = description;
@@ -19,9 +26,10 @@ export class InsertInputData {
 	}
 
 	validateData() {
-		const { name, description, validate } = this;
-		this.name = validate.name(name);
+		this.name = this.validate.name(this.name);
 		this.entityType = this.validate.entityType(this.entityType);
-		if (description) this.description = validate.description(description);
+		this.userId = this.validate.stringId(this.userId);
+		if (this.description)
+			this.description = this.validate.description(this.description);
 	}
 }

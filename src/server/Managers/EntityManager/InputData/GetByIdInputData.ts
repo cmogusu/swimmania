@@ -6,6 +6,7 @@ import { type Validate, ValidateInstance } from "./Validate";
 export class GetByIdInputData implements ILoadableEntity {
 	entityId: number;
 	entityType: EntityType;
+	userId?: string;
 
 	loadDefaultImage: boolean;
 	loadUserCanEdit: boolean;
@@ -13,11 +14,13 @@ export class GetByIdInputData implements ILoadableEntity {
 	validate: Validate;
 
 	constructor({
+		userId,
 		entityId,
 		entityType,
 		loadDefaultImage,
 		loadUserCanEdit,
 	}: RawGetByIdEntityInputs) {
+		this.userId = userId;
 		this.entityId = entityId;
 		this.entityType = entityType;
 
@@ -30,5 +33,6 @@ export class GetByIdInputData implements ILoadableEntity {
 	validateData() {
 		this.entityId = this.validate.id(this.entityId);
 		this.entityType = this.validate.entityType(this.entityType);
+		if (this.userId) this.userId = this.validate.stringId(this.userId);
 	}
 }

@@ -5,6 +5,7 @@ import { sanitizeBoolean } from "./utils";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class GetAllInputData extends BaseInputData implements ILoadableEntity {
+	userId?: string;
 	entityType: EntityType;
 	filters?: MetadataFilter[];
 
@@ -14,6 +15,7 @@ export class GetAllInputData extends BaseInputData implements ILoadableEntity {
 	validate: Validate;
 
 	constructor({
+		userId,
 		entityType,
 		filters,
 		pageSize,
@@ -23,6 +25,7 @@ export class GetAllInputData extends BaseInputData implements ILoadableEntity {
 	}: RawGetAllEntityInputs) {
 		super();
 
+		this.userId = userId;
 		this.entityType = entityType;
 		this.filters = filters;
 		this.pageSize = pageSize;
@@ -35,5 +38,6 @@ export class GetAllInputData extends BaseInputData implements ILoadableEntity {
 
 	validateData() {
 		this.entityType = this.validate.entityType(this.entityType);
+		if (this.userId) this.userId = this.validate.stringId(this.userId);
 	}
 }

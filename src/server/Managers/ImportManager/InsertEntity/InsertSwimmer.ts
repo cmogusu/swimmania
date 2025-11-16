@@ -9,6 +9,7 @@ export class InsertSwimmer extends BaseInsertEntity {
 	async insert(
 		cacheDb: TempEntityDatabase,
 		swimmer: RawSwimmer,
+		userId: string,
 		meetId: number,
 		eventId: number,
 		resultId: number,
@@ -24,6 +25,7 @@ export class InsertSwimmer extends BaseInsertEntity {
 
 		const swimmerId = await this.findOrInsertEntity(
 			entityType,
+			userId,
 			entityName,
 			description,
 		);

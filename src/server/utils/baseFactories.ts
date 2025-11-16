@@ -14,13 +14,13 @@ export function baseEntityFactory<T>(InitializerClass: new () => T) {
 }
 
 export function baseEntityClassFactory<U extends string, T>(
-	classesRecord: Record<U, new (args: unknown[]) => T>,
+	classesRecord: Record<U, new () => T>,
 ) {
 	const instances: Record<string, T> = {};
 
 	return {
 		instances,
-		getInstance(entityType: U, ...args: unknown[]): T {
+		getInstance(entityType: U): T {
 			if (!entityType) {
 				throw Error("Entity type not set");
 			}
@@ -31,8 +31,7 @@ export function baseEntityClassFactory<U extends string, T>(
 
 			if (!this.instances[entityType]) {
 				const InitializerClass = classesRecord[entityType];
-				// @ts-ignore
-				this.instances[entityType] = new InitializerClass(...args);
+				this.instances[entityType] = new InitializerClass();
 			}
 
 			return this.instances[entityType];

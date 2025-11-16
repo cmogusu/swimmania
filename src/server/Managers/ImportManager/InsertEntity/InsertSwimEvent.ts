@@ -9,6 +9,7 @@ export class InsertSwimEvent extends BaseInsertEntity {
 	async insert(
 		cacheDb: TempEntityDatabase,
 		event: RawSwimEventWithoutResults,
+		userId: string,
 		meetId: number | undefined,
 	): Promise<number> {
 		if (!event) {
@@ -26,6 +27,7 @@ export class InsertSwimEvent extends BaseInsertEntity {
 
 		const eventId = await this.findOrInsertEntity(
 			entityType,
+			userId,
 			entityName,
 			description,
 		);

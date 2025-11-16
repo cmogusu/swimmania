@@ -1,6 +1,6 @@
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { EVENT } from "@/server/constants";
+import { ANONYMOUS_USER_ID, EVENT } from "@/server/constants";
 import { Log } from "@/server/services";
 import type { EntityType } from "@/server/types";
 import { InsertEntity } from "../InsertEntity";
@@ -16,6 +16,8 @@ export class SwimResultImportManager extends BaseImportManager {
 	parser: SwimResultsParser;
 	log: Log;
 
+	// TODO - Replace anonymous user with generated random user
+	userId: string = ANONYMOUS_USER_ID;
 	meetId: number | undefined;
 	isInsertingSwimEvents = false;
 	IsInsertingSwimMeets = false;
@@ -31,7 +33,8 @@ export class SwimResultImportManager extends BaseImportManager {
 		this.registerDataListeners();
 	}
 
-	importText(text: string) {
+	importText(text: string, userId: string) {
+		this.userId = userId;
 		this.parser.parse(text);
 	}
 
@@ -79,7 +82,7 @@ export class SwimResultImportManager extends BaseImportManager {
 		const { data, onComplete } = meetData;
 
 		try {
-			this.meetId = await this.insert.swimMeet(data);
+			this.meetId = await this.insert.swimMeet(data, this.userId);
 			onComplete(true);
 		} catch (error: unknown) {
 			this.log.error("Error importing swim meet data", error as Error);
@@ -89,21 +92,30 @@ export class SwimResultImportManager extends BaseImportManager {
 
 	async insertEvent(eventData: EntityInsertData<RawSwimEventWithResults>) {
 		const { data, onComplete } = eventData;
-		const { meetId } = this;
+		const { meetId, userId } = this;
 		if (!meetId) {
 			throw Error("Meet id not set");
 		}
 
 		try {
-			const eventId = await this.insert.swimEvent(data, meetId);
-			const resultId = await this.insert.swimResult(data, eventId);
+			const eventId = await this.insert.swimEvent(data, userId, meetId);
+			const resultId = await this.insert.swimResult(data, userId, eventId);
 			const swimmerId = await this.insert.swimmer(
 				data,
+				userId,
 				meetId,
 				eventId,
 				resultId,
 			);
-			await this.insert.team(data, meetId, eventId, resultId, swimmerId);
+
+			await this.insert.team(
+				data,
+				userId,
+				meetId,
+				eventId,
+				resultId,
+				swimmerId,
+			);
 			onComplete(true);
 		} catch (error: unknown) {
 			this.log.error("Error importing swim event data", error as Error);

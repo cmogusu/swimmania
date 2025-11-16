@@ -1,15 +1,23 @@
 import { auth } from "auth";
-import type { User } from "next-auth";
 import { PrivateEntityTypesObj } from "@/server/constants";
 import type { EntityType, RelationshipType } from "@/server/types";
 import { isUndefined } from "@/server/utils";
 import { RelatedEntityIdManager } from "../RelatedEntityIdManager";
 import { GrantAccessInputData, RevokeAccessInputData } from "./InputData";
-import type { RawGrantAccessInputs, RawRevokeAccessInputs } from "./type";
+import type {
+	RawGrantAccessInputs,
+	RawGrantLoggedInUserAccessInputs,
+	RawRevokeAccessInputs,
+} from "./type";
 
-const ADMIN_IDS = ["adminId"];
+const ADMIN_IDS = [process.env.ADMIN_USER_ID];
 
 export class UserManager extends RelatedEntityIdManager {
+	static async getLoggedInUserId(): Promise<string | undefined> {
+		const session = await auth();
+		return session?.user?.id;
+	}
+
 	userEntityType: EntityType = "user";
 	userRelationshipType: RelationshipType = "owns_inverse";
 
@@ -17,18 +25,13 @@ export class UserManager extends RelatedEntityIdManager {
 		throw Error(errorMessage ?? "Access denied");
 	}
 
-	async getUser(): Promise<User | undefined> {
-		const session = await auth();
-		return session?.user;
-	}
-
-	async assertCanViewEntities(entityType: EntityType) {
+	async assertCanViewEntities(entityType: EntityType, userId?: string) {
 		const isPrivateEntityType = entityType in PrivateEntityTypesObj;
 		if (!isPrivateEntityType) {
 			return;
 		}
 
-		const isAdmin = await this.isAdmin();
+		const isAdmin = await this.isAdmin(userId);
 		if (isAdmin) {
 			return;
 		}
@@ -36,19 +39,22 @@ export class UserManager extends RelatedEntityIdManager {
 		this.throwError();
 	}
 
-	async assertCanViewEntity(entityType: EntityType, entityId: number) {
+	async assertCanViewEntity(
+		entityType: EntityType,
+		userId: string | undefined,
+		entityId: number,
+	) {
 		const isPrivateEntityType = entityType in PrivateEntityTypesObj;
 		if (isPrivateEntityType) {
 			return this.throwError();
 		}
 
-		await this.assertHasAccess(entityType, entityId);
+		await this.assertHasAccess(entityType, userId, entityId);
 	}
 
-	async assertCanCreateEntity(entityType: EntityType) {
+	async assertCanCreateEntity(entityType: EntityType, userId: string) {
 		const errorMessage = "Access denied. You must be logged in to create item";
-		const user = await this.getUser();
-		if (!user) {
+		if (!userId) {
 			return this.throwError(errorMessage);
 		}
 
@@ -57,43 +63,54 @@ export class UserManager extends RelatedEntityIdManager {
 		}
 	}
 
-	async assertCanEditEntity(entityType: EntityType, entityId: number) {
+	async assertCanEditEntity(
+		entityType: EntityType,
+		userId: string,
+		entityId: number,
+	) {
 		const errorMessage = "Access denied. Not allowed to edit entity";
-		await this.assertHasAccess(entityType, entityId, errorMessage);
+		await this.assertHasAccess(entityType, userId, entityId, errorMessage);
 	}
 
 	async canEditEntity(
 		entityType: EntityType,
+		userId: string,
 		entityId: number,
 	): Promise<boolean> {
-		return await this.hasAccess(entityType, entityId);
+		return await this.hasAccess(entityType, userId, entityId);
 	}
 
-	async assertCanDeleteEntity(entityType: EntityType, entityId: number) {
+	async assertCanDeleteEntity(
+		entityType: EntityType,
+		userId: string | undefined,
+		entityId: number,
+	) {
 		const errorMessage = "Access denied. Not allowed to delete entity";
-		await this.assertHasAccess(entityType, entityId, errorMessage);
+		await this.assertHasAccess(entityType, userId, entityId, errorMessage);
 	}
 
 	async assertHasAccess(
 		entityType: EntityType,
+		userId: string | undefined,
 		entityId: number,
 		errorMessage?: string,
 	) {
-		const canAccess = await this.hasAccess(entityType, entityId);
+		const canAccess = await this.hasAccess(entityType, userId, entityId);
 		if (!canAccess) {
 			throw Error(errorMessage);
 		}
 	}
 
-	async isAdmin() {
-		const user = await this.getUser();
-		return user?.id ? ADMIN_IDS.includes(user.id) : false;
+	async isAdmin(userId?: string) {
+		return userId ? ADMIN_IDS.includes(userId) : false;
 	}
 
-	async hasAccess(entityType: EntityType, entityId: number): Promise<boolean> {
-		const user = await this.getUser();
-
-		if (!user?.id) {
+	async hasAccess(
+		entityType: EntityType,
+		userId: string | undefined,
+		entityId: number,
+	): Promise<boolean> {
+		if (!userId) {
 			return Promise.resolve(false);
 		}
 
@@ -101,8 +118,36 @@ export class UserManager extends RelatedEntityIdManager {
 			entityType: entityType,
 			entityId,
 			relatedEntityType: this.userEntityType,
-			relatedEntityId: user.id,
+			relatedEntityId: userId,
 			relationshipType: this.userRelationshipType,
+		});
+	}
+
+	async revokeLoggedInUserEntityAccess(
+		rawInputs: RawGrantLoggedInUserAccessInputs,
+	) {
+		const userId = await UserManager.getLoggedInUserId();
+		if (!userId) {
+			throw new Error("User not logged in");
+		}
+
+		return await this.revokeEntityAccess({
+			...rawInputs,
+			userId,
+		});
+	}
+
+	async grantLoggedInUserEntityAccess(
+		rawInputs: RawGrantLoggedInUserAccessInputs,
+	) {
+		const userId = await UserManager.getLoggedInUserId();
+		if (!userId) {
+			throw new Error("User not logged in");
+		}
+
+		return await this.grantEntityAccess({
+			...rawInputs,
+			userId,
 		});
 	}
 
@@ -110,26 +155,34 @@ export class UserManager extends RelatedEntityIdManager {
 		const inputData = new GrantAccessInputData(rawInputs);
 		inputData.validateData();
 
-		return await this.grantAccess(inputData.entityType, inputData.entityId);
+		return await this.grantAccess(
+			inputData.entityType,
+			inputData.userId,
+			inputData.entityId,
+		);
 	}
 
 	async revokeEntityAccess(rawInputs: RawRevokeAccessInputs) {
 		const inputData = new RevokeAccessInputData(rawInputs);
 		inputData.validateData();
 
-		return await this.revokeAccess(inputData.entityType, inputData.entityId);
+		return await this.revokeAccess(
+			inputData.entityType,
+			inputData.userId,
+			inputData.entityId,
+		);
 	}
 
 	async grantAccess(
 		entityType: EntityType,
+		userId: string,
 		entityId: number,
 	): Promise<boolean> {
-		const user = await this.getUser();
-		if (isUndefined(user?.id)) {
-			return Promise.resolve(false);
+		if (isUndefined(userId)) {
+			throw Error("User id not set");
 		}
 
-		const hasAccess = await this.hasAccess(entityType, entityId);
+		const hasAccess = await this.hasAccess(entityType, userId, entityId);
 		if (hasAccess) {
 			return Promise.resolve(true);
 		}
@@ -138,7 +191,7 @@ export class UserManager extends RelatedEntityIdManager {
 			entityType,
 			entityId,
 			relatedEntityType: this.userEntityType,
-			relatedEntityId: user?.id,
+			relatedEntityId: userId,
 			relationshipType: this.userRelationshipType,
 		});
 
@@ -147,18 +200,18 @@ export class UserManager extends RelatedEntityIdManager {
 
 	async revokeAccess(
 		entityType: EntityType,
+		userId: string,
 		entityId: number,
 	): Promise<boolean> {
-		const user = await this.getUser();
-		if (isUndefined(user?.id)) {
-			return Promise.resolve(false);
+		if (isUndefined(userId)) {
+			throw Error("User id not set");
 		}
 
 		const { id } = await this.deleteById({
 			entityType,
 			entityId,
 			relatedEntityType: this.userEntityType,
-			relatedEntityId: user?.id,
+			relatedEntityId: userId,
 			relationshipType: this.userRelationshipType,
 		});
 

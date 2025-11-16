@@ -4,6 +4,7 @@ import { sanitizeBoolean } from "./utils";
 import { type Validate, ValidateInstance } from "./Validate";
 
 export class GetByNameInputData implements ILoadableEntity {
+	userId?: string;
 	name: string;
 	entityType: EntityType;
 
@@ -13,11 +14,13 @@ export class GetByNameInputData implements ILoadableEntity {
 	validate: Validate;
 
 	constructor({
+		userId,
 		name,
 		entityType,
 		loadDefaultImage,
 		loadUserCanEdit,
 	}: RawGetByNameEntityInputs) {
+		this.userId = userId;
 		this.name = name;
 		this.entityType = entityType;
 
@@ -30,5 +33,6 @@ export class GetByNameInputData implements ILoadableEntity {
 	validateData() {
 		this.name = this.validate.name(this.name);
 		this.entityType = this.validate.entityType(this.entityType);
+		if (this.userId) this.userId = this.validate.stringId(this.userId);
 	}
 }

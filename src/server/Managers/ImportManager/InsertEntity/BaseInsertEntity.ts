@@ -23,6 +23,7 @@ export class BaseInsertEntity {
 
 	async findOrInsertEntity(
 		entityType: EntityType,
+		userId: string,
 		name: string,
 		description?: string,
 	) {
@@ -40,6 +41,7 @@ export class BaseInsertEntity {
 			entityType,
 			name,
 			description,
+			userId,
 		});
 
 		return meetId;

@@ -8,6 +8,7 @@ export class GetByIdsInputData
 	extends BaseInputData
 	implements ILoadableEntity
 {
+	userId?: string;
 	entityIds: number[];
 	entityType: EntityType;
 
@@ -17,6 +18,7 @@ export class GetByIdsInputData
 	validate: Validate;
 
 	constructor({
+		userId,
 		entityIds,
 		entityType,
 		pageSize,
@@ -26,6 +28,7 @@ export class GetByIdsInputData
 	}: RawGetByIdsEntityInputs) {
 		super();
 
+		this.userId = userId;
 		this.entityIds = entityIds;
 		this.entityType = entityType;
 		this.pageSize = pageSize;
@@ -40,5 +43,6 @@ export class GetByIdsInputData
 	validateData() {
 		this.entityIds = this.validate.ids(this.entityIds);
 		this.entityType = this.validate.entityType(this.entityType);
+		if (this.userId) this.userId = this.validate.stringId(this.userId);
 	}
 }
