@@ -4,6 +4,7 @@ import type { EntityType } from "@/server/types";
 import type { ITempEntityDatabase } from "../types";
 
 export class TempEntityDatabase implements ITempEntityDatabase {
+	// TODO: Replace DatabaseSync with better-sqlite3
 	db: DatabaseSync;
 
 	constructor(db: DatabaseSync) {

@@ -33,7 +33,7 @@ export class FileActions {
 			await writeFile(filePath, buffer);
 		}
 
-		return this.getPathToUploadsFolder(filePath);
+		return filePath;
 	}
 
 	getPathToUploadsFolder(filePath: string) {
@@ -62,10 +62,9 @@ export class FileActions {
 	}
 
 	async delete(inputData: DeleteFileInputData): Promise<void> {
-		const filePath = path.join(PUBLIC_FOLDER, inputData.filePath);
-		const exists = await this.fileExists(filePath);
+		const exists = await this.fileExists(inputData.filePath);
 		if (exists) {
-			await rm(filePath);
+			await rm(inputData.filePath);
 		}
 	}
 

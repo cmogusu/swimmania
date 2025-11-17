@@ -2,13 +2,9 @@ import { access, constants, readFile } from "fs/promises";
 import pdf from "pdf-parse-new";
 import { type FileManager, fileManagerFactory } from "../../FileManager";
 import type { RawImportData } from "../types";
-import type {
-	ImportManager,
-	RawFileImportInputs,
-	RawFileNameImportInputs,
-} from "./types";
+import type { RawFileImportInputs, RawFileNameImportInputs } from "./types";
 
-export class BaseImportManager implements ImportManager {
+export class BaseImportManager {
 	fileManager: FileManager;
 
 	constructor() {

@@ -5,8 +5,6 @@ import { PDF_FOLDER } from "@/server/constants/paths";
 import { fileManagerFactory } from "@/server/Managers/FileManager";
 import { InsertEntity } from "@/server/Managers/ImportManager/InsertEntity";
 
-const m = fileManagerFactory.getInstance();
-
 export default async function Page() {
 	return (
 		<div className="p-6">
@@ -36,20 +34,19 @@ export default async function Page() {
 async function uploadPdf(formData: FormData) {
 	"use server";
 
-	// const file = formData.get("image") as File;
-	// m.delete({ file });
-	m.deleteFile({
-		filePath:
-			"/images/camel_febf88ea4051355e7918b87cf19c9602a9c8223dbe2eb5ca15b7d469823254c7.jpg",
-	});
+	const file = formData.get("image") as File;
+	const fileManager = fileManagerFactory.getInstance();
+	const { filePath, fileText } = await fileManager.readPdfFile({ file });
+	console.log(filePath, fileText);
 }
 
 async function uploadImg(formData: FormData) {
 	"use server";
 
 	const file = formData.get("image") as File;
-	const filepath = await m.uploadImage({ file });
-	console.log(filepath);
+	const fileManager = fileManagerFactory.getInstance();
+	const { filePath, fileText } = await fileManager.readImageFile({ file });
+	console.log(filePath, fileText);
 }
 
 export const swimMeet = {

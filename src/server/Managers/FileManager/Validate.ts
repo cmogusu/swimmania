@@ -14,7 +14,6 @@ export class Validate extends BaseValidate {
 	}
 
 	file(file: File, allowedFileTypes: string[]) {
-		console.log({ allowedFileTypes });
 		return z
 			.file()
 			.min(1)

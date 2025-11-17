@@ -1,44 +1,50 @@
-import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { ANONYMOUS_USER_ID, EVENT } from "@/server/constants";
+import path from "path";
+import { EVENT } from "@/server/constants";
+import { TEMP_DB_FOLDER } from "@/server/constants/paths";
 import { Log } from "@/server/services";
 import type { EntityType } from "@/server/types";
+import { fileManagerFactory } from "../../FileManager";
 import { InsertEntity } from "../InsertEntity";
 import type { RawSwimEventWithResults, RawSwimMeet } from "../types";
 import { BaseImportManager } from "./BaseImportManager";
 import { SwimResultsParser } from "./SwimResultsParser";
 import type { EntityInsertData } from "./types";
 
-const TEMP_DB_NAME = "TEMP_SWIM_RESULTS.db";
-
 export class SwimResultImportManager extends BaseImportManager {
+	static async getImportPdfInstance(userId: string, file: File) {
+		const fileManager = fileManagerFactory.getInstance();
+		const { filePath, fileText } = await fileManager.readPdfFile({ file });
+		return new SwimResultImportManager(userId, filePath, fileText);
+	}
+
+	static async getImportImageInstance(userId: string, file: File) {
+		const fileManager = fileManagerFactory.getInstance();
+		const { filePath, fileText } = await fileManager.readImageFile({ file });
+		return new SwimResultImportManager(userId, filePath, fileText);
+	}
+
 	insert: InsertEntity;
 	parser: SwimResultsParser;
 	log: Log;
 
-	// TODO - Replace anonymous user with generated random user
-	userId: string = ANONYMOUS_USER_ID;
+	userId: string;
 	meetId: number | undefined;
+	dbPath;
 	isInsertingSwimEvents = false;
 	IsInsertingSwimMeets = false;
 
-	constructor(folder: string) {
+	constructor(userId: string, filePath: string, fileText: string) {
 		super();
 
-		const dbPath = path.join(folder, TEMP_DB_NAME);
-		const db = new DatabaseSync(dbPath);
-		this.log = new Log();
-		this.insert = new InsertEntity(db);
-		this.parser = new SwimResultsParser(db);
-		this.registerDataListeners();
-	}
-
-	importText(text: string, userId: string) {
 		this.userId = userId;
-		this.parser.parse(text);
-	}
+		this.dbPath = this.getDbFilePath(filePath);
 
-	registerDataListeners() {
+		const db = new DatabaseSync(this.dbPath);
+		this.insert = new InsertEntity(db);
+		this.log = new Log();
+
+		this.parser = new SwimResultsParser(db);
 		this.parser.on(EVENT.DATA_READY, (entityType: EntityType) => {
 			if (entityType === "swimEvent" && this.meetId) {
 				this.startInsertingSwimEvents();
@@ -46,6 +52,15 @@ export class SwimResultImportManager extends BaseImportManager {
 				this.startInsertingSwimMeet();
 			}
 		});
+
+		this.parser.parse(fileText);
+	}
+
+	getDbFilePath(filePath: string) {
+		const ext = path.extname(filePath);
+		const name = path.basename(filePath, ext);
+		const fileName = `${name}_$}${ext}`;
+		return path.join(TEMP_DB_FOLDER, fileName);
 	}
 
 	async startInsertingSwimMeet() {
@@ -116,10 +131,23 @@ export class SwimResultImportManager extends BaseImportManager {
 				resultId,
 				swimmerId,
 			);
+
 			onComplete(true);
+			this.onComplete(true);
 		} catch (error: unknown) {
 			this.log.error("Error importing swim event data", error as Error);
 			onComplete(false);
+			this.onComplete(false);
 		}
+	}
+
+	onComplete(isSuccessful: boolean) {
+		this.log.appLogic(
+			isSuccessful
+				? "Successfully uploaded swim results"
+				: "Failed to upload swim results",
+		);
+
+		this.fileManager.deleteFile({ filePath: this.dbPath });
 	}
 }

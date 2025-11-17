@@ -10,7 +10,3 @@ export type EntityInsertData<T> = {
 	data: T;
 	onComplete: (isProcessingSuccessful: boolean) => void;
 };
-
-export interface ImportManager {
-	importFile: (rawInputs: RawFileImportInputs) => Promise<void>;
-}

@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
 		ignoreDuringBuilds: true,
 	},
 	poweredByHeader: false,
+	serverExternalPackages: ["tesseract.js", "better-sqlite3"],
 };
 
 export default nextConfig;
