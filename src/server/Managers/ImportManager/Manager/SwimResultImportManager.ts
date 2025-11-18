@@ -1,11 +1,11 @@
+import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import path from "path";
 import { EVENT } from "@/server/constants";
 import { TEMP_DB_FOLDER } from "@/server/constants/paths";
 import { Log } from "@/server/services";
-import type { EntityType } from "@/server/types";
 import { fileManagerFactory } from "../../FileManager";
 import { InsertEntity } from "../InsertEntity";
+import type { RawEntityDatabase } from "../RawEntityDatabase";
 import type { RawSwimEventWithResults, RawSwimMeet } from "../types";
 import { BaseImportManager } from "./BaseImportManager";
 import { SwimResultsParser } from "./SwimResultsParser";
@@ -25,7 +25,6 @@ export class SwimResultImportManager extends BaseImportManager {
 	}
 
 	insert: InsertEntity;
-	parser: SwimResultsParser;
 	log: Log;
 
 	userId: string;
@@ -44,16 +43,17 @@ export class SwimResultImportManager extends BaseImportManager {
 		this.insert = new InsertEntity(db);
 		this.log = new Log();
 
-		this.parser = new SwimResultsParser(db);
-		this.parser.on(EVENT.DATA_READY, (entityType: EntityType) => {
-			if (entityType === "swimEvent" && this.meetId) {
-				this.startInsertingSwimEvents();
-			} else if (entityType === "swimMeet") {
-				this.startInsertingSwimMeet();
-			}
+		const parser = new SwimResultsParser(db);
+		const headerText = fileText.slice(0, 400);
+		const rawSwmMeetDb = parser.parseSwimMeet(headerText);
+		rawSwmMeetDb.on(EVENT.DATA, () => {
+			this.startInsertingSwimMeet(rawSwmMeetDb);
 		});
 
-		this.parser.parse(fileText);
+		const rawSwmEventDb = parser.parseSwimEvent(fileText);
+		rawSwmEventDb.on(EVENT.DATA, () => {
+			this.startInsertingSwimEvents(rawSwmEventDb);
+		});
 	}
 
 	getDbFilePath(filePath: string) {
@@ -63,31 +63,33 @@ export class SwimResultImportManager extends BaseImportManager {
 		return path.join(TEMP_DB_FOLDER, fileName);
 	}
 
-	async startInsertingSwimMeet() {
+	async startInsertingSwimMeet(rawEntityDb: RawEntityDatabase<RawSwimMeet>) {
 		if (this.IsInsertingSwimMeets) {
 			return;
 		}
 
 		this.IsInsertingSwimMeets = true;
-		let meetData = this.parser.getMeetData();
+		let meetData = rawEntityDb.getData();
 		while (meetData) {
 			await this.insertMeet(meetData);
-			meetData = this.parser.getMeetData();
+			meetData = rawEntityDb.getData();
 		}
 
 		this.IsInsertingSwimMeets = false;
 	}
 
-	async startInsertingSwimEvents() {
+	async startInsertingSwimEvents(
+		rawEntityDb: RawEntityDatabase<RawSwimEventWithResults>,
+	) {
 		if (this.isInsertingSwimEvents) {
 			return;
 		}
 
 		this.isInsertingSwimEvents = true;
-		let eventData = this.parser.getEventData();
+		let eventData = rawEntityDb.getData();
 		while (eventData) {
 			await this.insertEvent(eventData);
-			eventData = this.parser.getEventData();
+			eventData = rawEntityDb.getData();
 		}
 
 		this.isInsertingSwimEvents = false;
@@ -133,21 +135,9 @@ export class SwimResultImportManager extends BaseImportManager {
 			);
 
 			onComplete(true);
-			this.onComplete(true);
 		} catch (error: unknown) {
 			this.log.error("Error importing swim event data", error as Error);
 			onComplete(false);
-			this.onComplete(false);
 		}
-	}
-
-	onComplete(isSuccessful: boolean) {
-		this.log.appLogic(
-			isSuccessful
-				? "Successfully uploaded swim results"
-				: "Failed to upload swim results",
-		);
-
-		this.fileManager.deleteFile({ filePath: this.dbPath });
 	}
 }

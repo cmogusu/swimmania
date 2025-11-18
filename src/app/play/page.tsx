@@ -4,21 +4,23 @@ import { ANONYMOUS_USER_ID } from "@/server/constants";
 import { PDF_FOLDER } from "@/server/constants/paths";
 import { fileManagerFactory } from "@/server/Managers/FileManager";
 import { InsertEntity } from "@/server/Managers/ImportManager/InsertEntity";
+import { RawSwimMeetDatabase } from "@/server/Managers/ImportManager/RawEntityDatabase";
 
 export default async function Page() {
 	return (
 		<div className="p-6">
-			<form action={uploadPdf}>
+			<form action={doSth}>
+				<input type="submit" className="btn btn-sm" value="do sth" />
+			</form>
+
+			<form action={uploadImg}>
 				<input
 					className="input input-sm"
 					type="file"
 					name="image"
+					placeholder="upload pdf"
 					accept="application/pdf"
 				/>
-				<input type="submit" className="btn btn-sm" value="pdf" />
-			</form>
-
-			<form action={uploadImg}>
 				<input
 					className="input input-sm"
 					type="file"
@@ -31,21 +33,30 @@ export default async function Page() {
 	);
 }
 
-async function uploadPdf(formData: FormData) {
+export async function doSth() {
 	"use server";
 
-	const file = formData.get("image") as File;
-	const fileManager = fileManagerFactory.getInstance();
-	const { filePath, fileText } = await fileManager.readPdfFile({ file });
-	console.log(filePath, fileText);
+	const dbPath = path.join(PDF_FOLDER, "/swimResult/mydb.tempDb");
+	const db = new DatabaseSync(dbPath);
+	const rawDb = new RawSwimMeetDatabase(db);
+
+	// const d = rawDb.getAllSettings();
+	const e = rawDb.getWasDataEnded();
+	console.log(e);
 }
 
-async function uploadImg(formData: FormData) {
+export async function uploadImg(formData: FormData) {
 	"use server";
 
 	const file = formData.get("image") as File;
 	const fileManager = fileManagerFactory.getInstance();
 	const { filePath, fileText } = await fileManager.readImageFile({ file });
+	console.log(filePath, fileText);
+}
+
+export async function uploadPdf(file: File) {
+	const fileManager = fileManagerFactory.getInstance();
+	const { filePath, fileText } = await fileManager.readPdfFile({ file });
 	console.log(filePath, fileText);
 }
 

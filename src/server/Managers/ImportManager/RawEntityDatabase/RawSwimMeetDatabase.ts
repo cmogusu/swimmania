@@ -1,8 +1,14 @@
+import type { DatabaseSync } from "node:sqlite";
+import { EVENT } from "@/server/constants";
 import type { RawSwimMeet } from "../types";
 import { PROCESSING_STATE } from "./constants";
-import { TempRawEntityDatabase } from "./TempRawEntityDatabase";
+import { RawEntityDatabase } from "./RawEntityDatabase";
 
-export class TempSwimMeetDatabase extends TempRawEntityDatabase<RawSwimMeet> {
+export class RawSwimMeetDatabase extends RawEntityDatabase<RawSwimMeet> {
+	constructor(db: DatabaseSync) {
+		super(db, "swimMeet");
+	}
+
 	createRawEntityDataTable() {
 		this.db.exec(`
       CREATE TABLE IF NOT EXISTS ${this.dbTable} (
@@ -20,5 +26,6 @@ export class TempSwimMeetDatabase extends TempRawEntityDatabase<RawSwimMeet> {
 
 	insert(data: RawSwimMeet) {
 		this.insertSingleRowRawData(data);
+		this.emit(EVENT.DATA);
 	}
 }

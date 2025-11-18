@@ -5,3 +5,5 @@ export const PROCESSING_STATE = {
 };
 
 export const MAX_FAILURE_COUNT = 3;
+
+export const DATA_ENDED_SETTINGS_NAME = "dataEnded";

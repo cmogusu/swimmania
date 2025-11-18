@@ -52,7 +52,6 @@ export type RawSwimEventWithResults = RawSwimEventWithoutResults &
 
 export interface ITextParser {
 	parse: (text: string) => void;
-	on: (event: string, fn: (data: unknown) => void) => void;
 }
 
 export type TempDatabaseEntityTypes = Extract<
@@ -60,17 +59,18 @@ export type TempDatabaseEntityTypes = Extract<
 	"swimEvent" | "swimMeet"
 >;
 
+export interface IDataStore {
+	insert(data: unknown): void;
+	setDataEnded(): void;
+}
+
+export interface IRawEntityDatabase {
+	getData(): unknown;
+}
+
 export interface ITempEntityDatabase {
 	getByName(entityType: EntityType, name: string): number;
 	insert(entityType: EntityType, entityId: number, name: string): void;
-}
-
-export interface ITempRawEntityDatabase {
-	getAll(): unknown[];
-	getUnprocessed(): unknown;
-	insert(_data: unknown): void;
-	setProcessed(id: number): void;
-	deleteTable(): void;
 }
 
 export type DbOutput<T> = T & { id: number };

@@ -1,21 +1,19 @@
-import { EventEmitter } from "node:stream";
 import OpenAI from "openai";
 import { type ChainOutput, chain } from "stream-chain";
 import { parser } from "stream-json";
 import { streamValues } from "stream-json/streamers/StreamValues.js";
-import { EVENT } from "@/server/constants";
 import { Log } from "@/server/services";
-import type { ITextParser } from "../types";
+import type { IDataStore, ITextParser } from "../types";
 
-export class OpenAIParser extends EventEmitter implements ITextParser {
+export class OpenAIParser implements ITextParser {
 	client: OpenAI;
 	log: Log;
 	model: string = "gpt-4.1";
 	pipeline: ChainOutput<string, unknown>;
+	dataStore: IDataStore;
 
-	constructor() {
-		super();
-
+	constructor(dataStore: IDataStore) {
+		this.dataStore = dataStore;
 		this.log = new Log();
 		this.client = this.getClient();
 		this.pipeline = this.getPipeline();
@@ -36,14 +34,14 @@ export class OpenAIParser extends EventEmitter implements ITextParser {
 		const pipeline = chain([parser({ jsonStreaming: true }), streamValues()]);
 
 		pipeline.on("data", (result) => {
-			this.emitData(result.value);
+			this.dataStore.insert(result.value);
+		});
+
+		pipeline.on("end", () => {
+			this.dataStore.setDataEnded();
 		});
 
 		return pipeline;
-	}
-
-	emitData(value: unknown) {
-		this.emit(EVENT.DATA, value);
 	}
 
 	parse(_text: string) {

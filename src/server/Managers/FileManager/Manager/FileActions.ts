@@ -5,7 +5,6 @@ import {
 	constants,
 	mkdir,
 	readdir,
-	rename,
 	rm,
 	stat,
 	writeFile,
@@ -42,9 +41,8 @@ export class FileActions {
 
 	getFilePath(uploadDirectory: string, fileName: string, fileHash: string) {
 		const ext = path.extname(fileName);
-		const name = path.basename(fileName, ext);
-		const fullName = `${name}_${fileHash}${ext}`;
-		return path.join(uploadDirectory, fullName);
+		const newFileName = `${fileHash}${ext}`;
+		return path.join(uploadDirectory, newFileName);
 	}
 
 	writeTempFile(buffer: Uint8Array) {
@@ -78,30 +76,6 @@ export class FileActions {
 		const hash = crypto.createHash("sha256");
 		hash.update(buffer);
 		return hash.digest("hex");
-	}
-
-	async uploadSth() {
-		const filePath = "/Users/clive/www/swimmania/public/uploads/camel.jpg";
-		const hash =
-			"febf88ea4051355e7918b87cf19c9602a9c8223dbe2eb5ca15b7d469823254c7";
-
-		const folderPath = this.getFolderPath(hash);
-		await this.createFolder(folderPath);
-		await this.moveFileIntoFolder(folderPath, filePath);
-	}
-
-	async moveFileIntoFolder(folderPath: string, filePath: string) {
-		const fileName = path.basename(filePath);
-		const fileNameInFolder = path.join(folderPath, fileName);
-		try {
-			await access(fileNameInFolder);
-		} catch (_e) {
-			await rename(filePath, fileNameInFolder);
-		}
-	}
-
-	getFolderPath(folderName: string) {
-		return path.join(UPLOADS_FOLDER, folderName);
 	}
 
 	async createFolder(folderPath: string) {
