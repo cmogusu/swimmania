@@ -45,21 +45,25 @@ export class SwimResultImportManager extends BaseImportManager {
 
 		const parser = new SwimResultsParser(db);
 		const headerText = fileText.slice(0, 400);
-		const rawSwmMeetDb = parser.parseSwimMeet(headerText);
-		rawSwmMeetDb.on(EVENT.DATA, () => {
-			this.startInsertingSwimMeet(rawSwmMeetDb);
+		const rawSwimMeetDb = parser.parseSwimMeet(headerText);
+		rawSwimMeetDb.on(EVENT.DATA, () => {
+			this.startInsertingSwimMeet(rawSwimMeetDb);
 		});
 
-		const rawSwmEventDb = parser.parseSwimEvent(fileText);
-		rawSwmEventDb.on(EVENT.DATA, () => {
-			this.startInsertingSwimEvents(rawSwmEventDb);
+		const rawSwimEventDb = parser.parseSwimEvent(fileText);
+		rawSwimEventDb.on(EVENT.DATA, () => {
+			this.startInsertingSwimEvents(rawSwimEventDb);
 		});
+
+		// Start inserting in case all the data was already in the db
+		this.startInsertingSwimMeet(rawSwimMeetDb);
+		this.startInsertingSwimEvents(rawSwimEventDb);
 	}
 
 	getDbFilePath(filePath: string) {
 		const ext = path.extname(filePath);
 		const name = path.basename(filePath, ext);
-		const fileName = `${name}_$}${ext}`;
+		const fileName = `${name}.db`;
 		return path.join(TEMP_DB_FOLDER, fileName);
 	}
 

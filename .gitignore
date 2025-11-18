@@ -49,3 +49,4 @@ next-env.d.ts
 /public/uploads
 /public/pdf
 /public/images
+/public/db

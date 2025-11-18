@@ -1,11 +1,15 @@
 import type { DatabaseSync } from "node:sqlite";
-import { SwimEventParser } from "../FileParsers";
+import { SwimEventParser, SwimMeetParser } from "../FileParsers";
 import {
 	type RawEntityDatabase,
 	RawSwimEventDatabase,
 	RawSwimMeetDatabase,
 } from "../RawEntityDatabase";
-import type { RawSwimEventWithResults, RawSwimMeet } from "../types";
+import type {
+	ITextParser,
+	RawSwimEventWithResults,
+	RawSwimMeet,
+} from "../types";
 
 export class SwimResultsParser {
 	db: DatabaseSync;
@@ -15,23 +19,34 @@ export class SwimResultsParser {
 	}
 
 	parseSwimMeet(text: string): RawEntityDatabase<RawSwimMeet> {
-		return this.parse<RawSwimMeet>(new RawSwimMeetDatabase(this.db), text);
-	}
-
-	parseSwimEvent(text: string): RawEntityDatabase<RawSwimEventWithResults> {
-		return this.parse<RawSwimEventWithResults>(
-			new RawSwimEventDatabase(this.db),
+		const rawEntityDb = new RawSwimMeetDatabase(this.db);
+		return this.parse<RawSwimMeet>(
+			rawEntityDb,
+			new SwimMeetParser(rawEntityDb),
 			text,
 		);
 	}
 
-	parse<OutputType>(rawEntityDb: RawEntityDatabase<OutputType>, text: string) {
+	parseSwimEvent(text: string): RawEntityDatabase<RawSwimEventWithResults> {
+		const rawEntityDb = new RawSwimEventDatabase(this.db);
+		return this.parse<RawSwimEventWithResults>(
+			rawEntityDb,
+			new SwimEventParser(rawEntityDb),
+			text,
+		);
+	}
+
+	parse<OutputType>(
+		rawEntityDb: RawEntityDatabase<OutputType>,
+		parser: ITextParser,
+		text: string,
+	) {
 		const hasData = rawEntityDb.getWasDataEnded();
+		console.log("***", { hasData });
 		if (hasData) {
 			return rawEntityDb;
 		}
 
-		const parser = new SwimEventParser(rawEntityDb);
 		parser.parse(text);
 		return rawEntityDb;
 	}
