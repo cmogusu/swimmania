@@ -1,35 +1,25 @@
+import dynamic from "next/dynamic";
 import type { EntitiesData, EntityType } from "@/server/types";
-// import { ClientEntities } from "./ClientEntities";
-import { Entity } from "./Entity";
-import { LoadMore } from "./LoadMore";
 
 type Props = {
 	entityType: EntityType;
 	entitiesData: EntitiesData;
 };
 
-export const Entities = ({ entityType, entitiesData }: Props) => {
-	const { entities, nextPage, hasMore } = entitiesData || {};
+const DefaultEntitiesComponent = dynamic(
+	() => import("./EntityComponents/Default/Entities"),
+);
 
-	if (!entities) {
-		return <h1>oops! Error happened</h1>;
-	}
+type EntitiesComponents = React.ComponentType<Props>;
+const entitiesComponents: Record<string, EntitiesComponents> = {
+	swimMeet: dynamic(() => import("./EntityComponents/SwimMeet/Entities")),
+};
+
+export const Entities = ({ entityType, entitiesData }: Props) => {
+	const EntitiesComponents =
+		entitiesComponents[entityType] || DefaultEntitiesComponent;
 
 	return (
-		<div>
-			{/* <ClientEntities entityType={entityType}> */}
-			{entities.map((entity) => (
-				<Entity key={entity.entityId} entity={entity} entityType={entityType} />
-			))}
-			{/* </ClientEntities> */}
-
-			{hasMore && (
-				<LoadMore entityType={entityType}>
-					<a className="btn btn-sm" href={`/${entityType}?page=${nextPage}`}>
-						Load more
-					</a>
-				</LoadMore>
-			)}
-		</div>
+		<EntitiesComponents entitiesData={entitiesData} entityType={entityType} />
 	);
 };

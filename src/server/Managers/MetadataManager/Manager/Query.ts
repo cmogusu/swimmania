@@ -4,9 +4,9 @@ import type {
 	DbTableColumn,
 	EntityType,
 	MetadataFilter,
+	MetadataValue,
 	RawMetadata,
 } from "@/server/types";
-import { isString } from "@/server/utils";
 import { extractMetadataNamesAndValues } from "./utils";
 
 export class Query extends BaseQuery {
@@ -34,17 +34,41 @@ export class Query extends BaseQuery {
 	filterBy(entityType: EntityType, filters: MetadataFilter[]) {
 		this.throwIfNotSet({ entityType, filters });
 
-		const whereClause = filters
-			.map(({ name, comparator, value }: MetadataFilter) =>
-				isString(value)
-					? `${name} ${comparator} '${value}'`
-					: `${name} ${comparator} ${value}`,
-			)
-			.join("AND ");
+		const placeHolders: string[] = [];
+		const values: MetadataValue[] = [];
+		filters.forEach(({ name, comparator, value }: MetadataFilter) => {
+			placeHolders.push(`${name} ${comparator} ? `);
+			values.push(value);
+		});
+
 		return this.exec(
 			`SELECT entityId FROM \`metadata\` WHERE entityType=? AND ?`,
-			[entityType, whereClause],
+			[entityType, ...values],
 		);
+	}
+
+	filterEntitiesBy(entityType: EntityType, filters: MetadataFilter[]) {
+		this.throwIfNotSet({ entityType, filters });
+
+		const { placeHolders, values } =
+			this.getFilterPlaceholdersAndValues(filters);
+
+		const tableName = EntityMetadataDbTables[entityType];
+		return this.exec(
+			`SELECT * FROM \`${tableName}\` as m INNER JOIN \`entity\` as e on e.id=m.entityId WHERE e.id=? AND ${placeHolders.join(" AND ")};`,
+			[entityType, ...values],
+		);
+	}
+
+	getFilterPlaceholdersAndValues(filters: MetadataFilter[]) {
+		const placeHolders: string[] = [];
+		const values: MetadataValue[] = [];
+		filters.forEach(({ name, comparator, value }: MetadataFilter) => {
+			placeHolders.push(`${name} ${comparator} ? `);
+			values.push(value);
+		});
+
+		return { placeHolders, values };
 	}
 
 	insertEmpty(entityId: number, entityType: EntityType) {

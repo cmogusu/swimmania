@@ -1,17 +1,19 @@
 import Image from "next/image";
-import type { PropsWithChildren } from "react";
 import { DefaultSiteImage } from "@/constants";
-import { SelectEntityButton } from "../../SelectEntityButton";
-import type { EntityProps } from "../types";
+import type { EntityData, RawMetadata } from "@/server/types";
 
-type Props = PropsWithChildren & EntityProps;
+type Props = {
+	entity: EntityData;
+	metadata?: RawMetadata;
+	handleButtonClick?: () => void;
+};
 
-export default function Pool({ entity, children }: Props) {
+export function EntityContent({ entity, metadata, handleButtonClick }: Props) {
 	const { entityId, name, description, entityType, defaultImage } = entity;
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
-		<div className="card card-side bg-base-100 shadow-sm mb-4 grid-rows-2">
+		<div>
 			<figure>
 				<Image alt={image.alt} width={1000} height={667} src={image.src} />
 			</figure>
@@ -22,11 +24,23 @@ export default function Pool({ entity, children }: Props) {
 					</h2>
 				</a>
 				<p>{description}</p>
-				<div className="card-actions justify-end">
-					<SelectEntityButton entityId={entityId} />
-				</div>
 
-				{children}
+				{metadata && (
+					<>
+						<div>start date: {metadata.startDate}</div>
+						<div>end date: {metadata.endDate}</div>
+					</>
+				)}
+
+				<div className="card-actions justify-end">
+					<button
+						className="btn btn-primary"
+						type="button"
+						onClick={handleButtonClick}
+					>
+						View
+					</button>
+				</div>
 			</div>
 		</div>
 	);

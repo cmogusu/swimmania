@@ -9,7 +9,7 @@ type EntitiesProps = {
 
 export const Entities = async ({ entityType, pageNumber }: EntitiesProps) => {
 	const { entities, nextPage, hasMore } =
-		(await api.getEntities(entityType, pageNumber, true)) || {};
+		(await api.getEntities(entityType, pageNumber, undefined, true)) || {};
 
 	if (!entities) {
 		return <h1>oops! Error happened</h1>;

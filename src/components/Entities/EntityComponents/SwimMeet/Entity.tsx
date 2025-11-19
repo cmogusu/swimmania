@@ -1,22 +1,15 @@
-import type { PropsWithChildren } from "react";
-import type { EntityProps } from "../types";
+import type { EntityData } from "@/server/types";
+import EntityContainer from "./EntityContainer";
+import { EntityContent } from "./EntityContent";
 
-type Props = PropsWithChildren & EntityProps;
+type EntityProps = {
+	entity: EntityData;
+};
 
-export default function SwimMeet({ entity, children }: Props) {
-	const { entityId, name, description, entityType } = entity;
-
+export function Entity({ entity }: EntityProps) {
 	return (
-		<div className="card card-side bg-base-100 shadow-sm mb-4 grid-rows-2">
-			<div className="card-body">
-				<a href={`/${entityType}/${entityId}`}>
-					<h2 className="card-title">
-						{name} - {entityId}
-					</h2>
-				</a>
-				<p>{description}</p>
-				{children}
-			</div>
-		</div>
+		<EntityContainer entity={entity}>
+			<EntityContent entity={entity} />
+		</EntityContainer>
 	);
 }

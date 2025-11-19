@@ -88,6 +88,12 @@ export class MetadataManager {
 		return this.db.filterBy(metadataInputs);
 	}
 
+	filterEntitiesBy(rawInputs: RawFilterByMetadataInputs): Promise<number[]> {
+		const metadataInputs = new FilterInputData(rawInputs);
+		metadataInputs.validateData();
+		return this.db.filterBy(metadataInputs);
+	}
+
 	async getDbTableColumnNames(
 		entityType: EntityType,
 	): Promise<{ dbTableName: string; schemaTableName: string }[]> {

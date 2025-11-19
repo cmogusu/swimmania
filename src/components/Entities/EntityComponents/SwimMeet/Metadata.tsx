@@ -1,3 +1,3 @@
-import Metadata from "../Pool/Metadata";
+import Metadata from "../Default/Metadata";
 
 export default Metadata;

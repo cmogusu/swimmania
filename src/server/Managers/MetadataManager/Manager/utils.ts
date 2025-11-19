@@ -39,7 +39,6 @@ export const formatMetadataFromDb = (rawMetadata: RawMetadata) => {
 		metadata[updatedName] = rawMetadata[name];
 	}
 
-	delete metadata.entityId;
 	return metadata as RawMetadata;
 };
 
