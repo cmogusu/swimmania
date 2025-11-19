@@ -1,62 +1,63 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import { DatePropertyType, TextPropertyType } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	firstName: (rawMetadata?: RawMetadata) =>
+	firstName: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "firstName",
 			title: "First name",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	surname: (rawMetadata?: RawMetadata) =>
+	surname: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "surname",
 			title: "Surname",
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 
-	thirdName: (rawMetadata?: RawMetadata) =>
+	thirdName: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "thirdName",
 			title: "Third name or Initial",
 			sortIndex: 14,
-			...rawMetadata,
+			value,
 		}),
 
-	dob: (rawMetadata?: RawMetadata) =>
+	dob: (value?: MetadataValue) =>
 		new DatePropertyType({
 			name: "dob",
 			title: "Date of birth",
 			sortIndex: 16,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class SwimmerMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
 		return getPropertyInstance(
 			SwimmerMetadata.propertyInitilizers,
-			rawMetadata,
+			name,
+			value,
 		);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			SwimmerMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

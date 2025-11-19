@@ -1,6 +1,7 @@
 import type {
 	IMetadataPropertyType,
 	IParentMetadataPropertyType,
+	MetadataValue,
 	RawMetadata,
 } from "@/server/types";
 import type { MetadataPropertyInitializer } from "../types";
@@ -8,10 +9,10 @@ import type { MetadataPropertyInitializer } from "../types";
 // Always returns parent metadata property
 export function getPropertyInstance(
 	initializers: Record<string, MetadataPropertyInitializer>,
-	rawMetadata?: RawMetadata,
+	name: string,
+	value: MetadataValue | undefined,
 	intializeAllProperties?: boolean,
 ) {
-	const { name } = rawMetadata || {};
 	if (!name) {
 		throw Error("Metadata name not set");
 	}
@@ -22,11 +23,11 @@ export function getPropertyInstance(
 		throw Error("Invalid metadata property name");
 	}
 
-	const propertyInstance = initializer(rawMetadata);
+	const propertyInstance = initializer(value);
 	if (childName) {
 		(propertyInstance as IParentMetadataPropertyType).createChildInstance(
 			childName,
-			rawMetadata,
+			value,
 		);
 	}
 
@@ -40,28 +41,31 @@ export function getPropertyInstance(
 
 export function getMetadataProperties(
 	propertyInitilizers: Record<string, MetadataPropertyInitializer>,
-	rawMetadataArr?: RawMetadata[],
+	rawMetadata?: RawMetadata,
 	intializeAllProperties: boolean = false,
 ): Record<string, IMetadataPropertyType> {
 	const properties: Record<string, IMetadataPropertyType> = {};
 
-	rawMetadataArr?.forEach((rawMetadata: RawMetadata) => {
-		const { name } = rawMetadata;
-		const [propertyName] = name.split(".");
+	if (rawMetadata) {
+		for (const name in rawMetadata) {
+			const [propertyName] = name.split(".");
+			const value = rawMetadata[name];
 
-		if (properties[propertyName]?.type === "parent") {
-			(
-				properties[propertyName] as IParentMetadataPropertyType
-			).createChildInstance(name, rawMetadata);
-			return;
+			if (properties[propertyName]?.type === "parent") {
+				(
+					properties[propertyName] as IParentMetadataPropertyType
+				).createChildInstance(name, value);
+				continue;
+			}
+
+			properties[propertyName] = getPropertyInstance(
+				propertyInitilizers,
+				name,
+				value,
+				intializeAllProperties,
+			);
 		}
-
-		properties[propertyName] = getPropertyInstance(
-			propertyInitilizers,
-			rawMetadata,
-			intializeAllProperties,
-		);
-	});
+	}
 
 	if (!intializeAllProperties) {
 		return properties;
@@ -71,7 +75,8 @@ export function getMetadataProperties(
 		if (!properties[propertyName]) {
 			properties[propertyName] = getPropertyInstance(
 				propertyInitilizers,
-				{ name: propertyName },
+				propertyName,
+				undefined,
 				intializeAllProperties,
 			);
 		}

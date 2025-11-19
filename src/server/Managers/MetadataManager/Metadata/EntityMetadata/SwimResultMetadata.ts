@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	NumberPropertyType,
 	TextPropertyType,
@@ -9,76 +9,77 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	rank: (rawMetadata?: RawMetadata) =>
+	rank: (value?: MetadataValue) =>
 		new NumberPropertyType({
 			name: "rank",
 			title: "Position",
 			min: 0,
 			max: 1e5,
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	surname: (rawMetadata?: RawMetadata) =>
+	surname: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "surname",
 			title: "Surname",
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 
-	firstName: (rawMetadata?: RawMetadata) =>
+	firstName: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "firstName",
 			title: "First name",
 			sortIndex: 14,
-			...rawMetadata,
+			value,
 		}),
 
-	thirdName: (rawMetadata?: RawMetadata) =>
+	thirdName: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "thirdName",
 			title: "Third name or Initial",
 			sortIndex: 16,
-			...rawMetadata,
+			value,
 		}),
 
-	age: (rawMetadata?: RawMetadata) =>
+	age: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "ageGroup",
 			title: "Age group",
 			sortIndex: 18,
-			...rawMetadata,
+			value,
 		}),
 
-	time: (rawMetadata?: RawMetadata) =>
+	time: (value?: MetadataValue) =>
 		new TimePropertyType({
 			name: "time",
 			title: "Time",
 			sortIndex: 20,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class SwimResultMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
 		return getPropertyInstance(
 			SwimResultMetadata.propertyInitilizers,
-			rawMetadata,
+			name,
+			value,
 		);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			SwimResultMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

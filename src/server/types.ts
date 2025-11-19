@@ -84,12 +84,7 @@ export type SchemaType =
 	| "dateTime"
 	| "email";
 
-export type RawMetadata = {
-	id?: number;
-	name: string;
-	value?: MetadataValue;
-	entityId?: number;
-};
+export type RawMetadata = Record<string, MetadataValue>;
 
 export type MetadataComparator = "=" | "!=" | "<" | "<=" | ">" | ">=";
 
@@ -158,7 +153,7 @@ export interface IMetadataPropertyType {
 	title: string;
 	name: string;
 	value: MetadataValue;
-	dbValue: MetadataData[];
+	dbValue: RawMetadata;
 	formattedValue: string;
 	sortIndex: number;
 	setSeedData: () => void;
@@ -182,7 +177,7 @@ export type IParentMetadataPropertyType = IMetadataPropertyType & {
 	names: string[];
 	children: IMetadataPropertyType[];
 	getChild: (childName: string) => IMetadataPropertyType;
-	createChildInstance: (childName: string, rawMetadata?: RawMetadata) => void;
+	createChildInstance: (childName: string, value?: MetadataValue) => void;
 	createAllChildInstances: () => void;
 	getDbTableColumns: () => DbTableColumn[];
 };
@@ -191,7 +186,7 @@ export interface IEntityMetadata {
 	metadata: IMetadataPropertyType[];
 	names: string[];
 
-	dbValue: MetadataData[];
+	dbValue: RawMetadata;
 	getDbTableColumns: () => DbTableColumn[];
 
 	validateFilter: (filter: MetadataFilter) => MetadataFilter;
@@ -202,7 +197,9 @@ export interface IEntityMetadata {
 
 export type MetadataValue = boolean | number | string;
 
-export type MetadataFilter = RawMetadata & {
+export type MetadataFilter = {
+	name: string;
+	value: MetadataValue;
 	comparator: MetadataComparator;
 };
 

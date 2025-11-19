@@ -1,38 +1,39 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import { DateTimePropertyType } from "../MetadataPropertyType";
 import type { MetadataPropertyInitializer } from "../types";
 import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	time: (rawMetadata?: RawMetadata) =>
+	time: (value?: MetadataValue) =>
 		new DateTimePropertyType({
 			name: "time",
 			title: "Time",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class CommentMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
 		return getPropertyInstance(
 			CommentMetadata.propertyInitilizers,
-			rawMetadata,
+			name,
+			value,
 		);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			CommentMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

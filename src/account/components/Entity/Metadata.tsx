@@ -4,7 +4,7 @@ import { entityMetadataFactory } from "@/server/Managers";
 import type {
 	EntityType,
 	IMetadataPropertyType,
-	MetadataData,
+	RawMetadata,
 } from "@/server/types";
 
 type Props = {
@@ -14,10 +14,7 @@ type Props = {
 
 export const Metadata = async ({ entityId, entityType }: Props) => {
 	const metadata = await api.getMetadata(entityType, entityId);
-	const metadataComponents = getMetadataComponents(
-		entityType,
-		(metadata as MetadataData[]) || [],
-	);
+	const metadataComponents = getMetadataComponents(entityType, metadata);
 
 	return (
 		<section className="mb-4">
@@ -30,9 +27,9 @@ export const Metadata = async ({ entityId, entityType }: Props) => {
 
 const getMetadataComponents = (
 	entityType: EntityType,
-	metadata: MetadataData[] | undefined,
+	metadata: RawMetadata | undefined,
 ) => {
-	const entityMetadata = metadata?.length
+	const entityMetadata = metadata
 		? entityMetadataFactory.getInstance(entityType, metadata)
 		: null;
 

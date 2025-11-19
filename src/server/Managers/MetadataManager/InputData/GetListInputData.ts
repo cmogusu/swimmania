@@ -1,4 +1,9 @@
-import type { EntityType, IEntityMetadata, RawMetadata } from "@/server/types";
+import type {
+	EntityType,
+	IEntityMetadata,
+	MetadataValue,
+	RawMetadata,
+} from "@/server/types";
 import { entityMetadataFactory } from "..";
 import { formatColumnNameForDb } from "../Manager/utils";
 import type { RawGetListMetadataInputs } from "../types";
@@ -31,13 +36,11 @@ export class GetListInputData {
 	}
 
 	getEntityMetadataInstance(entityType: EntityType, names: string[]) {
-		const rawMetadataArr = names.map(
-			(name: string) =>
-				({
-					name,
-				}) as RawMetadata,
-		);
+		const metadata: RawMetadata = {};
+		names.forEach((name: string) => {
+			metadata[name] = undefined as unknown as MetadataValue;
+		});
 
-		return entityMetadataFactory.getInstance(entityType, rawMetadataArr);
+		return entityMetadataFactory.getInstance(entityType, metadata);
 	}
 }

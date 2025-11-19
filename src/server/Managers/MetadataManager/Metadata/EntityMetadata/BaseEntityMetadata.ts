@@ -3,7 +3,6 @@ import type {
 	IEntityMetadata,
 	IMetadataPropertyType,
 	IParentMetadataPropertyType,
-	MetadataData,
 	MetadataFilter,
 	RawMetadata,
 } from "@/server/types";
@@ -19,12 +18,12 @@ export class BaseEntityMetadata implements IEntityMetadata {
 
 	initializeAndSetProperties(
 		propertyInitilizers: Record<string, MetadataPropertyInitializer>,
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		const properties = getMetadataProperties(
 			propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 
@@ -76,8 +75,13 @@ export class BaseEntityMetadata implements IEntityMetadata {
 		}
 	}
 
-	get dbValue(): MetadataData[] {
-		return this.metadata.flatMap((metadata) => metadata.dbValue).filter(isSet);
+	get dbValue(): RawMetadata {
+		const dbValue = {};
+		this.metadata.forEach((metadata: IMetadataPropertyType) => {
+			Object.assign(dbValue, metadata.dbValue);
+		});
+
+		return dbValue;
 	}
 
 	validateFilter(filter: MetadataFilter): MetadataFilter {

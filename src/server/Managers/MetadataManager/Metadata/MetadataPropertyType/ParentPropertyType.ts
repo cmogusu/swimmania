@@ -2,7 +2,6 @@ import type {
 	DbTableColumn,
 	IMetadataPropertyType,
 	IParentMetadataPropertyType,
-	MetadataData,
 	MetadataValue,
 	RawMetadata,
 } from "@/server/types";
@@ -35,14 +34,15 @@ export class ParentPropertyType
 	}
 
 	getDbTableColumns(): DbTableColumn[] {
-		return this.children.map((p) => p.getDbTableColumn());
+		const x = this.children.map((p) => p.getDbTableColumn());
+		console.log(x);
+		return x;
 	}
 
-	createChildInstance(name: string, rawMetadata?: RawMetadata) {
+	createChildInstance(name: string, value?: MetadataValue) {
 		const childName = name.includes(".") ? name.split(".")[1] : name;
 		if (this[childName]) {
-			const { id, value } = rawMetadata || {};
-			if (isSet(id)) this[childName].id = id;
+			console.log("in here", childName);
 			if (isSet(value)) this[childName].value = value;
 			return;
 		}
@@ -52,7 +52,8 @@ export class ParentPropertyType
 			throw Error("Invalid child name");
 		}
 
-		this[childName] = initializer(rawMetadata);
+		console.log(this.name, childName);
+		this[childName] = initializer(value);
 		this[childName].name = `${this.name}.${childName}`;
 		this.children.push(this[childName]);
 	}
@@ -81,10 +82,13 @@ export class ParentPropertyType
 		throw Error("Editing parent value not permitted");
 	}
 
-	get dbValue(): MetadataData[] {
-		return this.children.flatMap(
-			(child: IMetadataPropertyType) => child.dbValue,
-		);
+	get dbValue(): RawMetadata {
+		const dbValue = {};
+		this.children.forEach((child: IMetadataPropertyType) => {
+			Object.assign(dbValue, child.dbValue);
+		});
+
+		return dbValue;
 	}
 
 	setSeedData() {

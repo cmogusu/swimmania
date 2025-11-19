@@ -20,10 +20,12 @@ export const EntitiesMetadataList: Record<EntityType, string[]> = {
 	team: ["membershipFee.ksh"],
 	lifeguard: ["dob", "location.lat", "location.lng"],
 	swimMeet: [
-		"startEndDates.startDate",
+		"meetDates.startDate",
+		"meetDates.endDate",
 		"course",
 		"location.lat",
 		"location.lng",
+		"location.name",
 	],
 	swimEvent: ["eventNumber", "swimStroke", "swimDistance"],
 	swimResult: ["rank", "time"],

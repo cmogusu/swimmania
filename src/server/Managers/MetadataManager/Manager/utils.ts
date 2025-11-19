@@ -32,6 +32,27 @@ export const metadataResultToArray = (
 	return arr;
 };
 
+export const formatMetadataFromDb = (rawMetadata: RawMetadata) => {
+	const metadata: Record<string, unknown> = {};
+	for (const name in metadata) {
+		const updatedName = formatColumnNameFromDb(name);
+		metadata[updatedName] = rawMetadata[name];
+	}
+
+	delete metadata.entityId;
+	return metadata as RawMetadata;
+};
+
+export const formatMetadataForDb = (rawMetadata: RawMetadata) => {
+	const metadata: Record<string, unknown> = {};
+	for (const name in metadata) {
+		const updatedName = formatColumnNameForDb(name);
+		metadata[updatedName] = rawMetadata[name];
+	}
+
+	return metadata as RawMetadata;
+};
+
 export const formatColumnForDb = (column: DbTableColumn): DbTableColumn => ({
 	name: formatColumnNameForDb(column.name),
 	type: column.type,
@@ -60,18 +81,14 @@ export const getExtraColumnNames = (
 	return Object.keys(columnNamesClone);
 };
 
-export const extractMetadataNamesAndValues = (
-	rawMetadataArr: RawMetadata[],
-) => {
-	const length = rawMetadataArr.length;
-	const names = Array(length);
-	const values = Array(length);
+export const extractMetadataNamesAndValues = (rawMetadata: RawMetadata) => {
+	const names = [];
+	const values = [];
 
-	let i = 0;
-	while (i < length) {
-		names[i] = rawMetadataArr[i].name;
-		values[i] = rawMetadataArr[i].value;
-		i += 1;
+	for (const key in rawMetadata) {
+		const value = rawMetadata[key];
+		values.push(value);
+		names.push(key);
 	}
 
 	return { names, values };

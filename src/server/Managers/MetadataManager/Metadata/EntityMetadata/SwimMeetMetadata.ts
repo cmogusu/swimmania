@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	DatePropertyType,
 	LatitudePropertyType,
@@ -18,23 +18,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "location",
 			title: "Location",
 			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
+				lat: (value?: MetadataValue) =>
 					new LatitudePropertyType({
 						name: "lat",
 						title: "Latitude",
-						...rawMetadata,
+						value,
 					}),
-				lng: (rawMetadata?: RawMetadata) =>
+				lng: (value?: MetadataValue) =>
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
-						...rawMetadata,
+						value,
 					}),
-				name: (rawMetadata?: RawMetadata) =>
+				name: (value?: MetadataValue) =>
 					new TextPropertyType({
 						name: "name",
 						title: "Name",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 8,
@@ -42,26 +42,26 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 
 	meetDates: () =>
 		new ParentPropertyType({
-			name: "startEndDates",
+			name: "meetDates",
 			title: "Event date",
 			childInitializers: {
-				startDate: (rawMetadata?: RawMetadata) =>
+				startDate: (value?: MetadataValue) =>
 					new DatePropertyType({
 						name: "startDate",
 						title: "Start date",
-						...rawMetadata,
+						value,
 					}),
-				endDate: (rawMetadata?: RawMetadata) =>
+				endDate: (value?: MetadataValue) =>
 					new DatePropertyType({
 						name: "endDate",
 						title: "End date",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 10,
 		}),
 
-	course: (rawMetadata?: RawMetadata) =>
+	course: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "course",
 			title: "Course",
@@ -76,37 +76,38 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 
-	time: (rawMetadata?: RawMetadata) =>
+	time: (value?: MetadataValue) =>
 		new TimePropertyType({
 			name: "time",
 			title: "Start time",
 			sortIndex: 14,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class SwimMeetMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
 		return getPropertyInstance(
 			SwimMeetMetadata.propertyInitilizers,
-			rawMetadata,
+			name,
+			value,
 		);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			SwimMeetMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

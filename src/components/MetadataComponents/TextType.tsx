@@ -12,7 +12,7 @@ export const TextType = ({
 				<div>{parentTitle}</div>
 				<div>
 					{childrenMetadata.map((m) => (
-						<RenderItem key={m.id} title={m.title} value={m.formattedValue} />
+						<RenderItem key={m.name} title={m.title} value={m.formattedValue} />
 					))}
 				</div>
 			</div>

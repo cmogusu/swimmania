@@ -2,6 +2,7 @@ import type {
 	EntityType,
 	IEntityMetadata,
 	IMetadataPropertyType,
+	MetadataValue,
 	RawMetadata,
 } from "@/server/types";
 import { CoachMetadata } from "./CoachMetadata";
@@ -20,10 +21,13 @@ import { UserMetadata } from "./UserMetadata";
 
 type EntityMetadataClassType = {
 	new (
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties?: boolean,
 	): IEntityMetadata;
-	getPropertyInstance: (rawMetadata: RawMetadata) => IMetadataPropertyType;
+	getPropertyInstance: (
+		name: string,
+		value?: MetadataValue,
+	) => IMetadataPropertyType;
 };
 
 const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
@@ -45,7 +49,7 @@ const entityMetadataClasses: Record<EntityType, EntityMetadataClassType> = {
 export const entityMetadataFactory = {
 	getInstance(
 		entityType: EntityType,
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties?: boolean,
 	) {
 		const EntityMetadataClass = entityMetadataClasses[entityType];
@@ -53,15 +57,19 @@ export const entityMetadataFactory = {
 			throw Error("Invalid entity type");
 		}
 
-		return new EntityMetadataClass(rawMetadataArr, intializeAllProperties);
+		return new EntityMetadataClass(rawMetadata, intializeAllProperties);
 	},
 
-	getPropertyInstance(entityType: EntityType, rawMetadata: RawMetadata) {
+	getPropertyInstance(
+		entityType: EntityType,
+		name: string,
+		value?: MetadataValue,
+	) {
 		const EntityMetadataClass = entityMetadataClasses[entityType];
 		if (!EntityMetadataClass) {
 			throw Error("Invalid entity type");
 		}
 
-		return EntityMetadataClass.getPropertyInstance(rawMetadata);
+		return EntityMetadataClass.getPropertyInstance(name, value);
 	},
 };

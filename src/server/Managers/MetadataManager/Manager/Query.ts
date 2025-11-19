@@ -59,19 +59,15 @@ export class Query extends BaseQuery {
 		]);
 	}
 
-	update(
-		entityId: number,
-		entityType: EntityType,
-		rawMetadataArr: RawMetadata[],
-	) {
+	update(entityId: number, entityType: EntityType, rawMetadata: RawMetadata) {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
-			rawMetadataArr,
+			rawMetadata,
 		});
 
 		const tableName = EntityMetadataDbTables[entityType];
-		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
+		const { names, values } = extractMetadataNamesAndValues(rawMetadata);
 		const joinedNames = names.map((n) => `${n}=?`).join(", ");
 
 		return this.exec(
@@ -80,19 +76,15 @@ export class Query extends BaseQuery {
 		);
 	}
 
-	upsert(
-		entityId: number,
-		entityType: EntityType,
-		rawMetadataArr: RawMetadata[],
-	) {
+	upsert(entityId: number, entityType: EntityType, rawMetadata: RawMetadata) {
 		this.throwIfNotSet({
 			entityId,
 			entityType,
-			rawMetadataArr,
+			rawMetadata,
 		});
 
 		const tableName = EntityMetadataDbTables[entityType];
-		const { names, values } = extractMetadataNamesAndValues(rawMetadataArr);
+		const { names, values } = extractMetadataNamesAndValues(rawMetadata);
 		const insertColumns = names.join(", ");
 		const insertPlaceholders = Array(names.length).fill("?").join(",");
 		const updateColumns = names.map((n) => `${n}=?`).join(", ");

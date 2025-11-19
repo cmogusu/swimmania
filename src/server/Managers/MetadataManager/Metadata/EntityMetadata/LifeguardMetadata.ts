@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	LatitudePropertyType,
 	LongitudePropertyType,
@@ -15,80 +15,81 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "location",
 			title: "Location",
 			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
+				lat: (value?: MetadataValue) =>
 					new LatitudePropertyType({
 						name: "lat",
 						title: "Latitude",
-						...rawMetadata,
+						value,
 					}),
-				lng: (rawMetadata?: RawMetadata) =>
+				lng: (value?: MetadataValue) =>
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
-						...rawMetadata,
+						value,
 					}),
-				name: (rawMetadata?: RawMetadata) =>
+				name: (value?: MetadataValue) =>
 					new TextPropertyType({
 						name: "name",
 						title: "Name",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 8,
 		}),
 
-	firstName: (rawMetadata?: RawMetadata) =>
+	firstName: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "firstName",
 			title: "First name",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	surname: (rawMetadata?: RawMetadata) =>
+	surname: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "surname",
 			title: "Surname",
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 
-	thirdName: (rawMetadata?: RawMetadata) =>
+	thirdName: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "thirdName",
 			title: "Third name or Initial",
 			sortIndex: 14,
-			...rawMetadata,
+			value,
 		}),
 
-	dob: (rawMetadata?: RawMetadata) =>
+	dob: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "dob",
 			title: "Date of birth",
 			sortIndex: 16,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class LifeguardMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
 		return getPropertyInstance(
 			LifeguardMetadata.propertyInitilizers,
-			rawMetadata,
+			name,
+			value,
 		);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			LifeguardMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

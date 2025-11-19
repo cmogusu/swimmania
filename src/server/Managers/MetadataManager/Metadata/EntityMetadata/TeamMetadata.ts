@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	LatitudePropertyType,
 	LongitudePropertyType,
@@ -16,34 +16,34 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "location",
 			title: "Location of base",
 			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
+				lat: (value?: MetadataValue) =>
 					new LatitudePropertyType({
 						name: "lat",
 						title: "Latitude",
-						...rawMetadata,
+						value,
 					}),
-				lng: (rawMetadata?: RawMetadata) =>
+				lng: (value?: MetadataValue) =>
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
-						...rawMetadata,
+						value,
 					}),
-				name: (rawMetadata?: RawMetadata) =>
+				name: (value?: MetadataValue) =>
 					new TextPropertyType({
 						name: "name",
 						title: "Name",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 8,
 		}),
 
-	openToPublic: (rawMetadata?: RawMetadata) =>
+	openToPublic: (value?: MetadataValue) =>
 		new NumberPropertyType({
 			name: "openToPublic",
 			title: "Open to public",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
 	membershipFee: () =>
@@ -51,23 +51,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "membershipFee",
 			title: "Membership fee",
 			childInitializers: {
-				ksh: (rawMetadata?: RawMetadata) =>
+				ksh: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
 						min: 0,
 						max: 1e5,
-						...rawMetadata,
+						value,
 					}),
-				usd: (rawMetadata?: RawMetadata) =>
+				usd: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "usd",
 						prefix: "Usd ",
 						title: "Usd",
 						min: 0,
 						max: 1e5,
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 12,
@@ -77,19 +77,19 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 export class TeamMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(TeamMetadata.propertyInitilizers, rawMetadata);
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
+		return getPropertyInstance(TeamMetadata.propertyInitilizers, name, value);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			TeamMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

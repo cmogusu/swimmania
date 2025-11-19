@@ -1,7 +1,7 @@
 import { isUndefined } from "@/server/utils";
-import type { EntityData, EntityType, RawMetadata } from "../../types";
-import type { Image } from "../ImageManager";
-import type { RawEntity } from "./types";
+import type { EntityData, EntityType, RawMetadata } from "../types";
+import type { RawEntity } from "./EntityManager/types";
+import type { Image } from "./ImageManager";
 
 export class Entity {
 	entityId: number;

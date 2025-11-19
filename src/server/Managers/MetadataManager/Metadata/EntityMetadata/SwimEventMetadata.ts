@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	NumberPropertyType,
 	OptionsPropertyType,
@@ -9,15 +9,15 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	eventNumber: (rawMetadata?: RawMetadata) =>
+	eventNumber: (value?: MetadataValue) =>
 		new NumberPropertyType({
 			name: "eventNumber",
 			title: "Event number",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	swimStroke: (rawMetadata?: RawMetadata) =>
+	swimStroke: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "swimStroke",
 			title: "Swim stroke",
@@ -52,10 +52,10 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 
-	swimDistance: (rawMetadata?: RawMetadata) =>
+	swimDistance: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "swimDistance",
 			title: "Swim distance",
@@ -102,10 +102,10 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 14,
-			...rawMetadata,
+			value,
 		}),
 
-	swimDistanceUnit: (rawMetadata?: RawMetadata) =>
+	swimDistanceUnit: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "swimDistanceUnit",
 			title: "Swim distance unit",
@@ -120,10 +120,10 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 16,
-			...rawMetadata,
+			value,
 		}),
 
-	gender: (rawMetadata?: RawMetadata) =>
+	gender: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "gender",
 			title: "Gender",
@@ -138,37 +138,38 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 18,
-			...rawMetadata,
+			value,
 		}),
 
-	ageGroup: (rawMetadata?: RawMetadata) =>
+	ageGroup: (value?: MetadataValue) =>
 		new TextPropertyType({
 			name: "ageGroup",
 			title: "AgeGroup",
 			sortIndex: 20,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class SwimEventMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
 		return getPropertyInstance(
 			SwimEventMetadata.propertyInitilizers,
-			rawMetadata,
+			name,
+			value,
 		);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			SwimEventMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

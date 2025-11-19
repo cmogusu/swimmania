@@ -1,7 +1,7 @@
+import { Entities } from "@/components/Entities";
+import { EntitiesMap } from "@/components/EntitiesMap";
+import { EntityLocationContextProvider } from "@/context";
 import type { EntitiesData, EntityType } from "@/server/types";
-import { Entities } from "../components/Entities";
-import { EntitiesMap } from "../components/EntitiesMap";
-import { EntityLocationContextProvider } from "../context";
 
 type Props = {
 	entityType: EntityType;

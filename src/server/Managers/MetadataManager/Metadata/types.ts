@@ -2,7 +2,6 @@ import type {
 	IMetadataPropertyType,
 	MetadataValue,
 	Option,
-	RawMetadata,
 } from "@/server/types";
 
 export type MetadataTypeInputs = {
@@ -23,7 +22,7 @@ export type MetadataTypeInputs = {
 };
 
 export type MetadataPropertyInitializer = (
-	rawMetadata?: RawMetadata,
+	value?: MetadataValue,
 ) => IMetadataPropertyType;
 
 export type ParentTypeInputs = MetadataTypeInputs & {

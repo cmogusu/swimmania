@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	LatitudePropertyType,
 	LongitudePropertyType,
@@ -15,23 +15,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "location",
 			title: "Location of base",
 			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
+				lat: (value?: MetadataValue) =>
 					new LatitudePropertyType({
 						name: "lat",
 						title: "Latitude",
-						...rawMetadata,
+						value,
 					}),
-				lng: (rawMetadata?: RawMetadata) =>
+				lng: (value?: MetadataValue) =>
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
-						...rawMetadata,
+						value,
 					}),
-				name: (rawMetadata?: RawMetadata) =>
+				name: (value?: MetadataValue) =>
 					new TextPropertyType({
 						name: "name",
 						title: "Name",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 10,
@@ -41,19 +41,19 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 export class ParentMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(ParentMetadata.propertyInitilizers, rawMetadata);
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
+		return getPropertyInstance(ParentMetadata.propertyInitilizers, name, value);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			ParentMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

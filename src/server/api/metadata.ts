@@ -24,7 +24,7 @@ export async function getMetadataList(
 export async function getMetadata(
 	entityType: EntityType,
 	entityId: number,
-): Promise<RawMetadata[] | undefined> {
+): Promise<RawMetadata | undefined> {
 	try {
 		const metadataManager = metadataManagerFactory.getInstance();
 		return await metadataManager.getAll({
@@ -39,14 +39,14 @@ export async function getMetadata(
 export async function updateMetadata(
 	entityType: EntityType,
 	entityId: number,
-	rawMetadataArr: RawMetadata[],
+	rawMetadata: RawMetadata,
 ) {
 	try {
 		const metadataManager = metadataManagerFactory.getInstance();
 		return await metadataManager.update({
 			entityType,
 			entityId,
-			rawMetadataArr,
+			rawMetadata,
 		});
 	} catch (error: unknown) {
 		log.error("Unable to update metadata", error as Error);
@@ -56,14 +56,14 @@ export async function updateMetadata(
 export async function upsertMetadata(
 	entityType: EntityType,
 	entityId: number,
-	rawMetadataArr: RawMetadata[],
+	rawMetadata: RawMetadata,
 ) {
 	try {
 		const metadataManager = metadataManagerFactory.getInstance();
 		return await metadataManager.upsert({
 			entityType,
 			entityId,
-			rawMetadataArr,
+			rawMetadata,
 		});
 	} catch (error: unknown) {
 		log.error("Unable to insert metadata", error as Error);

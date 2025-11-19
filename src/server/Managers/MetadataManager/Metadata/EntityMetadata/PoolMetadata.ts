@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	BooleanPropertyType,
 	LatitudePropertyType,
@@ -20,29 +20,29 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "location",
 			title: "Location",
 			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
+				lat: (value?: MetadataValue) =>
 					new LatitudePropertyType({
 						name: "lat",
 						title: "Latitude",
-						...rawMetadata,
+						value,
 					}),
-				lng: (rawMetadata?: RawMetadata) =>
+				lng: (value?: MetadataValue) =>
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
-						...rawMetadata,
+						value,
 					}),
-				name: (rawMetadata?: RawMetadata) =>
+				name: (value?: MetadataValue) =>
 					new TextPropertyType({
 						name: "name",
 						title: "Name",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 8,
 		}),
 
-	hostInstitutionType: (rawMetadata?: RawMetadata) =>
+	hostInstitutionType: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "hostInstitutionType",
 			title: "Host type",
@@ -61,10 +61,10 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	poolShape: (rawMetadata?: RawMetadata) =>
+	poolShape: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "poolShape",
 			title: "Shape of pool",
@@ -87,7 +87,7 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 
 	poolDimensions: () =>
@@ -95,23 +95,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "poolDimensions",
 			title: "Pool dimensions",
 			childInitializers: {
-				length: (rawMetadata?: RawMetadata) =>
+				length: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "length",
 						title: "Length",
 						suffix: " meters",
 						min: 5,
 						max: 200,
-						...rawMetadata,
+						value,
 					}),
-				width: (rawMetadata?: RawMetadata) =>
+				width: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "width",
 						title: "Width",
 						suffix: " meters",
 						min: 5,
 						max: 200,
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 14,
@@ -122,60 +122,60 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "operatingHours",
 			title: "Operating hours",
 			childInitializers: {
-				opening: (rawMetadata?: RawMetadata) =>
+				opening: (value?: MetadataValue) =>
 					new TimePropertyType({
 						name: "opening",
 						title: "Opening hours",
-						...rawMetadata,
+						value,
 					}),
-				closing: (rawMetadata?: RawMetadata) =>
+				closing: (value?: MetadataValue) =>
 					new TimePropertyType({
 						name: "closing",
 						title: "Closing hours",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 16,
 		}),
 
-	crowdiness: (rawMetadata?: RawMetadata) =>
+	crowdiness: (value?: MetadataValue) =>
 		new RatingsPropertyType({
 			name: "crowdiness",
 			title: "How crowded",
 			sortIndex: 18,
-			...rawMetadata,
+			value,
 		}),
 
-	openToPublic: (rawMetadata?: RawMetadata) =>
+	openToPublic: (value?: MetadataValue) =>
 		new BooleanPropertyType({
 			name: "openToPublic",
 			title: "Open to public",
 			sortIndex: 20,
-			...rawMetadata,
+			value,
 		}),
 
-	openToChildren: (rawMetadata?: RawMetadata) =>
+	openToChildren: (value?: MetadataValue) =>
 		new BooleanPropertyType({
 			name: "openToChildren",
 			title: "Open to children",
 			sortIndex: 22,
-			...rawMetadata,
+			value,
 		}),
 
-	hasLaneRopes: (rawMetadata?: RawMetadata) =>
+	hasLaneRopes: (value?: MetadataValue) =>
 		new BooleanPropertyType({
 			name: "hasLaneRopes",
 			title: "Lane ropes",
 			sortIndex: 24,
-			...rawMetadata,
+			value,
 		}),
 
-	isHeated: (rawMetadata?: RawMetadata) =>
+	isHeated: (value?: MetadataValue) =>
 		new BooleanPropertyType({
 			name: "isHeated",
 			title: "Heated",
 			sortIndex: 26,
-			...rawMetadata,
+			value,
 		}),
 
 	entryFeeIn: () =>
@@ -183,77 +183,77 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "entryFeeIn",
 			title: "Entry fee",
 			childInitializers: {
-				ksh: (rawMetadata?: RawMetadata) =>
+				ksh: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
 						min: 0,
 						max: 1e5,
-						...rawMetadata,
+						value,
 					}),
-				usd: (rawMetadata?: RawMetadata) =>
+				usd: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "usd",
 						prefix: "Usd ",
 						title: "Usd",
 						min: 0,
 						max: 1e4,
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 28,
 		}),
 
-	isIndoor: (rawMetadata?: RawMetadata) =>
+	isIndoor: (value?: MetadataValue) =>
 		new BooleanPropertyType({
 			name: "isIndoor",
 			title: "Indoor pool",
 			sortIndex: 30,
-			...rawMetadata,
+			value,
 		}),
 
-	cleanliness: (rawMetadata?: RawMetadata) =>
+	cleanliness: (value?: MetadataValue) =>
 		new RatingsPropertyType({
 			name: "cleanliness",
 			title: "Cleanliness",
 			sortIndex: 32,
-			...rawMetadata,
+			value,
 		}),
 
-	changingRoomCleanliness: (rawMetadata?: RawMetadata) =>
+	changingRoomCleanliness: (value?: MetadataValue) =>
 		new RatingsPropertyType({
 			name: "changingRoomCleanliness",
 			title: "Cleanliness of changing room",
 			sortIndex: 34,
-			...rawMetadata,
+			value,
 		}),
 
-	hasOnDutyLifeguard: (rawMetadata?: RawMetadata) =>
+	hasOnDutyLifeguard: (value?: MetadataValue) =>
 		new BooleanPropertyType({
 			name: "hasOnDutyLifeguard",
 			title: "Lifeguards",
 			sortIndex: 36,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class PoolMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(PoolMetadata.propertyInitilizers, rawMetadata);
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
+		return getPropertyInstance(PoolMetadata.propertyInitilizers, name, value);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			PoolMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

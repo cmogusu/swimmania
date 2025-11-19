@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	LatitudePropertyType,
 	LongitudePropertyType,
@@ -18,52 +18,52 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "location",
 			title: "Location",
 			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
+				lat: (value?: MetadataValue) =>
 					new LatitudePropertyType({
 						name: "lat",
 						title: "Latitude",
-						...rawMetadata,
+						value,
 					}),
-				lng: (rawMetadata?: RawMetadata) =>
+				lng: (value?: MetadataValue) =>
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
-						...rawMetadata,
+						value,
 					}),
-				name: (rawMetadata?: RawMetadata) =>
+				name: (value?: MetadataValue) =>
 					new TextPropertyType({
 						name: "name",
 						title: "Name",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 8,
 		}),
 
-	performance: (rawMetadata?: RawMetadata) =>
+	performance: (value?: MetadataValue) =>
 		new RatingsPropertyType({
 			name: "performance",
 			title: "How did the coach perform",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	friendliness: (rawMetadata?: RawMetadata) =>
+	friendliness: (value?: MetadataValue) =>
 		new RatingsPropertyType({
 			name: "friendliness",
 			title: "How friendly",
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 
-	experience: (rawMetadata?: RawMetadata) =>
+	experience: (value?: MetadataValue) =>
 		new NumberPropertyType({
 			name: "experience",
 			title: "Years of experience",
 			sortIndex: 14,
 			min: 0,
 			max: 70,
-			...rawMetadata,
+			value,
 		}),
 
 	ratePerHour: () =>
@@ -71,23 +71,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "ratePerHour",
 			title: "Hourly rate",
 			childInitializers: {
-				ksh: (rawMetadata?: RawMetadata) =>
+				ksh: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
 						min: 0,
 						max: 1e5,
-						...rawMetadata,
+						value,
 					}),
-				usd: (rawMetadata?: RawMetadata) =>
+				usd: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "usd",
 						prefix: "Usd ",
 						title: "Usd",
 						min: 0,
 						max: 1e5,
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 16,
@@ -98,19 +98,17 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "workingHours",
 			title: "Working hours",
 			childInitializers: {
-				opening: (rawMetadata?: RawMetadata) =>
+				opening: (value?: MetadataValue) =>
 					new TimePropertyType({
 						name: "opening",
 						title: "Opening",
-						value: "08:00",
-						...rawMetadata,
+						value: value || "08:00",
 					}),
-				closing: (rawMetadata?: RawMetadata) =>
+				closing: (value?: MetadataValue) =>
 					new TimePropertyType({
 						name: "closing",
 						title: "Closing",
-						value: "17:00",
-						...rawMetadata,
+						value: value || "17:00",
 					}),
 			},
 			sortIndex: 18,
@@ -120,19 +118,19 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 export class CoachMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(CoachMetadata.propertyInitilizers, rawMetadata);
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
+		return getPropertyInstance(CoachMetadata.propertyInitilizers, name, value);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			CoachMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

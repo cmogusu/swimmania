@@ -4,7 +4,7 @@ import type {
 	RelationshipType,
 } from "@/server/types";
 import { Entity } from "./Entity";
-import type { RawEntity } from "./types";
+import type { RawEntity } from "./EntityManager/types";
 
 export class Entities {
 	entities: Entity[] = [];

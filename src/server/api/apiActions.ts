@@ -158,23 +158,14 @@ export async function updateLocationMetadata(formData: FormData) {
 
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
-	const metadataArr = [
-		{
-			name: "location.lat",
-			value: Number(data.latValue),
-		},
-		{
-			name: "location.lng",
-			value: Number(data.lngValue),
-		},
-		{
-			name: "location.name",
-			value: data.locationName as string,
-		},
-	];
+	const metadata = {
+		"location.lat": Number(data.latValue),
+		"location.lng": Number(data.lngValue),
+		"location.name": data.locationName as string,
+	};
 
 	// TODO: Return to updateMetadata after testing all metadata updates
-	await api.upsertMetadata(entityType, entityId, metadataArr);
+	await api.upsertMetadata(entityType, entityId, metadata);
 	reloadEditPage(data.entityType, data.entityId);
 }
 
@@ -188,14 +179,11 @@ export async function updateMetadata(formData: FormData) {
 
 	const entityId = Number(data.entityId);
 	const entityType = data.entityType as EntityType;
-	const metadataArr = [
-		{
-			name: data.name as string,
-			value: data.value as MetadataValue,
-		},
-	];
+	const name = data.name as string;
+	const value = data.value as MetadataValue;
+	const metadata = { [name]: value };
 
-	await api.updateMetadata(entityType, entityId, metadataArr);
+	await api.updateMetadata(entityType, entityId, metadata);
 	reloadEditPage(data.entityType, data.entityId);
 }
 

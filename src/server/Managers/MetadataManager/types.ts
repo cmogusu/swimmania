@@ -33,7 +33,7 @@ export type RawInsertEmptyMetadataInputs = {
 export type RawInsertMetadataInputs = {
 	entityType: EntityType;
 	entityId: number;
-	rawMetadataArr: RawMetadata[];
+	rawMetadata: RawMetadata;
 };
 
 export type RawDeleteMetadataInputs = {

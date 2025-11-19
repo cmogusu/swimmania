@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	LatitudePropertyType,
 	LongitudePropertyType,
@@ -16,23 +16,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "location",
 			title: "Location",
 			childInitializers: {
-				lat: (rawMetadata?: RawMetadata) =>
+				lat: (value?: MetadataValue) =>
 					new LatitudePropertyType({
 						name: "lat",
 						title: "Latitude",
-						...rawMetadata,
+						value,
 					}),
-				lng: (rawMetadata?: RawMetadata) =>
+				lng: (value?: MetadataValue) =>
 					new LongitudePropertyType({
 						name: "lng",
 						title: "Longitude",
-						...rawMetadata,
+						value,
 					}),
-				name: (rawMetadata?: RawMetadata) =>
+				name: (value?: MetadataValue) =>
 					new TextPropertyType({
 						name: "name",
 						title: "Name",
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 10,
@@ -43,23 +43,23 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 			name: "averageSchoolFees",
 			title: "Average school fee",
 			childInitializers: {
-				ksh: (rawMetadata?: RawMetadata) =>
+				ksh: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "ksh",
 						prefix: "Ksh ",
 						title: "Shillings",
 						min: 0,
 						max: 1e7,
-						...rawMetadata,
+						value,
 					}),
-				usd: (rawMetadata?: RawMetadata) =>
+				usd: (value?: MetadataValue) =>
 					new NumberPropertyType({
 						name: "usd",
 						prefix: "Usd ",
 						title: "Usd",
 						min: 0,
 						max: 1e6,
-						...rawMetadata,
+						value,
 					}),
 			},
 			sortIndex: 12,
@@ -69,19 +69,19 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 export class SchoolMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(SchoolMetadata.propertyInitilizers, rawMetadata);
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
+		return getPropertyInstance(SchoolMetadata.propertyInitilizers, name, value);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			SchoolMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

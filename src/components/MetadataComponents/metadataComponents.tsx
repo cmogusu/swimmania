@@ -3,7 +3,7 @@ import { entityMetadataFactory } from "@/server/Managers";
 import type {
 	EntityType,
 	IMetadataPropertyType,
-	MetadataData,
+	RawMetadata,
 } from "@/server/types";
 import { childComponents } from "./childComponents";
 import { ParentType } from "./ParentType";
@@ -18,7 +18,7 @@ export const metadataComponents: Record<string, ComponentType> = {
 
 export const getMetadataComponents = (
 	entityType: EntityType,
-	metadata: MetadataData[] | undefined,
+	metadata: RawMetadata | undefined,
 ) => {
 	const entityMetadata = metadata?.length
 		? entityMetadataFactory.getInstance(entityType, metadata)

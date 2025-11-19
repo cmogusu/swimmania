@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	EmailPropertyType,
 	OptionsPropertyType,
@@ -8,15 +8,15 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	email: (rawMetadata?: RawMetadata) =>
+	email: (value?: MetadataValue) =>
 		new EmailPropertyType({
 			name: "email",
 			title: "Email address",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	country: (rawMetadata?: RawMetadata) =>
+	country: (value?: MetadataValue) =>
 		new OptionsPropertyType({
 			name: "country",
 			title: "Country of residence",
@@ -39,26 +39,26 @@ const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
 				},
 			],
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class UserMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(UserMetadata.propertyInitilizers, rawMetadata);
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
+		return getPropertyInstance(UserMetadata.propertyInitilizers, name, value);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			UserMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

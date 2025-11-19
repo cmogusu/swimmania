@@ -7,7 +7,7 @@ type Props = {
 	entityType: EntityType;
 	entityId: number;
 	names: string[];
-	render: (metadataArr: RawMetadata[]) => JSX.Element;
+	render: (metadata: RawMetadata) => JSX.Element;
 };
 
 export const EntityMetadataList = async ({
@@ -20,11 +20,11 @@ export const EntityMetadataList = async ({
 		return null;
 	}
 
-	const metadataArr = await getMetadata(entityType, entityId, names);
+	const metadata = await getMetadata(entityType, entityId, names);
 
 	return (
 		<Suspense fallback={<Loading />}>
-			{metadataArr?.length ? render(metadataArr) : null}
+			{metadata ? render(metadata) : null}
 		</Suspense>
 	);
 };

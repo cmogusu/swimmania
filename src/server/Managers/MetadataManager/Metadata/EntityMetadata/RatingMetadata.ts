@@ -1,4 +1,4 @@
-import type { RawMetadata } from "@/server/types";
+import type { MetadataValue, RawMetadata } from "@/server/types";
 import {
 	DateTimePropertyType,
 	RatingsPropertyType,
@@ -8,39 +8,39 @@ import { BaseEntityMetadata } from "./BaseEntityMetadata";
 import { getPropertyInstance } from "./utils";
 
 const propertyInitializers: Record<string, MetadataPropertyInitializer> = {
-	time: (rawMetadata?: RawMetadata) =>
+	time: (value?: MetadataValue) =>
 		new DateTimePropertyType({
 			name: "time",
 			title: "Time",
 			sortIndex: 10,
-			...rawMetadata,
+			value,
 		}),
 
-	rating: (rawMetadata?: RawMetadata) =>
+	rating: (value?: MetadataValue) =>
 		new RatingsPropertyType({
 			name: "rating",
 			title: "Rating",
 			sortIndex: 12,
-			...rawMetadata,
+			value,
 		}),
 };
 
 export class RatingMetadata extends BaseEntityMetadata {
 	static propertyInitilizers = propertyInitializers;
 
-	static getPropertyInstance = (rawMetadata?: RawMetadata) => {
-		return getPropertyInstance(RatingMetadata.propertyInitilizers, rawMetadata);
+	static getPropertyInstance = (name: string, value?: MetadataValue) => {
+		return getPropertyInstance(RatingMetadata.propertyInitilizers, name, value);
 	};
 
 	constructor(
-		rawMetadataArr?: RawMetadata[],
+		rawMetadata?: RawMetadata,
 		intializeAllProperties: boolean = false,
 	) {
 		super();
 
 		this.initializeAndSetProperties(
 			RatingMetadata.propertyInitilizers,
-			rawMetadataArr,
+			rawMetadata,
 			intializeAllProperties,
 		);
 	}

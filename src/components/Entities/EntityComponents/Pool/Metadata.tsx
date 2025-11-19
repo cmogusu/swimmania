@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useEntityLocationContext } from "@/context";
-import type { MetadataValue, RawMetadata } from "@/server/types";
 import type { MetadataProps } from "../types";
 
-export default function ({ entityId, metadataArr }: MetadataProps) {
+export default function ({ entityId, metadata }: MetadataProps) {
 	const { setEntityLocation } = useEntityLocationContext();
 
 	useEffect(() => {
-		const metadataObj = arrayToObj(metadataArr);
-		const lat = metadataObj["location.lat"];
-		const lng = metadataObj["location.lng"];
+		const lat = metadata["location.lat"];
+		const lng = metadata["location.lng"];
 		if (lat && lng) {
 			return setEntityLocation({
 				entityId,
@@ -19,24 +17,21 @@ export default function ({ entityId, metadataArr }: MetadataProps) {
 				lng: Number(lng),
 			});
 		}
-	}, [setEntityLocation, metadataArr, entityId]);
+	}, [setEntityLocation, metadata, entityId]);
 
-	return (
-		<div>
-			{metadataArr.map((m) => (
-				<div key={m.name}>
-					{m.name}: {m.value}
-				</div>
-			))}
-		</div>
-	);
+	const metadataComponents = useMemo(() => {
+		const components = [];
+
+		for (const key in metadata) {
+			components.push(
+				<div key={key}>
+					{key}: {metadata[key]}
+				</div>,
+			);
+		}
+
+		return components;
+	}, [metadata]);
+
+	return <div>{metadataComponents}</div>;
 }
-
-const arrayToObj = (metadataArr: RawMetadata[]) =>
-	metadataArr.reduce(
-		(acc, metadata) => {
-			acc[metadata.name] = metadata.value;
-			return acc;
-		},
-		{} as Record<string, MetadataValue | undefined>,
-	);

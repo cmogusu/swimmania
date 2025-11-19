@@ -1,7 +1,6 @@
 import type {
 	DbTableColumn,
 	IMetadataPropertyType,
-	MetadataData,
 	MetadataValue,
 	RawMetadata,
 	SchemaType,
@@ -69,13 +68,13 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		this._value = v;
 	}
 
-	get dbValue(): MetadataData[] {
+	get dbValue(): RawMetadata {
 		const { name, value } = this;
 		if (!isUndefined(value)) {
-			return [{ name, value }];
+			return { [name]: value };
 		}
 
-		return [];
+		return {};
 	}
 
 	get formattedValue(): string {
@@ -83,9 +82,6 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 	}
 
 	validateValue(_?: MetadataValue) {}
-
-	createChildInstance(_: string, __?: RawMetadata) {}
-	createAllChildInstances() {}
 
 	setSeedData() {}
 

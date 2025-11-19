@@ -16,7 +16,8 @@ import {
 	formatColumnForDb,
 	formatColumnNameForDb,
 	formatColumnNameFromDb,
-	metadataResultToArray,
+	formatMetadataForDb,
+	formatMetadataFromDb,
 } from "./utils";
 
 type DbColumn = {
@@ -31,25 +32,25 @@ export class Database extends BaseDatabase {
 		this.query = new Query();
 	}
 
-	async getAll(metadataData: GetAllInputData): Promise<RawMetadata[]> {
-		const [rawMetadataArr] = await this.query.getAll(
+	async getAll(metadataData: GetAllInputData): Promise<RawMetadata> {
+		const [rawMetadata] = await this.query.getAll(
 			metadataData.entityType,
 			metadataData.entityId,
 		);
 
-		const results = (rawMetadataArr as Record<string, unknown>[])[0];
-		return metadataResultToArray(results);
+		const results = (rawMetadata as RawMetadata[])[0];
+		return formatMetadataFromDb(results);
 	}
 
-	async getList(metadataData: GetListInputData): Promise<RawMetadata[]> {
-		const [rawMetadataArr] = await this.query.getList(
+	async getList(metadataData: GetListInputData): Promise<RawMetadata> {
+		const [rawMetadata] = await this.query.getList(
 			metadataData.entityType,
 			metadataData.entityId,
 			metadataData.names,
 		);
 
-		const results = (rawMetadataArr as Record<string, unknown>[])[0];
-		return metadataResultToArray(results);
+		const results = (rawMetadata as RawMetadata[])[0];
+		return formatMetadataFromDb(results);
 	}
 
 	async filterBy(metadataData: FilterInputData): Promise<number[]> {
@@ -65,7 +66,7 @@ export class Database extends BaseDatabase {
 		const [updateData] = await this.query.update(
 			metadataData.entityId,
 			metadataData.entityType,
-			metadataData.rawMetadataArr,
+			formatMetadataForDb(metadataData.rawMetadata),
 		);
 
 		return updateData as { affectedRows: number };
@@ -84,7 +85,7 @@ export class Database extends BaseDatabase {
 		const [insertData] = await this.query.upsert(
 			metadataData.entityId,
 			metadataData.entityType,
-			metadataData.rawMetadataArr,
+			formatMetadataForDb(metadataData.rawMetadata),
 		);
 
 		return insertData as { insertId: number };

@@ -3,7 +3,7 @@ import { entityMetadataFactory } from "@/server/Managers";
 import type {
 	EntityType,
 	IMetadataPropertyType,
-	MetadataData,
+	RawMetadata,
 } from "@/server/types";
 import { editMetadataComponents } from "../EditMetadataComponents";
 
@@ -17,7 +17,7 @@ export const EditMetadata = async ({ entityType, entityId }: Props) => {
 	const metadataComponents = getMetadataComponents(
 		entityType,
 		entityId,
-		(metadata as MetadataData[]) || [],
+		metadata,
 	);
 
 	return (
@@ -31,7 +31,7 @@ export const EditMetadata = async ({ entityType, entityId }: Props) => {
 const getMetadataComponents = (
 	entityType: EntityType,
 	entityId: number,
-	metadata: MetadataData[] | undefined,
+	metadata: RawMetadata | undefined,
 ) => {
 	const entityMetadata = entityMetadataFactory.getInstance(
 		entityType,

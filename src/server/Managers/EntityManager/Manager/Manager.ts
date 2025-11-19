@@ -1,3 +1,6 @@
+import type { UserId } from "@/server/types";
+import { Entities } from "../../Entities";
+import { Entity } from "../../Entity";
 import { type ImageManager, imageManagerFactory } from "../../ImageManager";
 import {
 	type MetadataManager,
@@ -8,8 +11,6 @@ import {
 	relatedEntityIdManagerFactory,
 } from "../../RelatedEntityIdManager";
 import { type UserManager, userManagerFactory } from "../../UserManager";
-import { Entities } from "../Entities";
-import { Entity } from "../Entity";
 import {
 	DeleteInputData,
 	GetAllInputData,
@@ -32,7 +33,6 @@ import type {
 	RawGetByNameEntityInputs,
 	RawInsertEntityInputs,
 	RawUpdateEntityInputs,
-	UserId,
 } from "../types";
 import { Database } from "./Database";
 
@@ -177,6 +177,7 @@ export class EntityManager {
 		});
 
 		const deleteImage = this.imageManager.deleteAll({
+			userId: inputData.userId,
 			entityType,
 			entityId,
 		});

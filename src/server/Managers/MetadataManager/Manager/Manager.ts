@@ -28,20 +28,18 @@ export class MetadataManager {
 		this.db = new Database();
 	}
 
-	async getAll(rawInputs: RawGetAllMetadataInputs): Promise<RawMetadata[]> {
+	async getAll(rawInputs: RawGetAllMetadataInputs): Promise<RawMetadata> {
 		const metadataInputs = new GetAllInputData(rawInputs);
 		metadataInputs.validateData();
 
-		const rawMetadataArr: RawMetadata[] = await this.db.getAll(metadataInputs);
-		return rawMetadataArr;
+		return await this.db.getAll(metadataInputs);
 	}
 
-	async getList(rawInputs: RawGetListMetadataInputs): Promise<RawMetadata[]> {
+	async getList(rawInputs: RawGetListMetadataInputs): Promise<RawMetadata> {
 		const metadataInputs = new GetListInputData(rawInputs);
 		metadataInputs.validateData();
 
-		const rawMetadataArr: RawMetadata[] = await this.db.getList(metadataInputs);
-		return rawMetadataArr;
+		return await this.db.getList(metadataInputs);
 	}
 
 	async update(rawInputs: RawUpdateMetadataInputs) {

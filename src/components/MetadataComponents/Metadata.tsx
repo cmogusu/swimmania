@@ -1,9 +1,9 @@
-import type { EntityType, MetadataData } from "@/server/types";
+import type { EntityType, RawMetadata } from "@/server/types";
 import { getMetadataComponents } from "./metadataComponents";
 
 type Props = {
 	entityType: EntityType;
-	metadata: MetadataData[] | undefined;
+	metadata: RawMetadata | undefined;
 };
 
 export const Metadata = ({ entityType, metadata }: Props) => {

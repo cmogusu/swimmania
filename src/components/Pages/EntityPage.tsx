@@ -1,5 +1,5 @@
+import { Entity } from "@/components/Entity";
 import type { EntityData, EntityType } from "@/server/types";
-import { Entity } from "../components/Entity";
 
 type Props = {
 	entity: EntityData | undefined;
