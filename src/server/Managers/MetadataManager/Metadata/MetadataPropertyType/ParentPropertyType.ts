@@ -13,8 +13,7 @@ export class ParentPropertyType
 	extends BaseMetadataPropertyType
 	implements IParentMetadataPropertyType
 {
-	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
-	[key: string]: any;
+	properties: Record<string, IMetadataPropertyType> = {};
 	children: IMetadataPropertyType[] = [];
 	childInitializers: Record<string, MetadataPropertyInitializer>;
 
@@ -34,16 +33,13 @@ export class ParentPropertyType
 	}
 
 	getDbTableColumns(): DbTableColumn[] {
-		const x = this.children.map((p) => p.getDbTableColumn());
-		console.log(x);
-		return x;
+		return this.children.map((p) => p.getDbTableColumn());
 	}
 
 	createChildInstance(name: string, value?: MetadataValue) {
 		const childName = name.includes(".") ? name.split(".")[1] : name;
-		if (this[childName]) {
-			console.log("in here", childName);
-			if (isSet(value)) this[childName].value = value;
+		if (this.properties[childName]) {
+			if (isSet(value)) this.properties[childName].value = value;
 			return;
 		}
 
@@ -52,10 +48,9 @@ export class ParentPropertyType
 			throw Error("Invalid child name");
 		}
 
-		console.log(this.name, childName);
-		this[childName] = initializer(value);
-		this[childName].name = `${this.name}.${childName}`;
-		this.children.push(this[childName]);
+		this.properties[childName] = initializer(value);
+		this.properties[childName].name = `${this.name}.${childName}`;
+		this.children.push(this.properties[childName]);
 	}
 
 	createAllChildInstances() {
@@ -66,12 +61,11 @@ export class ParentPropertyType
 
 	getChild(name: string): IMetadataPropertyType {
 		const childName = name.includes(".") ? name.split(".")[1] : name;
-
-		if (!this[childName]) {
+		if (!this.properties[childName]) {
 			throw Error("Child not found");
 		}
 
-		return this[childName];
+		return this.properties[childName];
 	}
 
 	get value(): MetadataValue {

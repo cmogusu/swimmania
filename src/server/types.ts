@@ -154,6 +154,8 @@ export interface IMetadataPropertyType {
 	name: string;
 	value: MetadataValue;
 	dbValue: RawMetadata;
+	allowedComparators: string[];
+	validateValue: (v: MetadataValue) => MetadataValue;
 	formattedValue: string;
 	sortIndex: number;
 	setSeedData: () => void;

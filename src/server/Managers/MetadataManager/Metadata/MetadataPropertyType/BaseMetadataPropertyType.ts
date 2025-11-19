@@ -81,7 +81,9 @@ export class BaseMetadataPropertyType implements IMetadataPropertyType {
 		return `${this.prefix}${this.value?.toString()}${this.suffix}`;
 	}
 
-	validateValue(_?: MetadataValue) {}
+	validateValue(_v?: MetadataValue): MetadataValue {
+		throw Error("Not implemented");
+	}
 
 	setSeedData() {}
 

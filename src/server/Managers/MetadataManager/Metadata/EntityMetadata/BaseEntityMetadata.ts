@@ -11,9 +11,7 @@ import type { MetadataPropertyInitializer } from "../types";
 import { getMetadataProperties } from "./utils";
 
 export class BaseEntityMetadata implements IEntityMetadata {
-	// biome-ignore lint/suspicious/noExplicitAny: TODO - find better solution for this
-	[key: string]: any;
-
+	properties: Record<string, IMetadataPropertyType> = {};
 	metadata: IMetadataPropertyType[] = [];
 
 	initializeAndSetProperties(
@@ -27,9 +25,9 @@ export class BaseEntityMetadata implements IEntityMetadata {
 			intializeAllProperties,
 		);
 
+		this.properties = properties;
 		for (const propertyName in properties) {
-			this[propertyName] = properties[propertyName];
-			this.metadata.push(this[propertyName]);
+			this.metadata.push(properties[propertyName]);
 		}
 
 		this.metadata.sort((m1, m2) => m1.sortIndex - m2.sortIndex);
@@ -57,16 +55,19 @@ export class BaseEntityMetadata implements IEntityMetadata {
 			throw Error("Property name does not exist");
 		}
 
-		const property = this[propertyName];
+		const property = this.properties[propertyName];
 		if (!propertyChildName) {
 			return property;
 		}
 
-		if (!Object.hasOwn(property, propertyChildName)) {
+		const childProperty = (property as IParentMetadataPropertyType)?.getChild(
+			propertyChildName,
+		);
+		if (!childProperty) {
 			throw Error("Property child name does not exist");
 		}
 
-		return property[propertyChildName];
+		return childProperty;
 	}
 
 	set(target: unknown, source?: unknown) {
@@ -86,7 +87,7 @@ export class BaseEntityMetadata implements IEntityMetadata {
 
 	validateFilter(filter: MetadataFilter): MetadataFilter {
 		const { name, comparator, value } = filter;
-		const property = this[name];
+		const property = this.properties[name];
 
 		if (!property) {
 			throw Error("Invalid metadata name");

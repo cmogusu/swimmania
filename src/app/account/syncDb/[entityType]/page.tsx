@@ -30,7 +30,11 @@ export default async function SyncMetadataTables({ params }: Props) {
 	return (
 		<Page breadcrumbs={breadcrumbs}>
 			<div className="mb-4">
-				<EntitiesNavBar entityType={entityType} baseUrl="/account/syncDb" />
+				<EntitiesNavBar
+					entityType={entityType}
+					baseUrl="/account/syncDb"
+					showAll={true}
+				/>
 
 				<h2 className="mb-2">{entityType}</h2>
 				<table className="w-100">
