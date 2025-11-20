@@ -1,11 +1,19 @@
+import dynamic from "next/dynamic";
+import { api } from "@/server/api";
+
+const Play = dynamic(() => import("@/components/Play/Play"));
+
 export default async function ExpPage() {
-	const onClicky = () => {};
+	const entityType = "pool";
+	const entitiesData = await api.getEntities(entityType, 1);
+
+	if (!entitiesData) {
+		return "loading";
+	}
 
 	return (
 		<div>
-			<button type="button" onClick={onClicky}>
-				Does this work?
-			</button>
+			<Play entityType={entityType} entitiesData={entitiesData} />
 		</div>
 	);
 }

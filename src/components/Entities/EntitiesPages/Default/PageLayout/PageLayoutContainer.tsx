@@ -1,19 +1,22 @@
 "use client";
 
+import type { PropsWithChildren } from "react";
 import {
 	EntitiesContextProvider,
 	EntityDrawerContextProvider,
+	EntityLocationContextProvider,
 	SelectedEntityContextProvider,
+	VisibleEntityIdsContextProvider,
 } from "@/context";
 import type { EntitiesData, EntityType } from "@/server/types";
-import { Drawer } from "./Drawer";
+import { Entities } from "../Entities";
 
-type Props = {
+type Props = PropsWithChildren & {
 	entityType: EntityType;
 	entitiesData: EntitiesData;
 };
 
-export default function Play({ entityType, entitiesData }: Props) {
+export const PageLayoutContainer = ({ entityType, entitiesData }: Props) => {
 	return (
 		<EntitiesContextProvider
 			entitiesData={entitiesData}
@@ -21,9 +24,13 @@ export default function Play({ entityType, entitiesData }: Props) {
 		>
 			<SelectedEntityContextProvider>
 				<EntityDrawerContextProvider>
-					<Drawer entities={entitiesData.entities} />
+					<VisibleEntityIdsContextProvider>
+						<EntityLocationContextProvider>
+							<Entities entityType={entityType} entitiesData={entitiesData} />
+						</EntityLocationContextProvider>
+					</VisibleEntityIdsContextProvider>
 				</EntityDrawerContextProvider>
 			</SelectedEntityContextProvider>
 		</EntitiesContextProvider>
 	);
-}
+};

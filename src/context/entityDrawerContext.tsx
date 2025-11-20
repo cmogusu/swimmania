@@ -3,22 +3,22 @@
 import {
 	createContext,
 	type ReactNode,
+	type RefObject,
 	useCallback,
 	useContext,
 	useMemo,
 	useRef,
-	useState,
 } from "react";
-import { logError } from "@/utilities/log";
 
 interface ContextType {
+	inputRef: RefObject<HTMLInputElement | null>;
+
 	toggleDrawer: () => void;
-	setDrawerInputId: (id: string) => void;
 }
 
 const initialContext = {
+	inputRef: { current: null },
 	toggleDrawer: () => {},
-	setDrawerInputId: () => {},
 };
 
 const EntityDrawerContext = createContext<ContextType>(initialContext);
@@ -28,9 +28,7 @@ type Props = {
 };
 
 export const EntityDrawerContextProvider = ({ children }: Props) => {
-	const [drawerInputId, setDrawerInputId] = useState<string>("");
 	const inputRef = useRef<HTMLInputElement>(null);
-	inputRef.current = useInputElement(drawerInputId);
 
 	const toggleDrawer = useCallback(() => {
 		if (inputRef.current) {
@@ -41,7 +39,7 @@ export const EntityDrawerContextProvider = ({ children }: Props) => {
 	const context = useMemo(
 		() => ({
 			toggleDrawer,
-			setDrawerInputId,
+			inputRef,
 		}),
 		[toggleDrawer],
 	);
@@ -50,18 +48,3 @@ export const EntityDrawerContextProvider = ({ children }: Props) => {
 };
 
 export const useEntityDrawerContext = () => useContext(EntityDrawerContext);
-
-const useInputElement = (drawerInputId: string) =>
-	useMemo(() => {
-		if (!drawerInputId) {
-			return null;
-		}
-
-		const el = document.getElementById(drawerInputId);
-		if (!el) {
-			logError("Drawer id not set");
-			return null;
-		}
-
-		return el as HTMLInputElement;
-	}, [drawerInputId]);

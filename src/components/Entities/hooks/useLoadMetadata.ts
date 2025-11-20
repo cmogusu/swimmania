@@ -9,7 +9,6 @@ export const useLoadMetadata = (entityType: EntityType, entityId: number) => {
 
 	useEffect(() => {
 		getMetadata(entityType, entityId, metadataNames).then((metadata) => {
-			console.log(metadataNames, metadata);
 			setMetadata(metadata);
 		});
 	}, [entityType, entityId, metadataNames]);

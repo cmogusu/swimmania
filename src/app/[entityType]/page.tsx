@@ -1,14 +1,7 @@
 import { auth } from "auth";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
-import { EntityDrawerContainer } from "@/components/EntityDrawer";
 import { EntitiesPage, PageLayout } from "@/components/Pages";
-import {
-	EntitiesContextProvider,
-	EntityDrawerContextProvider,
-	SelectedEntityContextProvider,
-	VisibleEntityIdsContextProvider,
-} from "@/context";
 import { api } from "@/server/api";
 import { EntityTypePlurals } from "@/server/constants";
 import type { EntityType } from "@/server/types";
@@ -38,25 +31,9 @@ export default async function Home({ params, searchParams }: Props) {
 
 	return (
 		<SessionProvider session={session}>
-			<EntitiesContextProvider
-				entitiesData={entitiesData}
-				entityType={entityType}
-			>
-				<SelectedEntityContextProvider>
-					<VisibleEntityIdsContextProvider>
-						<EntityDrawerContextProvider>
-							<EntityDrawerContainer>
-								<PageLayout>
-									<EntitiesPage
-										entitiesData={entitiesData}
-										entityType={entityType}
-									/>
-								</PageLayout>
-							</EntityDrawerContainer>
-						</EntityDrawerContextProvider>
-					</VisibleEntityIdsContextProvider>
-				</SelectedEntityContextProvider>
-			</EntitiesContextProvider>
+			<PageLayout>
+				<EntitiesPage entitiesData={entitiesData} entityType={entityType} />
+			</PageLayout>
 		</SessionProvider>
 	);
 }

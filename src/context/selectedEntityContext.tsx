@@ -37,7 +37,7 @@ export const SelectedEntityContextProvider = ({ children }: Props) => {
 				throw Error("Entity id required");
 			}
 
-			const entity = entities.find((e) => e.id === entityId);
+			const entity = entities.find((e) => e.entityId === entityId);
 			if (!entity) {
 				throw Error("Entity not found");
 			}

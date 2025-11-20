@@ -17,9 +17,11 @@ export default function Entities({ entityType, entitiesData }: Props) {
 
 	return (
 		<div>
-			{entities.map((entity) => (
-				<Entity key={entity.entityId} entity={entity} />
-			))}
+			<ul className="list bg-base-100 rounded-box shadow-md">
+				{entities.map((entity) => (
+					<Entity key={entity.entityId} entity={entity} />
+				))}
+			</ul>
 
 			<LoadMore entityType={entityType} nextPage={nextPage} hasMore={hasMore} />
 		</div>

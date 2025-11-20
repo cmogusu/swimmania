@@ -8,7 +8,11 @@ type Props = {
 	handleButtonClick?: () => void;
 };
 
-export function EntityContent({ entity, metadata, handleButtonClick }: Props) {
+export const EntityContent = ({
+	entity,
+	metadata,
+	handleButtonClick,
+}: Props) => {
 	const { entityId, name, description, entityType, defaultImage } = entity;
 	const image = defaultImage || DefaultSiteImage;
 
@@ -44,4 +48,4 @@ export function EntityContent({ entity, metadata, handleButtonClick }: Props) {
 			</div>
 		</div>
 	);
-}
+};

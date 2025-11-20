@@ -1,35 +1,29 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useEffect, useId } from "react";
-import { useEntityDrawerContext } from "@/context";
-import { EntityDrawer } from "./EntityDrawer";
+import { type PropsWithChildren, useEffect, useId } from "react";
+import { useEntityDrawerContext, useSelectedEntityContext } from "@/context";
+import { EntityDrawerContent } from "./EntityDrawerContent";
+import { RenderedEntity } from "./RenderedEntitiy";
 
-type Props = {
-	children: ReactNode;
-};
-export const EntityDrawerContainer = ({ children }: Props) => {
+export const EntityDrawerContainer = ({ children }: PropsWithChildren) => {
 	const drawerInputId = useId();
-	const { setDrawerInputId } = useEntityDrawerContext();
+	const { toggleDrawer, inputRef } = useEntityDrawerContext();
+	const { entity } = useSelectedEntityContext();
 
 	useEffect(() => {
-		setDrawerInputId(drawerInputId);
-	}, [setDrawerInputId, drawerInputId]);
+		if (toggleDrawer && entity) {
+			toggleDrawer();
+		}
+	}, [entity, toggleDrawer]);
 
 	return (
-		<div className="drawer drawer-end">
-			<input id={drawerInputId} type="checkbox" className="drawer-toggle" />
-			<div className="drawer-content">{children}</div>
-			<div className="drawer-side">
-				<label
-					htmlFor={drawerInputId}
-					aria-label="close sidebar"
-					className="drawer-overlay"
-				></label>
-				<div className="bg-base-200 min-h-full w-9/12 p-4">
-					<EntityDrawer />
-				</div>
-			</div>
-		</div>
+		<EntityDrawerContent
+			drawerInputId={drawerInputId}
+			drawerContent={<RenderedEntity entity={entity} />}
+			inputRef={inputRef}
+			toggleDrawer={toggleDrawer}
+		>
+			{children}
+		</EntityDrawerContent>
 	);
 };

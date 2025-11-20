@@ -7,19 +7,21 @@ type Props = {
 };
 
 const DefaultEntitiesComponent = dynamic(
-	() => import("./EntityComponents/Default/Entities"),
+	() => import("./EntitiesPages/Default/PageLayout/PageLayout"),
 );
 
-type EntitiesComponents = React.ComponentType<Props>;
-const entitiesComponents: Record<string, EntitiesComponents> = {
-	swimMeet: dynamic(() => import("./EntityComponents/SwimMeet/Entities")),
+const entitiesPageComponents: Record<string, React.ComponentType<Props>> = {
+	swimMeet: dynamic(() => import("./EntitiesPages/SwimMeet/Entities")),
 };
 
 export const Entities = ({ entityType, entitiesData }: Props) => {
-	const EntitiesComponents =
-		entitiesComponents[entityType] || DefaultEntitiesComponent;
+	const EntitiesPageComponent =
+		entitiesPageComponents[entityType] || DefaultEntitiesComponent;
 
 	return (
-		<EntitiesComponents entitiesData={entitiesData} entityType={entityType} />
+		<EntitiesPageComponent
+			entitiesData={entitiesData}
+			entityType={entityType}
+		/>
 	);
 };

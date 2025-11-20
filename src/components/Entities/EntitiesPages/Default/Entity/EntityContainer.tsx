@@ -7,14 +7,14 @@ import {
 	useSetEntityLocation,
 	useSetVisibleEntityOnScroll,
 	useShowDrawerOnEntityClick,
-} from "../../hooks";
+} from "../../../hooks";
 import { EntityContent } from "./EntityContent";
 
 type Props = PropsWithChildren & {
 	entity: EntityData;
 };
 
-export default function EntityContainer({ entity }: Props) {
+export const EntityContainer = ({ entity }: Props) => {
 	const { entityType, entityId } = entity;
 	const divRef = useSetVisibleEntityOnScroll(entityId);
 	const handleButtonClick = useShowDrawerOnEntityClick(entityId);
@@ -30,4 +30,4 @@ export default function EntityContainer({ entity }: Props) {
 			/>
 		</div>
 	);
-}
+};

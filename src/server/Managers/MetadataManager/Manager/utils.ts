@@ -34,7 +34,7 @@ export const metadataResultToArray = (
 
 export const formatMetadataFromDb = (rawMetadata: RawMetadata) => {
 	const metadata: Record<string, unknown> = {};
-	for (const name in metadata) {
+	for (const name in rawMetadata) {
 		const updatedName = formatColumnNameFromDb(name);
 		metadata[updatedName] = rawMetadata[name];
 	}
@@ -44,7 +44,7 @@ export const formatMetadataFromDb = (rawMetadata: RawMetadata) => {
 
 export const formatMetadataForDb = (rawMetadata: RawMetadata) => {
 	const metadata: Record<string, unknown> = {};
-	for (const name in metadata) {
+	for (const name in rawMetadata) {
 		const updatedName = formatColumnNameForDb(name);
 		metadata[updatedName] = rawMetadata[name];
 	}
