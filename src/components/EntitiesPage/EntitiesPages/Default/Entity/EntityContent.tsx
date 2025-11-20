@@ -20,7 +20,7 @@ export const EntityContent = ({
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
-		<div>
+		<div className="card card-side bg-base-100 shadow-sm mb-4 grid-rows-2">
 			<figure>
 				<Image alt={image.alt} width={1000} height={667} src={image.src} />
 			</figure>
@@ -33,12 +33,7 @@ export const EntityContent = ({
 				<p>{description}</p>
 
 				{isMetadataLoading && <Loading />}
-				{metadata && (
-					<>
-						<div>start date: {metadata.startDate}</div>
-						<div>end date: {metadata.endDate}</div>
-					</>
-				)}
+				{metadata && renderMetadata(metadata)}
 
 				<div className="card-actions justify-end">
 					<button
@@ -52,4 +47,18 @@ export const EntityContent = ({
 			</div>
 		</div>
 	);
+};
+
+const renderMetadata = (metadata: RawMetadata) => {
+	const metadataArr = [];
+
+	for (const name in metadata) {
+		metadataArr.push(
+			<div>
+				{name}: {metadata[name]}
+			</div>,
+		);
+	}
+
+	return metadataArr;
 };

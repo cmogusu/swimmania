@@ -4,30 +4,32 @@ import type { PropsWithChildren } from "react";
 import type { EntityData } from "@/server/types";
 import {
 	useLoadMetadata,
-	useSetEntityLocation,
+	useNotifyOnVisible,
 	useSetVisibleEntityOnScroll,
-	useShowDrawerOnEntityClick,
-} from "../../hooks";
+} from "../../../hooks";
 import { EntityContent } from "./EntityContent";
 
 type Props = PropsWithChildren & {
 	entity: EntityData;
 };
 
-export default function EntityContainer({ entity }: Props) {
+export const EntityContainer = ({ entity }: Props) => {
 	const { entityType, entityId } = entity;
 	const divRef = useSetVisibleEntityOnScroll(entityId);
-	const handleButtonClick = useShowDrawerOnEntityClick(entityId);
-	const metadata = useLoadMetadata(entityType, entityId);
-	useSetEntityLocation(entityId, metadata);
+	const isVisible = useNotifyOnVisible(entityId);
+	const { isLoading: isMetadataLoading, metadata } = useLoadMetadata(
+		entityType,
+		entityId,
+		isVisible,
+	);
 
 	return (
 		<div ref={divRef}>
 			<EntityContent
 				entity={entity}
 				metadata={metadata}
-				handleButtonClick={handleButtonClick}
+				isMetadataLoading={isMetadataLoading}
 			/>
 		</div>
 	);
-}
+};

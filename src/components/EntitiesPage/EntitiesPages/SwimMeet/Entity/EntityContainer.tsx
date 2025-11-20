@@ -5,19 +5,18 @@ import type { EntityData } from "@/server/types";
 import {
 	useLoadMetadata,
 	useNotifyOnVisible,
-	useSetEntityLocation,
 	useSetVisibleEntityOnScroll,
-	useShowDrawerOnEntityClick,
 } from "../../../hooks";
 import { EntityContent } from "./EntityContent";
 
 type Props = PropsWithChildren & {
 	entity: EntityData;
+	itemPosition: number;
 };
 
-export const EntityContainer = ({ entity }: Props) => {
+export const EntityContainer = ({ entity, itemPosition }: Props) => {
 	const { entityType, entityId } = entity;
-	const divRef = useSetVisibleEntityOnScroll(entityId);
+	const containerRef = useSetVisibleEntityOnScroll(entityId);
 	const isVisible = useNotifyOnVisible(entityId);
 	const { isLoading: isMetadataLoading, metadata } = useLoadMetadata(
 		entityType,
@@ -25,17 +24,13 @@ export const EntityContainer = ({ entity }: Props) => {
 		isVisible,
 	);
 
-	const handleButtonClick = useShowDrawerOnEntityClick(entityId);
-	useSetEntityLocation(entityId, metadata);
-
 	return (
-		<div ref={divRef}>
-			<EntityContent
-				entity={entity}
-				metadata={metadata}
-				isMetadataLoading={isMetadataLoading}
-				handleButtonClick={handleButtonClick}
-			/>
-		</div>
+		<EntityContent
+			containerRef={containerRef}
+			entity={entity}
+			itemPosition={itemPosition}
+			metadata={metadata}
+			isMetadataLoading={isMetadataLoading}
+		/>
 	);
 };

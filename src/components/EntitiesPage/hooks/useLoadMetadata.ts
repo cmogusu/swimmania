@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getMetadata } from "@/server/api/apiActions";
 import { EntitiesMetadataList } from "@/server/constants";
 import type { EntityType, RawMetadata } from "@/server/types";
 import { throttle } from "@/utilities/general";
-
-const throttledGetMetadata = throttle(getMetadata, 500);
 
 export const useLoadMetadata = (
 	entityType: EntityType,
@@ -14,6 +12,7 @@ export const useLoadMetadata = (
 	const [metadata, setMetadata] = useState<RawMetadata>();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const metadataNames = EntitiesMetadataList[entityType];
+	const throttledGetMetadata = useMemo(() => throttle(getMetadata, 500), []);
 
 	useEffect(() => {
 		if (isVisible) {
@@ -26,7 +25,7 @@ export const useLoadMetadata = (
 					setIsLoading(false);
 				});
 		}
-	}, [entityType, entityId, metadataNames, isVisible]);
+	}, [entityType, entityId, metadataNames, isVisible, throttledGetMetadata]);
 
 	return { isLoading, metadata };
 };

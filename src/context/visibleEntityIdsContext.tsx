@@ -19,11 +19,11 @@ interface IContextType {
 	visibleEntityIds: number[];
 	setEntityContainerElement: (
 		entityId: number,
-		divContainerElement: HTMLDivElement,
+		divContainerElement: HTMLElement,
 	) => () => void;
 }
 
-const initialWeakMap = new WeakMap<HTMLDivElement, number>();
+const initialWeakMap = new WeakMap<HTMLElement, number>();
 const initialContext = {
 	visibleEntityIds: [],
 	setEntityContainerElement: () => {
@@ -40,7 +40,7 @@ type Props = {
 const ContextProvider = ({ children }: Props) => {
 	const [visibleEntityIds, setVisibleEntityIds] = useState<number[]>([]);
 	const divContainerElementsRef =
-		useRef<WeakMap<HTMLDivElement, number>>(initialWeakMap);
+		useRef<WeakMap<HTMLElement, number>>(initialWeakMap);
 
 	const onIntersect = useCallback((entries: IntersectionObserverEntry[]) => {
 		const { added, removed } = getChangedEntityIds(
@@ -60,7 +60,7 @@ const ContextProvider = ({ children }: Props) => {
 	);
 
 	const setEntityContainerElement = useCallback(
-		(entityId: number, divContainerElement: HTMLDivElement) => {
+		(entityId: number, divContainerElement: HTMLElement) => {
 			observer.observe(divContainerElement);
 			divContainerElementsRef.current.set(divContainerElement, entityId);
 
@@ -95,11 +95,11 @@ export const VisibleEntityIdsContextProvider =
 
 const getChangedEntityIds = (
 	entries: IntersectionObserverEntry[],
-	elements: WeakMap<HTMLDivElement, number>,
+	elements: WeakMap<HTMLElement, number>,
 ) =>
 	entries.reduce(
 		(acc, { isIntersecting, target }) => {
-			const entityId = elements.get(target as HTMLDivElement);
+			const entityId = elements.get(target as HTMLElement);
 
 			if (!entityId) {
 				logError("Container element not found");

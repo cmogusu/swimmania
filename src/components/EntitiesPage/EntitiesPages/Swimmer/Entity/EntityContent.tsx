@@ -1,14 +1,19 @@
 import Image from "next/image";
+import { Loading } from "@/components/Loading";
 import { DefaultSiteImage } from "@/constants";
 import type { EntityData, RawMetadata } from "@/server/types";
 
 type Props = {
 	entity: EntityData;
 	metadata?: RawMetadata;
-	handleButtonClick?: () => void;
+	isMetadataLoading?: boolean;
 };
 
-export function EntityContent({ entity, metadata }: Props) {
+export const EntityContent = ({
+	entity,
+	metadata,
+	isMetadataLoading,
+}: Props) => {
 	const { entityId, name, description, defaultImage } = entity;
 	const image = defaultImage || DefaultSiteImage;
 	const startDate = getDateString(metadata, "meetDates.startDate");
@@ -28,6 +33,7 @@ export function EntityContent({ entity, metadata }: Props) {
 			<div>
 				<div>{name}</div>
 				<div className="text-xs uppercase font-semibold opacity-60">
+					{isMetadataLoading && <Loading />}
 					{startDate} - {endDate}
 				</div>
 			</div>
@@ -46,7 +52,7 @@ export function EntityContent({ entity, metadata }: Props) {
 			</a>
 		</li>
 	);
-}
+};
 
 function getDateString(
 	metadata: RawMetadata | undefined,
