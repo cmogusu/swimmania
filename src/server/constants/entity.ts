@@ -7,6 +7,21 @@ import type {
 
 export const MAX_TEXT_LENGTH = 3000;
 export const POSTS_PER_PAGE = 5;
+export const ENTITIES_PER_PAGE: Record<EntityType, number> = {
+	parent: 10,
+	swimmer: 10,
+	school: 10,
+	pool: 10,
+	team: 10,
+	coach: 10,
+	lifeguard: 10,
+	swimMeet: 10,
+	swimEvent: 20,
+	swimResult: 20,
+	user: 5,
+	comment: 10,
+	rating: 10,
+};
 
 export const EntityTypes: EntityType[] = [
 	"parent",

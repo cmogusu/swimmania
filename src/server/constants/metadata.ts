@@ -16,7 +16,13 @@ export const EntitiesMetadataList: Record<EntityType, string[]> = {
 		"location.lng",
 	],
 	swimmer: ["dob"],
-	school: ["averageSchoolFees.ksh", "location.lat", "location.lng"],
+	school: [
+		"averageSchoolFees.ksh",
+		"location.lat",
+		"location.lng",
+		"gender",
+		"ageGroup",
+	],
 	team: ["membershipFee.ksh"],
 	lifeguard: ["dob", "location.lat", "location.lng"],
 	swimMeet: [
@@ -28,7 +34,7 @@ export const EntitiesMetadataList: Record<EntityType, string[]> = {
 		"location.name",
 	],
 	swimEvent: ["eventNumber", "swimStroke", "swimDistance"],
-	swimResult: ["rank", "time"],
+	swimResult: ["rank", "age", "time"],
 	parent: ["parentOf", "swimmer"],
 	user: ["email"],
 	comment: ["time"],

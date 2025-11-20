@@ -9,6 +9,7 @@ import {
 	useState,
 } from "react";
 import { getEntities } from "@/server/api/apiActions";
+import { ENTITIES_PER_PAGE } from "@/server/constants";
 import type { EntitiesData, EntityData, EntityType } from "@/server/types";
 import { throttle } from "@/utilities/general";
 
@@ -29,7 +30,7 @@ const initialContext = {
 };
 
 const EntitiesContext = createContext<ContextType>(initialContext);
-const throttleGetEntities = throttle(getEntities, 2000);
+const throttleGetEntities = throttle(getEntities, 1000);
 
 type Props = {
 	children: ReactNode;
@@ -58,7 +59,7 @@ export const EntitiesContextProvider = ({
 		}
 
 		setIsLoading(true);
-		throttleGetEntities(entityType, nextPage)
+		throttleGetEntities(entityType, nextPage, ENTITIES_PER_PAGE[entityType])
 			.then((entitiesData: EntitiesData | undefined) => {
 				if (!entitiesData) {
 					return;

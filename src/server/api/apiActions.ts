@@ -22,8 +22,12 @@ export async function handleSignOut() {
 	await signOut;
 }
 
-export async function getEntities(entityType: EntityType, pageNumber: number) {
-	return await api.getEntities(entityType, pageNumber);
+export async function getEntities(
+	entityType: EntityType,
+	pageNumber: number,
+	pageSize?: number,
+) {
+	return await api.getEntities(entityType, pageNumber, pageSize);
 }
 
 export async function getMetadata(

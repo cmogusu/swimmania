@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { EntitiesPage } from "@/components/EntitiesPage";
 import { api } from "@/server/api";
-import { EntityTypePlurals } from "@/server/constants";
+import { ENTITIES_PER_PAGE, EntityTypePlurals } from "@/server/constants";
 import type { EntityType } from "@/server/types";
 
 type Props = {
@@ -23,7 +23,11 @@ export default async function Home({ params, searchParams }: Props) {
 	const session = await auth();
 	const { entityType } = await params;
 	const { page = 1 } = await searchParams;
-	const entitiesData = await api.getEntities(entityType, Number(page));
+	const entitiesData = await api.getEntities(
+		entityType,
+		Number(page),
+		ENTITIES_PER_PAGE[entityType],
+	);
 
 	if (!entitiesData) {
 		return "Ooops! No entities found";

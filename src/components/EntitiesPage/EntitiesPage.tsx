@@ -14,8 +14,11 @@ const entitiesPageComponents: Record<string, React.ComponentType<Props>> = {
 	swimMeet: dynamic(
 		() => import("./EntitiesPages/SwimMeet/PageLayout/PageLayout"),
 	),
+	swimEvent: dynamic(
+		() => import("./EntitiesPages/SwimEvent/PageLayout/PageLayout"),
+	),
 	swimResult: dynamic(
-		() => import("./EntitiesPages/Default/PageLayout/PageLayout"),
+		() => import("./EntitiesPages/SwimResult/PageLayout/PageLayout"),
 	),
 };
 
