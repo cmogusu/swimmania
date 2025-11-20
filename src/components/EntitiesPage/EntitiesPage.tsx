@@ -11,10 +11,15 @@ const DefaultEntitiesComponent = dynamic(
 );
 
 const entitiesPageComponents: Record<string, React.ComponentType<Props>> = {
-	swimMeet: dynamic(() => import("./EntitiesPages/SwimMeet/Entities")),
+	swimMeet: dynamic(
+		() => import("./EntitiesPages/Default/PageLayout/PageLayout"),
+	),
+	swimResult: dynamic(
+		() => import("./EntitiesPages/Default/PageLayout/PageLayout"),
+	),
 };
 
-export const Entities = ({ entityType, entitiesData }: Props) => {
+export const EntitiesPage = ({ entityType, entitiesData }: Props) => {
 	const EntitiesPageComponent =
 		entitiesPageComponents[entityType] || DefaultEntitiesComponent;
 

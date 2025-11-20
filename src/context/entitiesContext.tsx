@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import {
 	createContext,
 	type ReactNode,
@@ -11,6 +10,7 @@ import {
 } from "react";
 import { getEntities } from "@/server/api/apiActions";
 import type { EntitiesData, EntityData, EntityType } from "@/server/types";
+import { throttle } from "@/utilities/general";
 
 interface ContextType {
 	entities: EntityData[];
@@ -29,6 +29,7 @@ const initialContext = {
 };
 
 const EntitiesContext = createContext<ContextType>(initialContext);
+const throttleGetEntities = throttle(getEntities, 2000);
 
 type Props = {
 	children: ReactNode;
@@ -50,7 +51,6 @@ export const EntitiesContextProvider = ({
 	const [nextPage, setNextPage] = useState<number>(initialNextPage);
 	const [hasMore, setHasMore] = useState<boolean>(initialHasMore);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const updatePage = useGetUpdatePageFn();
 
 	const loadNextPage = useCallback(() => {
 		if (!hasMore || isLoading) {
@@ -58,7 +58,7 @@ export const EntitiesContextProvider = ({
 		}
 
 		setIsLoading(true);
-		getEntities(entityType, nextPage)
+		throttleGetEntities(entityType, nextPage)
 			.then((entitiesData: EntitiesData | undefined) => {
 				if (!entitiesData) {
 					return;
@@ -69,13 +69,12 @@ export const EntitiesContextProvider = ({
 				setNextPage(nextPage);
 				setHasMore(hasMore);
 				setIsLoading(false);
-				updatePage(nextPage - 1);
 			})
 			.catch((e) => {
 				console.error(e);
 				setIsLoading(false);
 			});
-	}, [entityType, nextPage, hasMore, isLoading, updatePage]);
+	}, [entityType, nextPage, hasMore, isLoading]);
 
 	const context = useMemo(
 		() => ({
@@ -92,18 +91,3 @@ export const EntitiesContextProvider = ({
 };
 
 export const useEntitiesContext = () => useContext(EntitiesContext);
-
-const useGetUpdatePageFn = () => {
-	const searchParams = useSearchParams();
-
-	const updatePage = useCallback(
-		(page: number) => {
-			const params = new URLSearchParams(searchParams.toString());
-			params.set("page", `${page}`);
-			window.history.pushState({}, "", `?${params.toString()}`);
-		},
-		[searchParams],
-	);
-
-	return updatePage;
-};

@@ -1,7 +1,7 @@
 import { auth } from "auth";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
-import { EntitiesPage, PageLayout } from "@/components/Pages";
+import { EntitiesPage } from "@/components/EntitiesPage";
 import { api } from "@/server/api";
 import { EntityTypePlurals } from "@/server/constants";
 import type { EntityType } from "@/server/types";
@@ -31,9 +31,7 @@ export default async function Home({ params, searchParams }: Props) {
 
 	return (
 		<SessionProvider session={session}>
-			<PageLayout>
-				<EntitiesPage entitiesData={entitiesData} entityType={entityType} />
-			</PageLayout>
+			<EntitiesPage entitiesData={entitiesData} entityType={entityType} />
 		</SessionProvider>
 	);
 }

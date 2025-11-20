@@ -1,5 +1,3 @@
-"use client";
-
 import {
 	FullscreenControl,
 	Map as MapLibre,
@@ -7,42 +5,33 @@ import {
 } from "maplibre-gl";
 import type { LatLng } from "@/types";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useRef } from "react";
-import { useApiKeyContext } from "@/context";
-import { useMapDimesionsContext } from "@/context/mapDimensionsContext";
-import { logError, logInfo } from "@/utilities/log";
-import { MapContent } from "./MapContent";
-
-export type Props = {
-	setMaplibre: (map: MapLibre) => void;
-};
+import { useEffect, useState } from "react";
+import { DEFAULT_MAP_CENTER } from "@/constants";
+import { logInfo } from "@/utilities/log";
 
 const MAP_ZOOM = 1;
-const MAP_CENTER = {
-	lat: 0.1,
-	lng: 0.1,
-};
 
-export function BaseMaplibreMap({ setMaplibre }: Props) {
-	const { maptiler: maptilerApiKey } = useApiKeyContext();
-	const { width, height } = useMapDimesionsContext();
-	const divRef = useRef<HTMLDivElement>(null);
+export const useInitMap = (
+	apiKey: string | undefined,
+	container: HTMLDivElement | null,
+) => {
+	const [maplibre, setMaplibre] = useState<MapLibre>();
 
 	useEffect(() => {
-		if (!maptilerApiKey) {
+		if (!apiKey) {
 			return;
 		}
 
-		if (!divRef.current) {
+		if (!container) {
 			return;
 		}
 
 		logInfo("Creating maplibre map instance");
-		const styleUrl = `https://api.maptiler.com/maps/backdrop/style.json?key=${maptilerApiKey}`;
+		const styleUrl = `https://api.maptiler.com/maps/backdrop/style.json?key=${apiKey}`;
 		const { unsubscribe, ref } = renderMap(
-			divRef.current,
+			container,
 			styleUrl,
-			MAP_CENTER,
+			DEFAULT_MAP_CENTER,
 			MAP_ZOOM,
 		);
 
@@ -52,17 +41,10 @@ export function BaseMaplibreMap({ setMaplibre }: Props) {
 			logInfo("Removing maplibre map");
 			unsubscribe();
 		};
-	}, [maptilerApiKey, setMaplibre]);
+	}, [apiKey, container]);
 
-	if (!width) {
-		logError(
-			"Map width and height not specified. Make sure to wrap map in MapContainer",
-		);
-		return null;
-	}
-
-	return <MapContent divRef={divRef} width={width} height={height} />;
-}
+	return maplibre;
+};
 
 export function renderMap(
 	container: HTMLDivElement,

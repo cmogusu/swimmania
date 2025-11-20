@@ -13,7 +13,7 @@ import { useEntitiesContext } from "./entitiesContext";
 
 interface ContextType {
 	entity: EntityData | undefined;
-	selectEntity: (entityId: number) => void;
+	selectEntity: (entityId?: number) => void;
 }
 
 const initialContext = {
@@ -32,9 +32,10 @@ export const SelectedEntityContextProvider = ({ children }: Props) => {
 	const [entity, setEntity] = useState<EntityData>();
 
 	const selectEntity = useCallback(
-		(entityId: number) => {
+		(entityId?: number) => {
 			if (!entityId) {
-				throw Error("Entity id required");
+				setEntity(undefined);
+				return;
 			}
 
 			const entity = entities.find((e) => e.entityId === entityId);

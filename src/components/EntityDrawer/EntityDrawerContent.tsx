@@ -4,7 +4,7 @@ type Props = PropsWithChildren & {
 	drawerInputId?: string;
 	drawerContent?: ReactNode;
 	inputRef?: RefObject<HTMLInputElement | null>;
-	toggleDrawer?: () => void;
+	closeDrawer?: () => void;
 };
 
 export const EntityDrawerContent = ({
@@ -12,7 +12,7 @@ export const EntityDrawerContent = ({
 	drawerInputId,
 	drawerContent,
 	inputRef,
-	toggleDrawer,
+	closeDrawer,
 }: Props) => {
 	return (
 		<div className="drawer drawer-end">
@@ -20,6 +20,7 @@ export const EntityDrawerContent = ({
 				id={drawerInputId}
 				ref={inputRef}
 				type="checkbox"
+				onClick={closeDrawer}
 				className="drawer-toggle"
 			/>
 			<div className="drawer-content">{children}</div>
@@ -33,7 +34,7 @@ export const EntityDrawerContent = ({
 					{drawerContent}
 					<button
 						type="button"
-						onClick={toggleDrawer}
+						onClick={closeDrawer}
 						className="drawer-button btn btn-primary"
 					>
 						Close drawer

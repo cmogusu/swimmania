@@ -7,6 +7,7 @@ export const useLoadMoreOnVisible = (loadNextPage: () => void) => {
 		(entries: IntersectionObserverEntry[]) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
+					console.log("-loading");
 					loadNextPage();
 				}
 			});

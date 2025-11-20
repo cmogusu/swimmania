@@ -1,7 +1,5 @@
-import dynamic from "next/dynamic";
+import Play from "@/components/Play/Play";
 import { api } from "@/server/api";
-
-const Play = dynamic(() => import("@/components/Play/Play"));
 
 export default async function ExpPage() {
 	const entityType = "pool";

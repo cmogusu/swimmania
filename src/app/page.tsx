@@ -1,6 +1,5 @@
-import { EntityDrawerContainer } from "@/components/EntityDrawer";
+import { EntitiesPage } from "@/components/EntitiesPage";
 import { PageLayout } from "@/components/Pages";
-import { EntitiesPage } from "@/components/Pages/EntitiesPage";
 import {
 	ApiContextProvider,
 	EntitiesContextProvider,
@@ -33,14 +32,12 @@ export default async function Home({ searchParams }: Props) {
 				<VisibleEntityIdsContextProvider>
 					<EntityDrawerContextProvider>
 						<ApiContextProvider getApiKeys={getApiKeys}>
-							<EntityDrawerContainer>
-								<PageLayout>
-									<EntitiesPage
-										entitiesData={entitiesData}
-										entityType={entityType}
-									/>
-								</PageLayout>
-							</EntityDrawerContainer>
+							<PageLayout>
+								<EntitiesPage
+									entitiesData={entitiesData}
+									entityType={entityType}
+								/>
+							</PageLayout>
 						</ApiContextProvider>
 					</EntityDrawerContextProvider>
 				</VisibleEntityIdsContextProvider>

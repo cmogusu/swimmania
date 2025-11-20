@@ -4,16 +4,36 @@ export const capitalize = (text = "") => {
 	return `${firstLetter}${remainingText}`;
 };
 
-export function throttle<T extends unknown[]>(
-	callback: (...args: T) => void,
-	delayMs: number,
-) {
-	let nextExecutionTime = 0;
-	return (...args: T) => {
-		if (nextExecutionTime < Date.now()) {
-			nextExecutionTime = Date.now() + delayMs;
-			return callback(...args);
+// biome-ignore lint/suspicious/noExplicitAny: Callback should allow all outputs
+export function throttle<T extends (...args: any[]) => any>(
+	func: T,
+	delay: number,
+): (...args: Parameters<T>) => ReturnType<T> {
+	let timeoutId: ReturnType<typeof setTimeout> | null = null;
+	let lastArgs: Parameters<T> | null = null;
+	let lastThis: ThisParameterType<T> | null = null;
+	let lastResult: ReturnType<T>;
+
+	return function (
+		this: ThisParameterType<T>,
+		...args: Parameters<T>
+	): ReturnType<T> {
+		lastArgs = args;
+		lastThis = this;
+
+		if (!timeoutId) {
+			lastResult = func.apply(lastThis, lastArgs);
+			timeoutId = setTimeout(() => {
+				timeoutId = null;
+				if (lastArgs !== null) {
+					// If there were calls during the timeout, execute the last one
+					lastResult = func.apply(lastThis, lastArgs);
+					lastArgs = null;
+					lastThis = null;
+				}
+			}, delay);
 		}
+		return lastResult;
 	};
 }
 

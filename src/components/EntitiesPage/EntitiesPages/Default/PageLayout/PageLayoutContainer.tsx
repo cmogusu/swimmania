@@ -9,7 +9,7 @@ import {
 	VisibleEntityIdsContextProvider,
 } from "@/context";
 import type { EntitiesData, EntityType } from "@/server/types";
-import { Entities } from "../Entities";
+import { PageLayoutContent } from "./PageLayoutContent";
 
 type Props = PropsWithChildren & {
 	entityType: EntityType;
@@ -26,7 +26,10 @@ export const PageLayoutContainer = ({ entityType, entitiesData }: Props) => {
 				<EntityDrawerContextProvider>
 					<VisibleEntityIdsContextProvider>
 						<EntityLocationContextProvider>
-							<Entities entityType={entityType} entitiesData={entitiesData} />
+							<PageLayoutContent
+								entityType={entityType}
+								entitiesData={entitiesData}
+							/>
 						</EntityLocationContextProvider>
 					</VisibleEntityIdsContextProvider>
 				</EntityDrawerContextProvider>

@@ -1,12 +1,10 @@
 import Image from "next/image";
 import { DefaultSiteImage } from "@/constants";
-import type { EntityData } from "@/server/types";
+import { useSelectedEntityContext } from "@/context";
 
-type Props = {
-	entity?: EntityData;
-};
+export const RenderedEntity = () => {
+	const { entity } = useSelectedEntityContext();
 
-export const RenderedEntity = ({ entity }: Props) => {
 	if (!entity) {
 		return null;
 	}

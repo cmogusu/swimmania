@@ -15,11 +15,5 @@ export const EntitiesMap = () => {
 		console.log(visibleEntityIds);
 	}, [visibleEntityIds]);
 
-	return (
-		<div className="sticky top-0">
-			<div className="h-dvh bg-amber-500">
-				<MultipleLocationsMap locations={entityLocations} />
-			</div>
-		</div>
-	);
+	return <MultipleLocationsMap locations={entityLocations} />;
 };

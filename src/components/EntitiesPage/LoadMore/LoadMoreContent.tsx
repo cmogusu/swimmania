@@ -20,24 +20,26 @@ export const LoadMoreContent = ({
 
 	return (
 		<div className="mb-10" ref={divRef}>
-			{currentPage > 1 && (
-				<a
-					className="btn btn-sm"
-					href={`/${entityType}?page=${currentPage - 1}`}
-				>
-					{"<-"}Prev page{" "}
-				</a>
-			)}
+			<noscript>
+				{currentPage > 1 && (
+					<a
+						className="btn btn-sm"
+						href={`/${entityType}?page=${currentPage - 1}`}
+					>
+						{"<"}Prev page{" "}
+					</a>
+				)}
 
-			{hasMore && (
-				<a
-					className="btn btn-sm"
-					href={`/${entityType}?page=${nextPage}`}
-					onClick={handleLoadNextPage}
-				>
-					Next page {"->"}
-				</a>
-			)}
+				{hasMore && (
+					<a
+						className="btn btn-sm"
+						href={`/${entityType}?page=${nextPage}`}
+						onClick={handleLoadNextPage}
+					>
+						Next page {">"}
+					</a>
+				)}
+			</noscript>
 		</div>
 	);
 };

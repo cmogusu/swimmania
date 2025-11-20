@@ -1,29 +1,29 @@
 "use client";
 
-import { type PropsWithChildren, useEffect, useId } from "react";
-import { useEntityDrawerContext, useSelectedEntityContext } from "@/context";
+import type { PropsWithChildren, ReactNode } from "react";
+import { useEntityDrawerContext } from "@/context";
 import { EntityDrawerContent } from "./EntityDrawerContent";
 import { RenderedEntity } from "./RenderedEntitiy";
 
-export const EntityDrawerContainer = ({ children }: PropsWithChildren) => {
-	const drawerInputId = useId();
-	const { toggleDrawer, inputRef } = useEntityDrawerContext();
-	const { entity } = useSelectedEntityContext();
+type Props = PropsWithChildren & {
+	drawerInputId: string;
+	originalChildren: ReactNode;
+};
 
-	useEffect(() => {
-		if (toggleDrawer && entity) {
-			toggleDrawer();
-		}
-	}, [entity, toggleDrawer]);
+export const EntityDrawerContainer = ({
+	drawerInputId,
+	originalChildren,
+}: Props) => {
+	const { closeDrawer, inputRef } = useEntityDrawerContext();
 
 	return (
 		<EntityDrawerContent
 			drawerInputId={drawerInputId}
-			drawerContent={<RenderedEntity entity={entity} />}
+			drawerContent={<RenderedEntity />}
 			inputRef={inputRef}
-			toggleDrawer={toggleDrawer}
+			closeDrawer={closeDrawer}
 		>
-			{children}
+			{originalChildren}
 		</EntityDrawerContent>
 	);
 };
