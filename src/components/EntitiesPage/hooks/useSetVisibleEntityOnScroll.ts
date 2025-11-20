@@ -7,7 +7,7 @@ export const useSetVisibleEntityOnScroll = (entityId: number) => {
 
 	useEffect(() => {
 		if (divRef.current) {
-			const unsubscribe = setEntityContainerElement(divRef.current, entityId);
+			const unsubscribe = setEntityContainerElement(entityId, divRef.current);
 			return unsubscribe;
 		}
 	}, [entityId, setEntityContainerElement]);

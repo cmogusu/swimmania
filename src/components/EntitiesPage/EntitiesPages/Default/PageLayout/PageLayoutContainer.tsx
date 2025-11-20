@@ -5,6 +5,7 @@ import {
 	EntitiesContextProvider,
 	EntityDrawerContextProvider,
 	EntityLocationContextProvider,
+	EntityVisibilityNotifierContextProvider,
 	SelectedEntityContextProvider,
 	VisibleEntityIdsContextProvider,
 } from "@/context";
@@ -25,12 +26,14 @@ export const PageLayoutContainer = ({ entityType, entitiesData }: Props) => {
 			<SelectedEntityContextProvider>
 				<EntityDrawerContextProvider>
 					<VisibleEntityIdsContextProvider>
-						<EntityLocationContextProvider>
-							<PageLayoutContent
-								entityType={entityType}
-								entitiesData={entitiesData}
-							/>
-						</EntityLocationContextProvider>
+						<EntityVisibilityNotifierContextProvider>
+							<EntityLocationContextProvider>
+								<PageLayoutContent
+									entityType={entityType}
+									entitiesData={entitiesData}
+								/>
+							</EntityLocationContextProvider>
+						</EntityVisibilityNotifierContextProvider>
 					</VisibleEntityIdsContextProvider>
 				</EntityDrawerContextProvider>
 			</SelectedEntityContextProvider>

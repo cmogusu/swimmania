@@ -9,3 +9,4 @@ export * from "./modalRender";
 export * from "./selectedEntityContext";
 export * from "./toastContext";
 export * from "./visibleEntityIdsContext";
+export * from './entityVisibilityNotifierContext'

@@ -11,14 +11,15 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { subtractArrays } from "@/utilities/general";
 import { logError } from "@/utilities/log";
 import { withServerSafetyHoc } from "./withServerSafetyHoc";
 
-interface ContextType {
+interface IContextType {
 	visibleEntityIds: number[];
 	setEntityContainerElement: (
-		divContainerElement: HTMLDivElement,
 		entityId: number,
+		divContainerElement: HTMLDivElement,
 	) => () => void;
 }
 
@@ -30,7 +31,7 @@ const initialContext = {
 	},
 };
 
-const VisibleEntityIdsContext = createContext<ContextType>(initialContext);
+const VisibleEntityIdsContext = createContext<IContextType>(initialContext);
 
 type Props = {
 	children: ReactNode;
@@ -59,7 +60,7 @@ const ContextProvider = ({ children }: Props) => {
 	);
 
 	const setEntityContainerElement = useCallback(
-		(divContainerElement: HTMLDivElement, entityId: number) => {
+		(entityId: number, divContainerElement: HTMLDivElement) => {
 			observer.observe(divContainerElement);
 			divContainerElementsRef.current.set(divContainerElement, entityId);
 
@@ -129,29 +130,3 @@ const updateState = (
 		setVisibleIds((prevIds) => subtractArrays(prevIds, removedIds));
 	}
 };
-
-const subtractArrays = (arr1: number[], arr2: number[]): number[] => {
-	const sortedArr1: number[] = sort(arr1);
-	const sortedArr2: number[] = sort(arr2);
-
-	let i = 0;
-	let j = 0;
-	while (i < sortedArr1.length && j < sortedArr2.length) {
-		const id1 = sortedArr1[i];
-		const id2 = sortedArr2[j];
-
-		if (id1 === id2) {
-			delete sortedArr1[i];
-			i += 1;
-			j += 1;
-		} else if (id1 < id2) {
-			i += 1;
-		} else {
-			j += 1;
-		}
-	}
-
-	return sortedArr1.filter(Boolean);
-};
-
-const sort = (arr: number[]) => arr.slice().sort((v1, v2) => v1 - v2);
