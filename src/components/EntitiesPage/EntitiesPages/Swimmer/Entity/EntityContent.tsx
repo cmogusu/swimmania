@@ -1,26 +1,21 @@
 import Image from "next/image";
-import { Loading } from "@/components/Loading";
+import type { RefObject } from "react";
 import { DefaultSiteImage } from "@/constants";
-import type { EntityData, RawMetadata } from "@/server/types";
+import type { EntityData } from "@/server/types";
 
 type Props = {
 	entity: EntityData;
-	metadata?: RawMetadata;
-	isMetadataLoading?: boolean;
+	containerRef?: RefObject<HTMLElement | null>;
 };
 
-export const EntityContent = ({
-	entity,
-	metadata,
-	isMetadataLoading,
-}: Props) => {
-	const { entityId, name, description, defaultImage } = entity;
+export const EntityContent = ({ entity, containerRef }: Props) => {
+	const { entityId, name, description, defaultImage, metadata = {} } = entity;
 	const image = defaultImage || DefaultSiteImage;
-	const startDate = getDateString(metadata, "meetDates.startDate");
-	const endDate = getDateString(metadata, "meetDates.endDate");
+	const { startDate, endDate } = metadata;
 
 	return (
-		<li className="list-row">
+		// @ts-ignore
+		<li ref={containerRef} className="list-row">
 			<div>
 				<Image
 					className="size-10 rounded-box"
@@ -33,8 +28,7 @@ export const EntityContent = ({
 			<div>
 				<div>{name}</div>
 				<div className="text-xs uppercase font-semibold opacity-60">
-					{isMetadataLoading && <Loading />}
-					{startDate} - {endDate}
+					{getDateString(startDate)} - {getDateString(endDate)}
 				</div>
 			</div>
 			<p className="list-col-wrap text-xs">{description}</p>
@@ -54,10 +48,6 @@ export const EntityContent = ({
 	);
 };
 
-function getDateString(
-	metadata: RawMetadata | undefined,
-	metadataName: string,
-) {
-	const date = metadata?.[metadataName];
-	return date ? (date as unknown as Date).toLocaleDateString() : "";
+function getDateString(date?: unknown) {
+	return date ? (date as Date).toLocaleDateString() : "";
 }

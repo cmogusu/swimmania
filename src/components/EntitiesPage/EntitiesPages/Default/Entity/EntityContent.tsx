@@ -1,26 +1,30 @@
 import Image from "next/image";
-import { Loading } from "@/components/Loading";
+import type { RefObject } from "react";
 import { DefaultSiteImage } from "@/constants";
 import type { EntityData, RawMetadata } from "@/server/types";
 
 type Props = {
 	entity: EntityData;
 	metadata?: RawMetadata;
-	isMetadataLoading?: boolean;
+	containerRef?: RefObject<HTMLElement | null>;
 	handleButtonClick?: () => void;
 };
 
 export const EntityContent = ({
 	entity,
-	metadata,
-	isMetadataLoading,
+	containerRef,
 	handleButtonClick,
 }: Props) => {
-	const { entityId, name, description, entityType, defaultImage } = entity;
+	const { entityId, name, description, entityType, defaultImage, metadata } =
+		entity;
 	const image = defaultImage || DefaultSiteImage;
 
 	return (
-		<div className="card card-side bg-base-100 shadow-sm mb-4 grid-rows-2">
+		<div
+			// @ts-ignore
+			ref={containerRef}
+			className="card card-side bg-base-100 shadow-sm mb-4 grid-rows-2"
+		>
 			<figure>
 				<Image alt={image.alt} width={1000} height={667} src={image.src} />
 			</figure>
@@ -32,7 +36,6 @@ export const EntityContent = ({
 				</a>
 				<p>{description}</p>
 
-				{isMetadataLoading && <Loading />}
 				{metadata && renderMetadata(metadata)}
 
 				<div className="card-actions justify-end">
@@ -54,7 +57,7 @@ const renderMetadata = (metadata: RawMetadata) => {
 
 	for (const name in metadata) {
 		metadataArr.push(
-			<div>
+			<div key={name}>
 				{name}: {metadata[name]}
 			</div>,
 		);

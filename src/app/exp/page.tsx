@@ -3,7 +3,7 @@ import { api } from "@/server/api";
 
 export default async function ExpPage() {
 	const entityType = "pool";
-	const entitiesData = await api.getEntities(entityType, 1);
+	const entitiesData = await api.getEntities(entityType, 1, 10);
 
 	if (!entitiesData) {
 		return "loading";

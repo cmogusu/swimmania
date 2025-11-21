@@ -36,7 +36,7 @@ export const EntityVisibilityNotifierContextProvider = (
 
 	useEffect(() => {
 		visibleEntityIds.map((id) => {
-			visibilityCallbacksRef.current[id](true);
+			visibilityCallbacksRef.current[id]?.(true);
 		});
 	}, [visibleEntityIds]);
 

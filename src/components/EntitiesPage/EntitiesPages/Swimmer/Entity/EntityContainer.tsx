@@ -2,11 +2,7 @@
 
 import type { PropsWithChildren } from "react";
 import type { EntityData } from "@/server/types";
-import {
-	useLoadMetadata,
-	useNotifyOnVisible,
-	useSetVisibleEntityOnScroll,
-} from "../../../hooks";
+import { useSetVisibleEntityOnScroll } from "../../../hooks";
 import { EntityContent } from "./EntityContent";
 
 type Props = PropsWithChildren & {
@@ -14,22 +10,8 @@ type Props = PropsWithChildren & {
 };
 
 export const EntityContainer = ({ entity }: Props) => {
-	const { entityType, entityId } = entity;
-	const divRef = useSetVisibleEntityOnScroll(entityId);
-	const isVisible = useNotifyOnVisible(entityId);
-	const { isLoading: isMetadataLoading, metadata } = useLoadMetadata(
-		entityType,
-		entityId,
-		isVisible,
-	);
+	const { entityId } = entity;
+	const containerRef = useSetVisibleEntityOnScroll(entityId);
 
-	return (
-		<div ref={divRef}>
-			<EntityContent
-				entity={entity}
-				metadata={metadata}
-				isMetadataLoading={isMetadataLoading}
-			/>
-		</div>
-	);
+	return <EntityContent containerRef={containerRef} entity={entity} />;
 };

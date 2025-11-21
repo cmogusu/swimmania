@@ -7,10 +7,8 @@ type EntityProps = {
 	itemPosition: number;
 };
 
-export const Entity = ({ entity, itemPosition }: EntityProps) => {
-	return (
-		<EntityContainer entity={entity} itemPosition={itemPosition}>
-			<EntityContent entity={entity} itemPosition={itemPosition} />
-		</EntityContainer>
-	);
-};
+export const Entity = ({ entity, itemPosition }: EntityProps) => (
+	<EntityContainer entity={entity} itemPosition={itemPosition}>
+		<EntityContent entity={entity} itemPosition={itemPosition} />
+	</EntityContainer>
+);

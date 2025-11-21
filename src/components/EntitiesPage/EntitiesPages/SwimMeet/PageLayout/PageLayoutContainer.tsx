@@ -4,7 +4,6 @@ import type { PropsWithChildren } from "react";
 import {
 	EntitiesContextProvider,
 	EntityDrawerContextProvider,
-	EntityVisibilityNotifierContextProvider,
 	SelectedEntityContextProvider,
 	VisibleEntityIdsContextProvider,
 } from "@/context";
@@ -25,12 +24,10 @@ export const PageLayoutContainer = ({ entityType, entitiesData }: Props) => {
 			<SelectedEntityContextProvider>
 				<EntityDrawerContextProvider>
 					<VisibleEntityIdsContextProvider>
-						<EntityVisibilityNotifierContextProvider>
-							<PageLayoutContent
-								entityType={entityType}
-								entitiesData={entitiesData}
-							/>
-						</EntityVisibilityNotifierContextProvider>
+						<PageLayoutContent
+							entityType={entityType}
+							entitiesData={entitiesData}
+						/>
 					</VisibleEntityIdsContextProvider>
 				</EntityDrawerContextProvider>
 			</SelectedEntityContextProvider>

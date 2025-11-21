@@ -114,12 +114,12 @@ export type EntityData = {
 	entityId: number;
 	entityType: EntityType;
 	name: string;
-	description: string | undefined;
-	defaultImage: ImageData | undefined;
-	images: ImageData[] | undefined;
-	metadata: RawMetadata[] | undefined;
-	relationshipType: string | undefined;
-	userCanEdit: boolean | undefined;
+	description?: string;
+	defaultImage?: ImageData;
+	images?: ImageData[];
+	metadata?: RawMetadata;
+	userCanEdit?: boolean;
+	relatedEntities?: RelatedEntitiesData[];
 };
 
 export type EntitiesData = {
@@ -127,7 +127,10 @@ export type EntitiesData = {
 	entities: EntityData[];
 	hasMore: boolean;
 	pageSize: number;
-	isRelatedEntities: boolean;
+};
+
+export type RelatedEntitiesData = EntitiesData & {
+	entityType: EntityType;
 	relationshipType: RelationshipType | undefined;
 };
 

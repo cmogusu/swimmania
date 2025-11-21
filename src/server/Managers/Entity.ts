@@ -1,5 +1,10 @@
 import { isUndefined } from "@/server/utils";
-import type { EntityData, EntityType, RawMetadata } from "../types";
+import type {
+	EntityData,
+	EntityType,
+	RawMetadata,
+	RelatedEntitiesData,
+} from "../types";
 import type { RawEntity } from "./EntityManager/types";
 import type { Image } from "./ImageManager";
 
@@ -10,9 +15,9 @@ export class Entity {
 	description: string | undefined;
 	defaultImage: Image | undefined;
 	images: Image[] | undefined;
-	metadata: RawMetadata[] | undefined;
+	metadata: RawMetadata | undefined;
 	userCanEdit: boolean | undefined;
-	relationshipType: string | undefined;
+	relatedEntities: RelatedEntitiesData[] | undefined;
 
 	constructor({ id, name, type, description }: RawEntity) {
 		this.entityId = id;
@@ -32,7 +37,7 @@ export class Entity {
 			images: this.images?.map((img) => img.toJSON()),
 			metadata: this.metadata,
 			userCanEdit: this.userCanEdit,
-			relationshipType: this.relationshipType,
+			relatedEntities: this.relatedEntities,
 		};
 	}
 }

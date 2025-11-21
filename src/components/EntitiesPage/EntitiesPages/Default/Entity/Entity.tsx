@@ -6,10 +6,8 @@ type EntityProps = {
 	entity: EntityData;
 };
 
-export const Entity = ({ entity }: EntityProps) => {
-	return (
-		<EntityContainer entity={entity}>
-			<EntityContent entity={entity} />
-		</EntityContainer>
-	);
-};
+export const Entity = ({ entity }: EntityProps) => (
+	<EntityContainer entity={entity}>
+		<EntityContent entity={entity} />
+	</EntityContainer>
+);

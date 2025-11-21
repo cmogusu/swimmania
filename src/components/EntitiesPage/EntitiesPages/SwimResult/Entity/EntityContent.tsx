@@ -1,4 +1,3 @@
-import { Loading } from "@/components/Loading";
 import type { EntityData, RawMetadata } from "@/server/types";
 
 type Props = {
@@ -7,24 +6,17 @@ type Props = {
 	isMetadataLoading?: boolean;
 };
 
-export const EntityContent = ({
-	entity,
-	metadata,
-	isMetadataLoading,
-}: Props) => {
-	const { name, description } = entity;
+export const EntityContent = ({ entity }: Props) => {
+	const { name, description, metadata } = entity;
+	const { rank, age, time } = metadata || {};
 
 	return (
 		<tr>
-			<td>{metadata?.rank}</td>
+			<td>{rank}</td>
 			<td>{name}</td>
 			<td>{description}</td>
-			<td>
-				{metadata?.age} {isMetadataLoading && <Loading />}
-			</td>
-			<td>
-				{metadata?.time} {isMetadataLoading && <Loading />}
-			</td>
+			<td>{age}</td>
+			<td>{time}</td>
 		</tr>
 	);
 };

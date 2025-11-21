@@ -1,8 +1,4 @@
-import type {
-	EntitiesData,
-	IPaginated,
-	RelationshipType,
-} from "@/server/types";
+import type { EntitiesData, IPaginated } from "@/server/types";
 import { Entity } from "./Entity";
 import type { RawEntity } from "./EntityManager/types";
 
@@ -11,9 +7,6 @@ export class Entities {
 	hasMore: boolean = false;
 	pageSize: number = 0;
 	nextPage: number = 1;
-
-	isRelatedEntities: boolean = false;
-	_relationshipType?: RelationshipType;
 
 	constructor(
 		rawEntities: RawEntity[] | undefined,
@@ -30,23 +23,12 @@ export class Entities {
 		}
 	}
 
-	set relationshipType(relationshipType: RelationshipType | undefined) {
-		this.isRelatedEntities = Boolean(relationshipType);
-		this._relationshipType = relationshipType;
-	}
-
-	get relationshipType(): RelationshipType | undefined {
-		return this._relationshipType;
-	}
-
 	toJSON(): EntitiesData {
 		return {
 			entities: this.entities.map((e) => e.toJSON()),
 			hasMore: this.hasMore,
 			pageSize: this.pageSize,
 			nextPage: this.nextPage,
-			isRelatedEntities: this.isRelatedEntities,
-			relationshipType: this.relationshipType,
 		};
 	}
 }

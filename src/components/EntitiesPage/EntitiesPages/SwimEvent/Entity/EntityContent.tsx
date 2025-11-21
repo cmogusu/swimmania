@@ -1,20 +1,13 @@
-import { Loading } from "@/components/Loading";
-import type { EntityData, RawMetadata } from "@/server/types";
+import type { EntityData } from "@/server/types";
 
 type Props = {
 	entity: EntityData;
 	itemPosition: number;
-	metadata?: RawMetadata;
-	isMetadataLoading?: boolean;
 };
 
-export const EntityContent = ({
-	entity,
-	itemPosition,
-	metadata,
-	isMetadataLoading,
-}: Props) => {
-	const { name, description } = entity;
+export const EntityContent = ({ entity, itemPosition }: Props) => {
+	const { name, description, metadata } = entity;
+	const { swimDistance, swimStroke, gender, ageGroup } = metadata || {};
 
 	return (
 		// @ts-ignore
@@ -22,18 +15,10 @@ export const EntityContent = ({
 			<td>{itemPosition}</td>
 			<td>{name}</td>
 			<td>{description}</td>
-			<td>
-				{metadata?.swimDistance} {isMetadataLoading && <Loading />}
-			</td>
-			<td>
-				{metadata?.swimStroke} {isMetadataLoading && <Loading />}
-			</td>
-			<td>
-				{metadata?.gender} {isMetadataLoading && <Loading />}
-			</td>
-			<td>
-				{metadata?.ageGroup} {isMetadataLoading && <Loading />}
-			</td>
+			<td>{swimDistance}</td>
+			<td>{swimStroke}</td>
+			<td>{gender}</td>
+			<td>{ageGroup}</td>
 		</tr>
 	);
 };
