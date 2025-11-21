@@ -1,23 +1,14 @@
-import type { EntitiesData, EntityType } from "@/server/types";
-import { LoadMore } from "../../../LoadMore";
+import type { EntityData, EntityType } from "@/server/types";
 import { EntitiesContainer } from "./EntitiesContainer";
 import { EntitiesContent } from "./EntitiesContent";
 
 type Props = {
 	entityType: EntityType;
-	entitiesData: EntitiesData;
+	entities: EntityData[];
 };
 
-export const Entities = ({ entityType, entitiesData }: Props) => {
-	const { entities, nextPage, hasMore } = entitiesData || {};
-
-	return (
-		<div>
-			<EntitiesContainer entityType={entityType}>
-				<EntitiesContent entityType={entityType} entities={entities} />
-			</EntitiesContainer>
-
-			<LoadMore entityType={entityType} nextPage={nextPage} hasMore={hasMore} />
-		</div>
-	);
-};
+export const Entities = ({ entityType, entities }: Props) => (
+	<EntitiesContainer entityType={entityType}>
+		<EntitiesContent entityType={entityType} entities={entities} />
+	</EntitiesContainer>
+);

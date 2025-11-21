@@ -1,9 +1,6 @@
 import type { EntityType } from "@/server/types";
-import {
-	type Entities,
-	type EntityManager,
-	entityManagerFactory,
-} from "../../EntityManager";
+import type { Entities } from "../../Entities";
+import { type EntityManager, entityManagerFactory } from "../../EntityManager";
 import {
 	type RawGetRelatedInputData,
 	RelatedEntityIdManager,

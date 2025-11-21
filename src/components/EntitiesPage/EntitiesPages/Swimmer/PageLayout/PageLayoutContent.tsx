@@ -1,3 +1,4 @@
+import { LoadMore } from "@/components/EntitiesPage/LoadMore";
 import { EntityDrawer } from "@/components/EntityDrawer";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -10,6 +11,8 @@ type Props = {
 };
 
 export const PageLayoutContent = ({ entityType, entitiesData }: Props) => {
+	const { entities, nextPage, hasMore } = entitiesData || {};
+
 	return (
 		<EntityDrawer>
 			<div className="grid page-grid-rows h-screen">
@@ -22,7 +25,12 @@ export const PageLayoutContent = ({ entityType, entitiesData }: Props) => {
 							</div>
 						</div>
 						<main className="col-start-2 col-end-5 ">
-							<Entities entityType={entityType} entitiesData={entitiesData} />
+							<Entities entityType={entityType} entities={entities} />
+							<LoadMore
+								entityType={entityType}
+								nextPage={nextPage}
+								hasMore={hasMore}
+							/>
 						</main>
 					</div>
 				</div>
