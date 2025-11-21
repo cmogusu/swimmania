@@ -11,7 +11,7 @@ export const ENTITIES_PER_PAGE: Record<EntityType, number> = {
 	parent: 10,
 	swimmer: 10,
 	school: 10,
-	pool: 2,
+	pool: 10,
 	team: 10,
 	coach: 10,
 	lifeguard: 10,
